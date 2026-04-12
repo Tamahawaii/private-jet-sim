@@ -23,6 +23,12 @@ export default function LogisticsPlanner() {
 
   const projectedDistance = origin && destination ? calculateDistanceNM(origin.lat, origin.lng, destination.lat, destination.lng) : 0;
 
+  const getLegDate = (index: number) => {
+      const d = new Date(Date.now() + (index + 1) * 86400000); // Add 1 day per leg for mock scheduling
+      const dateStr = d.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      return `${dateStr} @ 08:00 LOCAL`;
+  };
+
   const handleBook = (jetId: string) => {
     if (origin && destination) {
        addScheduledLeg(jetId, origin, destination);
@@ -126,7 +132,7 @@ export default function LogisticsPlanner() {
                         {jet.scheduledRoutes.map((leg, i) => (
                            <div key={leg.id} className="flex flex-col p-3 bg-black/40 rounded-lg border border-white/5 group">
                               <div className="flex items-center justify-between mb-2">
-                                <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Leg 0{i+1}</span>
+                                <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Leg 0{i+1} • {getLegDate(i)}</span>
                                 <button onClick={() => removeScheduledLeg(jet.id, leg.id)} className="text-red-500/50 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={14}/></button>
                               </div>
                               <div className="flex items-center gap-3">

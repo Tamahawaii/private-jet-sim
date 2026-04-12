@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import { useStore } from '../lib/store';
 import { Plane, Plus, MapPin, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import AirportSearch from './AirportSearch';
 
 export default function FleetDashboard() {
-  const { fleet, setSelectedAircraftId, setActiveView, timeMultiplier, setTimeMultiplier } = useStore();
+  const { fleet, setSelectedAircraftId, setActiveView, timeMultiplier, setTimeMultiplier, setAircraftRoute } = useStore();
 
   const handleSelect = (id: string) => {
     setSelectedAircraftId(id);
@@ -72,9 +73,20 @@ export default function FleetDashboard() {
                   </div>
                   
                   <div className="flex flex-col gap-3 mt-auto">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 relative z-30">
                       <MapPin size={16} className="text-white/40"/>
-                      <span className="text-sm font-medium">Location: <strong className="text-white">{jet.currentLocation.name}</strong></span>
+                      <div className="text-[10px] uppercase font-bold flex items-center gap-2 text-white/50 w-full">
+                        BASE
+                        <div className="w-[120px] text-white" onClick={(e) => e.stopPropagation()}>
+                           <AirportSearch 
+                             value={jet.currentLocation} 
+                             onChange={(loc) => {
+                                if (!locked) setAircraftRoute(jet.id, loc, null);
+                             }}
+                            placeholder="Set Hub"
+                           />
+                        </div>
+                      </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <Clock size={16} className="text-white/40"/>

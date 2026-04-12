@@ -110,7 +110,8 @@ export default function MapEngine() {
 
         let planeCoords = [0, 0] as [number, number];
         let planeBearing = 0;
-        let arcCoords: [number, number][] = [];
+        let passedArcCoords: [number, number][] = [];
+        let futureArcCoords: [number, number][] = [];
         let rangeCoords: [number, number][] = [];
         let showRoute = false;
         let showRange = false;
@@ -129,13 +130,20 @@ export default function MapEngine() {
               progress
             );
 
-            arcCoords = computeGreatCirclePoints(
+            const fullArc = computeGreatCirclePoints(
               fJet.currentLocation.lat, fJet.currentLocation.lng,
               fJet.destination.lat, fJet.destination.lng
             );
 
+            const sliceIndex = Math.floor(progress * fullArc.length);
+            passedArcCoords = fullArc.slice(0, Math.max(2, sliceIndex + 1));
+            futureArcCoords = fullArc.slice(Math.max(0, sliceIndex));
+            
+            if (passedArcCoords.length < 2) passedArcCoords = [];
+            if (futureArcCoords.length < 2) futureArcCoords = [];
+
             planeCoords = interp.point;
-            planeBearing = interp.bearing;
+            planeBearing = interp.bearing - 45; // Offset Unicode plane symbol angle mathematically
             showRoute = true;
           } else {
             const baseBearing = computeBearing(fJet.currentLocation.lat, fJet.currentLocation.lng, fJet.destination.lat, fJet.destination.lng);
@@ -145,15 +153,15 @@ export default function MapEngine() {
             if (fJet.flightPhase === 'Taxi') {
                 distOffset = Math.min(0.04, (timePassedMs / 5000) * 0.04);
                 planeCoords = [offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lng, offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lat];
-                planeBearing = baseBearing;
+                planeBearing = baseBearing - 45;
             } else if (fJet.flightPhase === 'Takeoff') {
                 distOffset = 0.04 + Math.min(0.8, (timePassedMs / 6000) * 0.8);
                 planeCoords = [offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lng, offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lat];
-                planeBearing = baseBearing;
+                planeBearing = baseBearing - 45;
             } else if (fJet.flightPhase === 'Landing') {
                 distOffset = Math.max(0, 0.8 - ((timePassedMs / 8000) * 0.8));
                 planeCoords = [offsetCoordinate(fJet.destination.lat, fJet.destination.lng, distOffset, baseBearing - 180).lng, offsetCoordinate(fJet.destination.lat, fJet.destination.lng, distOffset, baseBearing - 180).lat];
-                planeBearing = baseBearing;
+                planeBearing = baseBearing - 45;
             }
           }
 
@@ -182,7 +190,12 @@ export default function MapEngine() {
 
         const routeData = {
            type: 'FeatureCollection',
-           features: showRoute ? [{ type: 'Feature', geometry: { type: 'LineString', coordinates: arcCoords } }] : []
+           features: showRoute && passedArcCoords.length >= 2 ? [{ type: 'Feature', geometry: { type: 'LineString', coordinates: passedArcCoords } }] : []
+        };
+
+        const futureRouteData = {
+           type: 'FeatureCollection',
+           features: showRoute && futureArcCoords.length >= 2 ? [{ type: 'Feature', geometry: { type: 'LineString', coordinates: futureArcCoords } }] : []
         };
 
         const rangeData = {
@@ -227,17 +240,38 @@ export default function MapEngine() {
                  paint: {
                    'line-color': fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff',
                    'line-width': 3,
-                   'line-dasharray': [2, 2],
-                   'line-opacity': 0.6
+                   'line-opacity': 0.8
                  }
                });
            } else {
                (m.getSource(routeSourceId) as any).setData(routeData);
                m.setPaintProperty(routeLayerId, 'line-color', fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff');
            }
+
+           const futureSourceId = `${routeSourceId}-future`;
+           const futureLayerId = `${routeLayerId}-future`;
+           if (!m.getSource(futureSourceId)) {
+               m.addSource(futureSourceId, { type: 'geojson', data: futureRouteData as any });
+               m.addLayer({
+                 id: futureLayerId,
+                 type: 'line',
+                 source: futureSourceId,
+                 paint: {
+                   'line-color': fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff',
+                   'line-width': 3,
+                   'line-dasharray': [2, 2],
+                   'line-opacity': 0.3
+                 }
+               });
+           } else {
+               (m.getSource(futureSourceId) as any).setData(futureRouteData);
+               m.setPaintProperty(futureLayerId, 'line-color', fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff');
+           }
         } else {
            if (m.getLayer(routeLayerId)) m.removeLayer(routeLayerId);
            if (m.getSource(routeSourceId)) m.removeSource(routeSourceId);
+           if (m.getLayer(`${routeLayerId}-future`)) m.removeLayer(`${routeLayerId}-future`);
+           if (m.getSource(`${routeSourceId}-future`)) m.removeSource(`${routeSourceId}-future`);
         }
 
         const rangeSourceId = `range-source-${fJet.id}`;
@@ -300,6 +334,42 @@ export default function MapEngine() {
       } else {
           if (m.getLayer(provLayerId)) m.removeLayer(provLayerId);
           if (m.getSource(provSourceId)) m.removeSource(provSourceId);
+      }
+
+      // Render Logistics Omni-Map (All scheduled future itineraries spanning the globe)
+      const omniSourceId = 'omni-routes';
+      const omniLayerId = 'omni-layer';
+      if (activeView === 'Logistics') {
+          const omniFeatures: any[] = [];
+          fleet.forEach(fJet => {
+            if (fJet.scheduledRoutes && fJet.scheduledRoutes.length > 0) {
+               fJet.scheduledRoutes.forEach(leg => {
+                  const points = computeGreatCirclePoints(leg.origin.lat, leg.origin.lng, leg.destination.lat, leg.destination.lng);
+                  omniFeatures.push({ type: 'Feature', geometry: { type: 'LineString', coordinates: points } });
+               });
+            }
+          });
+          const omniData = { type: 'FeatureCollection', features: omniFeatures };
+          
+          if (!m.getSource(omniSourceId)) {
+             m.addSource(omniSourceId, { type: 'geojson', data: omniData as any });
+             m.addLayer({
+               id: omniLayerId,
+               type: 'line',
+               source: omniSourceId,
+               paint: { 
+                 'line-color': '#00f0ff', 
+                 'line-width': 1.5, 
+                 'line-opacity': 0.2,
+                 'line-dasharray': [4, 4]
+               }
+             });
+          } else {
+             (m.getSource(omniSourceId) as any).setData(omniData);
+          }
+      } else {
+          if (m.getLayer(omniLayerId)) m.removeLayer(omniLayerId);
+          if (m.getSource(omniSourceId)) m.removeSource(omniSourceId);
       }
 
     }, 100);
