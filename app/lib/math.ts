@@ -42,38 +42,59 @@ export function computeGreatCirclePoints(
     const lat = toDeg(Math.atan2(z, Math.sqrt(x * x + y * y)));
     const lon = toDeg(Math.atan2(y, x));
     
-    coords.push([lon, lat]);
+    points.push([lon, lat]);
   }
-  return coords;
+  return points;
 }
 
-// Interpolate a single exact point along the great circle given a fraction (0.0 to 1.0)
-// Also returns the bearing so the plane icon faces the right direction
-export function interpolateFlightPosition(
-  lat1: number, lon1: number, lat2: number, lon2: number, fraction: number
-): { point: [number, number], bearing: number } {
-  if (fraction <= 0) return { point: [lon1, lat1], bearing: calculateInitialBearing(lat1, lon1, lat2, lon2) };
-  if (fraction >= 1) return { point: [lon2, lat2], bearing: calculateInitialBearing(lat1, lon1, lat2, lon2) };
+export function computeBearing(lat1: number, lng1: number, lat2: number, lng2: number) {
+  const originLat = lat1 * Math.PI / 180;
+  const originLng = lng1 * Math.PI / 180;
+  const destLat = lat2 * Math.PI / 180;
+  const destLng = lng2 * Math.PI / 180;
 
-  const distance = calculateDistanceNM(lat1, lon1, lat2, lon2);
-  const angDist = distance / 3440.065;
+  const y = Math.sin(destLng - originLng) * Math.cos(destLat);
+  const x = Math.cos(originLat) * Math.sin(destLat) -
+            Math.sin(originLat) * Math.cos(destLat) * Math.cos(destLng - originLng);
+  return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+}
 
-  const A = Math.sin((1 - fraction) * Math.abs(angDist)) / Math.sin(Math.abs(angDist));
-  const B = Math.sin(fraction * Math.abs(angDist)) / Math.sin(Math.abs(angDist));
-
-  const x = A * Math.cos(toRad(lat1)) * Math.cos(toRad(lon1)) + 
-            B * Math.cos(toRad(lat2)) * Math.cos(toRad(lon2));
-  const y = A * Math.cos(toRad(lat1)) * Math.sin(toRad(lon1)) + 
-            B * Math.cos(toRad(lat2)) * Math.sin(toRad(lon2));
-  const z = A * Math.sin(toRad(lat1)) + B * Math.sin(toRad(lat2));
-
-  const lat = toDeg(Math.atan2(z, Math.sqrt(x * x + y * y)));
-  const lon = toDeg(Math.atan2(y, x));
+export function offsetCoordinate(lat: number, lng: number, distanceNM: number, bearing: number) {
+  const R = 3440.065; // Earth radius in NM
+  const brng = bearing * Math.PI / 180;
+  const lat1 = lat * Math.PI / 180;
+  const lng1 = lng * Math.PI / 180;
   
-  // Calculate bearing to next minor point for rotation
-  const bearing = calculateInitialBearing(lat1, lon1, lat2, lon2); 
+  const lat2 = Math.asin(Math.sin(lat1) * Math.cos(distanceNM / R) + 
+                       Math.cos(lat1) * Math.sin(distanceNM / R) * Math.cos(brng));
+  const lng2 = lng1 + Math.atan2(Math.sin(brng) * Math.sin(distanceNM / R) * Math.cos(lat1),
+                               Math.cos(distanceNM / R) - Math.sin(lat1) * Math.sin(lat2));
 
-  return { point: [lon, lat], bearing };
+  return { lat: lat2 * 180 / Math.PI, lng: lng2 * 180 / Math.PI };
+}
+
+export function interpolateFlightPosition(lat1: number, lng1: number, lat2: number, lng2: number, fraction: number) {
+  const R = 3440.065; // Earth radius in NM
+  const d = calculateDistanceNM(lat1, lng1, lat2, lng2) / R;
+  
+  const lat1Rad = lat1 * Math.PI / 180;
+  const lng1Rad = lng1 * Math.PI / 180;
+  const lat2Rad = lat2 * Math.PI / 180;
+  const lng2Rad = lng2 * Math.PI / 180;
+
+  const a = Math.sin((1 - fraction) * d) / Math.sin(d);
+  const b = Math.sin(fraction * d) / Math.sin(d);
+
+  const x = a * Math.cos(lat1Rad) * Math.cos(lng1Rad) + b * Math.cos(lat2Rad) * Math.cos(lng2Rad);
+  const y = a * Math.cos(lat1Rad) * Math.sin(lng1Rad) + b * Math.cos(lat2Rad) * Math.sin(lng2Rad);
+  const z = a * Math.sin(lat1Rad) + b * Math.sin(lat2Rad);
+
+  const lat3 = Math.atan2(z, Math.sqrt(x * x + y * y)) * 180 / Math.PI;
+  const lng3 = Math.atan2(y, x) * 180 / Math.PI;
+
+  const bearing = computeBearing(lat1, lng1, lat2, lng2); // simplify bearing to point to destination overall
+
+  return { point: [lng3, lat3] as [number, number], bearing };
 }
 
 export function calculateInitialBearing(

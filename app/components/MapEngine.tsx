@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import maplibregl from 'maplibre-gl';
 import { useStore } from '../lib/store';
-import { interpolateFlightPosition, computeGreatCirclePoints } from '../lib/math';
+import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate } from '../lib/math';
 
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -104,29 +104,47 @@ export default function MapEngine() {
         let arcCoords: [number, number][] = [];
         let showRoute = false;
 
-        if ((fJet.flightPhase === 'Cruise' || fJet.flightPhase === 'Landing') && fJet.destination) {
+        if (fJet.destination && (fJet.flightPhase === 'Cruise' || fJet.flightPhase === 'Landing' || fJet.flightPhase === 'Taxi' || fJet.flightPhase === 'Takeoff')) {
           
           let progress = 0;
-          if (fJet.lockedUntil && fJet.launchedAt) {
+          if (fJet.flightPhase === 'Cruise' && fJet.lockedUntil && fJet.launchedAt) {
              progress = Math.min(1, Math.max(0, (Date.now() - fJet.launchedAt) / (fJet.lockedUntil - fJet.launchedAt)));
-          } else if (fJet.flightPhase === 'Landing') {
-             progress = 1;
           }
 
-          const interp = interpolateFlightPosition(
-            fJet.currentLocation.lat, fJet.currentLocation.lng,
-            fJet.destination.lat, fJet.destination.lng,
-            progress
-          );
+          if (fJet.flightPhase === 'Cruise') {
+            const interp = interpolateFlightPosition(
+              fJet.currentLocation.lat, fJet.currentLocation.lng,
+              fJet.destination.lat, fJet.destination.lng,
+              progress
+            );
 
-          arcCoords = computeGreatCirclePoints(
-            fJet.currentLocation.lat, fJet.currentLocation.lng,
-            fJet.destination.lat, fJet.destination.lng
-          );
+            arcCoords = computeGreatCirclePoints(
+              fJet.currentLocation.lat, fJet.currentLocation.lng,
+              fJet.destination.lat, fJet.destination.lng
+            );
 
-          planeCoords = interp.point;
-          planeBearing = interp.bearing;
-          showRoute = true;
+            planeCoords = interp.point;
+            planeBearing = interp.bearing;
+            showRoute = true;
+          } else {
+            const baseBearing = computeBearing(fJet.currentLocation.lat, fJet.currentLocation.lng, fJet.destination.lat, fJet.destination.lng);
+            let timePassedMs = fJet.launchedAt ? (Date.now() - fJet.launchedAt) : 0;
+            let distOffset = 0;
+
+            if (fJet.flightPhase === 'Taxi') {
+                distOffset = Math.min(0.04, (timePassedMs / 5000) * 0.04);
+                planeCoords = [offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lng, offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lat];
+                planeBearing = baseBearing;
+            } else if (fJet.flightPhase === 'Takeoff') {
+                distOffset = 0.04 + Math.min(0.8, (timePassedMs / 6000) * 0.8);
+                planeCoords = [offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lng, offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lat];
+                planeBearing = baseBearing;
+            } else if (fJet.flightPhase === 'Landing') {
+                distOffset = Math.max(0, 0.8 - ((timePassedMs / 8000) * 0.8));
+                planeCoords = [offsetCoordinate(fJet.destination.lat, fJet.destination.lng, distOffset, baseBearing - 180).lng, offsetCoordinate(fJet.destination.lat, fJet.destination.lng, distOffset, baseBearing - 180).lat];
+                planeBearing = baseBearing;
+            }
+          }
 
         } else {
            // On the ground

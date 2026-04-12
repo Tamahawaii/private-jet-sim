@@ -46,11 +46,15 @@ export default function FlightStateMachine() {
          updates.launchedAt = Date.now();
       }
       
+      if (newPhase === 'Taxi' || newPhase === 'Takeoff') {
+         updates.launchedAt = Date.now();
+      }
+
       if (newPhase === 'Landing') {
          if (jet.destination) updates.currentLocation = jet.destination;
          updates.destination = null;
          updates.lockedUntil = null;
-         updates.launchedAt = null;
+         updates.launchedAt = Date.now();
       }
       
       updateAircraft(jet.id, updates);
@@ -64,11 +68,11 @@ export default function FlightStateMachine() {
   };
 
   return (
-    <div className="absolute bottom-10 left-10 right-10 z-10 flex justify-between items-end">
+    <div className="w-[420px] flex gap-4 text-[var(--foreground)]">
       <motion.div 
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-panel p-6 rounded-2xl w-[420px] flex flex-col gap-4 text-[var(--foreground)] border border-white/10"
+        className="glass-panel p-6 rounded-2xl w-full flex flex-col gap-4 border border-white/10"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

@@ -109,16 +109,16 @@ export default function Home() {
              exit={{ opacity: 0, y: 50 }}
              className="absolute inset-0 z-20 pointer-events-none"
            >
-             <div className="pointer-events-none grid w-full h-full relative">
-                {/* Back to Hangar Button */}
-                <div className="absolute top-28 left-10 pointer-events-auto">
-                   <button onClick={() => setActiveView('Fleet')} className="glass-panel px-6 py-3 rounded-full text-xs font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors border border-white/20">
-                      ← Back to Hangar
-                   </button>
-                </div>
-                <div className="pointer-events-auto">
-                  <FlightStateMachine />
-                </div>
+             {/* Back to Hangar Button */}
+             <div className="absolute top-28 left-10 pointer-events-auto">
+                <button onClick={() => setActiveView('Fleet')} className="glass-panel px-6 py-3 rounded-full text-xs font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors border border-white/20 shadow-lg">
+                   ← Back to Hangar
+                </button>
+             </div>
+             
+             {/* Flight State Wrapper */}
+             <div className="absolute bottom-10 left-10 right-10 pointer-events-auto z-10 flex flex-col items-start gap-4">
+               <FlightStateMachine />
              </div>
            </motion.div>
         )}
@@ -130,7 +130,7 @@ export default function Home() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="absolute inset-0 z-20 bg-black/40"
+            className="absolute inset-0 z-20 bg-black/40 pointer-events-auto"
           >
             <CabinConfigurator />
           </motion.div>
