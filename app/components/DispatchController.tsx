@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../lib/store';
 import { CloudRain, Wind, AlertTriangle, Route as RouteIcon, DollarSign, Zap } from 'lucide-react';
 
