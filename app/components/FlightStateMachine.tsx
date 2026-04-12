@@ -158,7 +158,6 @@ export default function FlightStateMachine() {
              </div>
            </div>
         </div>
-         </div>
 
         {/* Action Button Area */}
         <div className="mt-auto p-4 bg-[#c2baa8] flex items-center gap-2 border-t border-[#b2a996]">
