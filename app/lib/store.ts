@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export type FlightPhase = 'Hangar' | 'Pre-flight' | 'Taxi' | 'Takeoff' | 'Cruise' | 'Landing';
 export type ActiveView = 'Fleet' | 'Logistics' | 'Configurator' | 'StateMachine';
@@ -73,26 +74,28 @@ export const MAIN_HUBS: Record<string, LocationData> = {
   NCE: { lat: 43.6584, lng: 7.2159, name: 'NCE' }
 };
 
-export const useStore = create<AppState>((set) => ({
-  fleet: [
-    {
-      id: 'mock-1',
-      tailNumber: 'N174JS',
-      model: 'Gulfstream G650ER',
-      speedKnots: 516,
-      flightPhase: 'Hangar',
-      currentLocation: MAIN_HUBS.LAX,
-      destination: MAIN_HUBS.HNL,
-      scheduledRoutes: [],
-      lockedUntil: null,
-      launchedAt: null
-    }
-  ],
-  selectedAircraftId: 'mock-1',
-  weatherEnabled: false,
-  activeView: 'Fleet', 
-  cabinSlots: ['Empty', 'Empty', 'Empty', 'Empty'],
-  timeMultiplier: 60, // Default 60x speed
+export const useStore = create<AppState>()(
+  persist(
+    (set) => ({
+      fleet: [
+        {
+          id: 'mock-1',
+          tailNumber: 'N174JS',
+          model: 'Gulfstream G650ER',
+          speedKnots: 516,
+          flightPhase: 'Hangar',
+          currentLocation: MAIN_HUBS.LAX,
+          destination: MAIN_HUBS.HNL,
+          scheduledRoutes: [],
+          lockedUntil: null,
+          launchedAt: null
+        }
+      ],
+      selectedAircraftId: 'mock-1',
+      weatherEnabled: false,
+      activeView: 'Fleet', 
+      cabinSlots: ['Empty', 'Empty', 'Empty', 'Empty'],
+      timeMultiplier: 60, // Default 60x speed
   
   addAircraft: (tailNumber, model) => set((state) => ({
     fleet: [
@@ -101,7 +104,7 @@ export const useStore = create<AppState>((set) => ({
         id: crypto.randomUUID(),
         tailNumber,
         model,
-        speedKnots: model.includes('8X') ? 488 : 516,
+        speedKnots: model.includes('8000') || model.includes('G700') ? 530 : model.includes('Citation') || model.includes('Praetor') ? 466 : model.includes('BBJ') || model.includes('10X') ? 490 : 516,
         flightPhase: 'Hangar',
         currentLocation: MAIN_HUBS.LAX,
         destination: null,
@@ -154,4 +157,6 @@ export const useStore = create<AppState>((set) => ({
   clearSchedule: (id) => set((state) => ({
     fleet: state.fleet.map(jet => jet.id === id ? { ...jet, scheduledRoutes: [] } : jet)
   }))
-}));
+}),
+{ name: 'jetstream-manifest-storage' }
+));

@@ -109,8 +109,15 @@ export default function FleetDashboard() {
                 className="bg-black/50 border border-white/10 rounded-lg p-3 text-white outline-none focus:border-[#00f0ff]"
               >
                 <option>Gulfstream G650ER</option>
+                <option>Gulfstream G700</option>
                 <option>Bombardier Global 7500</option>
+                <option>Bombardier Global 8000</option>
                 <option>Dassault Falcon 8X</option>
+                <option>Dassault Falcon 10X</option>
+                <option>Cessna Citation Longitude</option>
+                <option>Embraer Praetor 600</option>
+                <option>Boeing BBJ 787</option>
+                <option>Airbus ACJ TwoTwenty</option>
               </select>
               <div className="flex gap-2 mt-2">
                 <button onClick={() => setIsAdding(false)} className="flex-1 py-2 text-xs uppercase tracking-widest bg-white/5 rounded-lg hover:bg-white/10">Cancel</button>
