@@ -236,5 +236,5 @@ export const useStore = create<AppState>()(
   setZenMode: (enabled) => set({ zenMode: enabled }),
   setActiveView: (view) => set({ activeView: view })
 }),
-{ name: 'jetstream-dispatch-v1' }
+{ name: 'jetstream-dispatch-v2' }
 ));

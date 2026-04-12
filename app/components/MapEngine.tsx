@@ -9,7 +9,16 @@ import { Layers, Maximize, Minimize, FastForward, CloudRain } from 'lucide-react
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
+  const airportsRef = useRef<any[]>([]);
+
   const { fleet, selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode, timeMultiplier, setTimeMultiplier, weatherEnabled, setWeatherEnabled } = useStore();
+
+  useEffect(() => {
+     fetch('/airports.json')
+       .then(r => r.json())
+       .then(data => { airportsRef.current = data; })
+       .catch(e => console.error("Failed to fetch airports DB", e));
+  }, []);
   const jet = fleet.find(j => j.id === selectedAircraftId);
   const flightPhase = jet?.flightPhase;
   const [layersOpen, setLayersOpen] = useState(false);
@@ -70,10 +79,33 @@ export default function MapEngine() {
        if (state.selectedAircraftId) {
           const plane = state.fleet.find(j => j.id === state.selectedAircraftId);
           if (plane && (plane.flightPhase === 'Hangar' || plane.flightPhase === 'Pre-flight' || plane.flightPhase === 'Cruise')) {
-              // Note: Allow retargeting even in cruise!
+              
+              let targetLat = e.lngLat.lat;
+              let targetLng = e.lngLat.lng;
+              let targetName = `WP ${Math.floor(targetLat)}, ${Math.floor(targetLng)}`;
+
+              let minSq = Infinity;
+              let nearest = null;
+              
+              for (const ap of airportsRef.current) {
+                  const dl = ap.lat - targetLat;
+                  const dg = ap.lng - targetLng;
+                  const sq = dl*dl + dg*dg; 
+                  if (sq < minSq) {
+                     minSq = sq;
+                     nearest = ap;
+                  }
+              }
+
+              if (nearest) {
+                  targetLat = nearest.lat;
+                  targetLng = nearest.lng;
+                  targetName = `${nearest.iata} - ${nearest.name}`;
+              }
+
               state.setProvisionalRoute({
                  origin: plane.currentLocation,
-                 destination: { lat: e.lngLat.lat, lng: e.lngLat.lng, name: `WP ${Math.floor(e.lngLat.lat)}, ${Math.floor(e.lngLat.lng)}` }
+                 destination: { lat: targetLat, lng: targetLng, name: targetName }
               });
           }
        }
