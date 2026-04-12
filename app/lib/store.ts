@@ -10,14 +10,23 @@ export interface LocationData {
   name: string;
 }
 
+export interface RouteLeg {
+  id: string;
+  origin: LocationData;
+  destination: LocationData;
+}
+
 export interface Aircraft {
   id: string;
   tailNumber: string;
   model: string;
+  speedKnots: number;
   flightPhase: FlightPhase;
   currentLocation: LocationData;
   destination: LocationData | null;
+  scheduledRoutes: RouteLeg[];
   lockedUntil: number | null; 
+  launchedAt: number | null;
 }
 
 interface AppState {
@@ -36,6 +45,9 @@ interface AppState {
   setCabinSlot: (index: number, module: ModuleType) => void;
   setTimeMultiplier: (multiplier: number) => void;
   setAircraftRoute: (id: string, originName: string, destinationName: string) => void;
+  addScheduledLeg: (aircraftId: string, originName: string, destinationName: string) => void;
+  removeScheduledLeg: (aircraftId: string, legId: string) => void;
+  clearSchedule: (aircraftId: string) => void;
 }
 
 export const MAIN_HUBS: Record<string, LocationData> = {
@@ -52,10 +64,13 @@ export const useStore = create<AppState>((set) => ({
       id: 'mock-1',
       tailNumber: 'N174JS',
       model: 'Gulfstream G650ER',
+      speedKnots: 516,
       flightPhase: 'Hangar',
       currentLocation: MAIN_HUBS.LAX,
       destination: MAIN_HUBS.HNL,
-      lockedUntil: null
+      scheduledRoutes: [],
+      lockedUntil: null,
+      launchedAt: null
     }
   ],
   selectedAircraftId: 'mock-1',
@@ -71,10 +86,13 @@ export const useStore = create<AppState>((set) => ({
         id: crypto.randomUUID(),
         tailNumber,
         model,
+        speedKnots: model.includes('8X') ? 488 : 516,
         flightPhase: 'Hangar',
         currentLocation: MAIN_HUBS.LAX,
         destination: null,
-        lockedUntil: null
+        scheduledRoutes: [],
+        lockedUntil: null,
+        launchedAt: null
       }
     ]
   })),
@@ -100,5 +118,25 @@ export const useStore = create<AppState>((set) => ({
     return {
       fleet: state.fleet.map(jet => jet.id === id ? { ...jet, currentLocation: origin, destination: destination || null } : jet)
     };
-  })
+  }),
+  addScheduledLeg: (id, originName, destinationName) => set((state) => {
+    const origin = Object.values(MAIN_HUBS).find(h => h.name === originName);
+    const destination = Object.values(MAIN_HUBS).find(h => h.name === destinationName);
+    if (!origin || !destination) return state;
+    return {
+      fleet: state.fleet.map(jet => jet.id === id ? { 
+        ...jet, 
+        scheduledRoutes: [...jet.scheduledRoutes, { id: crypto.randomUUID(), origin, destination }] 
+      } : jet)
+    };
+  }),
+  removeScheduledLeg: (id, legId) => set((state) => ({
+    fleet: state.fleet.map(jet => jet.id === id ? {
+      ...jet,
+      scheduledRoutes: jet.scheduledRoutes.filter(leg => leg.id !== legId)
+    } : jet)
+  })),
+  clearSchedule: (id) => set((state) => ({
+    fleet: state.fleet.map(jet => jet.id === id ? { ...jet, scheduledRoutes: [] } : jet)
+  }))
 }));

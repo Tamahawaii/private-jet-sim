@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import FlightStateMachine from './components/FlightStateMachine';
 import CabinConfigurator from './components/CabinConfigurator';
 import FleetDashboard from './components/FleetDashboard';
+import LogisticsPlanner from './components/LogisticsPlanner';
 import { useStore } from './lib/store';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -81,6 +82,21 @@ export default function Home() {
           >
             <div className="pointer-events-auto h-full w-full">
                <FleetDashboard />
+            </div>
+          </motion.div>
+        )}
+
+        {activeView === 'Logistics' && (
+          <motion.div
+            key="logistics"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="absolute inset-0 z-20 pointer-events-none"
+          >
+            <div className="pointer-events-auto h-full w-full">
+               <LogisticsPlanner />
             </div>
           </motion.div>
         )}

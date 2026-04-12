@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plane, CloudRain, MapPin, Gauge } from 'lucide-react';
 import { useStore, FlightPhase, MAIN_HUBS } from '../lib/store';
+import { calculateDistanceNM } from '../lib/math';
 
 const PHASES: FlightPhase[] = ['Hangar', 'Pre-flight', 'Taxi', 'Takeoff', 'Cruise', 'Landing'];
 
@@ -34,15 +35,21 @@ export default function FlightStateMachine() {
       const newPhase = PHASES[currentIndex + 1];
       const updates: any = { flightPhase: newPhase };
       
-      if (newPhase === 'Cruise') {
-         // Lock the transit state based on logical distance (using flat 18000s for testing here)
-         updates.lockedUntil = Date.now() + ((18000 * 1000) / timeMultiplier);
+      if (newPhase === 'Cruise' && jet.destination) {
+         // Calculate real distance using spherical math
+         const distance = calculateDistanceNM(jet.currentLocation.lat, jet.currentLocation.lng, jet.destination.lat, jet.destination.lng);
+         // Calculate real duration based on this physical jet's capable cruising speed (ms)
+         const durationMs = (distance / jet.speedKnots) * 3600 * 1000;
+         
+         updates.lockedUntil = Date.now() + (durationMs / timeMultiplier);
+         updates.launchedAt = Date.now();
       }
       
       if (newPhase === 'Landing') {
          if (jet.destination) updates.currentLocation = jet.destination;
          updates.destination = null;
          updates.lockedUntil = null;
+         updates.launchedAt = null;
       }
       
       updateAircraft(jet.id, updates);
@@ -51,7 +58,7 @@ export default function FlightStateMachine() {
 
   const prevPhase = () => {
     if (currentIndex > 0) {
-      updateAircraft(jet.id, { flightPhase: PHASES[currentIndex - 1], lockedUntil: null });
+      updateAircraft(jet.id, { flightPhase: PHASES[currentIndex - 1], lockedUntil: null, launchedAt: null });
     }
   };
 
