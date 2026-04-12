@@ -21,17 +21,15 @@ export function calculateDistanceNM(lat1: number, lon1: number, lat2: number, lo
 }
 
 // Generates points along a great circle arc for drawing smooth lines on the globe
-export function computeGreatCirclePoints(
-  lat1: number, lon1: number, lat2: number, lon2: number, numPoints: number = 100
-): [number, number][] {
-  const coords: [number, number][] = [];
+export function computeGreatCirclePoints(lat1: number, lon1: number, lat2: number, lon2: number, segments: number = 100) {
+  const points: [number, number][] = [];
   const distance = calculateDistanceNM(lat1, lon1, lat2, lon2);
-  const fraction = distance / 3440.065; // Convert back to angular distance
+  const angDist = distance / 3440.065; // Angular distance in radians
 
-  for (let i = 0; i <= numPoints; i++) {
-    const f = i / numPoints;
-    const A = Math.sin((1 - f) * fraction) / Math.sin(fraction);
-    const B = Math.sin(f * fraction) / Math.sin(fraction);
+  for (let i = 0; i <= segments; i++) {
+    const fraction = i / segments;
+    const A = Math.sin((1 - fraction) * angDist) / Math.sin(angDist);
+    const B = Math.sin(fraction * angDist) / Math.sin(angDist);
 
     const x = A * Math.cos(toRad(lat1)) * Math.cos(toRad(lon1)) + 
               B * Math.cos(toRad(lat2)) * Math.cos(toRad(lon2));
