@@ -13,6 +13,17 @@ export default function FlightStateMachine() {
   const { fleet, selectedAircraftId, updateAircraft, weatherEnabled, setWeatherEnabled, timeMultiplier, setAircraftRoute } = useStore();
   const jet = fleet.find(j => j.id === selectedAircraftId);
   const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [locationExpanded, setLocationExpanded] = useState(false);
+
+  const getLocalTime = (lng: number) => {
+     const offsetHrs = Math.round(lng / 15);
+     const d = new Date(Date.now() + offsetHrs * 3600000);
+     const hrs = d.getUTCHours().toString().padStart(2, '0');
+     const mins = d.getUTCMinutes().toString().padStart(2, '0');
+     const month = d.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' });
+     const day = d.getUTCDate();
+     return `${hrs}:${mins} • ${month} ${day}`;
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -72,6 +83,11 @@ export default function FlightStateMachine() {
   const currentCost = simElapsedHours * jet.speedKnots * (jet.costPerNM || 20);
   const currentFuelBurned = simElapsedHours * (jet.fuelBurnGPH || 400);
 
+  const simTimeLeft = timeLeft * timeMultiplier;
+  const simHoursLeft = Math.floor(simTimeLeft / 3600);
+  const simMinutesLeft = Math.floor((simTimeLeft % 3600) / 60);
+  const formattedTTE = simHoursLeft > 0 ? `${simHoursLeft}h ${simMinutesLeft}m` : `${simMinutesLeft}m`;
+
   return (
     <div className="flex gap-4 text-[var(--foreground)] w-[860px]">
       <motion.div 
@@ -116,19 +132,58 @@ export default function FlightStateMachine() {
                     </div>
                   </div>
                ) : (
-                 <span className="text-sm font-bold tracking-widest uppercase">
+                 <button 
+                   onClick={() => setLocationExpanded(!locationExpanded)}
+                   className="text-sm font-bold tracking-widest uppercase hover:text-[#00f0ff] transition-colors flex items-center gap-2"
+                 >
                    {jet.currentLocation.name} {jet.destination ? `→ ${jet.destination.name}` : ''}
-                 </span>
+                 </button>
                )}
 
              </div>
-             {isLocked && <span className="text-xs font-mono font-bold text-[#d4af37] bg-black/50 px-2 py-1 rounded">{timeLeft}s TTE</span>}
+             {isLocked && <span className="text-xs font-mono font-bold text-[#d4af37] bg-black/50 px-2 py-1 rounded">{formattedTTE} TTE</span>}
           </div>
           <div className="flex items-center gap-3">
             <Gauge size={16} className="text-gray-400"/>
             <span className="text-sm tracking-wider">ALT: {jet.flightPhase === 'Cruise' ? '41,000 FT' : '0 FT'}</span>
           </div>
         </div>
+
+        <AnimatePresence>
+            {locationExpanded && (
+               <motion.div 
+                 initial={{ opacity: 0, height: 0 }}
+                 animate={{ opacity: 1, height: 'auto' }}
+                 exit={{ opacity: 0, height: 0 }}
+                 className="overflow-hidden bg-black/40 rounded-xl border border-white/5"
+               >
+                 <div className="p-4 flex flex-col gap-4">
+                    <div className="flex justify-between items-center">
+                       <div>
+                         <div className="text-[10px] uppercase tracking-widest text-[#00f0ff] font-bold mb-1">Origin ({jet.currentLocation.name})</div>
+                         <div className="text-sm font-mono text-white/90">{getLocalTime(jet.currentLocation.lng)}</div>
+                       </div>
+                       <div className="text-right">
+                         <div className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-1">Conditions</div>
+                         <div className="text-xs font-bold text-white flex items-center gap-1 justify-end"><CloudRain size={12}/> Clear, 22°C</div>
+                       </div>
+                    </div>
+                    {jet.destination && (
+                      <div className="flex justify-between items-center pt-3 border-t border-white/10">
+                         <div>
+                           <div className="text-[10px] uppercase tracking-widest text-[#00f0ff] font-bold mb-1">Destination ({jet.destination.name})</div>
+                           <div className="text-sm font-mono text-white/90">{getLocalTime(jet.destination.lng)}</div>
+                         </div>
+                         <div className="text-right">
+                           <div className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-1">Conditions</div>
+                           <div className="text-xs font-bold text-white flex items-center gap-1 justify-end"><CloudRain size={12}/> Overcast, 15°C</div>
+                         </div>
+                      </div>
+                    )}
+                 </div>
+               </motion.div>
+            )}
+         </AnimatePresence>
 
         <div className="flex gap-2 mt-2">
           <button 
