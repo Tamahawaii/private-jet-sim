@@ -35,7 +35,7 @@ export default function Home() {
   );
 
   return (
-    <main className="relative w-full h-full xl:min-h-screen overflow-hidden bg-[var(--background)]">
+    <main className="relative w-full h-screen overflow-hidden bg-[var(--background)]">
       <ErrorBoundary>
         {/* 3D MAP LAYER (ALWAYS RENDERED, Z-INDEX 0) */}
         <div className="absolute inset-0 z-0">
