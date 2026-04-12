@@ -93,7 +93,7 @@ export default function LogisticsPlanner() {
                     No scheduled legs
                   </div>
                 ) : (
-                  selectedJet.scheduledRoutes.map((leg, i) => {
+                  (selectedJet.scheduledRoutes || []).map((leg, i) => {
                     const dist = calculateDistanceNM(leg.origin.lat, leg.origin.lng, leg.destination.lat, leg.destination.lng);
                     return (
                       <div key={leg.id} className="bg-black/50 border border-white/10 p-4 rounded-xl flex items-center justify-between group">

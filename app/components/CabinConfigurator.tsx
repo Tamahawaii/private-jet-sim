@@ -222,7 +222,7 @@ export default function CabinConfigurator() {
                   <div className="text-[#00f0ff] tracking-widest text-xs font-bold bg-[#00f0ff]/10 px-3 py-1 rounded-full">{selectedJet.model}</div>
                 </div>
 
-                {selectedJet.cabinConfig.map((slot, index) => (
+                {(selectedJet.cabinConfig || []).map((slot, index) => (
                   <DroppableSlot key={`slot-${index}`} index={index} currentModuleId={slot} />
                 ))}
 
