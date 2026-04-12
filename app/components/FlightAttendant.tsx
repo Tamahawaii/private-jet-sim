@@ -5,7 +5,7 @@ import { useStore } from '../lib/store';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function FlightAttendant() {
-  const { activeView, selectedAircraftId, fleet } = useStore();
+  const { selectedAircraftId, fleet } = useStore();
   const [dialogue, setDialogue] = useState('');
   const [show, setShow] = useState(true);
 
@@ -15,27 +15,21 @@ export default function FlightAttendant() {
     setShow(false);
     const timer = setTimeout(() => {
       let nextDialogue = '';
-      if (activeView === 'Dashboard') {
-        nextDialogue = "Welcome back, Commander! Enter the Hangar to manage your assets or check Logistics to schedule global contracts.";
-      } else if (activeView === 'Fleet') {
-        nextDialogue = "The Hangar. Swipe through your active fleet below to select an aircraft to dispatch.";
-      } else if (activeView === 'Logistics') {
-        nextDialogue = "The World Map. Select an Origin and Destination to analyze viability and authorize contracts.";
-      } else if (activeView === 'StateMachine') {
-         if (jet?.flightPhase === 'Cruise') {
-            nextDialogue = "Aircraft is currently in transit. Tap the routing header to inspect live Atmospheric conditions.";
-         } else if (jet?.flightPhase === 'Hangar' || jet?.flightPhase === 'Pre-flight') {
-            nextDialogue = "Aircraft standing by. Set localized flight contracts and hit ACTIVATE to proceed to Taxi.";
-         } else {
-            nextDialogue = "Ground operations underway. Monitor progress carefully.";
-         }
+      if (!jet) {
+         nextDialogue = "Command Center active. Select an aircraft from the fleet roster to begin dispatch.";
+      } else if (jet.flightPhase === 'Cruise') {
+         nextDialogue = `${jet.tailNumber} is currently in transit to ${jet.destination?.name || 'its destination'}. Monitoring telemetry...`;
+      } else if (jet.flightPhase === 'Hangar' || jet.flightPhase === 'Pre-flight') {
+         nextDialogue = `${jet.tailNumber} standing by. Click the globe to map a route and authorize the launch sequence.`;
+      } else {
+         nextDialogue = `Ground operations underway for ${jet.tailNumber}. Tracking live maneuvers.`;
       }
       setDialogue(nextDialogue);
       setShow(true);
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [activeView, jet?.flightPhase]);
+  }, [selectedAircraftId, jet?.flightPhase, jet?.destination?.name]);
 
   if (!show) return null;
 
