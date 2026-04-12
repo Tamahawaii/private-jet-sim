@@ -161,11 +161,11 @@ export default function LogisticsPlanner() {
                     <div className="text-[#d4af37]">Est: {formatFlightTime(currentDist, selectedJet.speedKnots)}</div>
                   </div>
                   <button 
-                    onClick={handleAddRoute}
-                    disabled={draftOrigin === draftDest}
-                    className="bg-[#00f0ff]/20 text-[#00f0ff] hover:bg-[#00f0ff]/30 border border-[#00f0ff]/30 px-6 py-2 rounded uppercase font-bold tracking-widest text-xs transition-colors disabled:opacity-30"
+                    onClick={handleAddLeg}
+                    disabled={!newOrigin || !newDestination}
+                    className="p-3 bg-[#00f0ff]/20 text-[#00f0ff] hover:bg-[#00f0ff]/30 border border-[#00f0ff]/50 rounded-lg transition-colors disabled:opacity-30 disabled:hover:bg-[#00f0ff]/20"
                   >
-                    + Add to Manifest
+                    <ArrowRight size={20} />
                   </button>
                 </div>
               </div>
