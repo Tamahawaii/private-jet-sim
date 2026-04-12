@@ -51,13 +51,26 @@ export default function DispatchController() {
       </div>
 
       <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-6">
+
+         {jet.layoutImage && (
+            <div className="w-full h-32 relative bg-gradient-to-b from-white/5 to-transparent border border-white/10 rounded-lg overflow-hidden flex items-center justify-center p-2 group">
+               <img src={jet.layoutImage} alt={jet.model} className="w-full h-full object-contain filter group-hover:brightness-125 transition-all drop-shadow-[0_0_15px_rgba(0,240,255,0.3)]" />
+               <div className="absolute bottom-2 left-2 flex gap-2">
+                 <span className="bg-black/80 px-2 py-1 text-[8px] text-zinc-400 border border-white/10 rounded font-mono uppercase tracking-widest">{jet.cabinSlots} Modules</span>
+                 <span className="bg-black/80 px-2 py-1 text-[8px] text-zinc-400 border border-white/10 rounded font-mono uppercase tracking-widest">{jet.fuelBurnGPH} GPH</span>
+               </div>
+            </div>
+         )}
          
          {/* Live Flight Status */}
          {(jet.flightPhase !== 'Hangar') && (
            <div className="bg-[#00f0ff]/10 border border-[#00f0ff]/30 p-4 rounded-lg flex flex-col gap-2 relative overflow-hidden">
              <div className="absolute top-0 right-0 bottom-0 w-1 bg-[#00f0ff] animate-pulse"/>
              <span className="text-[9px] text-[#00f0ff] font-bold uppercase tracking-widest">Active Flight Phase</span>
-             <h3 className="text-xl text-white font-black font-mono">{jet.flightPhase.toUpperCase()}</h3>
+             <div className="flex justify-between items-end">
+               <h3 className="text-xl text-white font-black font-mono">{jet.flightPhase.toUpperCase()}</h3>
+               <span className="text-xs text-[#00f0ff] font-mono border border-[#00f0ff]/30 bg-[#00f0ff]/10 px-2 py-1 rounded">LIVE</span>
+             </div>
              <div className="text-xs text-zinc-400 font-mono mt-1">Telemetry controlled by simulator physics engine.</div>
            </div>
          )}
