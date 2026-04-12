@@ -99,6 +99,11 @@ export default function MapEngine() {
         const planeSourceId = `plane-source-${fJet.id}`;
         const planeLayerId = `plane-layer-${fJet.id}`;
 
+        let planeCoords = [0, 0] as [number, number];
+        let planeBearing = 0;
+        let arcCoords: [number, number][] = [];
+        let showRoute = false;
+
         if ((fJet.flightPhase === 'Cruise' || fJet.flightPhase === 'Landing') && fJet.destination) {
           
           let progress = 0;
@@ -114,69 +119,83 @@ export default function MapEngine() {
             progress
           );
 
-          const arcCoords = computeGreatCirclePoints(
+          arcCoords = computeGreatCirclePoints(
             fJet.currentLocation.lat, fJet.currentLocation.lng,
             fJet.destination.lat, fJet.destination.lng
           );
 
-          const routeData = {
-             type: 'FeatureCollection',
-             features: [{ type: 'Feature', geometry: { type: 'LineString', coordinates: arcCoords } }]
-          };
+          planeCoords = interp.point;
+          planeBearing = interp.bearing;
+          showRoute = true;
 
-          const planeData = {
-             type: 'FeatureCollection',
-             features: [{ 
-               type: 'Feature', 
-               geometry: { type: 'Point', coordinates: interp.point },
-               properties: { rotation: interp.bearing } 
-             }]
-          };
+        } else {
+           // On the ground
+           planeCoords = [fJet.currentLocation.lng, fJet.currentLocation.lat];
+           showRoute = false;
+        }
 
-          if (!m.getSource(routeSourceId)) {
-             m.addSource(routeSourceId, { type: 'geojson', data: routeData as any });
-             m.addLayer({
-               id: routeLayerId,
-               type: 'line',
-               source: routeSourceId,
-               paint: {
-                 'line-color': fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff',
-                 'line-width': 3,
-                 'line-dasharray': [2, 2],
-                 'line-opacity': 0.6
-               }
-             });
-             
-             m.addSource(planeSourceId, { type: 'geojson', data: planeData as any });
-             m.addLayer({
-               id: planeLayerId,
-               type: 'symbol',
-               source: planeSourceId,
-               layout: {
-                 'text-field': '✈',
-                 'text-size': 24,
-                 'text-rotation-alignment': 'map',
-                 'text-rotate': ['get', 'rotation'],
-                 'text-allow-overlap': true,
-               },
-               paint: {
-                 'text-color': fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff',
-                 'text-halo-color': '#000',
-                 'text-halo-width': 2
-               }
-             });
-          } else {
-             (m.getSource(routeSourceId) as any).setData(routeData);
-             (m.getSource(planeSourceId) as any).setData(planeData);
-             m.setPaintProperty(routeLayerId, 'line-color', fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff');
-             m.setPaintProperty(planeLayerId, 'text-color', fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff');
-          }
+        const planeData = {
+           type: 'FeatureCollection',
+           features: [{ 
+             type: 'Feature', 
+             geometry: { type: 'Point', coordinates: planeCoords },
+             properties: { rotation: planeBearing } 
+           }]
+        };
 
+        const routeData = {
+           type: 'FeatureCollection',
+           features: showRoute ? [{ type: 'Feature', geometry: { type: 'LineString', coordinates: arcCoords } }] : []
+        };
+
+        if (!m.getSource(planeSourceId)) {
+           m.addSource(planeSourceId, { type: 'geojson', data: planeData as any });
+           m.addLayer({
+             id: planeLayerId,
+             type: 'symbol',
+             source: planeSourceId,
+             layout: {
+               'text-field': '✈',
+               'text-size': fJet.flightPhase === 'Cruise' ? 24 : 16,
+               'text-rotation-alignment': 'map',
+               'text-rotate': ['get', 'rotation'],
+               'text-allow-overlap': true,
+             },
+             paint: {
+               'text-color': fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff',
+               'text-halo-color': '#000',
+               'text-halo-width': 2,
+               'text-opacity': fJet.flightPhase === 'Cruise' ? 1 : 0.6
+             }
+           });
+        } else {
+           (m.getSource(planeSourceId) as any).setData(planeData);
+           m.setPaintProperty(planeLayerId, 'text-color', fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff');
+           m.setLayoutProperty(planeLayerId, 'text-size', fJet.flightPhase === 'Cruise' ? 24 : 16);
+           m.setPaintProperty(planeLayerId, 'text-opacity', fJet.flightPhase === 'Cruise' ? 1 : 0.6);
+        }
+
+        if (showRoute) {
+           if (!m.getSource(routeSourceId)) {
+               m.addSource(routeSourceId, { type: 'geojson', data: routeData as any });
+               m.addLayer({
+                 id: routeLayerId,
+                 type: 'line',
+                 source: routeSourceId,
+                 paint: {
+                   'line-color': fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff',
+                   'line-width': 3,
+                   'line-dasharray': [2, 2],
+                   'line-opacity': 0.6
+                 }
+               });
+           } else {
+               (m.getSource(routeSourceId) as any).setData(routeData);
+               m.setPaintProperty(routeLayerId, 'line-color', fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff');
+           }
         } else {
            if (m.getLayer(routeLayerId)) m.removeLayer(routeLayerId);
            if (m.getSource(routeSourceId)) m.removeSource(routeSourceId);
-           if (m.getLayer(planeLayerId)) m.removeLayer(planeLayerId);
-           if (m.getSource(planeSourceId)) m.removeSource(planeSourceId);
         }
       });
     }, 100);

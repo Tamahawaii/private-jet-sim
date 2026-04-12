@@ -109,14 +109,16 @@ export default function Home() {
              exit={{ opacity: 0, y: 50 }}
              className="absolute inset-0 z-20 pointer-events-none"
            >
-             <div className="pointer-events-auto grid w-full h-full relative">
+             <div className="pointer-events-none grid w-full h-full relative">
                 {/* Back to Hangar Button */}
-                <div className="absolute top-28 left-10">
+                <div className="absolute top-28 left-10 pointer-events-auto">
                    <button onClick={() => setActiveView('Fleet')} className="glass-panel px-6 py-3 rounded-full text-xs font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors border border-white/20">
                       ← Back to Hangar
                    </button>
                 </div>
-                <FlightStateMachine />
+                <div className="pointer-events-auto">
+                  <FlightStateMachine />
+                </div>
              </div>
            </motion.div>
         )}

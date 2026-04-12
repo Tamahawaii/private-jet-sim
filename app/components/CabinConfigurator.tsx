@@ -13,6 +13,73 @@ const MODULES: { id: ModuleType; label: string; desc: string; icon: string }[] =
   { id: 'Cinema', label: 'Cinema Room', desc: '85" 8K display with surround', icon: '🎞️' },
 ];
 
+function JetModuleRenderer({ moduleType }: { moduleType: ModuleType }) {
+  if (moduleType === 'Executive') {
+    return (
+      <div className="w-full h-full flex flex-col justify-center items-center gap-2 relative bg-black/40">
+         <div className="flex gap-16">
+            <div className="w-8 h-10 bg-zinc-800 rounded-t-xl rounded-b-sm border-2 border-zinc-600 shadow-inner" />
+            <div className="w-8 h-10 bg-zinc-800 rounded-t-xl rounded-b-sm border-2 border-zinc-600 shadow-inner" />
+         </div>
+         <div className="w-40 h-12 bg-[#3e2723] rounded border-2 border-[#1a0f0a] shadow-[0_5px_15px_rgba(0,0,0,0.5)] flex items-center justify-center relative">
+            <div className="w-32 h-6 bg-[#2d1b15] rounded-sm opacity-80" />
+         </div>
+         <div className="flex gap-16">
+            <div className="w-8 h-10 bg-zinc-800 rounded-b-xl rounded-t-sm border-2 border-zinc-600 shadow-inner" />
+            <div className="w-8 h-10 bg-zinc-800 rounded-b-xl rounded-t-sm border-2 border-zinc-600 shadow-inner" />
+         </div>
+         <div className="absolute left-4 top-0 bottom-0 w-8 flex flex-col justify-center opacity-10 border-r-2 border-dashed border-white/50" />
+      </div>
+    );
+  }
+  
+  if (moduleType === 'MasterSuite') {
+    return (
+      <div className="w-full h-full flex items-center justify-end pr-6 pl-16 relative bg-black/40">
+         <div className="w-full max-w-[200px] h-24 bg-zinc-900 border-2 border-zinc-700 rounded-xl flex items-center justify-start p-2 shadow-2xl relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent pointer-events-none" />
+            <div className="flex flex-col gap-2 z-10">
+               <div className="w-10 h-7 bg-zinc-300 rounded-md shadow-sm" />
+               <div className="w-10 h-7 bg-zinc-300 rounded-md shadow-sm" />
+            </div>
+            <div className="ml-6 w-3/4 h-[90%] bg-zinc-800/80 rounded-md border border-zinc-600/50" />
+         </div>
+         <div className="absolute left-4 top-0 bottom-0 w-8 flex flex-col justify-center opacity-10 border-r-2 border-dashed border-white/50" />
+      </div>
+    );
+  }
+
+  if (moduleType === 'Cinema') {
+    return (
+      <div className="w-full h-full flex items-center justify-between px-8 relative bg-black/40">
+         <div className="w-12 h-28 bg-zinc-800 border-[3px] border-zinc-600 rounded-l-2xl rounded-r-md shadow-xl" />
+         <div className="w-6 h-32 bg-black border border-zinc-900 rounded shadow-[0_0_20px_rgba(0,240,255,0.15)] flex items-center justify-center relative">
+             <div className="w-1 h-28 bg-[#00f0ff]/20 rounded-full animate-pulse" />
+         </div>
+      </div>
+    );
+  }
+
+  if (moduleType === 'Galley') {
+    return (
+       <div className="w-full h-full flex justify-between px-4 relative bg-black/40">
+          <div className="w-20 h-full bg-zinc-900 border-r-2 border-zinc-700 flex flex-col justify-around py-2 shadow-[2px_0_10px_rgba(0,0,0,0.5)]">
+             <div className="w-12 h-12 ml-3 rounded-full border-2 border-zinc-600 bg-zinc-800 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full border border-zinc-500/50" />
+             </div>
+             <div className="w-16 h-3 ml-2 bg-zinc-700 rounded-sm" />
+          </div>
+          <div className="w-16 h-full bg-zinc-900 border-l-2 border-zinc-700 flex flex-col justify-center gap-4 p-3 shadow-[-2px_0_10px_rgba(0,0,0,0.5)]">
+             <div className="w-10 h-10 rounded bg-zinc-800 border-2 border-zinc-600" />
+             <div className="w-10 h-10 rounded bg-zinc-800 border-2 border-zinc-600" />
+          </div>
+       </div>
+    );
+  }
+
+  return null;
+}
+
 function DraggableModule({ module, isOverlay = false }: { module: typeof MODULES[0], isOverlay?: boolean }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `sidebar-${module.id}`,
@@ -53,13 +120,10 @@ function DroppableSlot({ index, currentModuleId }: { index: number, currentModul
   return (
     <div 
       ref={setNodeRef}
-      className={`w-full h-32 border-2 border-dashed rounded-xl flex items-center justify-center transition-colors ${isOver ? 'border-[var(--color-cyan)] bg-[var(--color-cyan)]/10 shadow-[0_0_15px_rgba(0,240,255,0.2)]' : 'border-white/20 bg-black/20'}`}
+      className={`w-full h-36 border-y-2 border-dashed flex items-center justify-center transition-colors relative overflow-hidden ${isOver ? 'border-[var(--color-cyan)] bg-[var(--color-cyan)]/10 shadow-[0_0_15px_rgba(0,240,255,0.2)] z-10' : 'border-white/10 bg-black/20 hover:bg-black/50'} ${index === 0 ? 'rounded-t-3xl border-t-2' : ''} ${index === 3 ? 'rounded-b-3xl border-b-2' : ''}`}
     >
       {moduleData ? (
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-3xl">{moduleData.icon}</span>
-          <span className="text-sm font-semibold tracking-wider text-[var(--color-cyan)] uppercase">{moduleData.label}</span>
-        </div>
+        <JetModuleRenderer moduleType={currentModuleId} />
       ) : (
         <span className="text-white/30 text-xs uppercase tracking-widest font-sans">Empty Slot {index + 1}</span>
       )}
