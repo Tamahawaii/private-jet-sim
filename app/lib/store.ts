@@ -36,7 +36,6 @@ interface AppState {
   selectedAircraftId: string | null;
   weatherEnabled: boolean;
   activeView: ActiveView;
-  cabinSlots: ModuleType[];
   timeMultiplier: number;
   
   addAircraft: (tailNumber: string, model: string) => void;
