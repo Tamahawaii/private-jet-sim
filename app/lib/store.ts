@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import { STARTER_FLEET, CatalogItem } from './mockData';
 
 export type FlightPhase = 'Hangar' | 'Pre-flight' | 'Taxi' | 'Takeoff' | 'Cruise' | 'Landing';
-export type ActiveView = 'Dashboard' | 'Fleet' | 'Logistics' | 'Configurator' | 'StateMachine' | 'Shop';
+export type ActiveView = 'Dashboard' | 'Fleet' | 'Logistics' | 'Configurator' | 'StateMachine' | 'Shop' | 'Sandbox';
 export type ModuleType = 'Executive' | 'MasterSuite' | 'Galley' | 'Cinema' | 'Empty';
 
 export interface LocationData {
@@ -50,6 +50,7 @@ interface AppState {
   mapStyle: 'FlightAware' | 'Satellite' | 'Dark' | 'Roads';
 
   buyAircraft: (catalogItem: CatalogItem) => void;
+  quickLaunchFlight: (id: string, destination: LocationData) => void;
   updateAircraft: (id: string, updates: Partial<Aircraft>) => void;
   setSelectedAircraftId: (id: string | null) => void;
   setProvisionalRoute: (route: { origin: LocationData, destination: LocationData } | null) => void;
@@ -113,10 +114,11 @@ export const useStore = create<AppState>()(
       timeMultiplier: 60,
       provisionalRoute: null,
       playerLevel: 1,
-      playerCash: 1100000000, // $1.1 Billion
+      playerCash: 80000000000, // $80 Billion
       mapStyle: 'FlightAware',
 
   buyAircraft: (item) => set((state) => {
+    // ... handles buy logic ...
     if (state.playerCash >= item.price) {
        const newAircraft: Aircraft = {
          id: `bought-jet-${Date.now()}`,
@@ -129,7 +131,7 @@ export const useStore = create<AppState>()(
          layoutImage: item.layoutImage,
          cabinConfig: Array(item.cabinSlots).fill('Empty'),
          flightPhase: 'Hangar',
-         currentLocation: MAIN_HUBS.LAX,
+         currentLocation: MAIN_HUBS.LAX, // always starts at LAX
          destination: null,
          scheduledRoutes: [],
          lockedUntil: null,
@@ -142,6 +144,34 @@ export const useStore = create<AppState>()(
        };
     }
     return state;
+  }),
+
+  quickLaunchFlight: (id, destination) => set((state) => {
+     // Compute rough travel time based on distance / speed
+     const plane = state.fleet.find(f => f.id === id);
+     if (!plane) return state;
+
+     // Calculate flight time in milliseconds
+     // Extremely rough distance in NM (very rough heuristic just for timer)
+     const distLat = Math.abs(plane.currentLocation.lat - destination.lat) * 60;
+     const distLng = Math.abs(plane.currentLocation.lng - destination.lng) * 60;
+     const distNM = Math.sqrt(distLat*distLat + distLng*distLng);
+     const hours = distNM / plane.speedKnots;
+     
+     // scale down timer for game loop (1 hour = simulated faster via timeMultiplier, but we'll use a fixed short demo time for Sandbox mode)
+     // Let Sandbox flights take a fun 60 seconds of real-time to cross the globe
+     const flightDurationRealTimeMs = 60000; 
+
+     return {
+        fleet: state.fleet.map(jet => jet.id === id ? {
+            ...jet,
+            flightPhase: 'Cruise',
+            destination: destination,
+            launchedAt: Date.now(),
+            lockedUntil: Date.now() + flightDurationRealTimeMs
+        } : jet),
+        activeView: 'Sandbox' // Ensure we're in sandbox view to watch it
+     };
   }),
 
   updateAircraft: (id, updates) => set((state) => ({

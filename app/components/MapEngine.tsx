@@ -44,6 +44,44 @@ export default function MapEngine() {
       bearing: -17.6,
     });
 
+    const m = map.current;
+
+    // Interactive map cursor logic
+    m.on('mousemove', (e) => {
+       const features = m.queryRenderedFeatures(e.point);
+       if (features.some(f => f.layer.id.startsWith('plane-layer-'))) {
+           m.getCanvas().style.cursor = 'pointer';
+       } else if (useStore.getState().activeView === 'Sandbox') {
+           m.getCanvas().style.cursor = 'crosshair';
+       } else {
+           m.getCanvas().style.cursor = '';
+       }
+    });
+
+    m.on('click', (e) => {
+       const features = m.queryRenderedFeatures(e.point);
+       const planeFeature = features.find(f => f.layer.id.startsWith('plane-layer-'));
+       
+       if (planeFeature) {
+          const id = planeFeature.layer.id.replace('plane-layer-', '');
+          useStore.getState().setSelectedAircraftId(id);
+          useStore.getState().setActiveView('Sandbox');
+          return;
+       }
+
+       const state = useStore.getState();
+       if (state.activeView === 'Sandbox' && state.selectedAircraftId) {
+          const plane = state.fleet.find(j => j.id === state.selectedAircraftId);
+          if (plane && (plane.flightPhase === 'Hangar' || plane.flightPhase === 'Pre-flight' || plane.flightPhase === 'Cruise')) {
+              // Note: Allow retargeting even in cruise!
+              state.setProvisionalRoute({
+                 origin: plane.currentLocation,
+                 destination: { lat: e.lngLat.lat, lng: e.lngLat.lng, name: `WP ${Math.floor(e.lngLat.lat)}, ${Math.floor(e.lngLat.lng)}` }
+              });
+          }
+       }
+    });
+
   }, []);
 
   useEffect(() => {
@@ -320,7 +358,7 @@ export default function MapEngine() {
       // Render Provisional Route Line
       const provSourceId = 'prov-route-source';
       const provLayerId = 'prov-route-layer';
-      if (activeView === 'Logistics' && provisionalRoute) {
+      if ((activeView === 'Logistics' || activeView === 'Sandbox') && provisionalRoute) {
           const provArcCoords = computeGreatCirclePoints(
               provisionalRoute.origin.lat, provisionalRoute.origin.lng,
               provisionalRoute.destination.lat, provisionalRoute.destination.lng

@@ -8,6 +8,7 @@ import FleetDashboard from './components/FleetDashboard';
 import LogisticsPlanner from './components/LogisticsPlanner';
 import Dashboard from './components/Dashboard';
 import Shop from './components/Shop';
+import FlightHUD from './components/FlightHUD';
 import FlightAttendant from './components/FlightAttendant';
 import { useStore } from './lib/store';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -185,6 +186,8 @@ export default function Home() {
             </div>
           </motion.div>
         )}
+
+        {activeView === 'Sandbox' && <FlightHUD />}
       </AnimatePresence>
 
       <FlightAttendant />
