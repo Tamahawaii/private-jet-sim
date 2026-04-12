@@ -2,9 +2,9 @@
 
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import FleetSidebar from './components/FleetSidebar';
-import DispatchController from './components/DispatchController';
-import FlightAttendant from './components/FlightAttendant';
+const FleetSidebar = dynamic(() => import('./components/FleetSidebar'), { ssr: false });
+const DispatchController = dynamic(() => import('./components/DispatchController'), { ssr: false });
+const FlightAttendant = dynamic(() => import('./components/FlightAttendant'), { ssr: false });
 
 const MapEngine = dynamic(() => import('./components/MapEngine'), {
   ssr: false,
