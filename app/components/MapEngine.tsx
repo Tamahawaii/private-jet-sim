@@ -113,6 +113,10 @@ export default function MapEngine() {
     }
 
     if (!jet || !jet.currentLocation) return;
+    
+    // Sandbox handles its own tight continuous tracking loop.
+    if (activeView === 'Sandbox') return;
+
     const center = [jet.currentLocation.lng, jet.currentLocation.lat] as [number, number];
 
     switch (flightPhase) {
@@ -163,54 +167,96 @@ export default function MapEngine() {
         let showRoute = false;
         let showRange = false;
 
-        if (fJet.destination && (fJet.flightPhase === 'Cruise' || fJet.flightPhase === 'Landing' || fJet.flightPhase === 'Taxi' || fJet.flightPhase === 'Takeoff')) {
-          
-          let progress = 0;
-          if (fJet.flightPhase === 'Cruise' && fJet.lockedUntil && fJet.launchedAt) {
-             progress = Math.min(1, Math.max(0, (Date.now() - fJet.launchedAt) / (fJet.lockedUntil - fJet.launchedAt)));
-          }
+        if (fJet.destination && fJet.launchedAt && fJet.flightPhase !== 'Hangar') {
+           const timeM = useStore.getState().timeMultiplier;
+           const simPassedMs = (Date.now() - fJet.launchedAt) * timeM;
+           const mins = simPassedMs / 60000;
+           
+           // Physics Thresholds (Simulated Minutes)
+           const preFlightEnds = 10;
+           const taxiEnds = 10 + 15; // 25
+           const takeoffEnds = 25 + 5; // 30
+           
+           // Fetch total locked time which was dynamically calculated upon launch
+           const lockedUntil = fJet.lockedUntil || (Date.now() + 60000);
+           const totalSimMins = ((lockedUntil - fJet.launchedAt) * timeM) / 60000;
+           const landingBegins = Math.max(takeoffEnds + 5, totalSimMins - 10);
+           
+           // Determine active physics phase mathematically
+           const calcPhase = 
+              mins < preFlightEnds ? 'Pre-flight' :
+              mins < taxiEnds ? 'Taxi' :
+              mins < takeoffEnds ? 'Takeoff' :
+              mins < landingBegins ? 'Cruise' :
+              mins < totalSimMins ? 'Landing' : 'Hangar';
 
-          if (fJet.flightPhase === 'Cruise') {
-            const interp = interpolateFlightPosition(
-              fJet.currentLocation.lat, fJet.currentLocation.lng,
-              fJet.destination.lat, fJet.destination.lng,
-              progress
-            );
+           // Auto-shift phase in store if boundary crossed
+           if (calcPhase !== fJet.flightPhase) {
+               if (calcPhase === 'Hangar') {
+                   useStore.getState().updateAircraft(fJet.id, { 
+                       flightPhase: 'Hangar', 
+                       currentLocation: fJet.destination, 
+                       destination: null, 
+                       launchedAt: null, 
+                       lockedUntil: null 
+                   });
+                   return; // skip this tick
+               } else {
+                   useStore.getState().updateAircraft(fJet.id, { flightPhase: calcPhase as any });
+                   return;
+               }
+           }
+           
+           const baseBearing = computeBearing(fJet.currentLocation.lat, fJet.currentLocation.lng, fJet.destination.lat, fJet.destination.lng);
 
-            const fullArc = computeGreatCirclePoints(
-              fJet.currentLocation.lat, fJet.currentLocation.lng,
-              fJet.destination.lat, fJet.destination.lng
-            );
+           if (fJet.flightPhase === 'Cruise') {
+             const cruiseProg = Math.min(1, Math.max(0, (mins - takeoffEnds) / (landingBegins - takeoffEnds)));
+             const interp = interpolateFlightPosition(
+               fJet.currentLocation.lat, fJet.currentLocation.lng,
+               fJet.destination.lat, fJet.destination.lng,
+               cruiseProg
+             );
 
-            const sliceIndex = Math.floor(progress * fullArc.length);
-            passedArcCoords = fullArc.slice(0, Math.max(2, sliceIndex + 1));
-            futureArcCoords = fullArc.slice(Math.max(0, sliceIndex));
-            
-            if (passedArcCoords.length < 2) passedArcCoords = [];
-            if (futureArcCoords.length < 2) futureArcCoords = [];
+             const fullArc = computeGreatCirclePoints(
+               fJet.currentLocation.lat, fJet.currentLocation.lng,
+               fJet.destination.lat, fJet.destination.lng
+             );
 
-            planeCoords = interp.point;
-            planeBearing = interp.bearing - 45; // Offset Unicode plane symbol angle mathematically
-            showRoute = true;
-          } else {
-            const baseBearing = computeBearing(fJet.currentLocation.lat, fJet.currentLocation.lng, fJet.destination.lat, fJet.destination.lng);
-            let timePassedMs = fJet.launchedAt ? (Date.now() - fJet.launchedAt) : 0;
-            let distOffset = 0;
+             const sliceIndex = Math.floor(cruiseProg * fullArc.length);
+             passedArcCoords = fullArc.slice(0, Math.max(2, sliceIndex + 1));
+             futureArcCoords = fullArc.slice(Math.max(0, sliceIndex));
+             
+             if (passedArcCoords.length < 2) passedArcCoords = [];
+             if (futureArcCoords.length < 2) futureArcCoords = [];
 
-            if (fJet.flightPhase === 'Taxi') {
-                distOffset = Math.min(0.04, (timePassedMs / 5000) * 0.04);
-                planeCoords = [offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lng, offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lat];
-                planeBearing = baseBearing - 45;
-            } else if (fJet.flightPhase === 'Takeoff') {
-                distOffset = 0.04 + Math.min(0.8, (timePassedMs / 6000) * 0.8);
-                planeCoords = [offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lng, offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lat];
-                planeBearing = baseBearing - 45;
-            } else if (fJet.flightPhase === 'Landing') {
-                distOffset = Math.max(0, 0.8 - ((timePassedMs / 8000) * 0.8));
-                planeCoords = [offsetCoordinate(fJet.destination.lat, fJet.destination.lng, distOffset, baseBearing - 180).lng, offsetCoordinate(fJet.destination.lat, fJet.destination.lng, distOffset, baseBearing - 180).lat];
-                planeBearing = baseBearing - 45;
-            }
-          }
+             planeCoords = interp.point;
+             planeBearing = interp.bearing - 45; 
+             showRoute = true;
+           } else {
+             let distOffset = 0;
+             if (fJet.flightPhase === 'Pre-flight') {
+                 planeCoords = [fJet.currentLocation.lng, fJet.currentLocation.lat];
+             } else if (fJet.flightPhase === 'Taxi') {
+                 const taxiProg = (mins - preFlightEnds) / 15;
+                 distOffset = Math.min(0.04, taxiProg * 0.04);
+                 planeCoords = [offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lng, offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lat];
+             } else if (fJet.flightPhase === 'Takeoff') {
+                 const takeoffProg = (mins - taxiEnds) / 5;
+                 distOffset = 0.04 + Math.min(0.8, takeoffProg * 0.8);
+                 planeCoords = [offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lng, offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lat];
+             } else if (fJet.flightPhase === 'Landing') {
+                 const landingProg = (mins - landingBegins) / 10;
+                 distOffset = Math.max(0, 0.8 - (landingProg * 0.8));
+                 planeCoords = [offsetCoordinate(fJet.destination.lat, fJet.destination.lng, distOffset, baseBearing - 180).lng, offsetCoordinate(fJet.destination.lat, fJet.destination.lng, distOffset, baseBearing - 180).lat];
+             }
+             planeBearing = baseBearing - 45;
+           }
+           
+           // Cinematic Sandbox Map Tracking
+           if (useStore.getState().activeView === 'Sandbox' && fJet.id === useStore.getState().selectedAircraftId) {
+               m.setCenter(planeCoords as [number, number]);
+               if (fJet.flightPhase !== 'Cruise' && m.getZoom() < 14) m.zoomTo(15, { duration: 1000 });
+           }
 
         } else {
            // On the ground
@@ -258,22 +304,21 @@ export default function MapEngine() {
              source: planeSourceId,
              layout: {
                'text-field': '✈',
-               'text-size': fJet.flightPhase === 'Cruise' ? 24 : 16,
+               'text-size': fJet.flightPhase === 'Cruise' ? 42 : 32,
                'text-rotation-alignment': 'map',
                'text-rotate': ['get', 'rotation'],
                'text-allow-overlap': true,
              },
              paint: {
                'text-color': '#ffffff',
-               'text-halo-color': '#000',
-               'text-halo-width': 1,
-               'text-opacity': fJet.flightPhase === 'Cruise' ? 1 : 0.6
+               'text-halo-color': '#00f0ff',
+               'text-halo-width': 2,
+               'text-opacity': 1
              }
            });
         } else {
            (m.getSource(planeSourceId) as any).setData(planeData);
-           m.setLayoutProperty(planeLayerId, 'text-size', fJet.flightPhase === 'Cruise' ? 24 : 16);
-           m.setPaintProperty(planeLayerId, 'text-opacity', fJet.flightPhase === 'Cruise' ? 1 : 0.6);
+           m.setLayoutProperty(planeLayerId, 'text-size', fJet.flightPhase === 'Cruise' ? 42 : 32);
         }
 
         if (showRoute) {

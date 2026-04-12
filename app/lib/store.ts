@@ -147,30 +147,27 @@ export const useStore = create<AppState>()(
   }),
 
   quickLaunchFlight: (id, destination) => set((state) => {
-     // Compute rough travel time based on distance / speed
      const plane = state.fleet.find(f => f.id === id);
      if (!plane) return state;
 
-     // Calculate flight time in milliseconds
-     // Extremely rough distance in NM (very rough heuristic just for timer)
      const distLat = Math.abs(plane.currentLocation.lat - destination.lat) * 60;
      const distLng = Math.abs(plane.currentLocation.lng - destination.lng) * 60;
      const distNM = Math.sqrt(distLat*distLat + distLng*distLng);
-     const hours = distNM / plane.speedKnots;
+     let hours = distNM / plane.speedKnots;
      
-     // scale down timer for game loop (1 hour = simulated faster via timeMultiplier, but we'll use a fixed short demo time for Sandbox mode)
-     // Let Sandbox flights take a fun 60 seconds of real-time to cross the globe
-     const flightDurationRealTimeMs = 60000; 
+     // Minimum flight time of 40 mins to support full phase intervals 
+     // (10m Pre-flight + 15m Taxi + 5m Takeoff + x Cruise + 10m Landing)
+     if (hours < 0.66) hours = 0.66;
 
      return {
         fleet: state.fleet.map(jet => jet.id === id ? {
             ...jet,
-            flightPhase: 'Cruise',
+            flightPhase: 'Pre-flight', // Start realistically!
             destination: destination,
             launchedAt: Date.now(),
-            lockedUntil: Date.now() + flightDurationRealTimeMs
+            lockedUntil: Date.now() + ((hours * 3600000) / state.timeMultiplier)
         } : jet),
-        activeView: 'Sandbox' // Ensure we're in sandbox view to watch it
+        activeView: 'Sandbox'
      };
   }),
 
