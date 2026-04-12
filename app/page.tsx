@@ -8,7 +8,17 @@ import FleetDashboard from './components/FleetDashboard';
 import { useStore } from './lib/store';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const MapEngine = dynamic(() => import('./components/MapEngine'), { ssr: false });
+const MapEngine = dynamic(() => import('./components/MapEngine'), { 
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 flex items-center justify-center bg-[#0a0a0c] z-0">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 border-4 border-[#00f0ff] border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(0,240,255,0.5)]" />
+        <p className="text-[#00f0ff] font-mono text-sm tracking-[0.2em] uppercase animate-pulse">Initializing 3D Engine...</p>
+      </div>
+    </div>
+  )
+});
 
 export default function Home() {
   const { activeView, setActiveView } = useStore();
@@ -16,16 +26,19 @@ export default function Home() {
   return (
     <main className="relative w-full h-full min-h-screen overflow-hidden bg-[var(--background)]">
       
-      {/* Background Map */}
-      <motion.div 
-        className="absolute inset-0 z-0"
-        animate={{
-          filter: activeView === 'Configurator' || activeView === 'Fleet' ? 'blur(20px) brightness(0.3)' : 'blur(0px) brightness(1)',
-        }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
-      >
+      {/* Background Map layer */}
+      <div className="absolute inset-0 z-0">
         <MapEngine />
-      </motion.div>
+      </div>
+      
+      {/* High-performance Map Darkening Overlay (Animates Opacity rather than expensive WebGL Blur) */}
+      <motion.div 
+        className="absolute inset-0 bg-[#0a0a0c]/80 pointer-events-none z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: activeView === 'Configurator' || activeView === 'Fleet' ? 1 : 0 }}
+        transition={{ duration: 0.8 }}
+        style={{ backdropFilter: 'blur(8px)' }}
+      />
       
       {/* Top Nav */}
       <div className="absolute top-0 left-0 w-full p-6 z-30 flex justify-between items-center pointer-events-none">
