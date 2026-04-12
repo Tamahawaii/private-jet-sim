@@ -4,6 +4,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import FlightStateMachine from './components/FlightStateMachine';
 import CabinConfigurator from './components/CabinConfigurator';
+import FleetDashboard from './components/FleetDashboard';
 import { useStore } from './lib/store';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -15,11 +16,11 @@ export default function Home() {
   return (
     <main className="relative w-full h-full min-h-screen overflow-hidden bg-[var(--background)]">
       
-      {/* Background Map - blurred if config is active */}
+      {/* Background Map */}
       <motion.div 
         className="absolute inset-0 z-0"
         animate={{
-          filter: activeView === 'Configurator' ? 'blur(20px) brightness(0.3)' : 'blur(0px) brightness(1)',
+          filter: activeView === 'Configurator' || activeView === 'Fleet' ? 'blur(20px) brightness(0.3)' : 'blur(0px) brightness(1)',
         }}
         transition={{ duration: 0.8, ease: "easeInOut" }}
       >
@@ -37,7 +38,7 @@ export default function Home() {
             onClick={() => setActiveView('Fleet')} 
             className={`hover:text-white transition-colors ${activeView === 'Fleet' ? 'text-[var(--color-cyan)] drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]' : ''}`}
           >
-            Fleet
+            Hangar
           </button>
           <button 
             onClick={() => setActiveView('Logistics')} 
@@ -58,16 +59,37 @@ export default function Home() {
       <AnimatePresence>
         {activeView === 'Fleet' && (
           <motion.div
-            key="fleet"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
+            key="dashboard"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             className="absolute inset-0 z-20 pointer-events-none"
           >
-            <div className="pointer-events-auto">
-              <FlightStateMachine />
+            <div className="pointer-events-auto h-full w-full">
+               <FleetDashboard />
             </div>
           </motion.div>
+        )}
+
+        {activeView === 'StateMachine' && (
+           <motion.div
+             key="statemachine"
+             initial={{ opacity: 0, y: 50 }}
+             animate={{ opacity: 1, y: 0 }}
+             exit={{ opacity: 0, y: 50 }}
+             className="absolute inset-0 z-20 pointer-events-none"
+           >
+             <div className="pointer-events-auto grid w-full h-full relative">
+                {/* Back to Hangar Button */}
+                <div className="absolute top-28 left-10">
+                   <button onClick={() => setActiveView('Fleet')} className="glass-panel px-6 py-3 rounded-full text-xs font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors border border-white/20">
+                      ← Back to Hangar
+                   </button>
+                </div>
+                <FlightStateMachine />
+             </div>
+           </motion.div>
         )}
         
         {activeView === 'Configurator' && (

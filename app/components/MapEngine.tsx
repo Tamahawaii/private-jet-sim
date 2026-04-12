@@ -10,7 +10,9 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZHVtbXlsb2NhbCIsImEiOiJjbXhxemN3aXYwbG53MnFxd
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const { flightPhase } = useStore();
+  const { fleet, selectedAircraftId } = useStore();
+  const jet = fleet.find(j => j.id === selectedAircraftId);
+  const flightPhase = jet?.flightPhase;
 
   useEffect(() => {
     if (map.current || !mapContainer.current) return;
@@ -42,28 +44,35 @@ export default function MapEngine() {
   }, []);
 
   useEffect(() => {
-    if (!map.current) return;
+    if (!map.current || !jet) return;
     const m = map.current;
+    const center = [jet.currentLocation.lng, jet.currentLocation.lat] as [number, number];
 
     switch (flightPhase) {
       case 'Hangar':
       case 'Pre-flight':
-        m.flyTo({ center: [-118.4085, 33.9416], zoom: 14, pitch: 45, duration: 2000 });
+        m.flyTo({ center, zoom: 14, pitch: 45, duration: 2000 });
         break;
       case 'Taxi':
-        m.flyTo({ center: [-118.401, 33.945], zoom: 15, pitch: 60, bearing: 45, duration: 4000 });
+        m.flyTo({ center, zoom: 15, pitch: 60, bearing: 45, duration: 4000 });
         break;
       case 'Takeoff':
-        m.flyTo({ zoom: 9, pitch: 70, duration: 6000 });
+        m.flyTo({ center, zoom: 9, pitch: 70, duration: 6000 });
         break;
       case 'Cruise':
-        m.flyTo({ center: [-138, 28], zoom: 4, pitch: 30, duration: 10000 });
+        if(jet.destination) {
+          const midLng = (jet.currentLocation.lng + jet.destination.lng) / 2;
+          const midLat = (jet.currentLocation.lat + jet.destination.lat) / 2;
+          m.flyTo({ center: [midLng, midLat], zoom: 4, pitch: 30, duration: 10000 });
+        }
         break;
       case 'Landing':
-        m.flyTo({ center: [-157.9255, 21.3204], zoom: 14, pitch: 60, duration: 8000 });
+        if(jet.destination) {
+           m.flyTo({ center: [jet.destination.lng, jet.destination.lat], zoom: 14, pitch: 60, duration: 8000 });
+        }
         break;
     }
-  }, [flightPhase]);
+  }, [flightPhase, jet?.id]);
 
   return (
     <div className="absolute inset-0 z-0">
