@@ -1,15 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useStore, MAIN_HUBS } from '../lib/store';
+import { useStore, LocationData } from '../lib/store';
 import { calculateDistanceNM } from '../lib/math';
-import { Plane, Plus, MapPin, Navigation, Trash2, Clock } from 'lucide-react';
+import { Plane, MapPin, Navigation, Trash2, Clock, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import AirportSearch from './AirportSearch';
 
 export default function LogisticsPlanner() {
   const { fleet, selectedAircraftId, setSelectedAircraftId, addScheduledLeg, removeScheduledLeg, clearSchedule } = useStore();
-  const [draftOrigin, setDraftOrigin] = useState<string>('LAX');
-  const [draftDest, setDraftDest] = useState<string>('HNL');
+  
+  const [newOrigin, setNewOrigin] = useState<LocationData | null>(null);
+  const [newDestination, setNewDestination] = useState<LocationData | null>(null);
 
   const selectedJet = fleet.find(j => j.id === selectedAircraftId);
 
@@ -20,10 +22,17 @@ export default function LogisticsPlanner() {
     return `${h}h ${m}m`;
   };
 
-  const handleAddRoute = () => {
-    if (!selectedJet || draftOrigin === draftDest) return;
-    addScheduledLeg(selectedJet.id, draftOrigin, draftDest);
+  const handleAddLeg = () => {
+    if (selectedJet && newOrigin && newDestination) {
+      addScheduledLeg(selectedJet.id, newOrigin, newDestination);
+      setNewOrigin(newDestination);
+      setNewDestination(null);
+    }
   };
+
+  const currentDist = (newOrigin && newDestination) 
+    ? calculateDistanceNM(newOrigin.lat, newOrigin.lng, newDestination.lat, newDestination.lng) 
+    : 0;
 
   return (
     <div className="absolute inset-0 z-20 flex pt-28 pb-10 px-10 gap-6 bg-black/60 backdrop-blur-xl overflow-y-auto">
@@ -127,29 +136,29 @@ export default function LogisticsPlanner() {
 
               {/* Add Leg UI */}
               <div className="mt-auto bg-white/5 border border-white/10 rounded-xl p-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <span className="text-xs uppercase tracking-widest text-[#00f0ff] font-bold">New Leg:</span>
-                  <select 
-                    value={draftOrigin} 
-                    onChange={e => setDraftOrigin(e.target.value)}
-                    className="bg-black border border-white/20 rounded p-2 text-sm outline-none focus:border-[#00f0ff]"
-                  >
-                    {Object.keys(MAIN_HUBS).map(h => <option key={h} value={h}>{h}</option>)}
-                  </select>
-                  <span className="text-white/50">TO</span>
-                  <select 
-                    value={draftDest} 
-                    onChange={e => setDraftDest(e.target.value)}
-                    className="bg-black border border-white/20 rounded p-2 text-sm outline-none focus:border-[#d4af37]"
-                  >
-                    {Object.keys(MAIN_HUBS).map(h => <option key={h} value={h} disabled={h === draftOrigin}>{h}</option>)}
-                  </select>
-                </div>
+                <div className="flex gap-4 items-center">
+                 <div className="flex-1 z-50">
+                   <AirportSearch 
+                     value={newOrigin} 
+                     onChange={setNewOrigin} 
+                     placeholder="Select Origin Airport..." 
+                   />
+                 </div>
+                 <ArrowRight size={20} className="text-white/40 shrink-0" />
+                 <div className="flex-1 z-50">
+                   <AirportSearch 
+                     value={newDestination} 
+                     onChange={setNewDestination} 
+                     placeholder="Select Destination Airport..."
+                     excludeIata={newOrigin?.name}
+                   />
+                 </div>
+              </div>
 
                 <div className="flex items-center gap-4">
                   <div className="text-right text-xs text-white/50">
-                    <div>Dist: {Math.round(calculateDistanceNM(MAIN_HUBS[draftOrigin].lat, MAIN_HUBS[draftOrigin].lng, MAIN_HUBS[draftDest].lat, MAIN_HUBS[draftDest].lng))} NM</div>
-                    <div className="text-[#d4af37]">Est: {formatFlightTime(calculateDistanceNM(MAIN_HUBS[draftOrigin].lat, MAIN_HUBS[draftOrigin].lng, MAIN_HUBS[draftDest].lat, MAIN_HUBS[draftDest].lng), selectedJet.speedKnots)}</div>
+                    <div>Dist: {Math.round(currentDist)} NM</div>
+                    <div className="text-[#d4af37]">Est: {formatFlightTime(currentDist, selectedJet.speedKnots)}</div>
                   </div>
                   <button 
                     onClick={handleAddRoute}

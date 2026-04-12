@@ -22,6 +22,7 @@ export interface Aircraft {
   tailNumber: string;
   model: string;
   speedKnots: number;
+  cabinConfig: ModuleType[];
   flightPhase: FlightPhase;
   currentLocation: LocationData;
   destination: LocationData | null;
@@ -43,10 +44,10 @@ interface AppState {
   setSelectedAircraftId: (id: string | null) => void;
   setWeatherEnabled: (enabled: boolean) => void;
   setActiveView: (view: ActiveView) => void;
-  setCabinSlot: (index: number, module: ModuleType) => void;
+  setCabinSlot: (aircraftId: string, index: number, module: ModuleType) => void;
   setTimeMultiplier: (multiplier: number) => void;
-  setAircraftRoute: (id: string, originName: string, destinationName: string) => void;
-  addScheduledLeg: (aircraftId: string, originName: string, destinationName: string) => void;
+  setAircraftRoute: (id: string, origin: LocationData, destination: LocationData | null) => void;
+  addScheduledLeg: (aircraftId: string, origin: LocationData, destination: LocationData) => void;
   removeScheduledLeg: (aircraftId: string, legId: string) => void;
   clearSchedule: (aircraftId: string) => void;
 }
@@ -83,6 +84,7 @@ export const useStore = create<AppState>()(
           tailNumber: 'N174JS',
           model: 'Gulfstream G650ER',
           speedKnots: 516,
+          cabinConfig: ['Empty', 'Empty', 'Empty', 'Empty'],
           flightPhase: 'Hangar',
           currentLocation: MAIN_HUBS.LAX,
           destination: MAIN_HUBS.HNL,
@@ -94,7 +96,6 @@ export const useStore = create<AppState>()(
       selectedAircraftId: 'mock-1',
       weatherEnabled: false,
       activeView: 'Fleet', 
-      cabinSlots: ['Empty', 'Empty', 'Empty', 'Empty'],
       timeMultiplier: 60, // Default 60x speed
   
   addAircraft: (tailNumber, model) => set((state) => ({
@@ -105,6 +106,7 @@ export const useStore = create<AppState>()(
         tailNumber,
         model,
         speedKnots: model.includes('8000') || model.includes('G700') ? 530 : model.includes('Citation') || model.includes('Praetor') ? 466 : model.includes('BBJ') || model.includes('10X') ? 490 : 516,
+        cabinConfig: Array(model.includes('BBJ') || model.includes('ACJ') ? 6 : model.includes('Citation') || model.includes('Praetor') ? 2 : 4).fill('Empty'),
         flightPhase: 'Hangar',
         currentLocation: MAIN_HUBS.LAX,
         destination: null,
@@ -122,32 +124,26 @@ export const useStore = create<AppState>()(
   setSelectedAircraftId: (id) => set({ selectedAircraftId: id }),
   setWeatherEnabled: (enabled) => set({ weatherEnabled: enabled }),
   setActiveView: (view) => set({ activeView: view }),
-  setCabinSlot: (index, module) => set((state) => {
-    const newSlots = [...state.cabinSlots];
-    newSlots[index] = module;
-    return { cabinSlots: newSlots };
-  }),
+  setCabinSlot: (id, index, module) => set((state) => ({
+    fleet: state.fleet.map(jet => {
+      if (jet.id === id) {
+        const newConfig = [...jet.cabinConfig];
+        newConfig[index] = module;
+        return { ...jet, cabinConfig: newConfig };
+      }
+      return jet;
+    })
+  })),
   setTimeMultiplier: (m) => set({ timeMultiplier: m }),
-  setAircraftRoute: (id, originName, destinationName) => set((state) => {
-    const origin = Object.values(MAIN_HUBS).find(h => h.name === originName);
-    const destination = destinationName ? Object.values(MAIN_HUBS).find(h => h.name === destinationName) : null;
-    if (!origin) return state;
-    
-    return {
-      fleet: state.fleet.map(jet => jet.id === id ? { ...jet, currentLocation: origin, destination: destination || null } : jet)
-    };
-  }),
-  addScheduledLeg: (id, originName, destinationName) => set((state) => {
-    const origin = Object.values(MAIN_HUBS).find(h => h.name === originName);
-    const destination = Object.values(MAIN_HUBS).find(h => h.name === destinationName);
-    if (!origin || !destination) return state;
-    return {
-      fleet: state.fleet.map(jet => jet.id === id ? { 
-        ...jet, 
-        scheduledRoutes: [...jet.scheduledRoutes, { id: crypto.randomUUID(), origin, destination }] 
-      } : jet)
-    };
-  }),
+  setAircraftRoute: (id, origin, destination) => set((state) => ({
+    fleet: state.fleet.map(jet => jet.id === id ? { ...jet, currentLocation: origin, destination } : jet)
+  })),
+  addScheduledLeg: (id, origin, destination) => set((state) => ({
+    fleet: state.fleet.map(jet => jet.id === id ? { 
+      ...jet, 
+      scheduledRoutes: [...jet.scheduledRoutes, { id: crypto.randomUUID(), origin, destination }] 
+    } : jet)
+  })),
   removeScheduledLeg: (id, legId) => set((state) => ({
     fleet: state.fleet.map(jet => jet.id === id ? {
       ...jet,

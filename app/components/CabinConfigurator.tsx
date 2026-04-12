@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { DndContext, DragOverlay, closestCenter, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
 import { useDroppable, useDraggable } from '@dnd-kit/core';
 import { useStore, ModuleType } from '../lib/store';
-import { Save, CheckCircle } from 'lucide-react';
+import { Save, CheckCircle, AlertTriangle } from 'lucide-react';
 
 const MODULES: { id: ModuleType; label: string; desc: string; icon: string }[] = [
   { id: 'Executive', label: 'Executive Club', desc: '4 premium leather swivel seats', icon: '💺' },
@@ -132,10 +132,12 @@ function DroppableSlot({ index, currentModuleId }: { index: number, currentModul
 }
 
 export default function CabinConfigurator() {
-  const { cabinSlots, setCabinSlot } = useStore();
+  const { fleet, selectedAircraftId, setCabinSlot } = useStore();
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  const selectedJet = fleet.find(j => j.id === selectedAircraftId);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
@@ -148,11 +150,11 @@ export default function CabinConfigurator() {
   const handleDragEnd = (event: any) => {
     setActiveDragId(null);
     const { over, active } = event;
-    if (over && over.id.startsWith('slot-')) {
+    if (selectedJet && over && over.id.startsWith('slot-')) {
       const slotIndex = over.data.current?.index;
       const moduleType = active.data.current?.type as ModuleType;
       if (slotIndex !== undefined && moduleType) {
-        setCabinSlot(slotIndex, moduleType);
+        setCabinSlot(selectedJet.id, slotIndex, moduleType);
       }
     }
   };
@@ -204,18 +206,30 @@ export default function CabinConfigurator() {
 
         {/* Fuselage Blueprint */}
         <div className="flex-1 flex justify-center items-center overflow-y-auto">
-          <div className="w-full max-w-xl relative">
-            <div className="absolute inset-0 border-[2px] border-white/20 rounded-[120px] pointer-events-none" />
-            <div className="absolute inset-0 border-[1px] border-[var(--color-cyan)]/30 rounded-[120px] pointer-events-none blur-sm" />
-            
-            <div className="py-20 px-16 flex flex-col gap-6 relative z-10">
-              <div className="text-center text-white/40 tracking-[0.5em] text-sm md:text-base font-light mb-2 uppercase">Cockpit</div>
-              {cabinSlots.map((slot, index) => (
-                <DroppableSlot key={`slot-${index}`} index={index} currentModuleId={slot} />
-              ))}
-              <div className="text-center text-white/40 tracking-[0.5em] text-sm md:text-base font-light mt-2 uppercase">Aft / Cargo</div>
+          {!selectedJet ? (
+            <div className="text-center text-white/40 flex flex-col items-center gap-4">
+               <AlertTriangle size={48} className="text-[#00f0ff]" />
+               <p className="tracking-widest uppercase">No Aircraft Selected</p>
             </div>
-          </div>
+          ) : (
+            <div className="w-full max-w-xl relative">
+              <div className="absolute inset-0 border-[2px] border-white/20 rounded-[120px] pointer-events-none" />
+              <div className="absolute inset-0 border-[1px] border-[var(--color-cyan)]/30 rounded-[120px] pointer-events-none blur-sm" />
+              
+              <div className="py-20 px-16 flex flex-col gap-6 relative z-10">
+                <div className="flex justify-between items-center px-4 mb-4">
+                  <div className="text-white/40 tracking-[0.5em] text-sm md:text-base font-light uppercase">Cockpit</div>
+                  <div className="text-[#00f0ff] tracking-widest text-xs font-bold bg-[#00f0ff]/10 px-3 py-1 rounded-full">{selectedJet.model}</div>
+                </div>
+
+                {selectedJet.cabinConfig.map((slot, index) => (
+                  <DroppableSlot key={`slot-${index}`} index={index} currentModuleId={slot} />
+                ))}
+
+                <div className="text-center text-white/40 tracking-[0.5em] text-sm md:text-base font-light mt-2 uppercase">Aft / Cargo</div>
+              </div>
+            </div>
+          )}
         </div>
 
         <DragOverlay dropAnimation={{ duration: 250, easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)' }}>

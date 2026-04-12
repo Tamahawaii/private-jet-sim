@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import AirportSearch from './AirportSearch';
 import { Plane, CloudRain, MapPin, Gauge } from 'lucide-react';
 import { useStore, FlightPhase, MAIN_HUBS } from '../lib/store';
 import { calculateDistanceNM } from '../lib/math';
@@ -87,23 +88,23 @@ export default function FlightStateMachine() {
                <MapPin size={16} className="text-gray-400"/>
                
                {(jet.flightPhase === 'Hangar' || jet.flightPhase === 'Pre-flight') ? (
-                  <div className="flex items-center gap-2 relative">
-                     <select 
-                       value={jet.currentLocation.name} 
-                       onChange={(e) => setAircraftRoute(jet.id, e.target.value, jet.destination?.name || '')}
-                       className="bg-black/50 border border-white/20 text-white rounded px-2 py-1 text-xs font-bold uppercase tracking-widest outline-none focus:border-[#00f0ff] appearance-none cursor-pointer"
-                     >
-                       {Object.keys(MAIN_HUBS).map(h => <option key={h} value={h}>{h}</option>)}
-                     </select>
-                     <span className="text-white/40">→</span>
-                     <select 
-                       value={jet.destination?.name || ''} 
-                       onChange={(e) => setAircraftRoute(jet.id, jet.currentLocation.name, e.target.value)}
-                       className={`bg-black/50 border text-white rounded px-2 py-1 text-xs font-bold uppercase tracking-widest outline-none appearance-none cursor-pointer ${!jet.destination ? 'border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)] focus:border-red-400' : 'border-white/20 focus:border-[#00f0ff]'}`}
-                     >
-                       <option value="" disabled>DEST</option>
-                       {Object.keys(MAIN_HUBS).map(h => <option key={h} value={h} disabled={h === jet.currentLocation.name}>{h}</option>)}
-                     </select>
+                  <div className="flex items-center gap-2 relative z-50 w-full">
+                    <div className="w-[120px]">
+                      <AirportSearch 
+                        value={jet.currentLocation} 
+                        onChange={(loc) => setAircraftRoute(jet.id, loc, jet.destination)} 
+                        placeholder="Origin"
+                      />
+                    </div>
+                    <span className="text-white/40">→</span>
+                    <div className="w-[120px]">
+                      <AirportSearch 
+                        value={jet.destination} 
+                        onChange={(loc) => setAircraftRoute(jet.id, jet.currentLocation, loc)} 
+                        placeholder="Dest"
+                        excludeIata={jet.currentLocation.name}
+                      />
+                    </div>
                   </div>
                ) : (
                  <span className="text-sm font-bold tracking-widest uppercase">
