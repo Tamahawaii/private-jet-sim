@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useStore } from '../lib/store';
-import { Plane, Navigation, Globe, Building2, Wind, Droplets } from 'lucide-react';
+import { Plane, Navigation, Globe, Building2, Wind, Droplets, MapPin } from 'lucide-react';
 import VirtualAttendant from './VirtualAttendant';
 
 export default function Dashboard() {
