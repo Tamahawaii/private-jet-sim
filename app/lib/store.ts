@@ -188,7 +188,31 @@ export const useStore = create<AppState>()(
       return jet;
     })
   })),
-  setTimeMultiplier: (m) => set({ timeMultiplier: m }),
+  setTimeMultiplier: (m) => set((state) => {
+      const now = Date.now();
+      const oldM = state.timeMultiplier;
+      if (m === oldM) return state;
+
+      return {
+         timeMultiplier: m,
+         fleet: state.fleet.map(jet => {
+            if (jet.flightPhase !== 'Hangar' && jet.launchedAt && jet.lockedUntil) {
+               const oldSimPassedMs = (now - jet.launchedAt) * oldM;
+               const newLaunchedAt = now - (oldSimPassedMs / m);
+               
+               const oldTotalSimMs = (jet.lockedUntil - jet.launchedAt) * oldM;
+               const newLockedUntil = newLaunchedAt + (oldTotalSimMs / m);
+               
+               return {
+                  ...jet,
+                  launchedAt: newLaunchedAt,
+                  lockedUntil: newLockedUntil
+               };
+            }
+            return jet;
+         })
+      };
+  }),
   setAircraftRoute: (id, origin, destination) => set((state) => ({
     fleet: state.fleet.map(jet => jet.id === id ? { ...jet, currentLocation: origin, destination } : jet)
   })),

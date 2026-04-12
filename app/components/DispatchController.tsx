@@ -21,9 +21,12 @@ export default function DispatchController() {
   let estimatedHours = 0;
   let tripCost = 0;
   
-  if (provisionalRoute) {
-     const dLat = (provisionalRoute.destination.lat - provisionalRoute.origin.lat) * 60;
-     const dLng = (provisionalRoute.destination.lng - provisionalRoute.origin.lng) * 60;
+  const origin = jet.flightPhase === 'Hangar' ? provisionalRoute?.origin : jet.currentLocation;
+  const destination = jet.flightPhase === 'Hangar' ? provisionalRoute?.destination : jet.destination;
+  
+  if (origin && destination) {
+     const dLat = (destination.lat - origin.lat) * 60;
+     const dLng = (destination.lng - origin.lng) * 60;
      distance = Math.round(Math.sqrt(dLat*dLat + dLng*dLng));
      estimatedHours = distance / jet.speedKnots;
      if (estimatedHours < 0.66) estimatedHours = 0.66; // Minimum block time
@@ -75,67 +78,71 @@ export default function DispatchController() {
            </div>
          )}
 
-         {/* Routing Planner (Only when parked) */}
-         {jet.flightPhase === 'Hangar' && (
-           <>
-             <div className="flex flex-col gap-2">
-                <span className="text-xs text-zinc-400 uppercase tracking-widest font-bold">Routing Instructions</span>
-                {!provisionalRoute ? (
-                   <div className="p-6 border border-dashed border-white/20 rounded-lg text-center opacity-70">
-                      <RouteIcon size={24} className="text-zinc-600 mx-auto mb-2"/>
-                      <p className="text-xs text-zinc-400 font-mono">SELECT A DESTINATION ON THE GLOBE</p>
-                   </div>
-                ) : (
-                   <div className="flex flex-col gap-3">
-                      <div className="bg-zinc-900 border border-zinc-700/50 p-3 rounded flex flex-col gap-1">
-                         <span className="text-[9px] text-zinc-500 uppercase tracking-widest">Origin</span>
-                         <span className="text-sm font-mono text-white">{provisionalRoute.origin.name}</span>
-                         <span className="text-[10px] font-mono text-[#00f0ff]">{getMetar(provisionalRoute.origin.lat, provisionalRoute.origin.lng)}</span>
-                      </div>
-                      <div className="w-px h-4 bg-zinc-700 mx-auto -my-1"/>
-                      <div className="bg-zinc-900 border border-[#00f0ff]/50 p-3 rounded flex flex-col gap-1 shadow-[0_0_15px_rgba(0,240,255,0.1)]">
-                         <span className="text-[9px] text-[#00f0ff] uppercase tracking-widest">Destination target</span>
-                         <span className="text-sm font-mono text-white">{provisionalRoute.destination.name}</span>
-                         <span className="text-[10px] font-mono text-amber-400 flex items-center gap-1"><CloudRain size={10}/> {getMetar(provisionalRoute.destination.lat, provisionalRoute.destination.lng)}</span>
-                      </div>
-                   </div>
-                )}
-             </div>
+         {/* Routing View (Displayed for active and provisional) */}
+         {(provisionalRoute || (jet.flightPhase !== 'Hangar' && jet.destination)) && origin && destination && (
+            <div className="flex flex-col gap-2">
+                 <span className="text-xs text-zinc-400 uppercase tracking-widest font-bold">
+                    {jet.flightPhase === 'Hangar' ? 'Routing Instructions' : 'Active Routing Lock'}
+                 </span>
+                 <div className="flex flex-col gap-3">
+                    <div className="bg-zinc-900 border border-zinc-700/50 p-3 rounded flex flex-col gap-1">
+                       <span className="text-[9px] text-zinc-500 uppercase tracking-widest">Origin</span>
+                       <span className="text-sm font-mono text-white">{origin.name}</span>
+                       <span className="text-[10px] font-mono text-[#00f0ff]">{getMetar(origin.lat, origin.lng)}</span>
+                    </div>
+                    <div className="w-px h-4 bg-zinc-700 mx-auto -my-1"/>
+                    <div className="bg-zinc-900 border border-[#00f0ff]/50 p-3 rounded flex flex-col gap-1 shadow-[0_0_15px_rgba(0,240,255,0.1)]">
+                       <span className="text-[9px] text-[#00f0ff] uppercase tracking-widest">Destination target</span>
+                       <span className="text-sm font-mono text-white">{destination.name}</span>
+                       <span className="text-[10px] font-mono text-amber-400 flex items-center gap-1"><CloudRain size={10}/> {getMetar(destination.lat, destination.lng)}</span>
+                    </div>
+                 </div>
 
-             {/* Costing Block */}
-             {provisionalRoute && (
-                <div className="flex flex-col gap-2 mt-4">
-                   <h3 className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mb-1">Flight Envelope & Costing</h3>
-                   <div className="grid grid-cols-2 gap-2">
-                       <div className="bg-white/5 border border-white/10 p-2 rounded">
-                          <span className="block text-[9px] text-zinc-500 uppercase tracking-widest">Distance</span>
-                          <span className="text-sm font-mono text-white font-bold">{distance.toLocaleString()} NM</span>
-                       </div>
-                       <div className="bg-white/5 border border-white/10 p-2 rounded">
-                          <span className="block text-[9px] text-zinc-500 uppercase tracking-widest">Duration</span>
-                          <span className="text-sm font-mono text-white font-bold">{estimatedHours.toFixed(1)} HRS</span>
-                       </div>
-                       <div className="col-span-2 bg-[#ff0055]/10 border border-[#ff0055]/20 p-3 rounded flex justify-between items-center">
-                          <div className="flex items-center gap-1 text-[#ff0055]">
-                             <DollarSign size={14}/>
-                             <span className="text-[10px] font-bold uppercase tracking-widest">Estimated Block Cost</span>
-                          </div>
-                          <span className="text-lg font-mono text-[#ff0055] font-black">{fmt(tripCost)}</span>
-                       </div>
-                   </div>
-                   
-                   <button 
-                     onClick={() => {
-                        quickLaunchFlight(jet.id, provisionalRoute.destination);
-                        setProvisionalRoute(null);
-                     }}
-                     className="w-full mt-4 bg-gradient-to-r from-[#00f0ff] to-[#0088ff] text-black font-black uppercase text-sm tracking-widest rounded px-4 py-4 flex items-center justify-center gap-2 hover:brightness-125 transition-all shadow-[0_0_20px_rgba(0,240,255,0.4)]"
-                   >
-                     FILE PLAN & LAUNCH <Zap size={16} className="fill-black"/>
-                   </button>
-                </div>
-             )}
-           </>
+                 {/* Costing Block */}
+                 <div className="flex flex-col gap-2 mt-4">
+                    <h3 className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mb-1">Flight Envelope & Costing</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                        <div className="bg-white/5 border border-white/10 p-2 rounded">
+                           <span className="block text-[9px] text-zinc-500 uppercase tracking-widest">Distance</span>
+                           <span className="text-sm font-mono text-white font-bold">{distance.toLocaleString()} NM</span>
+                        </div>
+                        <div className="bg-white/5 border border-white/10 p-2 rounded">
+                           <span className="block text-[9px] text-zinc-500 uppercase tracking-widest">Duration</span>
+                           <span className="text-sm font-mono text-white font-bold">{estimatedHours.toFixed(1)} HRS</span>
+                        </div>
+                        <div className="col-span-2 bg-[#ff0055]/10 border border-[#ff0055]/20 p-3 rounded flex justify-between items-center">
+                           <div className="flex items-center gap-1 text-[#ff0055]">
+                              <DollarSign size={14}/>
+                              <span className="text-[10px] font-bold uppercase tracking-widest">Estimated Block Cost</span>
+                           </div>
+                           <span className="text-lg font-mono text-[#ff0055] font-black">{fmt(tripCost)}</span>
+                        </div>
+                    </div>
+                    
+                    {jet.flightPhase === 'Hangar' && provisionalRoute && (
+                       <button 
+                         onClick={() => {
+                            quickLaunchFlight(jet.id, provisionalRoute.destination);
+                            setProvisionalRoute(null);
+                         }}
+                         className="w-full mt-4 bg-gradient-to-r from-[#00f0ff] to-[#0088ff] text-black font-black uppercase text-sm tracking-widest rounded px-4 py-4 flex items-center justify-center gap-2 hover:brightness-125 transition-all shadow-[0_0_20px_rgba(0,240,255,0.4)]"
+                       >
+                         FILE PLAN & LAUNCH <Zap size={16} className="fill-black"/>
+                       </button>
+                    )}
+                 </div>
+            </div>
+         )}
+         
+         {/* Blank state for hangar without route */}
+         {jet.flightPhase === 'Hangar' && !provisionalRoute && (
+            <div className="flex flex-col gap-2">
+               <span className="text-xs text-zinc-400 uppercase tracking-widest font-bold">Routing Instructions</span>
+               <div className="p-6 border border-dashed border-white/20 rounded-lg text-center opacity-70">
+                  <RouteIcon size={24} className="text-zinc-600 mx-auto mb-2"/>
+                  <p className="text-xs text-zinc-400 font-mono">SELECT A DESTINATION ON THE GLOBE</p>
+               </div>
+            </div>
          )}
 
       </div>
