@@ -213,5 +213,5 @@ export const useStore = create<AppState>()(
   setProvisionalRoute: (route) => set({ provisionalRoute: route }),
   setMapStyle: (style) => set({ mapStyle: style })
 }),
-{ name: 'jetstream-elite-storage' }
+{ name: 'jetstream-sandbox-v1' }
 ));
