@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useStore } from '../lib/store';
 import { SHOP_CATALOG } from '../lib/mockData';
 import { Plane, Plus, DollarSign, Fuel, Compass } from 'lucide-react';
-import { formatCurrency } from './Dashboard'; // we need to move this or rewrite formatCurrency, let's just write it natively
+// formatting utilities are defined locally
 
 function fmt(n: number) {
     if (n >= 1000000000) return '$' + (n / 1000000000).toFixed(1) + 'B';
