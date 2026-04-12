@@ -56,7 +56,7 @@ export default function DispatchController() {
             <div className="w-full h-32 relative bg-gradient-to-b from-white/5 to-transparent border border-white/10 rounded-lg overflow-hidden flex items-center justify-center p-2 group">
                <img src={jet.layoutImage} alt={jet.model} className="w-full h-full object-contain filter group-hover:brightness-125 transition-all drop-shadow-[0_0_15px_rgba(0,240,255,0.3)]" />
                <div className="absolute bottom-2 left-2 flex gap-2">
-                 <span className="bg-black/80 px-2 py-1 text-[8px] text-zinc-400 border border-white/10 rounded font-mono uppercase tracking-widest">{jet.cabinSlots} Modules</span>
+                 <span className="bg-black/80 px-2 py-1 text-[8px] text-zinc-400 border border-white/10 rounded font-mono uppercase tracking-widest">{jet.cabinConfig.length} Modules</span>
                  <span className="bg-black/80 px-2 py-1 text-[8px] text-zinc-400 border border-white/10 rounded font-mono uppercase tracking-widest">{jet.fuelBurnGPH} GPH</span>
                </div>
             </div>
