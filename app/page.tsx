@@ -2,7 +2,9 @@
 
 import { Suspense, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import FleetSidebar from './components/FleetSidebar';
+import TopNav from './components/TopNav';
+import FleetManager from './components/FleetManager';
+import Marketplace from './components/Marketplace';
 import DispatchController from './components/DispatchController';
 import FlightAttendant from './components/FlightAttendant';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -24,7 +26,7 @@ const MapEngine = dynamic(() => import('./components/MapEngine'), {
 
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
-  const { zenMode } = useStore();
+  const { zenMode, activeView } = useStore();
   
   useEffect(() => {
     setIsClient(true);
@@ -37,23 +39,29 @@ export default function Home() {
   );
 
   return (
-    <main className="relative w-full h-screen overflow-hidden bg-[var(--background)]">
+    <main className="relative w-full h-screen overflow-hidden bg-[#0a0a0c]">
       <ErrorBoundary>
-        {/* 3D MAP LAYER (ALWAYS RENDERED, Z-INDEX 0) */}
-        <div className="absolute inset-0 z-0">
+        <TopNav />
+
+        {/* 3D MAP LAYER (ALWAYS RENDERED to preserve webgl physics) */}
+        <div className={`absolute inset-0 transition-opacity ${activeView === 'Map' ? 'opacity-100 z-0 pointer-events-auto' : 'opacity-0 -z-10 pointer-events-none'}`}>
           <Suspense fallback={null}>
             <MapEngine />
           </Suspense>
         </div>
 
         {/* OVERLAYS */}
-        {!zenMode && (
+        {activeView === 'Map' && !zenMode && (
           <>
-            <FleetSidebar />
             <DispatchController />
             <FlightAttendant />
           </>
         )}
+
+        {/* FULL SCREENS */}
+        {activeView === 'Fleet' && <FleetManager />}
+        {activeView === 'Shop' && <Marketplace />}
+        
       </ErrorBoundary>
     </main>
   );

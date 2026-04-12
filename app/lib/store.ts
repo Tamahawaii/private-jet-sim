@@ -47,6 +47,7 @@ interface AppState {
   playerCash: number;
   mapStyle: 'FlightAware' | 'Satellite' | 'Dark' | 'Roads';
   zenMode: boolean;
+  activeView: 'Map' | 'Fleet' | 'Shop';
 
   buyAircraft: (catalogItem: CatalogItem) => void;
   quickLaunchFlight: (id: string, destination: LocationData) => void;
@@ -55,6 +56,7 @@ interface AppState {
   setProvisionalRoute: (route: { origin: LocationData, destination: LocationData } | null) => void;
   setWeatherEnabled: (enabled: boolean) => void;
   setZenMode: (enabled: boolean) => void;
+  setActiveView: (view: 'Map' | 'Fleet' | 'Shop') => void;
   setMapStyle: (style: 'FlightAware' | 'Satellite' | 'Dark' | 'Roads') => void;
   setCabinSlot: (aircraftId: string, index: number, module: ModuleType) => void;
   setTimeMultiplier: (multiplier: number) => void;
@@ -115,6 +117,7 @@ export const useStore = create<AppState>()(
       playerCash: 80000000000, // $80 Billion
       mapStyle: 'FlightAware',
       zenMode: false,
+      activeView: 'Map',
 
   buyAircraft: (item) => set((state) => {
     // ... handles buy logic ...
@@ -206,7 +209,8 @@ export const useStore = create<AppState>()(
   })),
   setProvisionalRoute: (route) => set({ provisionalRoute: route }),
   setMapStyle: (style) => set({ mapStyle: style }),
-  setZenMode: (enabled) => set({ zenMode: enabled })
+  setZenMode: (enabled) => set({ zenMode: enabled }),
+  setActiveView: (view) => set({ activeView: view })
 }),
 { name: 'jetstream-dispatch-v1' }
 ));

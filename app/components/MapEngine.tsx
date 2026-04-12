@@ -4,12 +4,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import { useStore } from '../lib/store';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
-import { Layers, Maximize, Minimize } from 'lucide-react';
+import { Layers, Maximize, Minimize, FastForward } from 'lucide-react';
 
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
-  const { fleet, selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode } = useStore();
+  const { fleet, selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode, timeMultiplier, setTimeMultiplier } = useStore();
   const jet = fleet.find(j => j.id === selectedAircraftId);
   const flightPhase = jet?.flightPhase;
   const [layersOpen, setLayersOpen] = useState(false);
@@ -277,7 +277,7 @@ export default function MapEngine() {
              source: planeSourceId,
              layout: {
                'text-field': '✈',
-               'text-size': fJet.flightPhase === 'Cruise' ? 42 : 32,
+               'text-size': fJet.flightPhase === 'Cruise' ? 82 : 52,
                'text-rotation-alignment': 'map',
                'text-rotate': ['get', 'rotation'],
                'text-allow-overlap': true,
@@ -291,7 +291,7 @@ export default function MapEngine() {
            });
         } else {
            (m.getSource(planeSourceId) as any).setData(planeData);
-           m.setLayoutProperty(planeLayerId, 'text-size', fJet.flightPhase === 'Cruise' ? 42 : 32);
+           m.setLayoutProperty(planeLayerId, 'text-size', fJet.flightPhase === 'Cruise' ? 82 : 52);
         }
 
         if (showRoute) {
@@ -473,6 +473,29 @@ export default function MapEngine() {
          >
             {zenMode ? <Minimize size={20}/> : <Maximize size={20}/>}
          </button>
+      </div>
+
+      {/* Speed Controls */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center bg-black/80 backdrop-blur-xl border border-white/20 rounded-full p-2 shadow-[0_0_30px_rgba(0,240,255,0.2)] pointer-events-auto">
+         <div className="px-4 border-r border-white/10 flex items-center gap-2 text-zinc-400">
+            <FastForward size={14} className={timeMultiplier > 1 ? "text-[#00f0ff]" : ""} />
+            <span className="text-[10px] font-mono tracking-widest font-black uppercase">Sim Speed</span>
+         </div>
+         <div className="flex px-2 gap-1">
+            {[1, 10, 30, 60, 300].map((spd) => (
+              <button 
+                key={spd}
+                onClick={() => setTimeMultiplier(spd)}
+                className={`w-10 h-8 rounded-full text-xs font-mono font-black transition-all ${
+                  timeMultiplier === spd 
+                     ? 'bg-[#00f0ff] text-black shadow-[0_0_15px_rgba(0,240,255,0.6)]' 
+                     : 'text-zinc-500 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                {spd}x
+              </button>
+            ))}
+         </div>
       </div>
 
     </div>
