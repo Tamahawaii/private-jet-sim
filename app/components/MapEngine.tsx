@@ -447,7 +447,7 @@ export default function MapEngine() {
       />
       
       {/* Dynamic Layer Toggle */}
-      <div className="absolute bottom-40 right-4 z-50 flex flex-col items-end gap-2 pointer-events-auto">
+      <div className="absolute bottom-10 right-[420px] z-50 flex flex-col items-end gap-2 pointer-events-auto">
          {layersOpen && (
             <div className="flex flex-col gap-1 bg-black/80 backdrop-blur border border-white/10 p-2 rounded-lg shadow-xl">
                {(['FlightAware', 'Satellite', 'Dark', 'Roads'] as const).map(s => (
