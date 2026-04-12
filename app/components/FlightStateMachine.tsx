@@ -89,56 +89,75 @@ export default function FlightStateMachine() {
   const formattedTTE = simHoursLeft > 0 ? `${simHoursLeft}h ${simMinutesLeft}m` : `${simMinutesLeft}m`;
 
   return (
-    <div className="flex gap-4 text-[var(--foreground)] w-[860px]">
+    <div className="absolute top-24 left-4 bottom-24 z-20 flex gap-4 text-[var(--foreground)] w-[360px] pointer-events-none">
       <motion.div 
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass-panel p-6 rounded-2xl w-[420px] shrink-0 flex flex-col gap-4 border border-white/10 relative z-20"
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="glass-panel p-0 rounded-lg w-full flex flex-col bg-[#e6e3dd] border-4 border-[#b5ae9c] overflow-hidden shadow-2xl relative pointer-events-auto"
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Plane className={isLocked ? 'text-[#d4af37]' : 'text-[#00f0ff]'} />
-            <h2 className="text-xl font-bold font-sans">{jet.tailNumber}</h2>
-          </div>
-          <span className={`text-xs font-bold uppercase tracking-widest ${isLocked ? 'text-[#d4af37]' : 'text-[#00f0ff]'}`}>
-            {jet.flightPhase}
-          </span>
+        {/* Header Ribbon */}
+        <div className="bg-[#003366] border-b-4 border-[#001D4A] text-white p-3 flex justify-between items-center relative">
+           <div className="flex flex-col">
+              <span className="text-[10px] uppercase font-bold text-[#00f0ff] mb-0.5 opacity-80">Route Contract</span>
+              <span className="text-sm font-black tracking-widest leading-none">{jet.currentLocation.name} - {jet.destination ? jet.destination.name : 'UNASSIGNED'}</span>
+           </div>
+           {isLocked && <div className="text-xs font-mono font-bold bg-[#ff0055] text-white px-2 py-1 rounded shadow-inner">{formattedTTE}</div>}
         </div>
-        
-        <div className="h-px bg-white/10 w-full" />
 
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
+        {/* Financial Header */}
+        <div className="bg-[#dcd6c9] border-b border-[#c2baa8] px-4 py-2 flex justify-between items-center text-[#003366]">
+           <span className="text-xs font-bold uppercase tracking-widest text-[#5c5443]">Reward</span>
+           <span className="text-sm font-black text-green-700 bg-green-500/20 px-2 rounded shadow-inner">+$24,500</span>
+        </div>
+
+        {/* Aircraft Block */}
+        <div className="p-4 flex flex-col gap-4">
+           <div className="flex items-center justify-between bg-white px-3 py-2 rounded-lg shadow border-b-4 border-gray-300">
              <div className="flex items-center gap-3">
-               <MapPin size={16} className="text-gray-400"/>
-               
-               {(jet.flightPhase === 'Hangar' || jet.flightPhase === 'Pre-flight') ? (
-                  <div className="flex items-center gap-2 relative z-50 w-full">
-                    <div className="w-[120px]">
-                      <AirportSearch 
-                        value={jet.currentLocation} 
-                        onChange={(loc) => setAircraftRoute(jet.id, loc, jet.destination)} 
-                        placeholder="Origin"
-                      />
-                    </div>
-                    <span className="text-white/40">→</span>
-                    <div className="w-[120px]">
-                      <AirportSearch 
-                        value={jet.destination} 
-                        onChange={(loc) => setAircraftRoute(jet.id, jet.currentLocation, loc)} 
-                        placeholder="Dest"
-                        excludeIata={jet.currentLocation.name}
-                      />
-                    </div>
-                  </div>
-               ) : (
-                 <button 
-                   onClick={() => setLocationExpanded(!locationExpanded)}
-                   className="text-sm font-bold tracking-widest uppercase hover:text-[#00f0ff] transition-colors flex items-center gap-2"
-                 >
-                   {jet.currentLocation.name} {jet.destination ? `→ ${jet.destination.name}` : ''}
-                 </button>
-               )}
+               <Plane size={24} className={isLocked ? 'text-[#d4af37]' : 'text-gray-400'} />
+               <div className="flex flex-col leading-tight">
+                 <span className="text-[9px] text-gray-500 font-bold tracking-widest uppercase">Flight {jet.tailNumber}</span>
+                 <span className="text-xs font-black text-gray-800 uppercase">{jet.model}</span>
+               </div>
+             </div>
+             <span className={`text-[10px] uppercase font-black px-2 py-1 rounded shadow-inner text-white ${isLocked ? 'bg-amber-500' : 'bg-gray-400'}`}>
+                {jet.flightPhase}
+             </span>
+           </div>
+
+           {/* Location Editing */}
+           <div className="flex items-center justify-between gap-1 mt-2">
+             <div className="w-[140px] bg-white p-3 rounded-lg border-b-4 border-gray-300 shadow text-black relative flex flex-col items-center">
+               <span className="absolute top-1 left-2 text-[8px] font-black uppercase text-gray-400 tracking-widest">Origin</span>
+               <div className="w-full mt-3 font-bold">
+                 <AirportSearch 
+                    value={jet.currentLocation} 
+                    onChange={(loc) => { if (!isLocked) setAircraftRoute(jet.id, loc, jet.destination) }} 
+                    placeholder="Origin"
+                 />
+               </div>
+               <div className="text-[10px] font-bold text-gray-500 mt-2">{getLocalTime(jet.currentLocation.lng)}</div>
+             </div>
+             
+             <div className="flex flex-col items-center justify-center px-1">
+                <Plane size={16} className={`text-[#00f0ff] transition-transform ${isLocked ? '-rotate-45 block' : 'hidden'}`} />
+                <div className="w-8 border-b-2 border-gray-400 border-dashed my-1" />
+             </div>
+             
+             <div className="w-[140px] bg-white p-3 rounded-lg border-b-4 border-gray-300 shadow text-black relative flex flex-col items-center">
+               <span className="absolute top-1 left-2 text-[8px] font-black uppercase text-[#00f0ff] tracking-widest">Dest</span>
+               <div className="w-full mt-3 font-bold">
+                 <AirportSearch 
+                    value={jet.destination} 
+                    onChange={(loc) => { if (!isLocked) setAircraftRoute(jet.id, jet.currentLocation, loc) }} 
+                    placeholder="Dest"
+                    excludeIata={jet.currentLocation.name}
+                 />
+               </div>
+               {jet.destination && <div className="text-[10px] font-bold text-gray-500 mt-2">{getLocalTime(jet.destination.lng)}</div>}
+             </div>
+           </div>
+        </div>
 
              </div>
              {isLocked && <span className="text-xs font-mono font-bold text-[#d4af37] bg-black/50 px-2 py-1 rounded">{formattedTTE} TTE</span>}
@@ -149,61 +168,27 @@ export default function FlightStateMachine() {
           </div>
         </div>
 
-        <AnimatePresence>
-            {locationExpanded && (
-               <motion.div 
-                 initial={{ opacity: 0, height: 0 }}
-                 animate={{ opacity: 1, height: 'auto' }}
-                 exit={{ opacity: 0, height: 0 }}
-                 className="overflow-hidden bg-black/40 rounded-xl border border-white/5"
-               >
-                 <div className="p-4 flex flex-col gap-4">
-                    <div className="flex justify-between items-center">
-                       <div>
-                         <div className="text-[10px] uppercase tracking-widest text-[#00f0ff] font-bold mb-1">Origin ({jet.currentLocation.name})</div>
-                         <div className="text-sm font-mono text-white/90">{getLocalTime(jet.currentLocation.lng)}</div>
-                       </div>
-                       <div className="text-right">
-                         <div className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-1">Conditions</div>
-                         <div className="text-xs font-bold text-white flex items-center gap-1 justify-end"><CloudRain size={12}/> Clear, 22°C</div>
-                       </div>
-                    </div>
-                    {jet.destination && (
-                      <div className="flex justify-between items-center pt-3 border-t border-white/10">
-                         <div>
-                           <div className="text-[10px] uppercase tracking-widest text-[#00f0ff] font-bold mb-1">Destination ({jet.destination.name})</div>
-                           <div className="text-sm font-mono text-white/90">{getLocalTime(jet.destination.lng)}</div>
-                         </div>
-                         <div className="text-right">
-                           <div className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-1">Conditions</div>
-                           <div className="text-xs font-bold text-white flex items-center gap-1 justify-end"><CloudRain size={12}/> Overcast, 15°C</div>
-                         </div>
-                      </div>
-                    )}
-                 </div>
-               </motion.div>
-            )}
-         </AnimatePresence>
-
-        <div className="flex gap-2 mt-2">
-          <button 
-            disabled={currentIndex === 0 || isLocked}
-            onClick={prevPhase}
-            className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-xs font-bold tracking-widest uppercase border border-white/10 rounded transition-colors disabled:opacity-30"
-          >
-            Revert
-          </button>
-          <button 
-            disabled={currentIndex === PHASES.length - 1 || isLocked || ((currentIndex === 0 || currentIndex === 1) && !jet.destination)}
-            onClick={nextPhase}
-            className={`flex-1 px-4 py-3 text-xs font-bold tracking-widest uppercase border rounded transition-colors disabled:opacity-30 flex items-center justify-center ${
-              isLocked 
-               ? 'bg-[#d4af37]/10 border-[#d4af37]/50 text-[#d4af37] shadow-[0_0_15px_rgba(212,175,55,0.2)]'
-               : 'bg-[#00f0ff]/20 hover:bg-[#00f0ff]/30 text-[#00f0ff] border-[#00f0ff]/50 shadow-[0_0_15px_rgba(0,240,255,0.2)]'
-            }`}
-          >
-            {isLocked ? 'In Transit...' : currentIndex === PHASES.length - 1 ? 'Arrived' : 'Advance'}
-          </button>
+        {/* Action Button Area */}
+        <div className="mt-auto p-4 bg-[#c2baa8] flex items-center gap-2 border-t border-[#b2a996]">
+           <button 
+             disabled={currentIndex === 0 || isLocked}
+             onClick={prevPhase}
+             className="px-4 py-4 bg-gray-500 hover:bg-gray-600 text-white text-xs font-black tracking-widest uppercase border border-gray-700 rounded-lg shadow-[0_4px_0_rgba(0,0,0,0.5)] transition-all active:translate-y-1 active:shadow-none disabled:opacity-40"
+           >
+             REV
+           </button>
+           <button 
+             disabled={currentIndex === PHASES.length - 1 || isLocked || ((currentIndex === 0 || currentIndex === 1) && !jet.destination)}
+             onClick={nextPhase}
+             className={`flex-1 py-4 text-xl font-black tracking-widest uppercase rounded-lg shadow-[0_6px_0_rgba(0,0,0,0.4)] transition-all active:translate-y-1.5 active:shadow-[0_0px_0_rgba(0,0,0,0)] disabled:opacity-60 disabled:shadow-none disabled:translate-y-1.5 ${
+               isLocked 
+                ? 'bg-amber-500 hover:bg-amber-400 text-amber-900 border border-amber-600 shadow-[0_6px_0_#92400e]'
+                : jet.flightPhase === 'Cruise' ? 'bg-purple-600 hover:bg-purple-500 text-white border border-purple-800 shadow-[0_6px_0_#4c1d95]' 
+                : 'bg-green-500 hover:bg-green-400 text-white border border-green-700 shadow-[0_6px_0_#166534]'
+             }`}
+           >
+             {isLocked ? 'TRANSIT' : jet.flightPhase === 'Cruise' ? 'LAND' : currentIndex === PHASES.length - 1 ? 'ARRIVED' : 'ACTIVATE'}
+           </button>
         </div>
       </motion.div>
 
@@ -224,33 +209,24 @@ export default function FlightStateMachine() {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="glass-panel p-6 rounded-2xl w-[320px] shrink-0 border border-[#00f0ff]/30 shadow-[0_0_20px_rgba(0,240,255,0.1)] flex flex-col relative overflow-hidden"
+            className="glass-panel p-4 rounded-xl w-[280px] shrink-0 border border-[#00f0ff]/30 shadow-2xl flex flex-col relative overflow-hidden bg-[#001D4A] pointer-events-auto"
           >
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(0,240,255,0.1),transparent_50%)] pointer-events-none" />
-            <h3 className="text-xs uppercase font-bold tracking-widest text-[#00f0ff] mb-4 flex items-center gap-2"><Orbit size={14}/> Live Telemetry</h3>
+            <h3 className="text-xs uppercase font-bold tracking-widest text-white mb-4 flex items-center gap-2"><Orbit size={14}/> Flight Tracking</h3>
             
-            <div className="grid grid-cols-2 gap-4 h-full">
-               <div className="flex flex-col justify-end bg-black/40 p-3 rounded-lg border border-white/5">
-                 <span className="text-[10px] text-white/50 uppercase tracking-widest font-bold mb-1">Altitude</span>
-                 <span className="text-lg font-mono text-white text-right">FL 410</span>
+            <div className="grid grid-cols-2 gap-3 h-full">
+               <div className="flex flex-col justify-end bg-black/60 p-3 rounded-lg border-b-2 border-[#00f0ff]">
+                 <span className="text-[9px] text-[#00f0ff] uppercase tracking-widest font-bold mb-1">Alt</span>
+                 <span className="text-sm font-mono text-white text-right">FL 410</span>
                </div>
-               <div className="flex flex-col justify-end bg-black/40 p-3 rounded-lg border border-white/5">
-                 <span className="text-[10px] text-white/50 uppercase tracking-widest font-bold mb-1">Airspeed</span>
-                 <span className="text-lg font-mono text-white text-right">M 0.85</span>
-               </div>
-               <div className="flex flex-col justify-end bg-black/40 p-3 rounded-lg border border-white/5">
-                 <span className="text-[10px] text-white/50 uppercase tracking-widest font-bold mb-1">Outside Air</span>
-                 <span className="text-lg font-mono text-white text-right">-54°C</span>
-               </div>
-               <div className="flex flex-col justify-end bg-black/40 p-3 rounded-lg border border-amber-500/20">
-                 <span className="text-[10px] text-amber-500/50 flex items-center gap-1 uppercase tracking-widest font-bold mb-1"><Droplet size={10}/> Burned</span>
-                 <span className="text-lg font-mono text-amber-500 text-right">{Math.floor(currentFuelBurned).toLocaleString()} <span className="text-[10px]">GAL</span></span>
+               <div className="flex flex-col justify-end bg-black/60 p-3 rounded-lg border-b-2 border-[#00f0ff]">
+                 <span className="text-[9px] text-[#00f0ff] uppercase tracking-widest font-bold mb-1">KIAS</span>
+                 <span className="text-sm font-mono text-white text-right">0.85 M</span>
                </div>
             </div>
             
             <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
-              <span className="text-[10px] text-red-400 uppercase tracking-widest font-bold flex items-center gap-1"><DollarSign size={12}/> Op Cost</span>
-              <span className="text-2xl font-mono text-red-400 tracking-tighter">${Math.floor(currentCost).toLocaleString()}</span>
+              <span className="text-[10px] text-white uppercase tracking-widest font-bold flex items-center gap-1">Fuel Status</span>
+              <span className="text-lg font-mono text-[#00f0ff] tracking-tighter">{Math.floor(currentFuelBurned).toLocaleString()} <span className="text-[10px]">GAL</span></span>
             </div>
           </motion.div>
         )}

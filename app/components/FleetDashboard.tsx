@@ -17,88 +17,87 @@ export default function FleetDashboard() {
   const isLocked = (lockedUntil: number | null) => lockedUntil ? Date.now() < lockedUntil : false;
 
   return (
-    <div className="absolute inset-0 z-20 flex pt-28 pb-10 px-10 gap-10 bg-black/60 backdrop-blur-xl overflow-y-auto">
-      <div className="flex-1 max-w-6xl mx-auto flex flex-col gap-8">
+    <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-[#001D4A] via-black/90 to-transparent pt-40 pb-6 pointer-events-none">
+      
+      {/* Hangar Graphic Tab */}
+      <div className="absolute right-0 bottom-32 bg-[#003366] border-t border-l border-[#00f0ff]/30 text-white px-8 py-2 -rotate-90 origin-bottom-right rounded-tl-xl font-bold tracking-[0.2em] shadow-2xl pointer-events-auto text-xs translate-x-[47%]">
+         HANGAR
+      </div>
+
+      <div className="flex overflow-x-auto gap-3 px-4 pb-4 snap-x snap-mandatory pointer-events-auto w-full" style={{ scrollbarWidth: 'none' }}>
         
-        <div className="flex justify-between items-center bg-white/5 border border-white/10 p-6 rounded-2xl glass-panel">
-          <div>
-            <h1 className="text-2xl font-bold tracking-widest text-[#00f0ff] mb-2 uppercase">Hangar Fleet</h1>
-            <p className="text-white/60 text-sm">Manage your aircraft and orchestrate flights</p>
-          </div>
-          
-          <div className="flex flex-col items-end gap-3">
-             <div className="flex bg-black/40 rounded-lg p-1 border border-white/10">
-                {[1, 10, 60, 3600].map(m => (
-                  <button 
-                    key={m} 
-                    onClick={() => setTimeMultiplier(m)}
-                    className={`px-3 py-1 text-xs font-mono rounded transition-colors ${timeMultiplier === m ? 'bg-[#00f0ff]/20 text-[#00f0ff]' : 'text-white/50 hover:text-white'}`}
-                  >
-                    {m}x
-                  </button>
-                ))}
-             </div>
-             <p className="text-xs text-white/40 tracking-widest uppercase">Time Scale Scale</p>
-          </div>
+        {/* Time Settings Block */}
+        <div className="w-[120px] shrink-0 snap-center flex flex-col justify-center items-center bg-[#001D4A]/60 border border-white/20 rounded-xl p-3 shadow-xl backdrop-blur-md">
+            <Clock className="text-[#00f0ff] mb-2" size={20}/>
+            <span className="text-[10px] uppercase tracking-widest text-[#00f0ff] font-bold mb-3 text-center leading-tight">Time<br/>Scale</span>
+            <div className="flex flex-col gap-1.5 w-full">
+               {[1, 10, 60].map(m => (
+                 <button 
+                   key={m} 
+                   onClick={() => setTimeMultiplier(m)}
+                   className={`w-full py-1.5 text-[10px] font-mono font-bold rounded shadow transition-all ${timeMultiplier === m ? 'bg-[#00f0ff] text-[#001D4A] scale-105' : 'bg-black/60 text-white/60 border border-white/10 hover:bg-white/20 hover:text-white'}`}
+                 >
+                   {m}x
+                 </button>
+               ))}
+               <button 
+                  onClick={() => setTimeMultiplier(3600)}
+                  className={`w-full py-1.5 mt-1 text-[10px] font-mono font-extrabold rounded shadow transition-all ${timeMultiplier === 3600 ? 'bg-[#ff0055] text-white scale-105 shadow-[0_0_10px_#ff0055]' : 'bg-[#ff0055]/20 text-[#ff0055] border border-[#ff0055]/50 hover:bg-[#ff0055]/40'}`}
+               >
+                 SKIP
+               </button>
+            </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {fleet.map(jet => {
+        {/* Aircraft Carousel */}
+        {fleet.map((jet, i) => {
             const locked = isLocked(jet.lockedUntil);
             const imgSource = jet.model.includes('BBJ') || jet.model.includes('ACJ') ? 'bbj' : jet.model.includes('Citation') || jet.model.includes('Praetor') ? 'citation' : 'gulfstream';
             return (
               <motion.div 
-                key={jet.id}
-                whileHover={{ y: -5 }}
-                onClick={() => handleSelect(jet.id)}
-                className={`rounded-2xl cursor-pointer transition-all overflow-hidden relative min-h-[180px] group border shadow-xl ${locked ? 'border-[#d4af37]/50 shadow-[0_0_15px_rgba(212,175,55,0.1)]' : 'border-[#00f0ff]/20 hover:border-[#00f0ff]/80 hover:shadow-[0_0_15px_rgba(0,240,255,0.2)]'}`}
+                 key={jet.id}
+                 whileTap={{ scale: 0.98 }}
+                 onClick={() => handleSelect(jet.id)}
+                 className={`w-[260px] shrink-0 snap-center rounded-xl cursor-pointer relative min-h-[190px] group border-2 shadow-2xl overflow-hidden ${locked ? 'border-[#d4af37] shadow-[#d4af37]/20 bg-[#2b2512]' : 'border-[#00f0ff]/40 bg-[#001D4A]/40 hover:border-white'}`}
               >
-                {/* Background Image injected procedurally */}
-                <div className="absolute inset-0 bg-black">
-                  <img 
-                     src={`/aircraft/${imgSource}.png`} 
-                     alt={jet.model}
-                     className="w-full h-full object-cover mix-blend-luminosity opacity-30 group-hover:opacity-70 group-hover:mix-blend-normal transition-all duration-700" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent" />
-                </div>
-
-                <div className="p-6 relative z-10 flex flex-col justify-between h-full">
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="flex items-center gap-2">
-                      <Plane className={locked ? 'text-[#d4af37]' : 'text-[#00f0ff]'} />
-                      <h2 className="text-xl font-bold tracking-wider text-white drop-shadow-md">{jet.tailNumber}</h2>
-                    </div>
-                    <span className="text-xs uppercase tracking-widest text-[#00f0ff] font-bold bg-black/50 px-2 py-1 rounded backdrop-blur-md">{jet.model}</span>
+                  {/* Procedural Image overlay */}
+                  <div className="absolute inset-0 bg-transparent mix-blend-screen pointer-events-none">
+                     <div className="absolute inset-0 flex items-center justify-center opacity-40 mix-blend-luminosity">
+                        <span className="text-white text-5xl opacity-20">✈</span>
+                     </div>
                   </div>
-                  
-                  <div className="flex flex-col gap-3 mt-auto">
-                    <div className="flex items-center gap-3 relative z-30">
-                      <MapPin size={16} className="text-white/40"/>
-                      <div className="text-[10px] uppercase font-bold flex items-center gap-2 text-white/50 w-full">
-                        BASE
-                        <div className="w-[120px] text-white" onClick={(e) => e.stopPropagation()}>
-                           <AirportSearch 
-                             value={jet.currentLocation} 
-                             onChange={(loc) => {
-                                if (!locked) setAircraftRoute(jet.id, loc, null);
-                             }}
-                            placeholder="Set Hub"
-                           />
+
+                  <div className="p-4 relative z-10 flex flex-col justify-between h-full bg-gradient-to-t from-black via-black/40 to-transparent">
+                    <div>
+                        <div className="flex items-center gap-2 mb-1">
+                           <span className={`text-xs font-black uppercase tracking-widest px-2 py-0.5 rounded shadow ${locked ? 'bg-[#d4af37] text-black' : 'bg-[#00f0ff] text-[#001D4A]'}`}>
+                              {locked ? 'ACTIVE' : 'IDLE'}
+                           </span>
                         </div>
-                      </div>
+                        <h2 className="text-xl font-black tracking-wider text-white drop-shadow-md">{jet.tailNumber}</h2>
+                        <span className="text-[10px] uppercase tracking-widest text-[#00f0ff]/80 font-bold drop-shadow">{jet.model}</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Clock size={16} className="text-white/40"/>
-                      <span className="text-sm font-medium">Status: <strong className={locked ? 'text-[#d4af37]' : 'text-[#00f0ff]'}>{jet.flightPhase}</strong></span>
+                    
+                    <div className="flex flex-col gap-2 mt-auto">
+                       <div className="bg-black/60 rounded p-2 border border-white/10 flex items-center gap-2 backdrop-blur hover:border-white/30 transition-colors" onClick={e => e.stopPropagation()}>
+                          <MapPin size={14} className="text-[#00f0ff]"/>
+                          <div className="flex-1">
+                             <AirportSearch 
+                               value={jet.currentLocation} 
+                               onChange={(loc) => { if (!locked) setAircraftRoute(jet.id, loc, null); }}
+                               placeholder="Set Fleet Hub"
+                             />
+                          </div>
+                       </div>
+                       <div className="w-full text-center py-1.5 uppercase tracking-widest text-[10px] font-bold bg-white/5 border border-white/10 rounded">
+                          {locked ? jet.flightPhase : 'Ready for Dispatch'}
+                       </div>
                     </div>
                   </div>
-                </div>
               </motion.div>
-            );
-          })}
+            )
+        })}
 
-        </div>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import CabinConfigurator from './components/CabinConfigurator';
 import FleetDashboard from './components/FleetDashboard';
 import LogisticsPlanner from './components/LogisticsPlanner';
 import Dashboard from './components/Dashboard';
+import FlightAttendant from './components/FlightAttendant';
 import { useStore } from './lib/store';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -42,37 +43,50 @@ export default function Home() {
         style={{ backdropFilter: 'blur(8px)' }}
       />
       
-      {/* Top Nav */}
-      <div className="absolute top-0 left-0 w-full p-6 z-30 flex justify-between items-center pointer-events-none">
-        <div className="glass-panel px-6 py-3 rounded-full pointer-events-auto flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-[var(--color-cyan)] shadow-[0_0_8px_var(--color-cyan)] animate-pulse" />
-          <h1 className="text-lg font-semibold tracking-widest text-white/90">MANIFEST</h1>
+      {/* Deep Mobile Game Top Bar */}
+      <div className="absolute top-0 left-0 w-full p-2 md:p-4 z-40 bg-gradient-to-b from-black/80 to-transparent pointer-events-none flex justify-between items-start">
+        
+        <div className="flex gap-2 pointer-events-auto">
+           {/* Level Indicator */}
+           <div className="bg-[#003366]/90 border text-white border-[#00f0ff]/30 pl-1 pr-3 py-1 flex items-center gap-2 rounded shadow-lg shadow-black/50 backdrop-blur-md cursor-pointer hover:bg-[#003366]">
+             <div className="w-7 h-7 bg-[#00f0ff]/20 flex items-center justify-center font-bold text-sm text-[#00f0ff] rounded">1</div>
+             <div className="flex flex-col leading-tight">
+                <span className="text-[8px] uppercase tracking-widest text-[#00f0ff] font-bold">Level</span>
+                <span className="text-xs font-bold font-mono">TRAINEE</span>
+             </div>
+           </div>
+           
+           {/* VIP Button */}
+           <button className="bg-gradient-to-b from-[#d4af37] to-amber-600 border border-amber-300 px-3 py-1 text-black font-extrabold text-[10px] rounded uppercase tracking-widest shadow-lg shadow-black/50 flex flex-col items-center justify-center hover:brightness-110 active:scale-95 transition-all">
+              <span className="leading-none mb-0.5">VIP</span>
+              <span className="leading-none text-[8px] opacity-80 flex gap-0.5"><span className="text-white">+</span>50% Cash</span>
+           </button>
         </div>
-        <div className="glass-panel px-6 py-3 rounded-full pointer-events-auto flex gap-6 text-sm font-medium text-white/50 uppercase tracking-widest relative z-50">
-          <button 
-            onClick={() => setActiveView('Dashboard')} 
-            className={`hover:text-white transition-colors ${activeView === 'Dashboard' ? 'text-[var(--color-cyan)] drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]' : ''}`}
-          >
-            Dashboard
-          </button>
-          <button 
-            onClick={() => setActiveView('Fleet')} 
-            className={`hover:text-white transition-colors ${activeView === 'Fleet' ? 'text-[var(--color-cyan)] drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]' : ''}`}
-          >
-            Hangar
-          </button>
-          <button 
-            onClick={() => setActiveView('Logistics')} 
-            className={`hover:text-white transition-colors ${activeView === 'Logistics' ? 'text-[var(--color-cyan)] drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]' : ''}`}
-          >
-            Logistics
-          </button>
-          <button 
-            onClick={() => setActiveView('Configurator')} 
-            className={`hover:text-white transition-colors ${activeView === 'Configurator' ? 'text-[var(--color-cyan)] drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]' : ''}`}
-          >
-            Cabin Configurator
-          </button>
+
+        <div className="flex gap-2 pointer-events-auto">
+           {/* Navigation Toggle (Compact for Mobile) */}
+           <div className="hidden md:flex bg-black/60 border border-white/10 p-1 rounded-lg gap-1 backdrop-blur-md">
+             {(['Dashboard', 'Fleet', 'Logistics'] as const).map(view => (
+                <button 
+                  key={view}
+                  onClick={() => setActiveView(view)} 
+                  className={`px-4 py-1 text-[10px] uppercase font-bold tracking-widest rounded transition-all ${activeView === view ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/30' : 'text-white/40 hover:text-white/80'}`}
+                >
+                  {view}
+                </button>
+             ))}
+           </div>
+
+           {/* Currency Indicator */}
+           <div className="bg-black/80 border border-white/10 px-3 py-1 rounded flex items-center gap-2 backdrop-blur-md shadow-lg shadow-black/50">
+              <span className="text-[#00f0ff] font-bold text-xs">$</span>
+              <span className="text-white font-mono font-bold text-sm">2.45M</span>
+           </div>
+           
+           {/* Store Action */}
+           <button className="bg-gradient-to-b from-green-500 to-green-700 border border-green-400 px-3 py-1 text-white font-bold text-xs rounded uppercase tracking-widest shadow-[0_0_15px_rgba(34,197,94,0.3)] flex items-center justify-center hover:brightness-110 active:scale-95 transition-all">
+              + Store
+           </button>
         </div>
       </div>
       
@@ -158,6 +172,8 @@ export default function Home() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <FlightAttendant />
 
     </main>
   );

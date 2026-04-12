@@ -41,11 +41,18 @@ interface AppState {
   timeMultiplier: number;
   provisionalRoute: { origin: LocationData, destination: LocationData } | null;
   
+  // Game UI State
+  playerLevel: number;
+  playerCash: number;
+  isVIP: boolean;
+  mapStyle: 'FlightAware' | 'Satellite' | 'Dark' | 'Roads';
+
   updateAircraft: (id: string, updates: Partial<Aircraft>) => void;
   setSelectedAircraftId: (id: string | null) => void;
   setProvisionalRoute: (route: { origin: LocationData, destination: LocationData } | null) => void;
   setWeatherEnabled: (enabled: boolean) => void;
   setActiveView: (view: ActiveView) => void;
+  setMapStyle: (style: 'FlightAware' | 'Satellite' | 'Dark' | 'Roads') => void;
   setCabinSlot: (aircraftId: string, index: number, module: ModuleType) => void;
   setTimeMultiplier: (multiplier: number) => void;
   setAircraftRoute: (id: string, origin: LocationData, destination: LocationData | null) => void;
@@ -111,6 +118,10 @@ export const useStore = create<AppState>()(
       activeView: 'Dashboard', 
       timeMultiplier: 60,
       provisionalRoute: null,
+      playerLevel: 1,
+      playerCash: 2450000,
+      isVIP: false,
+      mapStyle: 'FlightAware',
 
   updateAircraft: (id, updates) => set((state) => ({
     fleet: state.fleet.map(jet => jet.id === id ? { ...jet, ...updates } : jet)
@@ -148,7 +159,8 @@ export const useStore = create<AppState>()(
   clearSchedule: (id) => set((state) => ({
     fleet: state.fleet.map(jet => jet.id === id ? { ...jet, scheduledRoutes: [] } : jet)
   })),
-  setProvisionalRoute: (route) => set({ provisionalRoute: route })
+  setProvisionalRoute: (route) => set({ provisionalRoute: route }),
+  setMapStyle: (style) => set({ mapStyle: style })
 }),
 { name: 'jetstream-elite-storage' }
 ));

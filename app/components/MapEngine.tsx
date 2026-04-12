@@ -1,16 +1,18 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import { useStore } from '../lib/store';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
+import { Layers } from 'lucide-react';
 
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
-  const { fleet, selectedAircraftId, activeView, provisionalRoute } = useStore();
+  const { fleet, selectedAircraftId, activeView, provisionalRoute, mapStyle, setMapStyle } = useStore();
   const jet = fleet.find(j => j.id === selectedAircraftId);
   const flightPhase = jet?.flightPhase;
+  const [layersOpen, setLayersOpen] = useState(false);
 
   useEffect(() => {
     if (map.current || !mapContainer.current) return;
@@ -20,23 +22,17 @@ export default function MapEngine() {
       style: {
         version: 8,
         sources: {
-          'carto-dark': {
+          'base-raster': {
             type: 'raster',
-            tiles: [
-              'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
-              'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
-              'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
-              'https://d.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'
-            ],
-            tileSize: 256,
-            attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+            tiles: ['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'],
+            tileSize: 256
           }
         },
         layers: [
           {
-            id: 'carto-dark-layer',
+            id: 'base-layer',
             type: 'raster',
-            source: 'carto-dark',
+            source: 'base-raster',
             minzoom: 0,
             maxzoom: 22
           }
@@ -48,11 +44,24 @@ export default function MapEngine() {
       bearing: -17.6,
     });
 
-    return () => {
-      map.current?.remove();
-      map.current = null;
-    };
   }, []);
+
+  useEffect(() => {
+    if (!map.current) return;
+    const m = map.current;
+    
+    // Switch map styles directly
+    let tilesUrl = 'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png';
+    if (mapStyle === 'Roads') tilesUrl = 'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png';
+    if (mapStyle === 'Satellite') tilesUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+    
+    m.setStyle({
+      version: 8,
+      sources: { 'base-raster': { type: 'raster', tiles: [tilesUrl], tileSize: 256 } },
+      layers: [{ id: 'base-layer', type: 'raster', source: 'base-raster', minzoom: 0, maxzoom: 22 }]
+    });
+
+  }, [mapStyle]);
 
   useEffect(() => {
     if (!map.current) return;
@@ -217,15 +226,14 @@ export default function MapEngine() {
                'text-allow-overlap': true,
              },
              paint: {
-               'text-color': fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff',
+               'text-color': '#ffffff',
                'text-halo-color': '#000',
-               'text-halo-width': 2,
+               'text-halo-width': 1,
                'text-opacity': fJet.flightPhase === 'Cruise' ? 1 : 0.6
              }
            });
         } else {
            (m.getSource(planeSourceId) as any).setData(planeData);
-           m.setPaintProperty(planeLayerId, 'text-color', fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff');
            m.setLayoutProperty(planeLayerId, 'text-size', fJet.flightPhase === 'Cruise' ? 24 : 16);
            m.setPaintProperty(planeLayerId, 'text-opacity', fJet.flightPhase === 'Cruise' ? 1 : 0.6);
         }
@@ -238,14 +246,13 @@ export default function MapEngine() {
                  type: 'line',
                  source: routeSourceId,
                  paint: {
-                   'line-color': fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff',
-                   'line-width': 3,
+                   'line-color': '#ffffff',
+                   'line-width': 2.5,
                    'line-opacity': 0.8
                  }
                });
            } else {
                (m.getSource(routeSourceId) as any).setData(routeData);
-               m.setPaintProperty(routeLayerId, 'line-color', fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff');
            }
 
            const futureSourceId = `${routeSourceId}-future`;
@@ -257,15 +264,14 @@ export default function MapEngine() {
                  type: 'line',
                  source: futureSourceId,
                  paint: {
-                   'line-color': fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff',
-                   'line-width': 3,
+                   'line-color': '#ffffff',
+                   'line-width': 2.5,
                    'line-dasharray': [2, 2],
                    'line-opacity': 0.3
                  }
                });
            } else {
                (m.getSource(futureSourceId) as any).setData(futureRouteData);
-               m.setPaintProperty(futureLayerId, 'line-color', fJet.id === selectedAircraftId ? '#d4af37' : '#00f0ff');
            }
         } else {
            if (m.getLayer(routeLayerId)) m.removeLayer(routeLayerId);
@@ -379,8 +385,35 @@ export default function MapEngine() {
 
   return (
     <div className="absolute inset-0 z-0 bg-[#0a0a0c]">
-      <div ref={mapContainer} className="w-full h-full" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-transparent to-[var(--background)] opacity-80 pointer-events-none" />
+      <div 
+         ref={mapContainer} 
+         className="w-full h-full" 
+         style={mapStyle === 'FlightAware' ? { filter: 'sepia(100%) hue-rotate(185deg) saturate(300%) brightness(85%) contrast(120%)' } : {}}
+      />
+      
+      {/* Dynamic Layer Toggle */}
+      <div className="absolute bottom-40 right-4 z-50 flex flex-col items-end gap-2 pointer-events-auto">
+         {layersOpen && (
+            <div className="flex flex-col gap-1 bg-black/80 backdrop-blur border border-white/10 p-2 rounded-lg shadow-xl">
+               {(['FlightAware', 'Satellite', 'Dark', 'Roads'] as const).map(s => (
+                  <button 
+                     key={s} 
+                     onClick={() => setMapStyle(s)}
+                     className={`px-4 py-2 text-xs font-bold uppercase tracking-widest rounded transition-all text-left ${mapStyle === s ? 'bg-white text-black' : 'text-white/60 hover:bg-white/10 hover:text-white'}`}
+                  >
+                     {s} Mode
+                  </button>
+               ))}
+            </div>
+         )}
+         <button 
+            onClick={() => setLayersOpen(!layersOpen)}
+            className="w-12 h-12 bg-white text-black rounded-full shadow-2xl flex items-center justify-center hover:scale-105 transition-transform"
+         >
+            <Layers size={20} />
+         </button>
+      </div>
+
     </div>
   );
 }
