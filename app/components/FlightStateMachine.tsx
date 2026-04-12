@@ -158,15 +158,7 @@ export default function FlightStateMachine() {
              </div>
            </div>
         </div>
-
-             </div>
-             {isLocked && <span className="text-xs font-mono font-bold text-[#d4af37] bg-black/50 px-2 py-1 rounded">{formattedTTE} TTE</span>}
-          </div>
-          <div className="flex items-center gap-3">
-            <Gauge size={16} className="text-gray-400"/>
-            <span className="text-sm tracking-wider">ALT: {jet.flightPhase === 'Cruise' ? '41,000 FT' : '0 FT'}</span>
-          </div>
-        </div>
+         </div>
 
         {/* Action Button Area */}
         <div className="mt-auto p-4 bg-[#c2baa8] flex items-center gap-2 border-t border-[#b2a996]">
