@@ -1,17 +1,12 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import maplibregl from 'maplibre-gl';
 import { useStore } from '../lib/store';
-
-// We inject a dummy string. mapbox-gl requires the accessToken variable to be populated to initialize, 
-// but since we are exclusively loading open-source free raster arrays, they will never be validated against their billing servers!
-mapboxgl.accessToken = 'pk.eyJ1IjoiZHVtbXlsb2NhbCIsImEiOiJjbXhxemN3aXYwbG53MnFxdm5zYndkOWg0In0.dummy';
 
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const map = useRef<maplibregl.Map | null>(null);
   const { fleet, selectedAircraftId } = useStore();
   const jet = fleet.find(j => j.id === selectedAircraftId);
   const flightPhase = jet?.flightPhase;
@@ -19,7 +14,7 @@ export default function MapEngine() {
   useEffect(() => {
     if (map.current || !mapContainer.current) return;
     
-    map.current = new mapboxgl.Map({
+    map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: {
         version: 8,
@@ -50,18 +45,6 @@ export default function MapEngine() {
       zoom: 12,
       pitch: 60,
       bearing: -17.6,
-      projection: 'globe' as any,
-    });
-
-    map.current.on('style.load', () => {
-      // Re-apply the atmospheric space-fog wrapping so it still looks incredibly cinematic from orbit
-      map.current?.setFog({
-        color: 'rgb(186, 210, 235)',
-        'high-color': 'rgb(36, 92, 223)',
-        'horizon-blend': 0.02,
-        'space-color': 'rgb(11, 11, 25)',
-        'star-intensity': 0.6
-      });
     });
 
     return () => {
@@ -71,7 +54,7 @@ export default function MapEngine() {
   }, []);
 
   useEffect(() => {
-    if (!map.current || !jet) return;
+    if (!map.current || !jet || !jet.currentLocation) return;
     const m = map.current;
     const center = [jet.currentLocation.lng, jet.currentLocation.lat] as [number, number];
 
@@ -99,7 +82,7 @@ export default function MapEngine() {
         }
         break;
     }
-  }, [flightPhase, jet?.id]);
+  }, [flightPhase, jet?.currentLocation, jet?.destination]);
 
   return (
     <div className="absolute inset-0 z-0 bg-[#0a0a0c]">

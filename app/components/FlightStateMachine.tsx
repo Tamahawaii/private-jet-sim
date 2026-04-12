@@ -8,7 +8,7 @@ import { useStore, FlightPhase, MAIN_HUBS } from '../lib/store';
 const PHASES: FlightPhase[] = ['Hangar', 'Pre-flight', 'Taxi', 'Takeoff', 'Cruise', 'Landing'];
 
 export default function FlightStateMachine() {
-  const { fleet, selectedAircraftId, updateAircraft, weatherEnabled, setWeatherEnabled, timeMultiplier } = useStore();
+  const { fleet, selectedAircraftId, updateAircraft, weatherEnabled, setWeatherEnabled, timeMultiplier, setAircraftRoute } = useStore();
   const jet = fleet.find(j => j.id === selectedAircraftId);
   const [timeLeft, setTimeLeft] = useState<number>(0);
 
@@ -35,8 +35,8 @@ export default function FlightStateMachine() {
       const updates: any = { flightPhase: newPhase };
       
       if (newPhase === 'Cruise') {
+         // Lock the transit state based on logical distance (using flat 18000s for testing here)
          updates.lockedUntil = Date.now() + ((18000 * 1000) / timeMultiplier);
-         updates.destination = jet.currentLocation.name === 'LAX' ? MAIN_HUBS.HNL : (jet.currentLocation.name === 'HNL' ? MAIN_HUBS.JFK : MAIN_HUBS.LAX);
       }
       
       if (newPhase === 'Landing') {
@@ -78,9 +78,32 @@ export default function FlightStateMachine() {
           <div className="flex items-center justify-between">
              <div className="flex items-center gap-3">
                <MapPin size={16} className="text-gray-400"/>
-               <span className="text-sm font-bold tracking-widest uppercase">
-                 {jet.currentLocation.name} {jet.destination ? `→ ${jet.destination.name}` : ''}
-               </span>
+               
+               {(jet.flightPhase === 'Hangar' || jet.flightPhase === 'Pre-flight') ? (
+                  <div className="flex items-center gap-2 relative">
+                     <select 
+                       value={jet.currentLocation.name} 
+                       onChange={(e) => setAircraftRoute(jet.id, e.target.value, jet.destination?.name || '')}
+                       className="bg-black/50 border border-white/20 text-white rounded px-2 py-1 text-xs font-bold uppercase tracking-widest outline-none focus:border-[#00f0ff] appearance-none cursor-pointer"
+                     >
+                       {Object.keys(MAIN_HUBS).map(h => <option key={h} value={h}>{h}</option>)}
+                     </select>
+                     <span className="text-white/40">→</span>
+                     <select 
+                       value={jet.destination?.name || ''} 
+                       onChange={(e) => setAircraftRoute(jet.id, jet.currentLocation.name, e.target.value)}
+                       className={`bg-black/50 border text-white rounded px-2 py-1 text-xs font-bold uppercase tracking-widest outline-none appearance-none cursor-pointer ${!jet.destination ? 'border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)] focus:border-red-400' : 'border-white/20 focus:border-[#00f0ff]'}`}
+                     >
+                       <option value="" disabled>DEST</option>
+                       {Object.keys(MAIN_HUBS).map(h => <option key={h} value={h} disabled={h === jet.currentLocation.name}>{h}</option>)}
+                     </select>
+                  </div>
+               ) : (
+                 <span className="text-sm font-bold tracking-widest uppercase">
+                   {jet.currentLocation.name} {jet.destination ? `→ ${jet.destination.name}` : ''}
+                 </span>
+               )}
+
              </div>
              {isLocked && <span className="text-xs font-mono font-bold text-[#d4af37] bg-black/50 px-2 py-1 rounded">{timeLeft}s TTE</span>}
           </div>
@@ -99,7 +122,7 @@ export default function FlightStateMachine() {
             Revert
           </button>
           <button 
-            disabled={currentIndex === PHASES.length - 1 || isLocked}
+            disabled={currentIndex === PHASES.length - 1 || isLocked || ((currentIndex === 0 || currentIndex === 1) && !jet.destination)}
             onClick={nextPhase}
             className={`flex-1 px-4 py-3 text-xs font-bold tracking-widest uppercase border rounded transition-colors disabled:opacity-30 flex items-center justify-center ${
               isLocked 

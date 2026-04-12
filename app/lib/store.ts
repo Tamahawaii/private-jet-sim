@@ -35,6 +35,7 @@ interface AppState {
   setActiveView: (view: ActiveView) => void;
   setCabinSlot: (index: number, module: ModuleType) => void;
   setTimeMultiplier: (multiplier: number) => void;
+  setAircraftRoute: (id: string, originName: string, destinationName: string) => void;
 }
 
 export const MAIN_HUBS: Record<string, LocationData> = {
@@ -90,5 +91,14 @@ export const useStore = create<AppState>((set) => ({
     newSlots[index] = module;
     return { cabinSlots: newSlots };
   }),
-  setTimeMultiplier: (m) => set({ timeMultiplier: m })
+  setTimeMultiplier: (m) => set({ timeMultiplier: m }),
+  setAircraftRoute: (id, originName, destinationName) => set((state) => {
+    const origin = Object.values(MAIN_HUBS).find(h => h.name === originName);
+    const destination = destinationName ? Object.values(MAIN_HUBS).find(h => h.name === destinationName) : null;
+    if (!origin) return state;
+    
+    return {
+      fleet: state.fleet.map(jet => jet.id === id ? { ...jet, currentLocation: origin, destination: destination || null } : jet)
+    };
+  })
 }));
