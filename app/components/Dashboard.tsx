@@ -16,8 +16,8 @@ export default function Dashboard() {
   return (
     <div className="absolute inset-x-0 top-16 bottom-0 z-20 flex flex-col md:flex-row items-center justify-center p-4 gap-4 overflow-y-auto">
       
-      {/* 2x3 Grid exactly matching Screenshot 3 */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 w-full max-w-5xl h-fit">
+      {/* Symmetrical 2x2 Game Menu Grid */}
+      <div className="grid grid-cols-2 gap-3 md:gap-6 w-full max-w-4xl h-fit mt-10 md:mt-0">
 
          {/* 1. Contracts and Routes */}
          <motion.div 
@@ -33,10 +33,9 @@ export default function Dashboard() {
            <Plane size={80} className="absolute right-2 top-8 text-white/40 drop-shadow-lg -rotate-45" />
 
            <div className="mt-auto relative z-10">
-             <h2 className="text-xl md:text-3xl font-black text-white leading-tight drop-shadow-md">Contracts<br/>and routes</h2>
+             <h2 className="text-xl md:text-3xl font-black text-white leading-tight drop-shadow-md">Logistics &<br/>Contracts</h2>
              <div className="flex flex-col gap-1 mt-2">
-                <span className="text-[10px] uppercase font-bold text-blue-200 tracking-widest flex items-center gap-1"><MapPin size={10}/> ROUTES OPENED: <span className="text-white">12</span></span>
-                <span className="text-[10px] uppercase font-bold text-blue-200 tracking-widest flex items-center gap-1"><Globe size={10}/> PILOTS: <span className="text-white">{fleet.length}</span></span>
+                <span className="text-[10px] uppercase font-bold text-blue-200 tracking-widest flex items-center gap-1"><MapPin size={10}/> FLEET DEPLOYED: <span className="text-white">{activeFlights.length}</span></span>
              </div>
            </div>
          </motion.div>
@@ -53,48 +52,33 @@ export default function Dashboard() {
            <Plane size={150} className="absolute -right-10 -top-10 text-white/5 group-hover:scale-110 transition-transform duration-500" />
            
            <div className="mt-auto relative z-10">
-             <h2 className="text-xl md:text-3xl font-black text-white leading-tight drop-shadow-md">Airplanes<br/>and licenses</h2>
+             <h2 className="text-xl md:text-3xl font-black text-white leading-tight drop-shadow-md">My Fleet<br/>& Hangar</h2>
              <div className="flex flex-col gap-1 mt-2">
-                <span className="text-[10px] uppercase font-bold text-slate-300 tracking-widest flex items-center gap-1 justify-between">AIRPLANES: <span className="text-white">{fleet.length}/30</span></span>
-                <span className="text-[10px] uppercase font-bold text-slate-300 tracking-widest flex items-center gap-1 justify-between">LICENSES: <span className="text-white">6/219</span></span>
+                <span className="text-[10px] uppercase font-bold text-slate-300 tracking-widest flex items-center gap-1 justify-between">AIRCRAFT: <span className="text-white">{fleet.length} OWNED</span></span>
              </div>
            </div>
          </motion.div>
 
-         {/* 3. Cabin Configurator / Shop (Top Right) */}
-         <div className="flex flex-col gap-3 h-full">
-             <motion.div 
-               whileTap={{ scale: 0.95 }}
-               onClick={() => setActiveView('Configurator')}
-               className="bg-gradient-to-br from-[#003366] to-[#001D4A] rounded-xl overflow-hidden shadow-2xl relative cursor-pointer flex-1 flex flex-col p-4 border border-[#00f0ff]/30 group"
-             >
-                <div className="absolute right-2 top-2 bg-[#ff0055] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-lg z-20 uppercase">New</div>
-                <h2 className="text-lg font-black text-white drop-shadow-md absolute bottom-4 w-full text-center left-0">Configurator</h2>
-             </motion.div>
-             
-             <motion.div 
-               whileTap={{ scale: 0.95 }}
-               className="bg-gradient-to-br from-green-600 to-green-800 rounded-xl overflow-hidden shadow-2xl relative cursor-pointer flex-1 flex flex-col p-4 border border-green-500 group"
-             >
-                <div className="absolute top-2 left-2 bg-[#ff0055] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg z-20">19</div>
-                <h2 className="text-2xl font-black text-white drop-shadow-md mt-6">Shop</h2>
-                <span className="text-[8px] text-green-200 uppercase mt-auto">Visit regularly to check out new special offers! <strong className="text-white">Duty-free!</strong></span>
-             </motion.div>
-         </div>
+         {/* 3. Shop */}
+         <motion.div 
+           whileTap={{ scale: 0.95 }}
+           onClick={() => setActiveView('Shop' as any)}
+           className="bg-gradient-to-br from-green-600 to-green-800 rounded-xl overflow-hidden shadow-2xl relative cursor-pointer min-h-[160px] md:min-h-[220px] flex flex-col p-4 border border-green-500 group"
+         >
+            <div className="absolute top-2 left-2 bg-[#ff0055] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg z-20">New</div>
+            <h2 className="text-xl md:text-3xl font-black text-white leading-tight drop-shadow-md mt-auto">Aircraft<br/>Dealer</h2>
+            <span className="text-[10px] text-green-200 uppercase mt-2">Purchase new jets and expand operations</span>
+         </motion.div>
 
-         {/* 4. Special Events */}
-         <div className="col-span-2 md:col-span-2 bg-gradient-to-b from-blue-800 to-blue-900 rounded-xl overflow-hidden shadow-2xl relative cursor-pointer flex flex-col justify-end p-4 border border-blue-700 min-h-[120px]">
-             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(0,240,255,0.2),transparent_50%)]" />
-             <h2 className="text-2xl pt-8 font-black text-white drop-shadow-md tracking-widest">SPECIAL EVENTS</h2>
-             <span className="text-[10px] text-blue-300 font-bold uppercase tracking-widest mt-1 flex gap-2 items-center"><Navigation size={10}/> New events coming soon</span>
-         </div>
-
-         {/* 5. Charter Fleet */}
-         <div className="col-span-2 md:col-span-1 bg-gradient-to-br from-teal-700 to-teal-900 rounded-xl overflow-hidden shadow-2xl relative cursor-pointer flex flex-col justify-end p-4 border border-teal-600 opacity-80 min-h-[120px]">
-             <Plane size={80} className="absolute right-2 top-2 text-white/20 drop-shadow-lg -rotate-12" />
-             <h2 className="text-2xl font-black text-white drop-shadow-md">Charter fleet</h2>
-             <span className="text-[10px] text-teal-300 font-bold uppercase tracking-widest mt-1">🔒 Reach level 3 to unlock</span>
-         </div>
+         {/* 4. Configuration Layout */}
+         <motion.div 
+           whileTap={{ scale: 0.95 }}
+           onClick={() => setActiveView('Configurator')}
+           className="bg-gradient-to-br from-[#003366] to-[#001D4A] rounded-xl overflow-hidden shadow-2xl relative cursor-pointer min-h-[160px] md:min-h-[220px] flex flex-col p-4 border border-[#00f0ff]/30 group"
+         >
+            <h2 className="text-xl md:text-3xl font-black text-white leading-tight drop-shadow-md mt-auto">Cabin<br/>Configs</h2>
+            <span className="text-[8px] text-[#00f0ff] uppercase mt-2 tracking-widest">Review Blueprints</span>
+         </motion.div>
 
       </div>
     </div>

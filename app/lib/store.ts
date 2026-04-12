@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { STARTER_FLEET, CatalogItem } from './mockData';
 
 export type FlightPhase = 'Hangar' | 'Pre-flight' | 'Taxi' | 'Takeoff' | 'Cruise' | 'Landing';
-export type ActiveView = 'Dashboard' | 'Fleet' | 'Logistics' | 'Configurator' | 'StateMachine';
+export type ActiveView = 'Dashboard' | 'Fleet' | 'Logistics' | 'Configurator' | 'StateMachine' | 'Shop';
 export type ModuleType = 'Executive' | 'MasterSuite' | 'Galley' | 'Cinema' | 'Empty';
 
 export interface LocationData {
@@ -24,6 +25,8 @@ export interface Aircraft {
   speedKnots: number;
   fuelBurnGPH: number;
   costPerNM: number;
+  purchasePrice: number;
+  layoutImage?: string;
   cabinConfig: ModuleType[];
   flightPhase: FlightPhase;
   currentLocation: LocationData;
@@ -44,9 +47,9 @@ interface AppState {
   // Game UI State
   playerLevel: number;
   playerCash: number;
-  isVIP: boolean;
   mapStyle: 'FlightAware' | 'Satellite' | 'Dark' | 'Roads';
 
+  buyAircraft: (catalogItem: CatalogItem) => void;
   updateAircraft: (id: string, updates: Partial<Aircraft>) => void;
   setSelectedAircraftId: (id: string | null) => void;
   setProvisionalRoute: (route: { origin: LocationData, destination: LocationData } | null) => void;
@@ -87,41 +90,59 @@ export const MAIN_HUBS: Record<string, LocationData> = {
 export const useStore = create<AppState>()(
   persist(
     (set) => ({
-      fleet: [
-        {
-          id: 'v-1', tailNumber: 'N10XDS', model: 'Dassault Falcon 10X', speedKnots: 516, fuelBurnGPH: 420, costPerNM: 15, cabinConfig: Array(4).fill('Empty'), flightPhase: 'Hangar',
-          currentLocation: MAIN_HUBS.LHR, destination: null, scheduledRoutes: [], lockedUntil: null, launchedAt: null
-        },
-        {
-          id: 'v-2', tailNumber: 'N787BB', model: 'Boeing BBJ 787', speedKnots: 490, fuelBurnGPH: 1500, costPerNM: 45, cabinConfig: Array(6).fill('Empty'), flightPhase: 'Hangar',
-          currentLocation: MAIN_HUBS.DXB, destination: null, scheduledRoutes: [], lockedUntil: null, launchedAt: null
-        },
-        {
-          id: 'v-3', tailNumber: 'N700GS', model: 'Gulfstream G700', speedKnots: 530, fuelBurnGPH: 500, costPerNM: 18, cabinConfig: Array(4).fill('Empty'), flightPhase: 'Hangar',
-          currentLocation: MAIN_HUBS.LAX, destination: null, scheduledRoutes: [], lockedUntil: null, launchedAt: null
-        },
-        {
-          id: 'v-4', tailNumber: 'N600PR', model: 'Embraer Praetor 600', speedKnots: 466, fuelBurnGPH: 300, costPerNM: 10, cabinConfig: Array(2).fill('Empty'), flightPhase: 'Hangar',
-          currentLocation: MAIN_HUBS.GRU, destination: null, scheduledRoutes: [], lockedUntil: null, launchedAt: null
-        },
-        {
-          id: 'v-5', tailNumber: 'N350CL', model: 'Cessna Citation Longitude', speedKnots: 466, fuelBurnGPH: 280, costPerNM: 9, cabinConfig: Array(2).fill('Empty'), flightPhase: 'Hangar',
-          currentLocation: MAIN_HUBS.JFK, destination: null, scheduledRoutes: [], lockedUntil: null, launchedAt: null
-        },
-        {
-          id: 'v-6', tailNumber: 'N8000G', model: 'Bombardier Global 8000', speedKnots: 530, fuelBurnGPH: 490, costPerNM: 17, cabinConfig: Array(4).fill('Empty'), flightPhase: 'Hangar',
-          currentLocation: MAIN_HUBS.HND, destination: null, scheduledRoutes: [], lockedUntil: null, launchedAt: null
-        }
-      ],
-      selectedAircraftId: 'v-3',
+      fleet: STARTER_FLEET.map((j, i) => ({
+        id: `start-jet-${i+1}`,
+        tailNumber: `N${100 + i * 25}JS`,
+        model: j.model,
+        speedKnots: j.speedKnots,
+        fuelBurnGPH: j.fuelBurnGPH,
+        costPerNM: j.costPerNM,
+        purchasePrice: j.price,
+        layoutImage: j.layoutImage,
+        cabinConfig: Array(j.cabinSlots).fill('Empty'),
+        flightPhase: 'Hangar',
+        currentLocation: Object.values(MAIN_HUBS)[i],
+        destination: null,
+        scheduledRoutes: [],
+        lockedUntil: null,
+        launchedAt: null
+      })),
+      selectedAircraftId: 'start-jet-1',
       weatherEnabled: false,
       activeView: 'Dashboard', 
       timeMultiplier: 60,
       provisionalRoute: null,
       playerLevel: 1,
-      playerCash: 2450000,
-      isVIP: false,
+      playerCash: 1100000000, // $1.1 Billion
       mapStyle: 'FlightAware',
+
+  buyAircraft: (item) => set((state) => {
+    if (state.playerCash >= item.price) {
+       const newAircraft: Aircraft = {
+         id: `bought-jet-${Date.now()}`,
+         tailNumber: `N${Math.floor(Math.random() * 900) + 100}XP`,
+         model: item.model,
+         speedKnots: item.speedKnots,
+         fuelBurnGPH: item.fuelBurnGPH,
+         costPerNM: item.costPerNM,
+         purchasePrice: item.price,
+         layoutImage: item.layoutImage,
+         cabinConfig: Array(item.cabinSlots).fill('Empty'),
+         flightPhase: 'Hangar',
+         currentLocation: MAIN_HUBS.LAX,
+         destination: null,
+         scheduledRoutes: [],
+         lockedUntil: null,
+         launchedAt: null
+       };
+       return {
+         playerCash: state.playerCash - item.price,
+         fleet: [...state.fleet, newAircraft],
+         selectedAircraftId: newAircraft.id
+       };
+    }
+    return state;
+  }),
 
   updateAircraft: (id, updates) => set((state) => ({
     fleet: state.fleet.map(jet => jet.id === id ? { ...jet, ...updates } : jet)

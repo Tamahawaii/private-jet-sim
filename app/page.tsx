@@ -7,6 +7,7 @@ import CabinConfigurator from './components/CabinConfigurator';
 import FleetDashboard from './components/FleetDashboard';
 import LogisticsPlanner from './components/LogisticsPlanner';
 import Dashboard from './components/Dashboard';
+import Shop from './components/Shop';
 import FlightAttendant from './components/FlightAttendant';
 import { useStore } from './lib/store';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -24,7 +25,7 @@ const MapEngine = dynamic(() => import('./components/MapEngine'), {
 });
 
 export default function Home() {
-  const { activeView, setActiveView } = useStore();
+  const { activeView, setActiveView, playerCash } = useStore();
 
   return (
     <main className="relative w-full h-full min-h-screen overflow-hidden bg-[var(--background)]">
@@ -47,20 +48,18 @@ export default function Home() {
       <div className="absolute top-0 left-0 w-full p-2 md:p-4 z-40 bg-gradient-to-b from-black/80 to-transparent pointer-events-none flex justify-between items-start">
         
         <div className="flex gap-2 pointer-events-auto">
-           {/* Level Indicator */}
-           <div className="bg-[#003366]/90 border text-white border-[#00f0ff]/30 pl-1 pr-3 py-1 flex items-center gap-2 rounded shadow-lg shadow-black/50 backdrop-blur-md cursor-pointer hover:bg-[#003366]">
-             <div className="w-7 h-7 bg-[#00f0ff]/20 flex items-center justify-center font-bold text-sm text-[#00f0ff] rounded">1</div>
-             <div className="flex flex-col leading-tight">
-                <span className="text-[8px] uppercase tracking-widest text-[#00f0ff] font-bold">Level</span>
-                <span className="text-xs font-bold font-mono">TRAINEE</span>
-             </div>
+           {/* Navigation Toggle (Compact for Mobile) */}
+           <div className="hidden md:flex bg-black/60 border border-white/10 p-1 rounded-lg gap-1 backdrop-blur-md">
+             {(['Dashboard', 'Fleet', 'Logistics'] as const).map(view => (
+                <button 
+                  key={view}
+                  onClick={() => setActiveView(view)} 
+                  className={`px-4 py-1 text-[10px] uppercase font-bold tracking-widest rounded transition-all ${activeView === view ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/30' : 'text-white/40 hover:text-white/80'}`}
+                >
+                  {view}
+                </button>
+             ))}
            </div>
-           
-           {/* VIP Button */}
-           <button className="bg-gradient-to-b from-[#d4af37] to-amber-600 border border-amber-300 px-3 py-1 text-black font-extrabold text-[10px] rounded uppercase tracking-widest shadow-lg shadow-black/50 flex flex-col items-center justify-center hover:brightness-110 active:scale-95 transition-all">
-              <span className="leading-none mb-0.5">VIP</span>
-              <span className="leading-none text-[8px] opacity-80 flex gap-0.5"><span className="text-white">+</span>50% Cash</span>
-           </button>
         </div>
 
         <div className="flex gap-2 pointer-events-auto">
@@ -80,12 +79,12 @@ export default function Home() {
            {/* Currency Indicator */}
            <div className="bg-black/80 border border-white/10 px-3 py-1 rounded flex items-center gap-2 backdrop-blur-md shadow-lg shadow-black/50">
               <span className="text-[#00f0ff] font-bold text-xs">$</span>
-              <span className="text-white font-mono font-bold text-sm">2.45M</span>
+              <span className="text-[#00f0ff] font-mono font-black text-lg">{(playerCash / 1000000000).toFixed(1)}B</span>
            </div>
            
            {/* Store Action */}
-           <button className="bg-gradient-to-b from-green-500 to-green-700 border border-green-400 px-3 py-1 text-white font-bold text-xs rounded uppercase tracking-widest shadow-[0_0_15px_rgba(34,197,94,0.3)] flex items-center justify-center hover:brightness-110 active:scale-95 transition-all">
-              + Store
+           <button onClick={() => setActiveView('Dashboard')} className="bg-gradient-to-b from-green-500 to-green-700 border border-green-400 px-3 py-1 text-white font-bold text-xs rounded uppercase tracking-widest shadow-[0_0_15px_rgba(34,197,94,0.3)] flex items-center justify-center hover:brightness-110 active:scale-95 transition-all">
+              + Shop
            </button>
         </div>
       </div>
@@ -169,6 +168,21 @@ export default function Home() {
             className="absolute inset-0 z-20 bg-black/40 pointer-events-auto"
           >
             <CabinConfigurator />
+          </motion.div>
+        )}
+
+        {activeView === 'Shop' && (
+          <motion.div
+            key="shop"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="absolute inset-0 z-20 pointer-events-none"
+          >
+            <div className="pointer-events-auto h-full w-full">
+               <Shop />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
