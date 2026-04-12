@@ -55,29 +55,42 @@ export default function FleetDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {fleet.map(jet => {
             const locked = isLocked(jet.lockedUntil);
+            const imgSource = jet.model.includes('BBJ') || jet.model.includes('ACJ') ? 'bbj' : jet.model.includes('Citation') || jet.model.includes('Praetor') ? 'citation' : 'gulfstream';
             return (
               <motion.div 
                 key={jet.id}
                 whileHover={{ y: -5 }}
                 onClick={() => handleSelect(jet.id)}
-                className={`glass-panel p-6 rounded-2xl cursor-pointer transition-all border ${locked ? 'border-[#d4af37]/50 shadow-[0_0_15px_rgba(212,175,55,0.1)]' : 'border-[#00f0ff]/20 hover:border-[#00f0ff]/80 hover:shadow-[0_0_15px_rgba(0,240,255,0.2)]'}`}
+                className={`rounded-2xl cursor-pointer transition-all overflow-hidden relative min-h-[180px] group border shadow-xl ${locked ? 'border-[#d4af37]/50 shadow-[0_0_15px_rgba(212,175,55,0.1)]' : 'border-[#00f0ff]/20 hover:border-[#00f0ff]/80 hover:shadow-[0_0_15px_rgba(0,240,255,0.2)]'}`}
               >
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex items-center gap-2">
-                    <Plane className={locked ? 'text-[#d4af37]' : 'text-[#00f0ff]'} />
-                    <h2 className="text-xl font-bold tracking-wider">{jet.tailNumber}</h2>
-                  </div>
-                  <span className="text-xs uppercase tracking-widest text-white/50">{jet.model}</span>
+                {/* Background Image injected procedurally */}
+                <div className="absolute inset-0 bg-black">
+                  <img 
+                     src={`/aircraft/${imgSource}.png`} 
+                     alt={jet.model}
+                     className="w-full h-full object-cover mix-blend-luminosity opacity-30 group-hover:opacity-70 group-hover:mix-blend-normal transition-all duration-700" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent" />
                 </div>
-                
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-3">
-                    <MapPin size={16} className="text-white/40"/>
-                    <span className="text-sm">Location: <strong className="text-white">{jet.currentLocation.name}</strong></span>
+
+                <div className="p-6 relative z-10 flex flex-col justify-between h-full">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="flex items-center gap-2">
+                      <Plane className={locked ? 'text-[#d4af37]' : 'text-[#00f0ff]'} />
+                      <h2 className="text-xl font-bold tracking-wider text-white drop-shadow-md">{jet.tailNumber}</h2>
+                    </div>
+                    <span className="text-xs uppercase tracking-widest text-[#00f0ff] font-bold bg-black/50 px-2 py-1 rounded backdrop-blur-md">{jet.model}</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Clock size={16} className="text-white/40"/>
-                    <span className="text-sm">Status: <strong className={locked ? 'text-[#d4af37]' : 'text-[#00f0ff]'}>{jet.flightPhase}</strong></span>
+                  
+                  <div className="flex flex-col gap-3 mt-auto">
+                    <div className="flex items-center gap-3">
+                      <MapPin size={16} className="text-white/40"/>
+                      <span className="text-sm font-medium">Location: <strong className="text-white">{jet.currentLocation.name}</strong></span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Clock size={16} className="text-white/40"/>
+                      <span className="text-sm font-medium">Status: <strong className={locked ? 'text-[#d4af37]' : 'text-[#00f0ff]'}>{jet.flightPhase}</strong></span>
+                    </div>
                   </div>
                 </div>
               </motion.div>

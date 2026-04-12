@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type FlightPhase = 'Hangar' | 'Pre-flight' | 'Taxi' | 'Takeoff' | 'Cruise' | 'Landing';
-export type ActiveView = 'Fleet' | 'Logistics' | 'Configurator' | 'StateMachine';
+export type ActiveView = 'Dashboard' | 'Fleet' | 'Logistics' | 'Configurator' | 'StateMachine';
 export type ModuleType = 'Executive' | 'MasterSuite' | 'Galley' | 'Cinema' | 'Empty';
 
 export interface LocationData {
@@ -22,6 +22,8 @@ export interface Aircraft {
   tailNumber: string;
   model: string;
   speedKnots: number;
+  fuelBurnGPH: number;
+  costPerNM: number;
   cabinConfig: ModuleType[];
   flightPhase: FlightPhase;
   currentLocation: LocationData;
@@ -83,6 +85,8 @@ export const useStore = create<AppState>()(
           tailNumber: 'N174JS',
           model: 'Gulfstream G650ER',
           speedKnots: 516,
+          fuelBurnGPH: 500,
+          costPerNM: 18,
           cabinConfig: ['Empty', 'Empty', 'Empty', 'Empty'],
           flightPhase: 'Hangar',
           currentLocation: MAIN_HUBS.LAX,
@@ -94,7 +98,7 @@ export const useStore = create<AppState>()(
       ],
       selectedAircraftId: 'mock-1',
       weatherEnabled: false,
-      activeView: 'Fleet', 
+      activeView: 'Dashboard', 
       timeMultiplier: 60, // Default 60x speed
   
   addAircraft: (tailNumber, model) => set((state) => ({
@@ -105,6 +109,8 @@ export const useStore = create<AppState>()(
         tailNumber,
         model,
         speedKnots: model.includes('8000') || model.includes('G700') ? 530 : model.includes('Citation') || model.includes('Praetor') ? 466 : model.includes('BBJ') || model.includes('10X') ? 490 : 516,
+        fuelBurnGPH: model.includes('BBJ') || model.includes('ACJ') ? 1500 : model.includes('Citation') || model.includes('Praetor') ? 300 : 500,
+        costPerNM: model.includes('BBJ') || model.includes('ACJ') ? 45 : model.includes('Citation') || model.includes('Praetor') ? 10 : 18,
         cabinConfig: Array(model.includes('BBJ') || model.includes('ACJ') ? 6 : model.includes('Citation') || model.includes('Praetor') ? 2 : 4).fill('Empty'),
         flightPhase: 'Hangar',
         currentLocation: MAIN_HUBS.LAX,

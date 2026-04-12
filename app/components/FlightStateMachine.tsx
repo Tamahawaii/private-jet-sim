@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import AirportSearch from './AirportSearch';
-import { Plane, CloudRain, MapPin, Gauge } from 'lucide-react';
+import { Plane, CloudRain, MapPin, Gauge, Orbit, DollarSign, Droplet } from 'lucide-react';
 import { useStore, FlightPhase, MAIN_HUBS } from '../lib/store';
 import { calculateDistanceNM } from '../lib/math';
 
@@ -67,12 +67,17 @@ export default function FlightStateMachine() {
     }
   };
 
+  const elapsedS = jet.launchedAt ? Math.floor((Date.now() - jet.launchedAt) / 1000) : 0;
+  const simElapsedHours = (elapsedS * timeMultiplier) / 3600;
+  const currentCost = simElapsedHours * jet.speedKnots * (jet.costPerNM || 20);
+  const currentFuelBurned = simElapsedHours * (jet.fuelBurnGPH || 400);
+
   return (
-    <div className="w-[420px] flex gap-4 text-[var(--foreground)]">
+    <div className="flex gap-4 text-[var(--foreground)] w-[860px]">
       <motion.div 
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-panel p-6 rounded-2xl w-full flex flex-col gap-4 border border-white/10"
+        className="glass-panel p-6 rounded-2xl w-[420px] shrink-0 flex flex-col gap-4 border border-white/10 relative z-20"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -147,14 +152,54 @@ export default function FlightStateMachine() {
         </div>
       </motion.div>
 
-      <div className="flex gap-4">
+      {/* Weather Toggle */}
+      <div className="flex gap-4 relative z-20 shrink-0">
         <button 
           onClick={() => setWeatherEnabled(!weatherEnabled)}
-          className={`glass-panel p-4 rounded-xl flex items-center justify-center transition-colors ${weatherEnabled ? 'bg-[var(--color-cyan)]/20 border-[var(--color-cyan)]/30 text-[var(--color-cyan)] shadow-[0_0_15px_rgba(0,240,255,0.2)]' : 'text-gray-400 border border-white/10'}`}
+          className={`glass-panel p-4 h-fit rounded-xl flex items-center justify-center transition-colors ${weatherEnabled ? 'bg-[var(--color-cyan)]/20 border-[var(--color-cyan)]/30 text-[var(--color-cyan)] shadow-[0_0_15px_rgba(0,240,255,0.2)]' : 'text-gray-400 border border-white/10'}`}
         >
           <CloudRain size={24} />
         </button>
       </div>
+
+      {/* Telemetry HUD */}
+      <AnimatePresence>
+        {jet.flightPhase === 'Cruise' && (
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="glass-panel p-6 rounded-2xl w-[320px] shrink-0 border border-[#00f0ff]/30 shadow-[0_0_20px_rgba(0,240,255,0.1)] flex flex-col relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(0,240,255,0.1),transparent_50%)] pointer-events-none" />
+            <h3 className="text-xs uppercase font-bold tracking-widest text-[#00f0ff] mb-4 flex items-center gap-2"><Orbit size={14}/> Live Telemetry</h3>
+            
+            <div className="grid grid-cols-2 gap-4 h-full">
+               <div className="flex flex-col justify-end bg-black/40 p-3 rounded-lg border border-white/5">
+                 <span className="text-[10px] text-white/50 uppercase tracking-widest font-bold mb-1">Altitude</span>
+                 <span className="text-lg font-mono text-white text-right">FL 410</span>
+               </div>
+               <div className="flex flex-col justify-end bg-black/40 p-3 rounded-lg border border-white/5">
+                 <span className="text-[10px] text-white/50 uppercase tracking-widest font-bold mb-1">Airspeed</span>
+                 <span className="text-lg font-mono text-white text-right">M 0.85</span>
+               </div>
+               <div className="flex flex-col justify-end bg-black/40 p-3 rounded-lg border border-white/5">
+                 <span className="text-[10px] text-white/50 uppercase tracking-widest font-bold mb-1">Outside Air</span>
+                 <span className="text-lg font-mono text-white text-right">-54°C</span>
+               </div>
+               <div className="flex flex-col justify-end bg-black/40 p-3 rounded-lg border border-amber-500/20">
+                 <span className="text-[10px] text-amber-500/50 flex items-center gap-1 uppercase tracking-widest font-bold mb-1"><Droplet size={10}/> Burned</span>
+                 <span className="text-lg font-mono text-amber-500 text-right">{Math.floor(currentFuelBurned).toLocaleString()} <span className="text-[10px]">GAL</span></span>
+               </div>
+            </div>
+            
+            <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
+              <span className="text-[10px] text-red-400 uppercase tracking-widest font-bold flex items-center gap-1"><DollarSign size={12}/> Op Cost</span>
+              <span className="text-2xl font-mono text-red-400 tracking-tighter">${Math.floor(currentCost).toLocaleString()}</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

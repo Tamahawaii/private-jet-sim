@@ -6,6 +6,7 @@ import FlightStateMachine from './components/FlightStateMachine';
 import CabinConfigurator from './components/CabinConfigurator';
 import FleetDashboard from './components/FleetDashboard';
 import LogisticsPlanner from './components/LogisticsPlanner';
+import Dashboard from './components/Dashboard';
 import { useStore } from './lib/store';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -47,7 +48,13 @@ export default function Home() {
           <div className="w-2 h-2 rounded-full bg-[var(--color-cyan)] shadow-[0_0_8px_var(--color-cyan)] animate-pulse" />
           <h1 className="text-lg font-semibold tracking-widest text-white/90">MANIFEST</h1>
         </div>
-        <div className="glass-panel px-6 py-3 rounded-full pointer-events-auto flex gap-6 text-sm font-medium text-white/50 uppercase tracking-widest">
+        <div className="glass-panel px-6 py-3 rounded-full pointer-events-auto flex gap-6 text-sm font-medium text-white/50 uppercase tracking-widest relative z-50">
+          <button 
+            onClick={() => setActiveView('Dashboard')} 
+            className={`hover:text-white transition-colors ${activeView === 'Dashboard' ? 'text-[var(--color-cyan)] drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]' : ''}`}
+          >
+            Dashboard
+          </button>
           <button 
             onClick={() => setActiveView('Fleet')} 
             className={`hover:text-white transition-colors ${activeView === 'Fleet' ? 'text-[var(--color-cyan)] drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]' : ''}`}
@@ -71,6 +78,21 @@ export default function Home() {
       
       {/* Content Swap */}
       <AnimatePresence>
+        {activeView === 'Dashboard' && (
+          <motion.div
+            key="dash"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="absolute inset-0 z-20 pointer-events-none"
+          >
+            <div className="pointer-events-auto h-full w-full">
+               <Dashboard />
+            </div>
+          </motion.div>
+        )}
+
         {activeView === 'Fleet' && (
           <motion.div
             key="dashboard"
