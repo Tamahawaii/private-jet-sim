@@ -4,12 +4,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import { useStore } from '../lib/store';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
-import { Layers } from 'lucide-react';
+import { Layers, Maximize, Minimize } from 'lucide-react';
 
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
-  const { fleet, selectedAircraftId, provisionalRoute, mapStyle, setMapStyle } = useStore();
+  const { fleet, selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode } = useStore();
   const jet = fleet.find(j => j.id === selectedAircraftId);
   const flightPhase = jet?.flightPhase;
   const [layersOpen, setLayersOpen] = useState(false);
@@ -466,6 +466,12 @@ export default function MapEngine() {
             className="w-12 h-12 bg-white text-black rounded-full shadow-2xl flex items-center justify-center hover:scale-105 transition-transform"
          >
             <Layers size={20} />
+         </button>
+         <button 
+            onClick={() => setZenMode(!zenMode)}
+            className="w-12 h-12 bg-white text-black rounded-full shadow-2xl flex items-center justify-center hover:scale-105 transition-transform"
+         >
+            {zenMode ? <Minimize size={20}/> : <Maximize size={20}/>}
          </button>
       </div>
 

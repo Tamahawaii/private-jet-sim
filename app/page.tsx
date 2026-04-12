@@ -6,6 +6,7 @@ import FleetSidebar from './components/FleetSidebar';
 import DispatchController from './components/DispatchController';
 import FlightAttendant from './components/FlightAttendant';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { useStore } from './lib/store';
 
 const MapEngine = dynamic(() => import('./components/MapEngine'), {
   ssr: false,
@@ -23,6 +24,7 @@ const MapEngine = dynamic(() => import('./components/MapEngine'), {
 
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
+  const { zenMode } = useStore();
   
   useEffect(() => {
     setIsClient(true);
@@ -45,9 +47,13 @@ export default function Home() {
         </div>
 
         {/* OVERLAYS */}
-        <FleetSidebar />
-        <DispatchController />
-        <FlightAttendant />
+        {!zenMode && (
+          <>
+            <FleetSidebar />
+            <DispatchController />
+            <FlightAttendant />
+          </>
+        )}
       </ErrorBoundary>
     </main>
   );
