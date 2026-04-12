@@ -8,7 +8,7 @@ import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, of
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
-  const { fleet, selectedAircraftId, activeView } = useStore();
+  const { fleet, selectedAircraftId, activeView, provisionalRoute } = useStore();
   const jet = fleet.find(j => j.id === selectedAircraftId);
   const flightPhase = jet?.flightPhase;
 
@@ -55,8 +55,17 @@ export default function MapEngine() {
   }, []);
 
   useEffect(() => {
-    if (!map.current || !jet || !jet.currentLocation) return;
+    if (!map.current) return;
     const m = map.current;
+
+    if (activeView === 'Logistics' && provisionalRoute) {
+       const midLng = (provisionalRoute.origin.lng + provisionalRoute.destination.lng) / 2;
+       const midLat = (provisionalRoute.origin.lat + provisionalRoute.destination.lat) / 2;
+       m.flyTo({ center: [midLng, midLat], zoom: 3, pitch: 30, duration: 4000 });
+       return;
+    }
+
+    if (!jet || !jet.currentLocation) return;
     const center = [jet.currentLocation.lng, jet.currentLocation.lat] as [number, number];
 
     switch (flightPhase) {
@@ -83,7 +92,7 @@ export default function MapEngine() {
         }
         break;
     }
-  }, [flightPhase, jet?.currentLocation, jet?.destination]);
+  }, [flightPhase, jet?.currentLocation, jet?.destination, activeView, provisionalRoute]);
 
   // LIVE FLIGHT TRACKER ENGINE (Executes 10 times a second to interpolate map markers)
   useEffect(() => {
@@ -267,10 +276,36 @@ export default function MapEngine() {
            if (m.getSource(rangeSourceId)) m.removeSource(rangeSourceId);
         }
       });
+
+      // Render Provisional Route Line
+      const provSourceId = 'prov-route-source';
+      const provLayerId = 'prov-route-layer';
+      if (activeView === 'Logistics' && provisionalRoute) {
+          const provArcCoords = computeGreatCirclePoints(
+              provisionalRoute.origin.lat, provisionalRoute.origin.lng,
+              provisionalRoute.destination.lat, provisionalRoute.destination.lng
+          );
+          const provData = { type: 'FeatureCollection', features: [{ type: 'Feature', geometry: { type: 'LineString', coordinates: provArcCoords } }] };
+          if (!m.getSource(provSourceId)) {
+              m.addSource(provSourceId, { type: 'geojson', data: provData as any });
+              m.addLayer({
+                  id: provLayerId,
+                  type: 'line',
+                  source: provSourceId,
+                  paint: { 'line-color': '#ffffff', 'line-width': 4, 'line-dasharray': [2, 2], 'line-opacity': 0.8 }
+              });
+          } else {
+              (m.getSource(provSourceId) as any).setData(provData);
+          }
+      } else {
+          if (m.getLayer(provLayerId)) m.removeLayer(provLayerId);
+          if (m.getSource(provSourceId)) m.removeSource(provSourceId);
+      }
+
     }, 100);
 
     return () => clearInterval(intervalId);
-  }, [fleet, selectedAircraftId, activeView]);
+  }, [fleet, selectedAircraftId, activeView, provisionalRoute]);
 
   return (
     <div className="absolute inset-0 z-0 bg-[#0a0a0c]">

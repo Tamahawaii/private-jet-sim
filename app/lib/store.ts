@@ -39,10 +39,11 @@ interface AppState {
   weatherEnabled: boolean;
   activeView: ActiveView;
   timeMultiplier: number;
+  provisionalRoute: { origin: LocationData, destination: LocationData } | null;
   
-  addAircraft: (tailNumber: string, model: string) => void;
   updateAircraft: (id: string, updates: Partial<Aircraft>) => void;
   setSelectedAircraftId: (id: string | null) => void;
+  setProvisionalRoute: (route: { origin: LocationData, destination: LocationData } | null) => void;
   setWeatherEnabled: (enabled: boolean) => void;
   setActiveView: (view: ActiveView) => void;
   setCabinSlot: (aircraftId: string, index: number, module: ModuleType) => void;
@@ -81,46 +82,35 @@ export const useStore = create<AppState>()(
     (set) => ({
       fleet: [
         {
-          id: 'mock-1',
-          tailNumber: 'N174JS',
-          model: 'Gulfstream G650ER',
-          speedKnots: 516,
-          fuelBurnGPH: 500,
-          costPerNM: 18,
-          cabinConfig: ['Empty', 'Empty', 'Empty', 'Empty'],
-          flightPhase: 'Hangar',
-          currentLocation: MAIN_HUBS.LAX,
-          destination: MAIN_HUBS.HNL,
-          scheduledRoutes: [],
-          lockedUntil: null,
-          launchedAt: null
+          id: 'v-1', tailNumber: 'N10XDS', model: 'Dassault Falcon 10X', speedKnots: 516, fuelBurnGPH: 420, costPerNM: 15, cabinConfig: Array(4).fill('Empty'), flightPhase: 'Hangar',
+          currentLocation: MAIN_HUBS.LHR, destination: null, scheduledRoutes: [], lockedUntil: null, launchedAt: null
+        },
+        {
+          id: 'v-2', tailNumber: 'N787BB', model: 'Boeing BBJ 787', speedKnots: 490, fuelBurnGPH: 1500, costPerNM: 45, cabinConfig: Array(6).fill('Empty'), flightPhase: 'Hangar',
+          currentLocation: MAIN_HUBS.DXB, destination: null, scheduledRoutes: [], lockedUntil: null, launchedAt: null
+        },
+        {
+          id: 'v-3', tailNumber: 'N700GS', model: 'Gulfstream G700', speedKnots: 530, fuelBurnGPH: 500, costPerNM: 18, cabinConfig: Array(4).fill('Empty'), flightPhase: 'Hangar',
+          currentLocation: MAIN_HUBS.LAX, destination: null, scheduledRoutes: [], lockedUntil: null, launchedAt: null
+        },
+        {
+          id: 'v-4', tailNumber: 'N600PR', model: 'Embraer Praetor 600', speedKnots: 466, fuelBurnGPH: 300, costPerNM: 10, cabinConfig: Array(2).fill('Empty'), flightPhase: 'Hangar',
+          currentLocation: MAIN_HUBS.GRU, destination: null, scheduledRoutes: [], lockedUntil: null, launchedAt: null
+        },
+        {
+          id: 'v-5', tailNumber: 'N350CL', model: 'Cessna Citation Longitude', speedKnots: 466, fuelBurnGPH: 280, costPerNM: 9, cabinConfig: Array(2).fill('Empty'), flightPhase: 'Hangar',
+          currentLocation: MAIN_HUBS.JFK, destination: null, scheduledRoutes: [], lockedUntil: null, launchedAt: null
+        },
+        {
+          id: 'v-6', tailNumber: 'N8000G', model: 'Bombardier Global 8000', speedKnots: 530, fuelBurnGPH: 490, costPerNM: 17, cabinConfig: Array(4).fill('Empty'), flightPhase: 'Hangar',
+          currentLocation: MAIN_HUBS.HND, destination: null, scheduledRoutes: [], lockedUntil: null, launchedAt: null
         }
       ],
-      selectedAircraftId: 'mock-1',
+      selectedAircraftId: 'v-3',
       weatherEnabled: false,
       activeView: 'Dashboard', 
-      timeMultiplier: 60, // Default 60x speed
-  
-  addAircraft: (tailNumber, model) => set((state) => ({
-    fleet: [
-      ...state.fleet,
-      {
-        id: crypto.randomUUID(),
-        tailNumber,
-        model,
-        speedKnots: model.includes('8000') || model.includes('G700') ? 530 : model.includes('Citation') || model.includes('Praetor') ? 466 : model.includes('BBJ') || model.includes('10X') ? 490 : 516,
-        fuelBurnGPH: model.includes('BBJ') || model.includes('ACJ') ? 1500 : model.includes('Citation') || model.includes('Praetor') ? 300 : 500,
-        costPerNM: model.includes('BBJ') || model.includes('ACJ') ? 45 : model.includes('Citation') || model.includes('Praetor') ? 10 : 18,
-        cabinConfig: Array(model.includes('BBJ') || model.includes('ACJ') ? 6 : model.includes('Citation') || model.includes('Praetor') ? 2 : 4).fill('Empty'),
-        flightPhase: 'Hangar',
-        currentLocation: MAIN_HUBS.LAX,
-        destination: null,
-        scheduledRoutes: [],
-        lockedUntil: null,
-        launchedAt: null
-      }
-    ]
-  })),
+      timeMultiplier: 60,
+      provisionalRoute: null,
 
   updateAircraft: (id, updates) => set((state) => ({
     fleet: state.fleet.map(jet => jet.id === id ? { ...jet, ...updates } : jet)
@@ -157,7 +147,8 @@ export const useStore = create<AppState>()(
   })),
   clearSchedule: (id) => set((state) => ({
     fleet: state.fleet.map(jet => jet.id === id ? { ...jet, scheduledRoutes: [] } : jet)
-  }))
+  })),
+  setProvisionalRoute: (route) => set({ provisionalRoute: route })
 }),
-{ name: 'jetstream-manifest-storage' }
+{ name: 'jetstream-elite-storage' }
 ));
