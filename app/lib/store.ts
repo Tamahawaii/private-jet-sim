@@ -3,7 +3,6 @@ import { persist } from 'zustand/middleware';
 import { STARTER_FLEET, CatalogItem } from './mockData';
 
 export type FlightPhase = 'Hangar' | 'Pre-flight' | 'Taxi' | 'Takeoff' | 'Cruise' | 'Landing';
-export type ActiveView = 'Dashboard' | 'Fleet' | 'Logistics' | 'Configurator' | 'StateMachine' | 'Shop' | 'Sandbox';
 export type ModuleType = 'Executive' | 'MasterSuite' | 'Galley' | 'Cinema' | 'Empty';
 
 export interface LocationData {
@@ -40,7 +39,6 @@ interface AppState {
   fleet: Aircraft[];
   selectedAircraftId: string | null;
   weatherEnabled: boolean;
-  activeView: ActiveView;
   timeMultiplier: number;
   provisionalRoute: { origin: LocationData, destination: LocationData } | null;
   
@@ -55,7 +53,6 @@ interface AppState {
   setSelectedAircraftId: (id: string | null) => void;
   setProvisionalRoute: (route: { origin: LocationData, destination: LocationData } | null) => void;
   setWeatherEnabled: (enabled: boolean) => void;
-  setActiveView: (view: ActiveView) => void;
   setMapStyle: (style: 'FlightAware' | 'Satellite' | 'Dark' | 'Roads') => void;
   setCabinSlot: (aircraftId: string, index: number, module: ModuleType) => void;
   setTimeMultiplier: (multiplier: number) => void;
@@ -110,7 +107,6 @@ export const useStore = create<AppState>()(
       })),
       selectedAircraftId: 'start-jet-1',
       weatherEnabled: false,
-      activeView: 'Dashboard', 
       timeMultiplier: 60,
       provisionalRoute: null,
       playerLevel: 1,
@@ -166,8 +162,7 @@ export const useStore = create<AppState>()(
             destination: destination,
             launchedAt: Date.now(),
             lockedUntil: Date.now() + ((hours * 3600000) / state.timeMultiplier)
-        } : jet),
-        activeView: 'Sandbox'
+        } : jet)
      };
   }),
 
@@ -177,7 +172,6 @@ export const useStore = create<AppState>()(
 
   setSelectedAircraftId: (id) => set({ selectedAircraftId: id }),
   setWeatherEnabled: (enabled) => set({ weatherEnabled: enabled }),
-  setActiveView: (view) => set({ activeView: view }),
   setCabinSlot: (id, index, module) => set((state) => ({
     fleet: state.fleet.map(jet => {
       if (jet.id === id) {
@@ -210,5 +204,5 @@ export const useStore = create<AppState>()(
   setProvisionalRoute: (route) => set({ provisionalRoute: route }),
   setMapStyle: (style) => set({ mapStyle: style })
 }),
-{ name: 'jetstream-sandbox-v1' }
+{ name: 'jetstream-dispatch-v1' }
 ));

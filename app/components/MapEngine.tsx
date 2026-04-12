@@ -9,7 +9,7 @@ import { Layers } from 'lucide-react';
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
-  const { fleet, selectedAircraftId, activeView, provisionalRoute, mapStyle, setMapStyle } = useStore();
+  const { fleet, selectedAircraftId, provisionalRoute, mapStyle, setMapStyle } = useStore();
   const jet = fleet.find(j => j.id === selectedAircraftId);
   const flightPhase = jet?.flightPhase;
   const [layersOpen, setLayersOpen] = useState(false);
@@ -51,10 +51,8 @@ export default function MapEngine() {
        const features = m.queryRenderedFeatures(e.point);
        if (features.some(f => f.layer.id.startsWith('plane-layer-'))) {
            m.getCanvas().style.cursor = 'pointer';
-       } else if (useStore.getState().activeView === 'Sandbox') {
-           m.getCanvas().style.cursor = 'crosshair';
        } else {
-           m.getCanvas().style.cursor = '';
+           m.getCanvas().style.cursor = 'crosshair';
        }
     });
 
@@ -70,7 +68,7 @@ export default function MapEngine() {
        }
 
        const state = useStore.getState();
-       if (state.activeView === 'Sandbox' && state.selectedAircraftId) {
+       if (state.selectedAircraftId) {
           const plane = state.fleet.find(j => j.id === state.selectedAircraftId);
           if (plane && (plane.flightPhase === 'Hangar' || plane.flightPhase === 'Pre-flight' || plane.flightPhase === 'Cruise')) {
               // Note: Allow retargeting even in cruise!
@@ -105,45 +103,21 @@ export default function MapEngine() {
     if (!map.current) return;
     const m = map.current;
 
-    if (activeView === 'Logistics' && provisionalRoute) {
-       const midLng = (provisionalRoute.origin.lng + provisionalRoute.destination.lng) / 2;
-       const midLat = (provisionalRoute.origin.lat + provisionalRoute.destination.lat) / 2;
-       m.flyTo({ center: [midLng, midLat], zoom: 3, pitch: 30, duration: 4000 });
-       return;
-    }
-
-    if (!jet || !jet.currentLocation) return;
-    
-    // Sandbox handles its own tight continuous tracking loop.
-    if (activeView === 'Sandbox') return;
-
-    const center = [jet.currentLocation.lng, jet.currentLocation.lat] as [number, number];
-
     switch (flightPhase) {
       case 'Hangar':
       case 'Pre-flight':
-        m.flyTo({ center, zoom: 14, pitch: 45, duration: 3000 });
+        // Removed conflict logic in favor of pure interval
         break;
       case 'Taxi':
-        m.flyTo({ center, zoom: 16.5, pitch: 75, bearing: 45, duration: 4000 });
         break;
       case 'Takeoff':
-        m.flyTo({ center, zoom: 12, pitch: 70, duration: 6000 });
         break;
       case 'Cruise':
-        if(jet.destination) {
-          const midLng = (jet.currentLocation.lng + jet.destination.lng) / 2;
-          const midLat = (jet.currentLocation.lat + jet.destination.lat) / 2;
-          m.flyTo({ center: [midLng, midLat], zoom: 3, pitch: 30, duration: 10000 });
-        }
         break;
       case 'Landing':
-        if(jet.destination) {
-           m.flyTo({ center: [jet.destination.lng, jet.destination.lat], zoom: 15, pitch: 75, duration: 8000 });
-        }
         break;
     }
-  }, [flightPhase, jet?.currentLocation, jet?.destination, activeView, provisionalRoute]);
+  }, [flightPhase, jet?.currentLocation, jet?.destination, provisionalRoute]);
 
   // LIVE FLIGHT TRACKER ENGINE (Executes 10 times a second to interpolate map markers)
   useEffect(() => {
@@ -253,7 +227,7 @@ export default function MapEngine() {
            }
            
            // Cinematic Sandbox Map Tracking
-           if (useStore.getState().activeView === 'Sandbox' && fJet.id === useStore.getState().selectedAircraftId) {
+           if (fJet.id === useStore.getState().selectedAircraftId) {
                m.setCenter(planeCoords as [number, number]);
                if (fJet.flightPhase !== 'Cruise' && m.getZoom() < 14) m.zoomTo(15, { duration: 1000 });
            }
@@ -264,8 +238,8 @@ export default function MapEngine() {
            showRoute = false;
         }
 
-        // Dedicated Range Map for selected aircraft during logistics planning
-        if (fJet.id === selectedAircraftId && activeView === 'Logistics' && (fJet.flightPhase === 'Hangar' || fJet.flightPhase === 'Pre-flight')) {
+        // Dedicated Range Map for selected aircraft
+        if (fJet.id === selectedAircraftId && (fJet.flightPhase === 'Hangar' || fJet.flightPhase === 'Pre-flight')) {
             showRange = true;
             // E.g., BBJ: 9900NM, Citation: 3500NM, Gulfstream: 7500NM
             const rangeNM = fJet.model.includes('BBJ') || fJet.model.includes('ACJ') ? 8000 : fJet.model.includes('Citation') || fJet.model.includes('Praetor') ? 3500 : 7500;
@@ -403,7 +377,7 @@ export default function MapEngine() {
       // Render Provisional Route Line
       const provSourceId = 'prov-route-source';
       const provLayerId = 'prov-route-layer';
-      if ((activeView === 'Logistics' || activeView === 'Sandbox') && provisionalRoute) {
+      if (provisionalRoute) {
           const provArcCoords = computeGreatCirclePoints(
               provisionalRoute.origin.lat, provisionalRoute.origin.lng,
               provisionalRoute.destination.lat, provisionalRoute.destination.lng
@@ -425,10 +399,7 @@ export default function MapEngine() {
           if (m.getSource(provSourceId)) m.removeSource(provSourceId);
       }
 
-      // Render Logistics Omni-Map (All scheduled future itineraries spanning the globe)
-      const omniSourceId = 'omni-routes';
-      const omniLayerId = 'omni-layer';
-      if (activeView === 'Logistics') {
+      if (true) { // Always show omni routes
           const omniFeatures: any[] = [];
           fleet.forEach(fJet => {
             if (fJet.scheduledRoutes && fJet.scheduledRoutes.length > 0) {
@@ -464,7 +435,7 @@ export default function MapEngine() {
     }, 100);
 
     return () => clearInterval(intervalId);
-  }, [fleet, selectedAircraftId, activeView, provisionalRoute]);
+  }, [fleet, selectedAircraftId, provisionalRoute]);
 
   return (
     <div className="absolute inset-0 z-0 bg-[#0a0a0c]">
