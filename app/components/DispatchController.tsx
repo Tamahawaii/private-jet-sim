@@ -10,8 +10,69 @@ function fmt(n: number) {
     return '$' + n.toLocaleString();
 }
 
+import { Aircraft } from '../lib/store';
+
+function LiveTelemetryBlock({ jet, distance, timeMultiplier }: { jet: Aircraft, distance: number, timeMultiplier: number }) {
+  const [now, setNow] = useState(Date.now());
+  
+  useEffect(() => {
+     const i = setInterval(() => setNow(Date.now()), 100);
+     return () => clearInterval(i);
+  }, []);
+
+  if (!jet.launchedAt || !jet.lockedUntil) return null;
+
+  const totalSimMs = (jet.lockedUntil - jet.launchedAt) * timeMultiplier;
+  const passedSimMs = (now - jet.launchedAt) * timeMultiplier;
+  let progress = totalSimMs > 0 ? passedSimMs / totalSimMs : 0;
+  if (progress > 1) progress = 1;
+  if (progress < 0) progress = 0;
+
+  const distTraveled = distance * progress;
+  const distRemaining = distance - distTraveled;
+  
+  const realMsRemaining = jet.lockedUntil - now;
+  const virtualMsRemaining = realMsRemaining * timeMultiplier;
+  
+  const formatVirtualMs = (ms: number) => {
+     if (ms < 0) return "00h 00m";
+     const totalMins = Math.floor(ms / 60000);
+     const h = Math.floor(totalMins / 60);
+     const m = Math.floor(totalMins % 60);
+     return `${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m`;
+  };
+
+  return (
+    <div className="grid grid-cols-2 gap-2 mt-4 text-xs font-mono">
+       <div className="bg-black/50 p-2 rounded border border-[#00f0ff]/20">
+          <span className="block text-[8px] text-[#00f0ff] uppercase tracking-widest">Ground Speed</span>
+          <span className="text-white font-bold">{jet.flightPhase === 'Cruise' ? jet.speedKnots : Math.floor(jet.speedKnots * 0.4)} KTS</span>
+       </div>
+       <div className="bg-black/50 p-2 rounded border border-[#00f0ff]/20">
+          <span className="block text-[8px] text-[#00f0ff] uppercase tracking-widest">ETA</span>
+          <span className="text-white font-bold">{formatVirtualMs(virtualMsRemaining)}</span>
+       </div>
+       <div className="bg-black/50 p-2 rounded border border-[#00f0ff]/20">
+          <span className="block text-[8px] text-[#00f0ff] uppercase tracking-widest">Dist Traveled</span>
+          <span className="text-white font-bold">{Math.floor(distTraveled)} NM</span>
+       </div>
+       <div className="bg-black/50 p-2 rounded border border-[#00f0ff]/20">
+          <span className="block text-[8px] text-[#00f0ff] uppercase tracking-widest">Dist Remaining</span>
+          <span className="text-white font-bold">{Math.floor(distRemaining)} NM</span>
+       </div>
+       <div className="col-span-2 mt-2">
+          <div className="h-1.5 w-full bg-black/80 rounded-full overflow-hidden border border-white/10 shadow-inner">
+             <div className="h-full bg-gradient-to-r from-[#0088ff] to-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.8)] relative" style={{ width: `${progress * 100}%` }}>
+                <div className="absolute top-0 right-0 bottom-0 w-2 bg-white/50 animate-pulse"/>
+             </div>
+          </div>
+       </div>
+    </div>
+  );
+}
+
 export default function DispatchController() {
-  const { fleet, selectedAircraftId, provisionalRoute, quickLaunchFlight, setProvisionalRoute } = useStore();
+  const { fleet, selectedAircraftId, provisionalRoute, quickLaunchFlight, setProvisionalRoute, timeMultiplier } = useStore();
   const jet = fleet.find(j => j.id === selectedAircraftId);
 
   if (!jet) return null;
@@ -74,7 +135,9 @@ export default function DispatchController() {
                <h3 className="text-xl text-white font-black font-mono">{jet.flightPhase.toUpperCase()}</h3>
                <span className="text-xs text-[#00f0ff] font-mono border border-[#00f0ff]/30 bg-[#00f0ff]/10 px-2 py-1 rounded">LIVE</span>
              </div>
-             <div className="text-xs text-zinc-400 font-mono mt-1">Telemetry controlled by simulator physics engine.</div>
+             
+             <LiveTelemetryBlock jet={jet} distance={distance} timeMultiplier={timeMultiplier} />
+             
            </div>
          )}
 
