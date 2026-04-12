@@ -1,11 +1,11 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import FleetSidebar from './components/FleetSidebar';
+import DispatchController from './components/DispatchController';
+import FlightAttendant from './components/FlightAttendant';
 import { ErrorBoundary } from './components/ErrorBoundary';
-const FleetSidebar = dynamic(() => import('./components/FleetSidebar'), { ssr: false });
-const DispatchController = dynamic(() => import('./components/DispatchController'), { ssr: false });
-const FlightAttendant = dynamic(() => import('./components/FlightAttendant'), { ssr: false });
 
 const MapEngine = dynamic(() => import('./components/MapEngine'), {
   ssr: false,
@@ -22,9 +22,20 @@ const MapEngine = dynamic(() => import('./components/MapEngine'), {
 });
 
 export default function Home() {
+  const [isClient, setIsClient] = useState(false);
+  
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return (
+     <div className="w-screen h-screen bg-[#0a0a0c] flex items-center justify-center text-[#00f0ff] font-mono tracking-widest animate-pulse">
+        INITIALIZING COMMAND CENTER...
+     </div>
+  );
+
   return (
     <main className="relative w-full h-full xl:min-h-screen overflow-hidden bg-[var(--background)]">
-      
       <ErrorBoundary>
         {/* 3D MAP LAYER (ALWAYS RENDERED, Z-INDEX 0) */}
         <div className="absolute inset-0 z-0">
@@ -38,7 +49,6 @@ export default function Home() {
         <DispatchController />
         <FlightAttendant />
       </ErrorBoundary>
-
     </main>
   );
 }
