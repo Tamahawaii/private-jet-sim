@@ -63,7 +63,6 @@ export default function MapEngine() {
        if (planeFeature) {
           const id = planeFeature.layer.id.replace('plane-layer-', '');
           useStore.getState().setSelectedAircraftId(id);
-          useStore.getState().setActiveView('Sandbox');
           return;
        }
 
@@ -399,6 +398,8 @@ export default function MapEngine() {
           if (m.getSource(provSourceId)) m.removeSource(provSourceId);
       }
 
+      const omniSourceId = 'omni-routes';
+      const omniLayerId = 'omni-layer';
       if (true) { // Always show omni routes
           const omniFeatures: any[] = [];
           fleet.forEach(fJet => {
