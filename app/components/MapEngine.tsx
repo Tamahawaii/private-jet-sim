@@ -4,12 +4,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import { useStore } from '../lib/store';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
-import { Layers, Maximize, Minimize, FastForward } from 'lucide-react';
+import { Layers, Maximize, Minimize, FastForward, CloudRain } from 'lucide-react';
 
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
-  const { fleet, selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode, timeMultiplier, setTimeMultiplier } = useStore();
+  const { fleet, selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode, timeMultiplier, setTimeMultiplier, weatherEnabled, setWeatherEnabled } = useStore();
   const jet = fleet.find(j => j.id === selectedAircraftId);
   const flightPhase = jet?.flightPhase;
   const [layersOpen, setLayersOpen] = useState(false);
@@ -117,6 +117,60 @@ export default function MapEngine() {
         break;
     }
   }, [flightPhase, jet?.currentLocation, jet?.destination, provisionalRoute]);
+
+  // Weather Radar Overlay
+  useEffect(() => {
+    if (!map.current) return;
+    const m = map.current;
+
+    const updateWeather = async () => {
+      try {
+        if (!m.isStyleLoaded()) return;
+
+        if (!weatherEnabled) {
+          if (m.getLayer('rainviewer-layer')) m.removeLayer('rainviewer-layer');
+          if (m.getSource('rainviewer')) m.removeSource('rainviewer');
+          return;
+        }
+
+        const res = await fetch('https://api.rainviewer.com/public/weather-maps.json');
+        const data = await res.json();
+        const latest = data.radar.past[data.radar.past.length - 1].path;
+        const tileUrl = `${data.host}${latest}/256/{z}/{x}/{y}/2/1_1.png`;
+
+        if (m.getSource('rainviewer')) {
+           m.removeLayer('rainviewer-layer');
+           m.removeSource('rainviewer');
+        }
+
+        m.addSource('rainviewer', {
+           type: 'raster',
+           tiles: [tileUrl],
+           tileSize: 256
+        });
+        
+        m.addLayer({
+           id: 'rainviewer-layer',
+           type: 'raster',
+           source: 'rainviewer',
+           paint: { 'raster-opacity': 0.6 }
+        });
+      } catch (e) {
+        console.error("Weather radar failed", e);
+      }
+    };
+
+    if (m.isStyleLoaded()) {
+      updateWeather();
+    } else {
+      m.once('styledata', updateWeather);
+    }
+    
+    // Re-apply if mapStyle changes wipe the layers
+    const wrapper = () => updateWeather();
+    m.on('style.load', wrapper);
+    return () => { m.off('style.load', wrapper); };
+  }, [weatherEnabled, mapStyle]);
 
   // LIVE FLIGHT TRACKER ENGINE (Executes 10 times a second to interpolate map markers)
   useEffect(() => {
@@ -459,6 +513,13 @@ export default function MapEngine() {
                      {s} Mode
                   </button>
                ))}
+               <div className="w-full h-px bg-white/20 my-1"/>
+               <button 
+                  onClick={() => setWeatherEnabled(!weatherEnabled)}
+                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest rounded transition-all text-left ${weatherEnabled ? 'bg-[#00f0ff] text-black' : 'text-[#00f0ff] hover:bg-[#00f0ff]/10'}`}
+               >
+                  <CloudRain size={14}/> {weatherEnabled ? 'LIVE RADAR: ON' : 'LIVE RADAR: OFF'}
+               </button>
             </div>
          )}
          <button 
