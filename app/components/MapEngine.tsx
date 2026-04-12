@@ -3,12 +3,12 @@
 import React, { useEffect, useRef } from 'react';
 import maplibregl from 'maplibre-gl';
 import { useStore } from '../lib/store';
-import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate } from '../lib/math';
+import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
 
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
-  const { fleet, selectedAircraftId } = useStore();
+  const { fleet, selectedAircraftId, activeView } = useStore();
   const jet = fleet.find(j => j.id === selectedAircraftId);
   const flightPhase = jet?.flightPhase;
 
@@ -102,7 +102,9 @@ export default function MapEngine() {
         let planeCoords = [0, 0] as [number, number];
         let planeBearing = 0;
         let arcCoords: [number, number][] = [];
+        let rangeCoords: [number, number][] = [];
         let showRoute = false;
+        let showRange = false;
 
         if (fJet.destination && (fJet.flightPhase === 'Cruise' || fJet.flightPhase === 'Landing' || fJet.flightPhase === 'Taxi' || fJet.flightPhase === 'Takeoff')) {
           
@@ -152,6 +154,14 @@ export default function MapEngine() {
            showRoute = false;
         }
 
+        // Dedicated Range Map for selected aircraft during logistics planning
+        if (fJet.id === selectedAircraftId && activeView === 'Logistics' && (fJet.flightPhase === 'Hangar' || fJet.flightPhase === 'Pre-flight')) {
+            showRange = true;
+            // E.g., BBJ: 9900NM, Citation: 3500NM, Gulfstream: 7500NM
+            const rangeNM = fJet.model.includes('BBJ') || fJet.model.includes('ACJ') ? 8000 : fJet.model.includes('Citation') || fJet.model.includes('Praetor') ? 3500 : 7500;
+            rangeCoords = computeRangeCirclePoints(fJet.currentLocation.lat, fJet.currentLocation.lng, rangeNM);
+        }
+
         const planeData = {
            type: 'FeatureCollection',
            features: [{ 
@@ -164,6 +174,11 @@ export default function MapEngine() {
         const routeData = {
            type: 'FeatureCollection',
            features: showRoute ? [{ type: 'Feature', geometry: { type: 'LineString', coordinates: arcCoords } }] : []
+        };
+
+        const rangeData = {
+           type: 'FeatureCollection',
+           features: showRange ? [{ type: 'Feature', geometry: { type: 'Polygon', coordinates: [rangeCoords] } }] : []
         };
 
         if (!m.getSource(planeSourceId)) {
@@ -215,11 +230,47 @@ export default function MapEngine() {
            if (m.getLayer(routeLayerId)) m.removeLayer(routeLayerId);
            if (m.getSource(routeSourceId)) m.removeSource(routeSourceId);
         }
+
+        const rangeSourceId = `range-source-${fJet.id}`;
+        const rangeLayerId = `range-layer-${fJet.id}`;
+        const rangeOutlineId = `range-outline-${fJet.id}`;
+
+        if (showRange) {
+           if (!m.getSource(rangeSourceId)) {
+               m.addSource(rangeSourceId, { type: 'geojson', data: rangeData as any });
+               m.addLayer({
+                  id: rangeLayerId,
+                  type: 'fill',
+                  source: rangeSourceId,
+                  paint: {
+                     'fill-color': '#00f0ff',
+                     'fill-opacity': 0.05
+                  }
+               }, planeLayerId); // insert below plane
+               m.addLayer({
+                  id: rangeOutlineId,
+                  type: 'line',
+                  source: rangeSourceId,
+                  paint: {
+                     'line-color': '#00f0ff',
+                     'line-width': 1,
+                     'line-opacity': 0.3,
+                     'line-dasharray': [4, 4]
+                  }
+               }, planeLayerId);
+           } else {
+               (m.getSource(rangeSourceId) as any).setData(rangeData);
+           }
+        } else {
+           if (m.getLayer(rangeLayerId)) m.removeLayer(rangeLayerId);
+           if (m.getLayer(rangeOutlineId)) m.removeLayer(rangeOutlineId);
+           if (m.getSource(rangeSourceId)) m.removeSource(rangeSourceId);
+        }
       });
     }, 100);
 
     return () => clearInterval(intervalId);
-  }, [fleet, selectedAircraftId]);
+  }, [fleet, selectedAircraftId, activeView]);
 
   return (
     <div className="absolute inset-0 z-0 bg-[#0a0a0c]">

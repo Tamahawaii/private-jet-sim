@@ -45,6 +45,32 @@ export function computeGreatCirclePoints(lat1: number, lon1: number, lat2: numbe
   return points;
 }
 
+// Generates an array of points forming a physical radius ring around a center coordinate
+export function computeRangeCirclePoints(lat: number, lon: number, radiusNM: number, segments: number = 72): [number, number][] {
+  const points: [number, number][] = [];
+  const angDist = radiusNM / 3440.065; 
+
+  for (let i = 0; i <= segments; i++) {
+    const bearing = (i / segments) * 360;
+    const brngRad = toRad(bearing);
+    const latRad = toRad(lat);
+    const lonRad = toRad(lon);
+
+    const destLatRad = Math.asin(
+      Math.sin(latRad) * Math.cos(angDist) +
+      Math.cos(latRad) * Math.sin(angDist) * Math.cos(brngRad)
+    );
+
+    const destLonRad = lonRad + Math.atan2(
+      Math.sin(brngRad) * Math.sin(angDist) * Math.cos(latRad),
+      Math.cos(angDist) - Math.sin(latRad) * Math.sin(destLatRad)
+    );
+
+    points.push([toDeg(destLonRad), toDeg(destLatRad)]);
+  }
+  return points;
+}
+
 export function computeBearing(lat1: number, lng1: number, lat2: number, lng2: number) {
   const originLat = lat1 * Math.PI / 180;
   const originLng = lng1 * Math.PI / 180;
