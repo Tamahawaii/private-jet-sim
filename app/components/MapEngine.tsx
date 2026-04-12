@@ -123,36 +123,33 @@ export default function MapEngine() {
     if (!map.current) return;
     const m = map.current;
 
-    const updateWeather = async () => {
+    const updateWeather = () => {
       try {
         if (!m.isStyleLoaded()) return;
 
         if (!weatherEnabled) {
-          if (m.getLayer('rainviewer-layer')) m.removeLayer('rainviewer-layer');
-          if (m.getSource('rainviewer')) m.removeSource('rainviewer');
+          if (m.getLayer('weather-radar')) m.removeLayer('weather-radar');
+          if (m.getSource('weather-radar')) m.removeSource('weather-radar');
           return;
         }
 
-        const res = await fetch('https://api.rainviewer.com/public/weather-maps.json');
-        const data = await res.json();
-        const latest = data.radar.past[data.radar.past.length - 1].path;
-        const tileUrl = `${data.host}${latest}/256/{z}/{x}/{y}/2/1_1.png`;
+        const tileUrl = 'https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913/{z}/{x}/{y}.png';
 
-        if (m.getSource('rainviewer')) {
-           m.removeLayer('rainviewer-layer');
-           m.removeSource('rainviewer');
+        if (m.getSource('weather-radar')) {
+           m.removeLayer('weather-radar');
+           m.removeSource('weather-radar');
         }
 
-        m.addSource('rainviewer', {
+        m.addSource('weather-radar', {
            type: 'raster',
            tiles: [tileUrl],
            tileSize: 256
         });
         
         m.addLayer({
-           id: 'rainviewer-layer',
+           id: 'weather-radar',
            type: 'raster',
-           source: 'rainviewer',
+           source: 'weather-radar',
            paint: { 'raster-opacity': 0.6 }
         });
       } catch (e) {
