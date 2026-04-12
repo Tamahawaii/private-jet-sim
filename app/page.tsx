@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
+import { ErrorBoundary } from './components/ErrorBoundary';
 const FleetSidebar = dynamic(() => import('./components/FleetSidebar'), { ssr: false });
 const DispatchController = dynamic(() => import('./components/DispatchController'), { ssr: false });
 const FlightAttendant = dynamic(() => import('./components/FlightAttendant'), { ssr: false });
@@ -24,17 +25,19 @@ export default function Home() {
   return (
     <main className="relative w-full h-full xl:min-h-screen overflow-hidden bg-[var(--background)]">
       
-      {/* 3D MAP LAYER (ALWAYS RENDERED, Z-INDEX 0) */}
-      <div className="absolute inset-0 z-0">
-        <Suspense fallback={null}>
-          <MapEngine />
-        </Suspense>
-      </div>
+      <ErrorBoundary>
+        {/* 3D MAP LAYER (ALWAYS RENDERED, Z-INDEX 0) */}
+        <div className="absolute inset-0 z-0">
+          <Suspense fallback={null}>
+            <MapEngine />
+          </Suspense>
+        </div>
 
-      {/* OVERLAYS */}
-      <FleetSidebar />
-      <DispatchController />
-      <FlightAttendant />
+        {/* OVERLAYS */}
+        <FleetSidebar />
+        <DispatchController />
+        <FlightAttendant />
+      </ErrorBoundary>
 
     </main>
   );
