@@ -16,6 +16,18 @@ import { getEventNextOccurrence } from '../lib/events';
 import TimeSkipModal from './TimeSkipModal';
 import airportsData from '../../data/airports.json';
 
+export const whenStyleReady = (map: any, fn: () => void) => {
+    if (map.isStyleLoaded()) {
+        try { fn(); } catch (e) { console.warn('MapLibre race condition caught:', e); }
+    } else {
+        map.once('styledata', () => {
+            if (map.isStyleLoaded()) {
+                try { fn(); } catch (e) { console.warn('MapLibre race condition caught on styledata:', e); }
+            }
+        });
+    }
+};
+
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
@@ -268,9 +280,7 @@ export default function MapEngine() {
     const m = map.current;
 
     const updateWeather = () => {
-      try {
-        if (!m.isStyleLoaded()) return;
-
+      whenStyleReady(m, () => {
         if (!weatherEnabled) {
           if (m.getLayer('weather-radar')) m.removeLayer('weather-radar');
           if (m.getSource('weather-radar')) m.removeSource('weather-radar');
@@ -296,16 +306,10 @@ export default function MapEngine() {
            source: 'weather-radar',
            paint: { 'raster-opacity': 0.6 }
         });
-      } catch (e) {
-        console.error("Weather radar failed", e);
-      }
+      });
     };
 
-    if (m.isStyleLoaded()) {
-      updateWeather();
-    } else {
-      m.once('styledata', updateWeather);
-    }
+    updateWeather();
     
     // Re-apply if mapStyle changes wipe the layers
     const wrapper = () => updateWeather();
@@ -319,7 +323,7 @@ export default function MapEngine() {
     const m = map.current;
 
     const intervalId = setInterval(() => {
-      if (!m.isStyleLoaded()) return;
+      whenStyleReady(m, () => {
       if (pathname !== '/' && pathname !== '/world' && !pathname.startsWith('/flight/')) return;
 
       fleetRef.current.forEach((fJet: Aircraft) => {
@@ -610,7 +614,7 @@ export default function MapEngine() {
           if (m.getLayer(eventsLayerId)) m.removeLayer(eventsLayerId);
           if (m.getSource(eventsSourceId)) m.removeSource(eventsSourceId);
       }
-
+      });
 
 
     }, 100);
@@ -625,7 +629,7 @@ export default function MapEngine() {
      if (!map.current) return;
      const m = map.current;
 
-     if (!m.isStyleLoaded()) return;
+     whenStyleReady(m, () => {
 
      if (!showFriends || (pathname !== '/' && pathname !== '/world' && pathname !== '/social')) {
          Object.values(friendMarkersRef.current).forEach(marker => marker.remove());
@@ -696,6 +700,7 @@ export default function MapEngine() {
              friendMarkersRef.current[id].remove();
              delete friendMarkersRef.current[id];
          }
+     });
      });
 
   }, [rawPersonas, rawPersonaStates, showFriends, pathname]);
