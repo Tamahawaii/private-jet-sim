@@ -39,13 +39,11 @@ export default function ActiveFlightPage({ params }: { params: Promise<{ flightI
                ✕
             </button>
             
-            <div className="pointer-events-auto">
-                {isArrived ? (
-                   <ArrivalRecap flight={flight} aircraft={aircraft} />
-                ) : (
-                   <BottomSheet flight={flight} aircraft={aircraft} />
-                )}
-            </div>
+            {isArrived ? (
+               <ArrivalRecap flight={flight} aircraft={aircraft} />
+            ) : (
+               <BottomSheet flight={flight} aircraft={aircraft} />
+            )}
         </div>
     );
 }

@@ -188,15 +188,19 @@ export default function MapEngine() {
     const m = map.current;
     
     // Switch map styles directly
-    let tilesUrl = 'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png';
-    if (mapStyle === 'Roads') tilesUrl = 'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png';
-    if (mapStyle === 'Satellite') tilesUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
-    
-    m.setStyle({
-      version: 8,
-      sources: { 'base-raster': { type: 'raster', tiles: [tilesUrl], tileSize: 256 } },
-      layers: [{ id: 'base-layer', type: 'raster', source: 'base-raster', minzoom: 0, maxzoom: 22 }]
-    });
+    // Switch map styles securely
+    if (mapStyle === 'Dark' || mapStyle === undefined) {
+      m.setStyle('https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json');
+    } else if (mapStyle === 'Roads') {
+      m.setStyle('https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json');
+    } else if (mapStyle === 'Satellite') {
+      const tilesUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+      m.setStyle({
+        version: 8,
+        sources: { 'base-raster': { type: 'raster', tiles: [tilesUrl], tileSize: 256 } },
+        layers: [{ id: 'base-layer', type: 'raster', source: 'base-raster', minzoom: 0, maxzoom: 22 }]
+      });
+    }
 
   }, [mapStyle]);
 
@@ -260,7 +264,7 @@ export default function MapEngine() {
 
     const intervalId = setInterval(() => {
       if (!m.isStyleLoaded()) return;
-      if (pathname !== '/' && pathname !== '/world') return;
+      if (pathname !== '/' && pathname !== '/world' && !pathname.startsWith('/flight/')) return;
 
       fleetRef.current.forEach((fJet: Aircraft) => {
         const routeSourceId = `route-source-${fJet.id}`;

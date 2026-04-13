@@ -34,7 +34,7 @@ export default function Step4Review({ aircraft, destination, onBack }: Props) {
 
      const map = new maplibregl.Map({
        container: mapContainer.current,
-       style: 'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
+       style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
        bounds: [
           [Math.min(origin.lng, destination.lng) - 5, Math.min(origin.lat, destination.lat) - 5],
           [Math.max(origin.lng, destination.lng) + 5, Math.max(origin.lat, destination.lat) + 5]

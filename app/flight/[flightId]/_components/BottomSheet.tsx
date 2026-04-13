@@ -56,12 +56,12 @@ export default function BottomSheet({ flight, aircraft }: { flight: Flight, airc
        }
    };
 
-   let heightClass = 'h-40';
-   if (state === 'half') heightClass = 'h-72';
-   if (state === 'full') heightClass = 'h-3/4';
+   let heightClass = 'h-[160px]';
+   if (state === 'half') heightClass = 'h-[320px]';
+   if (state === 'full') heightClass = 'h-[75vh]';
 
    return (
-       <div className={`w-full bg-black/90 backdrop-blur-3xl border-t border-white/20 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${heightClass} flex flex-col rounded-t-3xl shadow-[0_-20px_40px_rgba(0,0,0,0.5)]`}>
+       <div className={`w-full bg-black/90 pointer-events-auto backdrop-blur-3xl border-t border-white/20 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${heightClass} flex flex-col rounded-t-3xl shadow-[0_-20px_40px_rgba(0,0,0,0.5)]`}>
           {/* Drag Handle Area */}
           <div 
              className="w-full flex justify-center py-4 cursor-pointer hover:bg-white/5 transition-colors"
