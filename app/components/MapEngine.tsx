@@ -392,8 +392,6 @@ export default function MapEngine() {
         if (fJet.id === useStore.getState().selectedAircraftId) {
             if (!isNaN(planeCoords[0]) && !isNaN(planeCoords[1])) {
                 m.setCenter(planeCoords as [number, number]);
-            } else {
-                console.warn('NaN coords for', fJet.tailNumber, 'skipping setCenter');
             }
         }
 

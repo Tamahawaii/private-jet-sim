@@ -91,17 +91,20 @@ export async function bootstrapWorld() {
      }
   }
 
-  // 3. Patch any existing aircraft missing currentLocation
+  // 3. Patch any existing aircraft with corrupted currentLocation
   const existingFleet = await db.aircraft.toArray();
   for (const ac of existingFleet) {
-     if (!ac.currentLocation && ac.currentLocationICAO) {
-         // Best effort fallback
-         const fallback = { lat: 0, lng: 0, name: ac.currentLocationICAO };
-         if (ac.currentLocationICAO === 'PHNL') { fallback.lat = 21.328; fallback.lng = -157.922; fallback.name = "PHNL - Honolulu"; }
-         if (ac.currentLocationICAO === 'KJAC') { fallback.lat = 43.607; fallback.lng = -110.737; fallback.name = "KJAC - Jackson Hole"; }
-         if (ac.currentLocationICAO === 'KDAL') { fallback.lat = 32.847; fallback.lng = -96.851; fallback.name = "KDAL - Dallas Love"; }
-         if (ac.currentLocationICAO === 'SULS') { fallback.lat = -34.853; fallback.lng = -55.094; fallback.name = "SULS - Punta del Este"; }
-         await db.aircraft.update(ac.id, { currentLocation: fallback });
+     const coords = ac.currentLocation as any;
+     const isBad = !coords || typeof coords.lat !== 'number' || typeof coords.lng !== 'number' || isNaN(coords.lat) || isNaN(coords.lng) || !isFinite(coords.lat) || !isFinite(coords.lng);
+     
+     if (isBad && ac.currentLocationICAO) {
+         const apt = airportsData.find((a: any) => a.icao === ac.currentLocationICAO);
+         if (apt && typeof apt.lat === 'number' && typeof apt.lng === 'number' && !isNaN(apt.lat) && !isNaN(apt.lng)) {
+             await db.aircraft.update(ac.id, { currentLocation: { lat: apt.lat, lng: apt.lng, name: apt.name }});
+         } else {
+             // Best effort default for PHNL
+             if (ac.currentLocationICAO === 'PHNL') await db.aircraft.update(ac.id, { currentLocation: { lat: 21.328, lng: -157.922, name: "PHNL - Honolulu" } });
+         }
      }
   }
 
