@@ -43,13 +43,16 @@ export type Aircraft = {
   hoursFlown: number;
   hoursSinceLastMaintenance: number;
   
-  // Legacy MVP fields (Phase 0 -> Phase 2 compat)
+  // Required MVP Core Specs
+  costPerNM: number;
+  speedKnots: number;
+  fuelBurnGPH: number;
+  rangeNM: number;
+  
+  // Legacy MVP state (Phase 0 -> Phase 2 compat)
   id?: string;
   model?: string;
-  costPerNM?: number;
   flightPhase?: 'Hangar' | 'Pre-flight' | 'Taxi' | 'Takeoff' | 'Cruise' | 'Landing';
-  speedKnots?: number;
-  fuelBurnGPH?: number;
   currentLocation?: { lat: number, lng: number, name: string };
   destination?: { lat: number, lng: number, name: string } | null;
   lockedUntil?: number | null;

@@ -79,6 +79,7 @@ export default function Marketplace() {
                                   hoursSinceLastMaintenance: 0,
                                   flightPhase: 'Hangar',
                                   speedKnots: item.speedKnots,
+                                  rangeNM: item.rangeNM,
                                   fuelBurnGPH: item.fuelBurnGPH,
                                   currentLocation: { lat: 33.64, lng: -84.42, name: 'KATL - Atlanta' },
                                   destination: null,

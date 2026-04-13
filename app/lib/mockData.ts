@@ -1,6 +1,10 @@
+import aircraftData from '../../data/aircraft.json';
+
 export interface CatalogItem {
+  id: string;
   model: string;
   speedKnots: number;
+  rangeNM: number;
   fuelBurnGPH: number;
   costPerNM: number;
   price: number;
@@ -8,18 +12,27 @@ export interface CatalogItem {
   layoutImage?: string;
 }
 
-export const STARTER_FLEET: CatalogItem[] = [
-  { model: 'Embraer Phenom 300', speedKnots: 450, fuelBurnGPH: 190, costPerNM: 5, price: 9000000, cabinSlots: 2, layoutImage: '/layouts/phenom_300.png' },
-  { model: 'Cessna Citation X', speedKnots: 528, fuelBurnGPH: 340, costPerNM: 8, price: 20000000, cabinSlots: 3, layoutImage: '/layouts/citation_x.png' },
-  { model: 'Dassault Falcon 900', speedKnots: 480, fuelBurnGPH: 420, costPerNM: 12, price: 42000000, cabinSlots: 4, layoutImage: '/layouts/falcon_900.png' },
+export const SHOP_CATALOG: CatalogItem[] = aircraftData.map(a => ({
+  id: a.id,
+  model: a.name,
+  speedKnots: a.cruiseSpeedKTAS,
+  rangeNM: a.rangeNM,
+  fuelBurnGPH: a.burnGPH,
+  costPerNM: a.costPerNM,
+  price: a.price,
+  cabinSlots: a.moduleSlots,
+  layoutImage: `/layouts/${a.id.replace(/-/g, '_')}.png`
+}));
+
+// Provide the starter selection from the catalog based on expected specs
+const starterIds = [
+  'embraer-phenom-300',
+  'cessna-citation-x',
+  'dassault-falcon-900',
+  'bombardier-global-8000',
+  'boeing-bbj-787'
 ];
 
-export const SHOP_CATALOG: CatalogItem[] = [
-  { model: 'Astra Gulfstream SPX', speedKnots: 461, fuelBurnGPH: 220, costPerNM: 6, price: 6500000, cabinSlots: 2 },
-  { model: 'Dassault Falcon 10X', speedKnots: 516, fuelBurnGPH: 420, costPerNM: 15, price: 75000000, cabinSlots: 4 },
-  { model: 'Gulfstream G700', speedKnots: 530, fuelBurnGPH: 500, costPerNM: 18, price: 78000000, cabinSlots: 4 },
-  { model: 'Bombardier Global 8000', speedKnots: 530, fuelBurnGPH: 490, costPerNM: 17, price: 73000000, cabinSlots: 4 },
-  { model: 'Cessna Citation Longitude', speedKnots: 466, fuelBurnGPH: 280, costPerNM: 9, price: 29000000, cabinSlots: 2 },
-  { model: 'Embraer Praetor 600', speedKnots: 466, fuelBurnGPH: 300, costPerNM: 10, price: 21000000, cabinSlots: 2 },
-  { model: 'Boeing BBJ 787', speedKnots: 490, fuelBurnGPH: 1500, costPerNM: 45, price: 250000000, cabinSlots: 6 },
-];
+export const STARTER_FLEET: CatalogItem[] = starterIds
+  .map(id => SHOP_CATALOG.find(c => c.id === id)!)
+  .filter(Boolean);
