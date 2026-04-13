@@ -44,10 +44,10 @@ export default function AirportSearch({ value, onChange, placeholder = "Search g
 
   const filtered = query.length < 2 ? [] : airports.filter(a => {
     if (a.iata === excludeIata) return false;
-    const lowerQ = query.toLowerCase();
-    return a.iata.toLowerCase().includes(lowerQ) || 
-           a.name.toLowerCase().includes(lowerQ) ||
-           a.city.toLowerCase().includes(lowerQ);
+    const lowerQ = (query || '').toLowerCase();
+    return (a.iata || '').toLowerCase().includes(lowerQ) || 
+           (a.name || '').toLowerCase().includes(lowerQ) ||
+           (a.city || '').toLowerCase().includes(lowerQ);
   }).slice(0, 10);
 
   const handleSelect = (a: Airport) => {
