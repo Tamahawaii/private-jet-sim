@@ -13,8 +13,8 @@ const defaultPlayer: Player = {
   netWorth: 79700000000, // 79.7B
   prestigeScore: 200,
   createdAt: new Date().toISOString(),
-  homeBaseICAO: 'KATL',
-  currentLocationICAO: 'KATL',
+  homeBaseICAO: 'PHNL',
+  currentLocationICAO: 'PHNL',
   currentResortBookingID: null,
   settings: {
     simSpeed: 1,
@@ -28,6 +28,8 @@ export async function bootstrapWorld() {
   const player = await db.player.get('player');
   if (!player) {
     await db.player.add(defaultPlayer);
+  } else if (player.homeBaseICAO === 'KATL' || player.currentLocationICAO === 'KATL') {
+    await db.player.update('player', { homeBaseICAO: 'PHNL', currentLocationICAO: 'PHNL' });
   }
 
   // 2. Init Starter Fleet if world is completely empty
@@ -133,14 +135,22 @@ export async function bootstrapWorld() {
          await db.personas.bulkPut(personasData as any);
          
          const states = personasData.map((p: any) => {
-             const hq = airportsData.find((a: any) => a.icao === p.homeBaseICAO);
+             let spawnIcao = p.homeBaseICAO;
+             if (Math.random() < 0.3) {
+                 const preferred = (resortsData as any[]).filter(r => r.preferredBy && r.preferredBy.includes(p.id));
+                 if (preferred.length > 0) {
+                     spawnIcao = preferred[0].locationICAO;
+                 }
+             }
+
+             const hq = airportsData.find((a: any) => a.icao === spawnIcao) || airportsData.find((a: any) => a.icao === 'PHNL');
              const coords = hq && typeof hq.lat === 'number' && !isNaN(hq.lat) && typeof hq.lng === 'number' && !isNaN(hq.lng) 
                ? { lat: hq.lat, lng: hq.lng, name: hq.name } 
                : undefined;
                
              return {
                  personaId: p.id,
-                 currentLocationICAO: p.homeBaseICAO,
+                 currentLocationICAO: spawnIcao,
                  currentCoords: coords,
                  currentFlightState: null,
                  nextPlannedFlight: null,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Aircraft } from '../../../../types';
 import { calculateDistanceNM } from '../../../lib/math';
-import { Search, MapPin, X, ArrowLeft, Calendar, Plane } from 'lucide-react';
+import { Search, MapPin, X, ArrowLeft, Calendar, Plane, Waves } from 'lucide-react';
 import { db } from '../../../../lib/db';
 import { getEventNextOccurrence } from '../../../lib/events';
 import { useStore } from '../../../lib/store';
@@ -16,16 +16,24 @@ interface Props {
 }
 
 export default function Step2Destination({ aircraft, prefillDestination, prefillPurpose, onSelect, onBack }: Props) {
-   const [query, setQuery] = useState(prefillDestination && !prefillPurpose?.startsWith('event:') ? prefillDestination : '');
+   const [query, setQuery] = useState(prefillDestination && !prefillPurpose?.startsWith('event:') && !prefillPurpose?.startsWith('resort:') ? prefillDestination : '');
    const [airports, setAirports] = useState<any[]>([]);
    const [results, setResults] = useState<any[]>([]);
-   const [activeTab, setActiveTab] = useState<'airports'|'events'>(prefillPurpose?.startsWith('event:') ? 'events' : 'airports');
+   const [activeTab, setActiveTab] = useState<'airports'|'events'|'resorts'>(prefillPurpose?.startsWith('event:') ? 'events' : (prefillPurpose?.startsWith('resort:') ? 'resorts' : 'airports'));
    const [events, setEvents] = useState<any[]>([]);
+   const [resorts, setResorts] = useState<any[]>([]);
    useEffect(() => {
      db.events.toArray().then(raw => {
        const mapped = raw.map(e => getEventNextOccurrence(e, useStore.getState().getNow()));
        mapped.sort((a,b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
        setEvents(mapped);
+     });
+   }, []);
+
+   useEffect(() => {
+     db.resorts.toArray().then(raw => {
+       const mapped = raw.sort((a,b) => b.tier - a.tier);
+       setResorts(mapped);
      });
    }, []);
 
@@ -81,6 +89,12 @@ export default function Step2Destination({ aircraft, prefillDestination, prefill
                 className={`pb-4 text-xs font-bold font-mono tracking-widest uppercase transition-all flex items-center gap-2 border-b-2 ${activeTab === 'events' ? 'border-[#00f0ff] text-[#00f0ff]' : 'border-transparent text-zinc-500 hover:text-white'}`}
              >
                 <Calendar size={16}/> Global Events
+             </button>
+             <button 
+                onClick={() => setActiveTab('resorts')}
+                className={`pb-4 text-xs font-bold font-mono tracking-widest uppercase transition-all flex items-center gap-2 border-b-2 ${activeTab === 'resorts' ? 'border-[#f5a7a7] text-[#f5a7a7]' : 'border-transparent text-zinc-500 hover:text-white'}`}
+             >
+                <Waves size={16}/> Resorts
              </button>
          </div>
          
@@ -171,6 +185,46 @@ export default function Step2Destination({ aircraft, prefillDestination, prefill
                         </div>
                         <div className="flex items-center gap-2 text-zinc-500 text-xs font-mono tracking-widest bg-white/5 px-2 py-1 rounded">
                            {evt.locationICAO}
+                        </div>
+                     </button>
+                  );
+               })}
+            </div>
+         )}
+
+         {activeTab === 'resorts' && (
+            <div className="flex-1 overflow-y-auto pr-2 space-y-2">
+               {resorts.map((r: any) => {
+                  return (
+                     <button 
+                        key={r.id}
+                        onClick={() => {
+                           const a = airports.find(air => air.icao === r.locationICAO);
+                           if (a) {
+                              a.purpose = `resort:${r.id}`;
+                              a.purposeName = `Stay at ${r.name}`;
+                              handleSelect(a);
+                           } else {
+                              alert("Airport code not found in routing database.");
+                           }
+                        }}
+                        className="w-full p-4 bg-black/20 hover:bg-white/5 border border-white/5 hover:border-[#f5a7a7]/50 rounded-xl flex items-center justify-between text-left transition-all group"
+                     >
+                        <div className="flex items-center gap-4">
+                           <div className="w-12 h-12 bg-zinc-900 rounded overflow-hidden shrink-0 hidden sm:flex items-center justify-center">
+                               <span className="text-xl font-serif text-white/50">{r.name.substring(0,2).toUpperCase()}</span>
+                           </div>
+                           <div>
+                              <div className="font-mono text-base font-black text-white group-hover:text-[#f5a7a7] transition-colors tracking-widest uppercase">{r.name}</div>
+                              <div className="text-zinc-500 text-xs font-mono tracking-widest mt-1 uppercase flex items-center gap-2">
+                                  <span>Tier {r.tier}</span>
+                                  <span className="w-1 h-1 bg-zinc-700 rounded-full"/>
+                                  <span>{r.region}</span>
+                              </div>
+                           </div>
+                        </div>
+                        <div className="flex items-center gap-2 text-zinc-500 text-xs font-mono tracking-widest bg-white/5 px-2 py-1 rounded">
+                           {r.locationICAO}
                         </div>
                      </button>
                   );

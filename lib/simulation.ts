@@ -129,6 +129,11 @@ export async function resolveArrivals() {
                  linkTo: `/fleet/${f.tailNumber}`
              });
 
+             // Update player dynamically
+             if (f.passengers && f.passengers.includes('player')) {
+                 await db.player.update('player', { currentLocationICAO: f.destinationICAO });
+             }
+
              // Teleport companions automatically upon successful arrival 
              if (f.passengers && f.passengers.length > 0) {
                  for (const pid of f.passengers) {
@@ -167,6 +172,40 @@ export async function resolveArrivals() {
              }
          });
     }
+    
+    // Outside transaction explicitly: Trigger bump-into simulations post-arrivals
+    for (const f of pendingFlights) {
+        if (f.passengers && f.passengers.includes('player')) {
+            const collocated = await db.personaState.where('currentLocationICAO').equals(f.destinationICAO).toArray();
+            const eligible = collocated.filter(p => !p.lastDmSentAt || (now - new Date(p.lastDmSentAt).getTime() > 24 * 60 * 60 * 1000));
+            
+            for (const p of eligible) {
+                if (Math.random() < 0.25) {
+                    await db.personaState.update(p.personaId, {
+                        lastDmSentAt: new Date(now).toISOString()
+                    });
+                    
+                    useStore.getState().addToast({
+                        message: "Someone recognized you arriving.",
+                        link: `/social/${p.personaId}`
+                    });
+                    
+                    fetch('/api/ai/dm', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            personaId: p.personaId,
+                            trigger: "reaction",
+                            context: `You unexpectedly ran into the player arriving at ICAO ${f.destinationICAO}. Send ONE short active text expressing surprise and natively suggesting you meet up. Address them safely. Use claude-haiku-4-5-20251001 exclusively.`
+                        })
+                    }).catch(console.error);
+                    
+                    break; // strictly cap safely at max 1 iteration per flight arrival
+                }
+            }
+        }
+    }
+
     if (pendingFlights.length > 0) {
         await detectEventAttendance();
     }
