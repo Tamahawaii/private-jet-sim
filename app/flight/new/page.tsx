@@ -18,17 +18,16 @@ function FlightPlannerInternal() {
   const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
   
   const [step, setStep] = useState(prefillAircraft ? 2 : 1);
-  const [selectedAircraftId, setSelectedAircraftId] = useState<string | null>(
-    prefillAircraft ? fleet.find(j => j.tailNumber === prefillAircraft)?.id || null : null
-  );
+  const [selectedAircraftId, setSelectedAircraftId] = useState<string | null>(null);
   const [selectedDestination, setSelectedDestination] = useState<any | null>(null);
 
-  const activeAircraft = fleet.find(j => j.id === selectedAircraftId);
+  // Compute active aircraft falling back to query param
+  const activeAircraft = fleet.find(j => j.id === selectedAircraftId) 
+     || (prefillAircraft ? fleet.find(j => j.tailNumber === prefillAircraft) : undefined);
 
   // If prefilled but aircraft isn't valid or parked, force Step 1
   if (prefillAircraft && step === 2 && fleet.length > 0) {
-      const j = fleet.find(k => k.tailNumber === prefillAircraft);
-      if (!j || j.status !== 'parked') {
+      if (!activeAircraft || activeAircraft.status !== 'parked') {
           setStep(1);
       }
   }

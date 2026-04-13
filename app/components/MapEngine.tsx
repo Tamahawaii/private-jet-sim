@@ -36,6 +36,8 @@ export default function MapEngine() {
 
   const [airportsData, setAirportsData] = useState<any[]>([]);
 
+  useEffect(() => { fleetRef.current = fleet; }, [fleet]);
+  useEffect(() => { activeFlightsRef.current = activeFlights; }, [activeFlights]);
   useEffect(() => { showFleetRef.current = showFleet; }, [showFleet]);
   useEffect(() => { showAirportsRef.current = showAirports; }, [showAirports]);
 
