@@ -33,7 +33,7 @@ function FlightPlannerInternal() {
   }
 
   return (
-    <div className="absolute inset-0 z-50 bg-[#0a0a0c] text-white flex flex-col md:flex-row overflow-hidden">
+    <div className="absolute inset-0 z-50 bg-[#0a0a0c] text-white flex flex-col md:flex-row overflow-hidden pointer-events-auto">
         {/* Left Panel Sidebar */}
         <div className="w-full md:w-80 bg-black/50 border-r border-white/5 p-6 flex flex-col shrink-0 overflow-y-auto">
             <h1 className="text-xl font-black font-mono tracking-widest mb-8 text-[#00f0ff]">DISPATCHER</h1>
