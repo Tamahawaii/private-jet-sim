@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { useStore } from '../../lib/store';
-import { SHOP_CATALOG } from '../../lib/mockData';
-import { aircraftRepo } from '../../../lib/repositories/aircraft';
+import { useStore } from '../lib/store';
+import { SHOP_CATALOG } from '../lib/mockData';
+import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { Compass, Fuel, DollarSign, Package } from 'lucide-react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { playerRepo } from '../../../lib/repositories/player';
-import { Economy } from '../../../lib/economy';
+import { playerRepo } from '../../lib/repositories/player';
+import { Economy } from '../../lib/economy';
 import { useRouter } from 'next/navigation';
 import { useState, useMemo } from 'react';
 
@@ -22,11 +22,11 @@ export default function Marketplace() {
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
 
   const filteredCatalog = useMemo(() => {
-     let c = SHOP_CATALOG.filter(item => {
-         if (category === 'YACHTS') return false; // Not in json yet
+     let c = SHOP_CATALOG.filter((item: any) => {
+         if (category === 'YACHTS') return false; 
          return item.price <= maxPrice;
      });
-     c.sort((a, b) => sortOrder === 'DESC' ? b.price - a.price : a.price - b.price);
+     c.sort((a: any, b: any) => sortOrder === 'DESC' ? b.price - a.price : a.price - b.price);
      return c;
   }, [category, maxPrice, sortOrder]);
 
@@ -43,6 +43,8 @@ export default function Marketplace() {
                <span className="block text-xs font-mono text-zinc-500 mb-1 tracking-widest">AVAILABLE CAPITAL</span>
                <span className="text-2xl font-black text-emerald-400 font-mono">${playerCash.toLocaleString()}</span>
             </div>
+         </div>
+
          <div className="flex flex-col gap-4 bg-[#141419] p-4 rounded-xl border border-white/5">
             <div className="flex gap-4 items-center">
                <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">CATEGORY</span>
@@ -66,7 +68,7 @@ export default function Marketplace() {
          </div>
 
          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {filteredCatalog.map((item, i) => {
+            {filteredCatalog.map((item: any, i: number) => {
                const closingFee = Math.round(item.price * 0.01);
                const totalCost = item.price + closingFee;
                const canAfford = playerCash >= totalCost;

@@ -12,8 +12,8 @@ function fmt(n: number) {
     return '$' + n.toLocaleString();
 }
 
-import { playerRepo } from '../lib/repositories/player';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { playerRepo } from '../../lib/repositories/player';
 
 export default function TopNav() {
   const pathname = usePathname();

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Aircraft } from '../../../types';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { aircraftRepo } from '../../../lib/repositories/aircraft';
-import { Plane, Compass, Fuel, LayoutGrid, Route, MousePointerClick, ChevronLeft } from 'lucide-react';
+import { Plane, Compass, Fuel, LayoutGrid, Route, Package, ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Economy } from '../../../lib/economy';
 import { playerRepo } from '../../../lib/repositories/player';

@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useStore } from '../../lib/store';
-import { Aircraft } from '../../../types';
+import { useStore } from '../lib/store';
+import { Aircraft } from '../../types';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { aircraftRepo } from '../../../lib/repositories/aircraft';
+import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { Plane, Compass, Fuel, LayoutGrid, Route, MousePointerClick } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
