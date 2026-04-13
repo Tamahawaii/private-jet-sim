@@ -32,6 +32,18 @@ export default function Step4Review({ aircraft, destination, onBack }: Props) {
      if (!mapContainer.current || !brief || !aircraft.currentLocation) return;
      const origin = aircraft.currentLocation;
 
+     console.log('Origin:', origin);
+     console.log('Destination:', destination);
+     
+     // Hard Guard against Maplibregl NaN faults natively blocking application thread
+     if (!origin || !destination || isNaN(origin.lat) || isNaN(origin.lng) || isNaN(destination.lat) || isNaN(destination.lng) || origin.lat === null || destination.lat === null) {
+       console.error('Invalid flight coordinates detected:', origin, destination);
+       if (mapContainer.current) {
+         mapContainer.current.innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-red-500 font-mono text-xs tracking-widest bg-black/60 relative p-6 text-center border border-red-500/20">ROUTE PREVIEW UNAVAILABLE (INVALID COORDS)</div>';
+       }
+       return;
+     }
+
      const map = new maplibregl.Map({
        container: mapContainer.current,
        style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
