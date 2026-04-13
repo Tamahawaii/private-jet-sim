@@ -70,7 +70,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
         )}
 
         {/* NEXT.JS PAGE CONTENT */}
-        <div className="z-10 relative pointer-events-auto w-full h-full">
+        <div className={`z-10 relative w-full h-full ${isMapActive ? 'pointer-events-none' : 'pointer-events-auto'}`}>
            {children}
         </div>
       </ErrorBoundary>

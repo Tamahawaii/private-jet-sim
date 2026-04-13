@@ -7,7 +7,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { Aircraft } from '../../types';
 import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
-import { Layers, Maximize, Minimize, FastForward, CloudRain, Plane, Map as MapIcon, ShieldAlert, Building, Calendar } from 'lucide-react';
+import { Layers, Maximize, Minimize, FastForward, CloudRain, Plane, Map as MapIcon, ShieldAlert, Building, Calendar, Focus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 export default function MapEngine() {
@@ -372,25 +372,19 @@ export default function MapEngine() {
            m.addSource(planeSourceId, { type: 'geojson', data: planeData as any });
            m.addLayer({
              id: planeLayerId,
-             type: 'symbol',
+             type: 'circle',
              source: planeSourceId,
-             layout: {
-               'text-field': '✈',
-               'text-size': fJet.flightPhase === 'Cruise' ? 82 : 52,
-               'text-rotation-alignment': 'map',
-               'text-rotate': ['get', 'rotation'],
-               'text-allow-overlap': true,
-             },
              paint: {
-               'text-color': '#ffffff',
-               'text-halo-color': '#00f0ff',
-               'text-halo-width': 2,
-               'text-opacity': 1
+               'circle-color': '#00f0ff',
+               'circle-radius': fJet.flightPhase === 'Cruise' ? 6 : 4,
+               'circle-stroke-color': '#ffffff',
+               'circle-stroke-width': 1.5,
+               'circle-opacity': 0.9
              }
            });
         } else if (showFleet && m.getSource(planeSourceId)) {
            (m.getSource(planeSourceId) as any).setData(planeData);
-           m.setLayoutProperty(planeLayerId, 'text-size', fJet.flightPhase === 'Cruise' ? 82 : 52);
+           m.setPaintProperty(planeLayerId, 'circle-radius', fJet.flightPhase === 'Cruise' ? 6 : 4);
         } else if (!showFleet && m.getLayer(planeLayerId)) {
            m.removeLayer(planeLayerId);
            m.removeSource(planeSourceId);
@@ -548,20 +542,15 @@ export default function MapEngine() {
          style={mapStyle === 'FlightAware' ? { filter: 'sepia(100%) hue-rotate(185deg) saturate(300%) brightness(85%) contrast(120%)' } : {}}
       />
       
-      {/* Dynamic Layer Toggle */}
-      <div className="absolute bottom-10 right-[420px] z-50 flex flex-col items-end gap-2 pointer-events-auto">
+      {/* Dynamic Map Controls Stack (Bottom Right of Map Area) */}
+      <div className="absolute bottom-24 right-[420px] z-50 flex flex-col items-end gap-2 pointer-events-auto">
          {layersOpen && (
-            <div className="flex flex-col gap-1 bg-black/80 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl w-64">
+            <div className="flex flex-col gap-1 bg-black/80 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl w-64 mb-2">
                <h3 className="text-xs uppercase font-bold text-zinc-500 tracking-widest mb-2 border-b border-white/10 pb-2">Map Layers</h3>
                
                <button onClick={() => setShowFleet(!showFleet)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
                   <Plane size={16} className={showFleet ? "text-emerald-400" : "text-zinc-600"}/>
                   <span className={`text-xs font-bold tracking-widest ${showFleet ? 'text-white' : 'text-zinc-500'}`}>MY AIRCRAFT</span>
-               </button>
-
-               <button onClick={() => setWeatherEnabled(!weatherEnabled)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
-                  <CloudRain size={16} className={weatherEnabled ? "text-[#00f0ff]" : "text-zinc-600"}/>
-                  <span className={`text-xs font-bold tracking-widest ${weatherEnabled ? 'text-white' : 'text-zinc-500'}`}>LIVE WEATHER</span>
                </button>
 
                <button onClick={() => setShowAirports(!showAirports)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
@@ -588,20 +577,44 @@ export default function MapEngine() {
                   <span className="text-xs font-bold tracking-widest text-zinc-400 flex-1">EVENTS</span>
                   <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 3</span>
                </button>
-               
             </div>
          )}
+         
+         {/* The 4-Button Vertical Stack */}
          <button 
             onClick={() => setLayersOpen(!layersOpen)}
-            className="w-12 h-12 bg-white text-black rounded-full shadow-2xl flex items-center justify-center hover:scale-105 transition-transform"
+            className="w-11 h-11 bg-white text-black rounded shadow-2xl flex items-center justify-center hover:scale-105 transition-transform"
+            title="Map Layers"
          >
             <Layers size={20} />
          </button>
+         
          <button 
-            onClick={() => setZenMode(!zenMode)}
-            className="w-12 h-12 bg-white text-black rounded-full shadow-2xl flex items-center justify-center hover:scale-105 transition-transform"
+            onClick={() => setMapStyle(mapStyle === 'FlightAware' ? 'Dark' : 'FlightAware')}
+            className={`w-11 h-11 rounded shadow-2xl flex items-center justify-center hover:scale-105 transition-all outline outline-1 outline-white/20 ${mapStyle === 'FlightAware' ? 'bg-[#00f0ff] text-black outline-none' : 'bg-black/60 backdrop-blur-xl text-white'}`}
+            title="Map Style: Dark / FlightAware"
          >
-            {zenMode ? <Minimize size={20}/> : <Maximize size={20}/>}
+            {mapStyle === 'FlightAware' ? <MapIcon size={20}/> : <MapIcon size={20} className="opacity-50"/>}
+         </button>
+
+         <button 
+            onClick={() => setWeatherEnabled(!weatherEnabled)}
+            className={`w-11 h-11 rounded shadow-2xl flex items-center justify-center hover:scale-105 transition-all outline outline-1 outline-white/20 ${weatherEnabled ? 'bg-[#00f0ff] text-black outline-none' : 'bg-black/60 backdrop-blur-xl text-[#00f0ff]'}`}
+            title="Live Radar"
+         >
+            <CloudRain size={20} />
+         </button>
+
+         <button 
+            onClick={() => {
+               if (map.current && jet?.currentLocation) {
+                  map.current.flyTo({ center: [jet.currentLocation.lng, jet.currentLocation.lat], zoom: 12 });
+               }
+            }}
+            className="w-11 h-11 bg-black/60 backdrop-blur-xl text-white outline outline-1 outline-white/20 rounded shadow-2xl flex items-center justify-center hover:bg-white/20 transition-all mt-4"
+            title="Find Me"
+         >
+            <Focus size={20} />
          </button>
       </div>
 
