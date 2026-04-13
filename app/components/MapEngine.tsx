@@ -58,15 +58,17 @@ export default function MapEngine() {
   useEffect(() => {
      if (!map.current || hasCenteredRef.current || fleet.length === 0) return;
      if (pathname === '/' || pathname === '/world') {
-        if (selectedAircraftId) return; // Tracking specific aircraft
-        const bounds = new maplibregl.LngLatBounds();
-        fleet.forEach((jet: Aircraft) => {
-           if (jet.currentLocation) bounds.extend([jet.currentLocation.lng, jet.currentLocation.lat]);
-        });
-        if (!bounds.isEmpty()) {
-           map.current.fitBounds(bounds, { padding: 100, maxZoom: 5, duration: 2000 });
-           hasCenteredRef.current = true;
-        }
+         if (selectedAircraftId) return; // Tracking specific aircraft
+         const bounds = new maplibregl.LngLatBounds();
+         fleet.forEach((jet: Aircraft) => {
+            if (jet.currentLocation && !isNaN(jet.currentLocation.lng) && !isNaN(jet.currentLocation.lat) && jet.currentLocation.lng !== null && jet.currentLocation.lat !== null) {
+                bounds.extend([jet.currentLocation.lng, jet.currentLocation.lat]);
+            }
+         });
+         if (!bounds.isEmpty()) {
+            map.current.fitBounds(bounds, { padding: 100, maxZoom: 5, duration: 2000 });
+            hasCenteredRef.current = true;
+         }
      }
   }, [fleet, pathname, selectedAircraftId]);
 
@@ -83,7 +85,7 @@ export default function MapEngine() {
          type: 'geojson',
          data: {
            type: 'FeatureCollection',
-           features: airportsDataState.map(a => ({
+           features: airportsDataState.filter(a => a && a.lat !== null && a.lng !== null && !isNaN(a.lat) && !isNaN(a.lng)).map(a => ({
              type: 'Feature',
              geometry: { type: 'Point', coordinates: [a.lng, a.lat] },
              properties: { icao: a.icao, name: a.name }
@@ -562,8 +564,8 @@ export default function MapEngine() {
                 ? `${new Date(start).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })} - ${new Date(end).toLocaleDateString('en-US', { day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`
                 : `${new Date(start).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })} - ${new Date(end).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`;
 
-             const air = airportsRef.current.find(a => a.icao === evt.locationICAO);
-             if (!air) return null;
+             const air = airportsDataState.find(a => a.icao === evt.locationICAO);
+             if (!air || air.lat === null || air.lng === null || isNaN(air.lat) || isNaN(air.lng)) return null;
              
              return {
                 type: 'Feature',
@@ -642,7 +644,7 @@ export default function MapEngine() {
 
          <button 
             onClick={() => {
-               if (map.current && jet?.currentLocation) {
+               if (map.current && jet?.currentLocation && !isNaN(jet.currentLocation.lng) && !isNaN(jet.currentLocation.lat)) {
                   map.current.flyTo({ center: [jet.currentLocation.lng, jet.currentLocation.lat], zoom: 12 });
                }
             }}
