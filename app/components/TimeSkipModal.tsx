@@ -3,6 +3,7 @@ import { Clock, Zap, CheckCircle } from 'lucide-react';
 import { useStore } from '../lib/store';
 import { db } from '../../lib/db';
 import { resolveArrivals } from '../../lib/simulation';
+import { detectEventAttendance } from '../lib/events';
 
 interface Props {
   onClose: () => void;
@@ -22,6 +23,7 @@ export default function TimeSkipModal({ onClose }: Props) {
       
       // Deterministic immediate arrival resolution using store value directly
       const resolvedData = await resolveArrivals();
+      await detectEventAttendance();
       setResults(resolvedData || []);
       setState('summary');
    };

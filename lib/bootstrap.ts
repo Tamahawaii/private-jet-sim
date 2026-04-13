@@ -76,6 +76,20 @@ export async function bootstrapWorld() {
      }
   }
 
+  // 2.5 Init Events if missing
+  const eventCount = await db.events.count();
+  if (eventCount === 0) {
+     try {
+       const res = await fetch('/data/events.json');
+       const events = await res.json();
+       if (events && events.length > 0) {
+         await db.events.bulkPut(events);
+       }
+     } catch (e) {
+       console.error("Failed to seed events.json:", e);
+     }
+  }
+
   // 3. Patch any existing aircraft missing currentLocation
   const existingFleet = await db.aircraft.toArray();
   for (const ac of existingFleet) {
@@ -93,4 +107,8 @@ export async function bootstrapWorld() {
   // 4. Resolve any offline flight arrivals that occurred while the app was closed
   const { resolveArrivals } = require('./simulation');
   await resolveArrivals();
+  
+  // 5. Detect offline event occurrences
+  const { detectEventAttendance } = require('../app/lib/events');
+  await detectEventAttendance();
 }

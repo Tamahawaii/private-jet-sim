@@ -207,10 +207,12 @@ export type EventAttendance = {
   id: string;
   eventId: EventID;
   attendedAt: ISODateString;
-  companionPersonaIds: PersonaID[];
-  prestigeGained: number;
-  recapText: string;
+  companionPersonaIds?: PersonaID[];
+  prestigeGained: number | null;
+  recapText?: string;
   paparazziPhotoUrl?: string;
+  aircraftTailNumber?: string;
+  leftAt?: ISODateString | null;
 };
 
 export type Resort = {

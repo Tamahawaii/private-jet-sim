@@ -1,6 +1,7 @@
 import { db } from './db';
 import { useStore } from '../app/lib/store';
 import { calculateDistanceNM, computeGreatCirclePoints } from '../app/lib/math';
+import { detectEventAttendance } from '../app/lib/events';
 import { FLIGHT_COSTS } from './constants';
 import { Aircraft } from '../types';
 
@@ -127,6 +128,9 @@ export async function resolveArrivals() {
                  linkTo: `/fleet/${f.tailNumber}`
              });
          });
+    }
+    if (pendingFlights.length > 0) {
+        await detectEventAttendance();
     }
     
     return pendingFlights;

@@ -9,9 +9,10 @@ import { Aircraft } from '../../types';
 import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
 import { Layers, Maximize, Minimize, FastForward, CloudRain, Plane, MapPin, Map as MapIcon, ShieldAlert, Building, Calendar, Focus } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { resolveArrivals } from '../../lib/simulation';
+import { getEventNextOccurrence } from '../lib/events';
 import TimeSkipModal from './TimeSkipModal';
 
 export default function MapEngine() {
@@ -32,10 +33,16 @@ export default function MapEngine() {
   const [stylePickerOpen, setStylePickerOpen] = useState(false);
   const [showFleet, setShowFleet] = useState(true);
   const [showAirports, setShowAirports] = useState(true);
+  const [showEvents, setShowEvents] = useState(false);
   const [timeSkipOpen, setTimeSkipOpen] = useState(false);
   
   const showFleetRef = useRef(showFleet);
   const showAirportsRef = useRef(showAirports);
+  const showEventsRef = useRef(showEvents);
+  
+  const rawEvents = useLiveQuery(() => db.events.toArray()) || [];
+  const eventsRef = useRef(rawEvents);
+  const router = useRouter();
 
   const [airportsData, setAirportsData] = useState<any[]>([]);
 
@@ -43,6 +50,8 @@ export default function MapEngine() {
   useEffect(() => { activeFlightsRef.current = activeFlights; }, [activeFlights]);
   useEffect(() => { showFleetRef.current = showFleet; }, [showFleet]);
   useEffect(() => { showAirportsRef.current = showAirports; }, [showAirports]);
+  useEffect(() => { showEventsRef.current = showEvents; }, [showEvents]);
+  useEffect(() => { eventsRef.current = rawEvents; }, [rawEvents]);
 
   // Fit bounds to fleet on initial CMD CENTER mount
   useEffect(() => {
@@ -149,15 +158,35 @@ export default function MapEngine() {
     // Interactive map cursor logic
     m.on('mousemove', (e) => {
        const features = m.queryRenderedFeatures(e.point);
-       if (features.some(f => f.layer.id.startsWith('plane-layer-'))) {
+       if (features.some(f => f.layer.id.startsWith('plane-layer-') || f.layer.id === 'events-layer')) {
            m.getCanvas().style.cursor = 'pointer';
        } else {
            m.getCanvas().style.cursor = 'crosshair';
        }
     });
 
+    let hoverPopup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, className: 'event-hover-popup' });
+    m.on('mousemove', 'events-layer', (e) => {
+        if (e.features && e.features[0]) {
+            const props = e.features[0].properties;
+            hoverPopup.setLngLat(e.lngLat)
+                .setHTML(`<div class="bg-black/90 px-3 py-2 rounded-lg border border-[#d4af37]/30 text-white font-mono tracking-widest uppercase shadow-2xl backdrop-blur"><div class="text-xs font-black text-[#d4af37]">${props.name}</div><div class="text-[10px] text-zinc-400 mt-1">${props.dateStr}</div></div>`)
+                .addTo(m);
+        }
+    });
+    m.on('mouseleave', 'events-layer', () => {
+        hoverPopup.remove();
+    });
+
     m.on('click', (e) => {
        const features = m.queryRenderedFeatures(e.point);
+       
+       const eventFeature = features.find(f => f.layer.id === 'events-layer');
+       if (eventFeature) {
+          router.push(`/events/${eventFeature.properties.eventId}`);
+          return;
+       }
+
        const planeFeature = features.find(f => f.layer.id.startsWith('plane-layer-'));
        
        if (planeFeature) {
@@ -521,39 +550,59 @@ export default function MapEngine() {
           if (m.getSource(provSourceId)) m.removeSource(provSourceId);
       }
 
-      const omniSourceId = 'omni-routes';
-      const omniLayerId = 'omni-layer';
-      if (false) { // Disabled Omni Routes
-          const omniFeatures: any[] = [];
-          fleetRef.current.forEach((fJet: Aircraft) => {
-            if (fJet.scheduledRoutes && fJet.scheduledRoutes.length > 0) {
-               fJet.scheduledRoutes.forEach((leg: any) => {
-                  const points = computeGreatCirclePoints(leg.origin.lat, leg.origin.lng, leg.destination.lat, leg.destination.lng);
-                  omniFeatures.push({ type: 'Feature', geometry: { type: 'LineString', coordinates: points } });
-               });
-            }
-          });
-          const omniData = { type: 'FeatureCollection', features: omniFeatures };
-          
-          if (!m.getSource(omniSourceId)) {
-             m.addSource(omniSourceId, { type: 'geojson', data: omniData as any });
+      const eventsSourceId = 'events-source';
+      const eventsLayerId = 'events-layer';
+      
+      if (showEventsRef.current) {
+         const simNowLocal = useStore.getState().getNow();
+         const eventsFeatures = eventsRef.current.map((rawEvent: any) => {
+             const evt = getEventNextOccurrence(rawEvent, simNowLocal);
+             const start = new Date(evt.startDate).getTime();
+             const end = new Date(evt.endDate).getTime();
+             
+             // Proximate logic: within 7 days
+             const isProximate = (start - simNowLocal) > 0 && (start - simNowLocal) < 7 * 24 * 60 * 60 * 1000;
+             const isSameMonth = new Date(start).getUTCMonth() === new Date(end).getUTCMonth();
+             const dateStr = isSameMonth
+                ? `${new Date(start).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })} - ${new Date(end).toLocaleDateString('en-US', { day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`
+                : `${new Date(start).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })} - ${new Date(end).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}`;
+
+             const air = airportsRef.current.find(a => a.icao === evt.locationICAO);
+             if (!air) return null;
+             
+             return {
+                type: 'Feature',
+                properties: { eventId: evt.id, name: evt.name, isProximate, dateStr },
+                geometry: { type: 'Point', coordinates: [air.lng, air.lat] }
+             };
+         }).filter(Boolean);
+
+         const eventsData = { type: 'FeatureCollection', features: eventsFeatures };
+         
+         if (!m.getSource(eventsSourceId)) {
+             m.addSource(eventsSourceId, { type: 'geojson', data: eventsData as any });
              m.addLayer({
-               id: omniLayerId,
-               type: 'line',
-               source: omniSourceId,
-               paint: { 
-                 'line-color': '#00f0ff', 
-                 'line-width': 1.5, 
-                 'line-opacity': 0.2,
-                 'line-dasharray': [4, 4]
-               }
+                id: eventsLayerId,
+                type: 'circle',
+                source: eventsSourceId,
+                paint: {
+                   'circle-color': '#d4af37',
+                   'circle-radius': 6,
+                   'circle-opacity': ['case', ['boolean', ['get', 'isProximate'], false], 1.0, 0.5],
+                   'circle-stroke-color': '#ffffff',
+                   'circle-stroke-width': 1
+                }
              });
-          } else {
-             (m.getSource(omniSourceId) as any).setData(omniData);
-          }
+         } else {
+             (m.getSource(eventsSourceId) as any).setData(eventsData);
+             if (m.getLayer(eventsLayerId)) {
+                 const pulseRadius = 6 + Math.sin(performance.now() / 200) * 3;
+                 m.setPaintProperty(eventsLayerId, 'circle-radius', ['case', ['boolean', ['get', 'isProximate'], false], pulseRadius, 6]);
+             }
+         }
       } else {
-          if (m.getLayer(omniLayerId)) m.removeLayer(omniLayerId);
-          if (m.getSource(omniSourceId)) m.removeSource(omniSourceId);
+          if (m.getLayer(eventsLayerId)) m.removeLayer(eventsLayerId);
+          if (m.getSource(eventsSourceId)) m.removeSource(eventsSourceId);
       }
 
     }, 100);
@@ -637,10 +686,9 @@ export default function MapEngine() {
                   <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 8</span>
                </button>
 
-               <button className="flex items-center gap-3 p-2 rounded text-left opacity-30 cursor-not-allowed">
-                  <Calendar size={16} className="text-zinc-400"/>
-                  <span className="text-xs font-bold tracking-widest text-zinc-400 flex-1">EVENTS</span>
-                  <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 3</span>
+               <button onClick={() => setShowEvents(!showEvents)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
+                  <Calendar size={16} className={showEvents ? "text-[#d4af37]" : "text-zinc-600"}/>
+                  <span className={`text-xs font-bold tracking-widest flex-1 ${showEvents ? 'text-white' : 'text-zinc-500'}`}>EVENTS</span>
                </button>
             </div>
          )}
