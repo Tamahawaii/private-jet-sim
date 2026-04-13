@@ -10,6 +10,8 @@ import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
 import { Layers, Maximize, Minimize, FastForward, CloudRain, Plane, MapPin, Map as MapIcon, ShieldAlert, Building, Calendar, Focus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { resolveArrivals } from '../../lib/simulation';
 import TimeSkipModal from './TimeSkipModal';
 
 export default function MapEngine() {
@@ -23,6 +25,7 @@ export default function MapEngine() {
   const fleetRef = useRef(fleet);
   const activeFlightsRef = useRef(activeFlights);
   const pathname = usePathname();
+  const hasCenteredRef = useRef(false);
 
   const [weatherEnabled, setWeatherEnabled] = useState(true);
   const [layersOpen, setLayersOpen] = useState(false);
@@ -40,6 +43,22 @@ export default function MapEngine() {
   useEffect(() => { activeFlightsRef.current = activeFlights; }, [activeFlights]);
   useEffect(() => { showFleetRef.current = showFleet; }, [showFleet]);
   useEffect(() => { showAirportsRef.current = showAirports; }, [showAirports]);
+
+  // Fit bounds to fleet on initial CMD CENTER mount
+  useEffect(() => {
+     if (!map.current || hasCenteredRef.current || fleet.length === 0) return;
+     if (pathname === '/' || pathname === '/world') {
+        if (selectedAircraftId) return; // Tracking specific aircraft
+        const bounds = new maplibregl.LngLatBounds();
+        fleet.forEach((jet: Aircraft) => {
+           if (jet.currentLocation) bounds.extend([jet.currentLocation.lng, jet.currentLocation.lat]);
+        });
+        if (!bounds.isEmpty()) {
+           map.current.fitBounds(bounds, { padding: 100, maxZoom: 5, duration: 2000 });
+           hasCenteredRef.current = true;
+        }
+     }
+  }, [fleet, pathname, selectedAircraftId]);
 
   useEffect(() => {
      fetch('/airports.json').then(r => r.json()).then(setAirportsData).catch(console.error);
@@ -287,6 +306,10 @@ export default function MapEngine() {
                const elapsed = now - flight.departedAt;
                const total = flight.estimatedArrivalAt - flight.departedAt;
                let progress = Math.min(1, Math.max(0, total > 0 ? elapsed / total : 1));
+
+               if (progress >= 1.0) {
+                   resolveArrivals().catch(console.error); // Ensure map immediately initiates db sweep properly
+               }
 
                // Render great circle array
                const fullArc = flight.waypoints.map((w: any) => [w.lng, w.lat] as [number, number]);
