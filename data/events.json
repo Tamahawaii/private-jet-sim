@@ -13,7 +13,7 @@
     "ticketPrice": 250000,
     "dressCode": "Business formal with outerwear showmanship",
     "description": "The World Economic Forum (Davos) is a Tier 5 event.",
-    "imageUrl": "/imagery/events/world-economic-forum-davos.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "amara",
       "khalid",
@@ -36,7 +36,7 @@
     "ticketPrice": 75000,
     "dressCode": "Resort formal",
     "description": "The Sundance Film Festival is a Tier 3 event.",
-    "imageUrl": "/imagery/events/sundance-film-festival.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "jules",
       "vivian"
@@ -56,7 +56,7 @@
     "ticketPrice": 45000,
     "dressCode": "Resort formal",
     "description": "The Australian Open (Men's Final) is a Tier 3 event.",
-    "imageUrl": "/imagery/events/australian-open-men-s-final.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "marcus",
       "saanvi"
@@ -76,7 +76,7 @@
     "ticketPrice": 15000,
     "dressCode": "Resort formal",
     "description": "The Art SG / Frieze LA / Winter Shows is a Tier 3 event.",
-    "imageUrl": "/imagery/events/art-sg-frieze-la-winter-shows.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "pierre",
       "elena",
@@ -97,7 +97,7 @@
     "ticketPrice": 125000,
     "dressCode": "Resort formal",
     "description": "The Super Bowl is a Tier 4 event.",
-    "imageUrl": "/imagery/events/super-bowl.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "rico",
       "marcus",
@@ -118,7 +118,7 @@
     "ticketPrice": 40000,
     "dressCode": "Resort formal",
     "description": "The BAFTA Awards is a Tier 4 event.",
-    "imageUrl": "/imagery/events/bafta-awards.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "jules",
       "amara"
@@ -138,7 +138,7 @@
     "ticketPrice": 95000,
     "dressCode": "Resort formal",
     "description": "The Oscars + Vanity Fair Party is a Tier 5 event.",
-    "imageUrl": "/imagery/events/oscars-vanity-fair-party.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "jules",
       "vivian",
@@ -159,7 +159,7 @@
     "ticketPrice": 25000,
     "dressCode": "Resort formal",
     "description": "The Paris Fashion Week (F/W) is a Tier 3 event.",
-    "imageUrl": "/imagery/events/paris-fashion-week-f-w.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "alessandro",
       "pierre",
@@ -180,7 +180,7 @@
     "ticketPrice": 30000,
     "dressCode": "Resort formal",
     "description": "The Milan Design Week (Salone del Mobile) is a Tier 3 event.",
-    "imageUrl": "/imagery/events/milan-design-week-salone-del-mobile.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "alessandro",
       "saanvi",
@@ -201,7 +201,7 @@
     "ticketPrice": 50000,
     "dressCode": "Coded-cool desert",
     "description": "The Coachella Weekend 1 is a Tier 3 event.",
-    "imageUrl": "/imagery/events/coachella-weekend-1.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "rico",
       "dmitri",
@@ -222,7 +222,7 @@
     "ticketPrice": 30000,
     "dressCode": "Resort formal",
     "description": "The Coachella Weekend 2 is a Tier 2 event.",
-    "imageUrl": "/imagery/events/coachella-weekend-2.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "dmitri",
       "rico"
@@ -242,7 +242,7 @@
     "ticketPrice": 55000,
     "dressCode": "Classic Southern formal + hats",
     "description": "The Kentucky Derby is a Tier 4 event.",
-    "imageUrl": "/imagery/events/kentucky-derby.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "khalid",
       "vivian",
@@ -263,7 +263,7 @@
     "ticketPrice": 250000,
     "dressCode": "Thematic — whatever Anna decrees",
     "description": "The Met Gala is a Tier 5 event.",
-    "imageUrl": "/imagery/events/met-gala.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "vivian",
       "alessandro",
@@ -284,7 +284,7 @@
     "ticketPrice": 120000,
     "dressCode": "Resort formal",
     "description": "The Cannes Film Festival is a Tier 4 event.",
-    "imageUrl": "/imagery/events/cannes-film-festival.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "jules",
       "pierre",
@@ -305,7 +305,7 @@
     "ticketPrice": 180000,
     "dressCode": "Resort formal",
     "description": "The Monaco Grand Prix is a Tier 4 event.",
-    "imageUrl": "/imagery/events/monaco-grand-prix.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "sasha",
       "khalid",
@@ -327,7 +327,7 @@
     "ticketPrice": 40000,
     "dressCode": "Resort formal",
     "description": "The Art Basel Basel is a Tier 3 event.",
-    "imageUrl": "/imagery/events/art-basel-basel.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "pierre",
       "elena",
@@ -348,7 +348,7 @@
     "ticketPrice": 35000,
     "dressCode": "Morning suits, proper hats",
     "description": "The Royal Ascot is a Tier 4 event.",
-    "imageUrl": "/imagery/events/royal-ascot.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "khalid",
       "amara",
@@ -369,7 +369,7 @@
     "ticketPrice": 60000,
     "dressCode": "Resort formal",
     "description": "The Wimbledon Men's Final is a Tier 4 event.",
-    "imageUrl": "/imagery/events/wimbledon-men-s-final.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "khalid",
       "amara"
@@ -389,7 +389,7 @@
     "ticketPrice": 0,
     "dressCode": "Resort formal",
     "description": "The Sun Valley Allen & Co Conference is a Tier 5 event.",
-    "imageUrl": "/imagery/events/sun-valley-allen-co-conference.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "naomi",
       "vivian",
@@ -411,7 +411,7 @@
     "ticketPrice": 75000,
     "dressCode": "Resort formal",
     "description": "The Aspen Ideas Festival is a Tier 4 event.",
-    "imageUrl": "/imagery/events/aspen-ideas-festival.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "vivian",
       "amara",
@@ -432,7 +432,7 @@
     "ticketPrice": 25000,
     "dressCode": "Resort formal",
     "description": "The Cowes Week + yacht regatta is a Tier 3 event.",
-    "imageUrl": "/imagery/events/cowes-week-yacht-regatta.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "sasha",
       "pietro"
@@ -452,7 +452,7 @@
     "ticketPrice": 35000,
     "dressCode": "Resort formal",
     "description": "The Monaco Yacht Show is a Tier 3 event.",
-    "imageUrl": "/imagery/events/monaco-yacht-show.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "pietro",
       "dmitri",
@@ -473,7 +473,7 @@
     "ticketPrice": 45000,
     "dressCode": "Resort formal",
     "description": "The Hamptons Season (Watermill Ball + polo) is a Tier 3 event.",
-    "imageUrl": "/imagery/events/hamptons-season-watermill-ball-polo.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "vivian",
       "charles"
@@ -493,7 +493,7 @@
     "ticketPrice": 40000,
     "dressCode": "Resort formal",
     "description": "The Salzburg Festival is a Tier 4 event.",
-    "imageUrl": "/imagery/events/salzburg-festival.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "alessandro",
       "elena",
@@ -514,7 +514,7 @@
     "ticketPrice": 15000,
     "dressCode": "Resort formal",
     "description": "The Edinburgh International Festival is a Tier 2 event.",
-    "imageUrl": "/imagery/events/edinburgh-international-festival.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "saanvi",
       "amara"
@@ -534,7 +534,7 @@
     "ticketPrice": 30000,
     "dressCode": "Resort formal",
     "description": "The Burning Man (for the Silicon Valley set) is a Tier 2 event.",
-    "imageUrl": "/imagery/events/burning-man-for-the-silicon-valley-set.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "naomi",
       "marcus"
@@ -554,7 +554,7 @@
     "ticketPrice": 80000,
     "dressCode": "Resort formal",
     "description": "The Venice Film Festival is a Tier 4 event.",
-    "imageUrl": "/imagery/events/venice-film-festival.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "jules",
       "pierre"
@@ -574,7 +574,7 @@
     "ticketPrice": 50000,
     "dressCode": "Resort formal",
     "description": "The US Open Men's Final is a Tier 3 event.",
-    "imageUrl": "/imagery/events/us-open-men-s-final.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "rico",
       "amara",
@@ -595,7 +595,7 @@
     "ticketPrice": 25000,
     "dressCode": "Resort formal",
     "description": "The Milan Fashion Week + Paris Fashion Week (S/S) is a Tier 3 event.",
-    "imageUrl": "/imagery/events/milan-fashion-week-paris-fashion-week-s-s.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "alessandro",
       "pierre",
@@ -616,7 +616,7 @@
     "ticketPrice": 20000,
     "dressCode": "Resort formal",
     "description": "The Frieze London + Frieze Masters is a Tier 3 event.",
-    "imageUrl": "/imagery/events/frieze-london-frieze-masters.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "pierre",
       "amara",
@@ -637,7 +637,7 @@
     "ticketPrice": 60000,
     "dressCode": "Resort formal",
     "description": "The Japanese Grand Prix is a Tier 3 event.",
-    "imageUrl": "/imagery/events/japanese-grand-prix.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "naomi",
       "khalid"
@@ -657,7 +657,7 @@
     "ticketPrice": 70000,
     "dressCode": "Resort formal",
     "description": "The Pebble Beach Concours d'Elegance is a Tier 4 event.",
-    "imageUrl": "/imagery/events/pebble-beach-concours-d-elegance.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "sasha",
       "khalid",
@@ -678,7 +678,7 @@
     "ticketPrice": 40000,
     "dressCode": "Resort formal",
     "description": "The Breeders' Cup is a Tier 3 event.",
-    "imageUrl": "/imagery/events/breeders-cup.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "khalid"
     ]
@@ -697,7 +697,7 @@
     "ticketPrice": 50000,
     "dressCode": "Resort formal",
     "description": "The Art Basel Miami Beach is a Tier 4 event.",
-    "imageUrl": "/imagery/events/art-basel-miami-beach.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "pierre",
       "rico",
@@ -719,7 +719,7 @@
     "ticketPrice": 55000,
     "dressCode": "Resort formal",
     "description": "The Kennedy Center Honors is a Tier 4 event.",
-    "imageUrl": "/imagery/events/kennedy-center-honors.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "vivian",
       "jules"
@@ -739,7 +739,7 @@
     "ticketPrice": 85000,
     "dressCode": "Resort formal",
     "description": "The Abu Dhabi Grand Prix is a Tier 3 event.",
-    "imageUrl": "/imagery/events/abu-dhabi-grand-prix.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "khalid",
       "charles",
@@ -760,7 +760,7 @@
     "ticketPrice": 40000,
     "dressCode": "Resort formal",
     "description": "The Venice NYE Gala (varies) is a Tier 3 event.",
-    "imageUrl": "/imagery/events/venice-nye-gala-varies.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "alessandro",
       "elena"
@@ -780,7 +780,7 @@
     "ticketPrice": 65000,
     "dressCode": "Resort formal",
     "description": "The St. Barths New Year's Eve is a Tier 3 event.",
-    "imageUrl": "/imagery/events/st-barths-new-year-s-eve.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "sasha",
       "dmitri",
@@ -802,7 +802,7 @@
     "ticketPrice": 55000,
     "dressCode": "Resort formal",
     "description": "The Aspen New Year's is a Tier 3 event.",
-    "imageUrl": "/imagery/events/aspen-new-year-s.jpg",
+    "imageUrl": null,
     "confirmedAttendees": [
       "charles",
       "vivian",

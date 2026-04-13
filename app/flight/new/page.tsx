@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Step1Aircraft from './_components/Step1Aircraft';
 import Step2Destination from './_components/Step2Destination';
@@ -14,16 +14,39 @@ function FlightPlannerInternal() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const prefillAircraft = searchParams.get('aircraft');
+  const prefillDestination = searchParams.get('destination');
+  const prefillPurpose = searchParams.get('purpose');
 
   const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
+  const [airports, setAirports] = useState<any[]>([]);
+
+  useEffect(() => {
+      fetch('/airports.json').then(r => r.json()).then(setAirports).catch(console.error);
+  }, []);
   
-  const [step, setStep] = useState(prefillAircraft ? 2 : 1);
+  const [step, setStep] = useState(prefillAircraft ? (prefillDestination ? 3 : 2) : 1);
   const [selectedAircraftId, setSelectedAircraftId] = useState<string | null>(null);
   const [selectedDestination, setSelectedDestination] = useState<any | null>(null);
 
   // Compute active aircraft falling back to query param
   const activeAircraft = fleet.find(j => j.id === selectedAircraftId) 
      || (prefillAircraft ? fleet.find(j => j.tailNumber === prefillAircraft) : undefined);
+
+  // Step 2 query param routing
+  useEffect(() => {
+     if (step === 2 && prefillDestination && airports.length > 0 && !selectedDestination && activeAircraft) {
+         const found = airports.find(a => a.icao === prefillDestination);
+         if (found) {
+             const modified = { ...found };
+             if (prefillPurpose) {
+                 modified.purpose = prefillPurpose;
+                 modified.purposeName = prefillPurpose.startsWith('event:') ? 'Attending Event' : prefillPurpose;
+             }
+             setSelectedDestination(modified);
+             setStep(3);
+         }
+     }
+  }, [step, prefillDestination, prefillPurpose, airports, selectedDestination, activeAircraft]);
 
   // If prefilled but aircraft isn't valid or parked, force Step 1
   if (prefillAircraft && step === 2 && fleet.length > 0) {
