@@ -27,7 +27,7 @@ export default function MapEngine() {
        .then(data => { airportsRef.current = data; })
        .catch(e => console.error("Failed to fetch airports DB", e));
   }, []);
-  const jet = fleet.find(j => j.id === selectedAircraftId);
+  const jet = fleet.find((j: Aircraft) => j.id === selectedAircraftId);
   const flightPhase = jet?.flightPhase;
   const [layersOpen, setLayersOpen] = useState(false);
 
@@ -85,7 +85,7 @@ export default function MapEngine() {
 
        const state = useStore.getState();
        if (state.selectedAircraftId) {
-          const plane = state.fleet.find(j => j.id === state.selectedAircraftId);
+          const plane = fleetRef.current.find((j: Aircraft) => j.id === state.selectedAircraftId);
           if (plane && (plane.flightPhase === 'Hangar' || plane.flightPhase === 'Pre-flight' || plane.flightPhase === 'Cruise')) {
               
               let targetLat = e.lngLat.lat;
@@ -105,16 +105,15 @@ export default function MapEngine() {
                   }
               }
 
-              if (nearest) {
+              if (nearest && plane.currentLocation) {
                   targetLat = nearest.lat;
                   targetLng = nearest.lng;
                   targetName = `${nearest.iata} - ${nearest.name}`;
+                  state.setProvisionalRoute({
+                     origin: plane.currentLocation,
+                     destination: { lat: targetLat, lng: targetLng, name: targetName }
+                  });
               }
-
-              state.setProvisionalRoute({
-                 origin: plane.currentLocation,
-                 destination: { lat: targetLat, lng: targetLng, name: targetName }
-              });
           }
        }
     });
@@ -217,7 +216,7 @@ export default function MapEngine() {
     const intervalId = setInterval(() => {
       if (!m.isStyleLoaded()) return;
 
-      fleetRef.current.forEach(fJet => {
+      fleetRef.current.forEach((fJet: Aircraft) => {
         const routeSourceId = `route-source-${fJet.id}`;
         const routeLayerId = `route-layer-${fJet.id}`;
         const planeSourceId = `plane-source-${fJet.id}`;
@@ -231,7 +230,7 @@ export default function MapEngine() {
         let showRoute = false;
         let showRange = false;
 
-        if (fJet.destination && fJet.launchedAt && fJet.flightPhase !== 'Hangar') {
+        if (fJet.destination !== null && fJet.launchedAt !== null && fJet.currentLocation !== null && fJet.flightPhase !== 'Hangar') {
            const timeM = useStore.getState().timeMultiplier;
            const simPassedMs = (Date.now() - fJet.launchedAt) * timeM;
            const mins = simPassedMs / 60000;
@@ -242,7 +241,7 @@ export default function MapEngine() {
            const takeoffEnds = 25 + 5; // 30
            
            // Fetch total locked time which was dynamically calculated upon launch
-           const lockedUntil = fJet.lockedUntil || (Date.now() + 60000);
+           const lockedUntil = fJet.lockedUntil !== null ? fJet.lockedUntil : (Date.now() + 60000);
            const totalSimMins = ((lockedUntil - fJet.launchedAt) * timeM) / 60000;
            const landingBegins = Math.max(takeoffEnds + 5, totalSimMins - 10);
            
@@ -260,7 +259,7 @@ export default function MapEngine() {
                    // Ensure it reaches exact destination
                    aircraftRepo.update(fJet.id!, { 
                        flightPhase: 'Hangar', 
-                       currentLocation: fJet.destination || undefined, 
+                       currentLocation: fJet.destination, 
                        destination: null, 
                        launchedAt: null, 
                        lockedUntil: null 
@@ -325,12 +324,12 @@ export default function MapEngine() {
 
         } else {
            // On the ground
-           planeCoords = [fJet.currentLocation.lng, fJet.currentLocation.lat];
+           planeCoords = fJet.currentLocation ? [fJet.currentLocation.lng, fJet.currentLocation.lat] : [0, 0];
            showRoute = false;
         }
 
         // Dedicated Range Map for selected aircraft
-        if (fJet.id === selectedAircraftId && (fJet.flightPhase === 'Hangar' || fJet.flightPhase === 'Pre-flight')) {
+        if (fJet.id === selectedAircraftId && (fJet.flightPhase === 'Hangar' || fJet.flightPhase === 'Pre-flight') && fJet.currentLocation) {
             showRange = true;
             // E.g., BBJ: 9900NM, Citation: 3500NM, Gulfstream: 7500NM
             const rangeNM = fJet.model.includes('BBJ') || fJet.model.includes('ACJ') ? 8000 : fJet.model.includes('Citation') || fJet.model.includes('Praetor') ? 3500 : 7500;
@@ -494,9 +493,9 @@ export default function MapEngine() {
       const omniLayerId = 'omni-layer';
       if (true) { // Always show omni routes
           const omniFeatures: any[] = [];
-          fleetRef.current.forEach(fJet => {
+          fleetRef.current.forEach((fJet: Aircraft) => {
             if (fJet.scheduledRoutes && fJet.scheduledRoutes.length > 0) {
-               fJet.scheduledRoutes.forEach(leg => {
+               fJet.scheduledRoutes.forEach((leg: any) => {
                   const points = computeGreatCirclePoints(leg.origin.lat, leg.origin.lng, leg.destination.lat, leg.destination.lng);
                   omniFeatures.push({ type: 'Feature', geometry: { type: 'LineString', coordinates: points } });
                });

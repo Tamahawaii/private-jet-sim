@@ -20,7 +20,7 @@ function LiveTelemetryBlock({ jet, distance, timeMultiplier }: { jet: Aircraft, 
      return () => clearInterval(i);
   }, []);
 
-  if (!jet.launchedAt || !jet.lockedUntil) return null;
+  if (jet.launchedAt === null || jet.lockedUntil === null) return null;
 
   const totalSimMs = (jet.lockedUntil - jet.launchedAt) * timeMultiplier;
   const passedSimMs = (now - jet.launchedAt) * timeMultiplier;
@@ -77,7 +77,7 @@ import { aircraftRepo } from '../../lib/repositories/aircraft';
 export default function DispatchController() {
   const { selectedAircraftId, provisionalRoute, setProvisionalRoute, timeMultiplier } = useStore();
   const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
-  const jet = fleet.find(j => j.id === selectedAircraftId);
+  const jet = fleet.find((j: Aircraft) => j.id === selectedAircraftId);
 
   if (!jet) return null;
 
@@ -146,7 +146,7 @@ export default function DispatchController() {
          )}
 
          {/* Routing View (Displayed for active and provisional) */}
-         {(provisionalRoute || (jet.flightPhase !== 'Hangar' && jet.destination)) && origin && destination && (
+         {(provisionalRoute !== null || (jet.flightPhase !== 'Hangar' && jet.destination !== null)) && origin !== null && destination !== null && (
             <div className="flex flex-col gap-2">
                  <span className="text-xs text-zinc-400 uppercase tracking-widest font-bold">
                     {jet.flightPhase === 'Hangar' ? 'Routing Instructions' : 'Active Routing Lock'}
@@ -189,7 +189,7 @@ export default function DispatchController() {
                     {jet.flightPhase === 'Hangar' && provisionalRoute && (
                        <button 
                          onClick={() => {
-                            if (provisionalRoute?.destination && jet.currentLocation) {
+                            if (provisionalRoute?.destination !== null && jet.currentLocation !== null) {
                                const toRad = (v: number) => v * Math.PI / 180;
                                const R = 3440; // NM
                                const dLat = toRad(provisionalRoute.destination.lat - jet.currentLocation.lat);

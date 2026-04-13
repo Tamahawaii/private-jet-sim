@@ -12,7 +12,7 @@ export default function FlightAttendant() {
   const [dialogue, setDialogue] = useState('');
   const [show, setShow] = useState(true);
 
-  const jet = fleet.find(j => j.id === selectedAircraftId);
+  const jet = fleet.find((j: Aircraft) => j.id === selectedAircraftId);
 
   const [isClosed, setIsClosed] = useState(false);
 

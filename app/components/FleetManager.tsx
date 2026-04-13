@@ -71,7 +71,7 @@ export default function FleetManager() {
                          </div>
                          <div className="bg-black/40 p-2 rounded border border-white/5">
                             <span className="text-zinc-500 block mb-1">Location</span>
-                            <span className="text-white flex items-center gap-2"><Route size={12} className="text-amber-400"/> {jet.flightPhase === 'Hangar' ? jet.currentLocation.name : 'IN TRANSIT'}</span>
+                            <span className="text-white flex items-center gap-2"><Route size={12} className="text-amber-400"/> {jet.flightPhase === 'Hangar' ? (jet.currentLocation?.name ?? 'Hangar') : 'In Transit'}</span>
                          </div>
                       </div>
 
