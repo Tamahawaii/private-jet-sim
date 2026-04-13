@@ -49,8 +49,10 @@ export async function launchFlight(params: {
        
        const aircraft = await db.aircraft.get(params.aircraftId);
        const player = await db.player.get('player');
-       if (!aircraft || !player) throw new Error("Missing entities");
-       if (player.netWorth < params.cost) throw new Error("Insufficient funds");
+       
+       if (!aircraft) throw new Error(`Missing aircraft asset (${params.aircraftId})`);
+       if (!player) throw new Error("Player data not found");
+       if (player.netWorth < params.cost) throw new Error("Insufficient funds for dispatch");
        
        await db.flights.add({
            id: flightId,

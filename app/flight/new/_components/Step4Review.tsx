@@ -70,7 +70,7 @@ export default function Step4Review({ aircraft, destination, onBack }: Props) {
        setIsLaunching(true);
        try {
            const flightId = await launchFlight({
-               aircraftId: aircraft.id,
+               aircraftId: aircraft.tailNumber, // Pass tailNumber as ID since it's the primary key
                originICAO: aircraft.currentLocationICAO!,
                destinationICAO: destination.icao,
                distanceNM: brief.distanceNM,
@@ -82,7 +82,8 @@ export default function Step4Review({ aircraft, destination, onBack }: Props) {
            
            router.push(`/flight/${flightId}`);
        } catch (error: any) {
-           alert(error.message);
+           console.error("Launch Error:", error);
+           alert(`DISPATCH FAILED: ${error.message}`);
            setIsLaunching(false);
        }
    };
