@@ -20,7 +20,7 @@ export type Player = {
   createdAt: ISODateString;
   homeBaseICAO: ICAOCode;
   currentLocationICAO: ICAOCode;
-  currentResortBookingID?: string;
+  currentResortBookingID: string | null;
   settings: {
     simSpeed: 1 | 10 | 30 | 60 | 100;
     mapMode: "satellite" | "dark" | "roads" | "flightaware";
@@ -36,7 +36,7 @@ export type Aircraft = {
   purchasePrice: number;
   currentLocationICAO: ICAOCode;
   status: "parked" | "in_transit" | "maintenance";
-  currentFlightID?: FlightID;
+  currentFlightID: FlightID | null;
   modules: AircraftModule[];
   livery?: string;
   nickname?: string;
@@ -50,16 +50,16 @@ export type Aircraft = {
   rangeNM: number;
   
   // Legacy MVP state (Phase 0 -> Phase 2 compat)
-  id?: string;
-  model?: string;
-  flightPhase?: 'Hangar' | 'Pre-flight' | 'Taxi' | 'Takeoff' | 'Cruise' | 'Landing';
-  currentLocation?: { lat: number, lng: number, name: string };
-  destination?: { lat: number, lng: number, name: string } | null;
-  lockedUntil?: number | null;
-  launchedAt?: number | null;
-  layoutImage?: string;
-  cabinConfig?: any[];
-  scheduledRoutes?: any[];
+  id: string;
+  model: string;
+  flightPhase: 'Hangar' | 'Pre-flight' | 'Taxi' | 'Takeoff' | 'Cruise' | 'Landing';
+  currentLocation: { lat: number, lng: number, name: string } | null;
+  destination: { lat: number, lng: number, name: string } | null;
+  lockedUntil: number | null;
+  launchedAt: number | null;
+  layoutImage: string | null;
+  cabinConfig: any[];
+  scheduledRoutes: any[];
 };
 
 export type AircraftModule = {
@@ -89,10 +89,10 @@ export type Flight = {
   costUSD: number;
   waypoints: Coordinates[];
   passengers: PersonaID[];
-  purpose?: {
+  purpose: {
     type: "event" | "resort" | "leisure";
     targetId: EventID | ResortID;
-  };
+  } | null;
 };
 
 export type PersonaArchetype =
@@ -131,21 +131,21 @@ export type Persona = {
 export type PersonaState = {
   personaId: PersonaID;
   currentLocationICAO: ICAOCode;
-  currentFlightState?: {
+  currentFlightState: {
     originICAO: ICAOCode;
     destinationICAO: ICAOCode;
     departedAt: ISODateString;
     estimatedArrivalAt: ISODateString;
     waypoints: Coordinates[];
-  };
-  nextPlannedFlight?: {
+  } | null;
+  nextPlannedFlight: {
     originICAO: ICAOCode;
     destinationICAO: ICAOCode;
     plannedDepartureAt: ISODateString;
     reason: string;
-  };
+  } | null;
   friendshipWithPlayer: number;
-  lastInteractionAt?: ISODateString;
+  lastInteractionAt: ISODateString | null;
   mood: "happy" | "neutral" | "annoyed" | "envious" | "thrilled";
 };
 
@@ -275,6 +275,6 @@ export type Notification = {
   title: string;
   body: string;
   createdAt: ISODateString;
-  readAt?: ISODateString;
+  readAt: ISODateString | null;
   linkTo?: string;
 };

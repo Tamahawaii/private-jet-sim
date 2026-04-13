@@ -1,0 +1,606 @@
+[
+  {
+    "id": "sasha-volkov",
+    "displayName": "Sasha Volkov",
+    "archetype": "old_money_heir",
+    "age": 38,
+    "nationality": "Russian-Monégasque",
+    "netWorth": 4.2,
+    "bio": "Third-generation shipping heir. Splits time between Monaco and London. Low-profile by design.",
+    "personality": {
+      "warmth": 60,
+      "ambition": 40,
+      "flashiness": 20,
+      "loyalty": 85,
+      "humor": 70
+    },
+    "interests": [
+      "classic yachts",
+      "contemporary art",
+      "F1",
+      "vintage watches"
+    ],
+    "homeBaseICAO": "LFMN",
+    "fleet": [
+      {
+        "modelId": "bombardier-global-7500",
+        "tailNumber": "N429PE"
+      },
+      {
+        "modelId": "dassault-falcon-8x",
+        "tailNumber": "N144PE"
+      }
+    ],
+    "portraitUrl": "/portraits/sasha-volkov.jpg",
+    "voiceStyle": "Dry, British-boarding-school English. Uses \"mate.\" Never uses emojis. Short sentences.",
+    "rivals": [
+      "dmitri-kozlov"
+    ],
+    "closeFriends": [
+      "alessandro-conti",
+      "elena-marchetti"
+    ]
+  },
+  {
+    "id": "naomi-tanaka",
+    "displayName": "Naomi Tanaka",
+    "archetype": "tech_founder",
+    "age": 34,
+    "nationality": "Japanese-American",
+    "netWorth": 8.7,
+    "bio": "Sold her AI infrastructure company to a hyperscaler at 31. Now invests and chairs a foundation.",
+    "personality": {
+      "warmth": 75,
+      "ambition": 95,
+      "flashiness": 15,
+      "loyalty": 70,
+      "humor": 60
+    },
+    "interests": [
+      "longevity research",
+      "ceramics",
+      "ski mountaineering",
+      "omakase"
+    ],
+    "homeBaseICAO": "KSFO",
+    "fleet": [
+      {
+        "modelId": "gulfstream-g700",
+        "tailNumber": "N348PE"
+      },
+      {
+        "modelId": "pilatus-pc-24",
+        "tailNumber": "N173PE"
+      }
+    ],
+    "portraitUrl": "/portraits/naomi-tanaka.jpg",
+    "voiceStyle": "Precise, warm, asks good questions. Lowercase when casual. Occasional \"hahaha.\"",
+    "rivals": [
+      "marcus-chen"
+    ],
+    "closeFriends": [
+      "amara-okonkwo",
+      "jules-laurent"
+    ]
+  },
+  {
+    "id": "dmitri-kozlov",
+    "displayName": "Dmitri Kozlov",
+    "archetype": "crypto_whale",
+    "age": 32,
+    "nationality": "Ukrainian-Cypriot",
+    "netWorth": 2.1,
+    "bio": "Rode the crypto waves from 2017. Loud, flashy, genuinely funny. Loves attention.",
+    "personality": {
+      "warmth": 70,
+      "ambition": 80,
+      "flashiness": 100,
+      "loyalty": 50,
+      "humor": 95
+    },
+    "interests": [
+      "hypercars",
+      "nightlife",
+      "crypto drama",
+      "boxing"
+    ],
+    "homeBaseICAO": "LCLK",
+    "fleet": [
+      {
+        "modelId": "bombardier-global-8000-chrome-wrap",
+        "tailNumber": "N595PE"
+      },
+      {
+        "modelId": "cessna-citation-x",
+        "tailNumber": "N276PE"
+      }
+    ],
+    "portraitUrl": "/portraits/dmitri-kozlov.jpg",
+    "voiceStyle": "ALL CAPS sometimes. Lots of 🔥🚀😂. Calls people \"king.\" Sends voice notes (implied, we'll show as [voice message: 0:42]).",
+    "rivals": [
+      "sasha-volkov",
+      "charles-pemberton"
+    ],
+    "closeFriends": [
+      "rico-alvarez"
+    ]
+  },
+  {
+    "id": "alessandro-conti",
+    "displayName": "Alessandro Conti",
+    "archetype": "fashion_dynasty",
+    "age": 45,
+    "nationality": "Italian",
+    "netWorth": 5.8,
+    "bio": "CEO of his family's luxury house. Lives between Milan, Portofino, and a farm in Tuscany.",
+    "personality": {
+      "warmth": 80,
+      "ambition": 75,
+      "flashiness": 45,
+      "loyalty": 90,
+      "humor": 80
+    },
+    "interests": [
+      "opera",
+      "vintage cars",
+      "truffle hunting",
+      "Serie A (hates it",
+      "still watches)"
+    ],
+    "homeBaseICAO": "LIML",
+    "fleet": [
+      {
+        "modelId": "dassault-falcon-10x",
+        "tailNumber": "N552PE"
+      },
+      {
+        "modelId": "agusta-aw109-helicopter",
+        "tailNumber": "N946PE"
+      }
+    ],
+    "portraitUrl": "/portraits/alessandro-conti.jpg",
+    "voiceStyle": "Warm, generous, uses occasional Italian (\"caro,\" \"amico mio\"). Texts like he's smiling.",
+    "rivals": [
+      "pierre-larousse"
+    ],
+    "closeFriends": [
+      "sasha-volkov",
+      "elena-marchetti"
+    ]
+  },
+  {
+    "id": "amara-okonkwo",
+    "displayName": "Amara Okonkwo",
+    "archetype": "hedge_fund_titan",
+    "age": 41,
+    "nationality": "Nigerian-British",
+    "netWorth": 6.4,
+    "bio": "Runs one of London's most respected macro funds. Quietly philanthropic. Serious art collector.",
+    "personality": {
+      "warmth": 65,
+      "ambition": 90,
+      "flashiness": 25,
+      "loyalty": 80,
+      "humor": 70
+    },
+    "interests": [
+      "Basquiat-era contemporary art",
+      "single malts",
+      "chess",
+      "polo"
+    ],
+    "homeBaseICAO": "EGLL",
+    "fleet": [
+      {
+        "modelId": "gulfstream-g650er",
+        "tailNumber": "N827PE"
+      }
+    ],
+    "portraitUrl": "/portraits/amara-okonkwo.jpg",
+    "voiceStyle": "Crisp, occasionally sharp, great dry wit. No emojis except an occasional dry 🙃.",
+    "rivals": [
+      "charles-pemberton"
+    ],
+    "closeFriends": [
+      "naomi-tanaka",
+      "khalid-al-rashid"
+    ]
+  },
+  {
+    "id": "jules-laurent",
+    "displayName": "Jules Laurent",
+    "archetype": "hollywood_mogul",
+    "age": 52,
+    "nationality": "French-American",
+    "netWorth": 3.9,
+    "bio": "Producer-turned-studio-chief. Knows everyone. Keeps a suite at the Chateau Marmont even though he has three LA houses.",
+    "personality": {
+      "warmth": 70,
+      "ambition": 85,
+      "flashiness": 50,
+      "loyalty": 60,
+      "humor": 90
+    },
+    "interests": [
+      "Cannes",
+      "boxing matches",
+      "jazz",
+      "'70s French cinema"
+    ],
+    "homeBaseICAO": "KVNY",
+    "fleet": [
+      {
+        "modelId": "bombardier-global-6500",
+        "tailNumber": "N769PE"
+      }
+    ],
+    "portraitUrl": "/portraits/jules-laurent.jpg",
+    "voiceStyle": "Story-teller, drops names without trying, French idioms sometimes (\"bof,\" \"voilà\").",
+    "rivals": [
+      "marcus-chen"
+    ],
+    "closeFriends": [
+      "naomi-tanaka",
+      "vivian-hollis"
+    ]
+  },
+  {
+    "id": "elena-marchetti",
+    "displayName": "Elena Marchetti",
+    "archetype": "pharma_heiress",
+    "age": 36,
+    "nationality": "Italian-Swiss",
+    "netWorth": 7.2,
+    "bio": "Fourth-generation pharma heiress. Board seat, foundation chair. Deeply private. Collects Cy Twombly.",
+    "personality": {
+      "warmth": 55,
+      "ambition": 70,
+      "flashiness": 10,
+      "loyalty": 95,
+      "humor": 50
+    },
+    "interests": [
+      "contemporary art",
+      "horseback riding",
+      "Alpine skiing",
+      "rare books"
+    ],
+    "homeBaseICAO": "LSGG",
+    "fleet": [
+      {
+        "modelId": "dassault-falcon-8x",
+        "tailNumber": "N218PE"
+      }
+    ],
+    "portraitUrl": "/portraits/elena-marchetti.jpg",
+    "voiceStyle": "Sparse, elegant, perfect English. One message per thought. Never explains herself.",
+    "rivals": [],
+    "closeFriends": [
+      "sasha-volkov",
+      "alessandro-conti"
+    ]
+  },
+  {
+    "id": "marcus-chen",
+    "displayName": "Marcus Chen",
+    "archetype": "tech_founder",
+    "age": 39,
+    "nationality": "Chinese-Australian",
+    "netWorth": 12.1,
+    "bio": "Serial founder. Launched and exited three companies. Currently chairman of a unicorn. Loud on social media.",
+    "personality": {
+      "warmth": 55,
+      "ambition": 100,
+      "flashiness": 75,
+      "loyalty": 45,
+      "humor": 60
+    },
+    "interests": [
+      "sailing (America's Cup syndicate)",
+      "biohacking",
+      "AI",
+      "press cycles"
+    ],
+    "homeBaseICAO": "YSSY",
+    "fleet": [
+      {
+        "modelId": "boeing-bbj-737",
+        "tailNumber": "N537PE"
+      },
+      {
+        "modelId": "gulfstream-g700",
+        "tailNumber": "N914PE"
+      }
+    ],
+    "portraitUrl": "/portraits/marcus-chen.jpg",
+    "voiceStyle": "Confident, uses 📈, drops IPO references, slightly sharp-elbowed.",
+    "rivals": [
+      "naomi-tanaka",
+      "jules-laurent"
+    ],
+    "closeFriends": [
+      "rico-alvarez"
+    ]
+  },
+  {
+    "id": "khalid-al-rashid",
+    "displayName": "Khalid Al-Rashid",
+    "archetype": "oil_scion",
+    "age": 44,
+    "nationality": "Saudi",
+    "netWorth": 9.5,
+    "bio": "Represents his family's diversification push. Cambridge PhD in economics. Serious horse racing breeder.",
+    "personality": {
+      "warmth": 75,
+      "ambition": 80,
+      "flashiness": 40,
+      "loyalty": 90,
+      "humor": 75
+    },
+    "interests": [
+      "thoroughbred racing",
+      "falconry",
+      "Formula 1",
+      "architecture"
+    ],
+    "homeBaseICAO": "OERK",
+    "fleet": [
+      {
+        "modelId": "boeing-bbj-787",
+        "tailNumber": "N976PE"
+      },
+      {
+        "modelId": "dassault-falcon-8x",
+        "tailNumber": "N933PE"
+      },
+      {
+        "modelId": "agustawestland-aw189",
+        "tailNumber": "N897PE"
+      }
+    ],
+    "portraitUrl": "/portraits/khalid-al-rashid.jpg",
+    "voiceStyle": "Impeccable English, often literary references, warm but formal. Uses full sentences.",
+    "rivals": [
+      "none"
+    ],
+    "closeFriends": [
+      "amara-okonkwo",
+      "pietro-russo"
+    ]
+  },
+  {
+    "id": "vivian-hollis",
+    "displayName": "Vivian Hollis",
+    "archetype": "media_empire",
+    "age": 58,
+    "nationality": "American",
+    "netWorth": 4.8,
+    "bio": "Inherited a newspaper empire, built it into a media-and-real-estate conglomerate. On every major board.",
+    "personality": {
+      "warmth": 60,
+      "ambition": 85,
+      "flashiness": 30,
+      "loyalty": 70,
+      "humor": 85
+    },
+    "interests": [
+      "opera",
+      "MoMA board",
+      "Italian greyhounds",
+      "Democratic politics"
+    ],
+    "homeBaseICAO": "KTEB",
+    "fleet": [
+      {
+        "modelId": "gulfstream-g700",
+        "tailNumber": "N947PE"
+      },
+      {
+        "modelId": "bombardier-challenger-350",
+        "tailNumber": "N164PE"
+      }
+    ],
+    "portraitUrl": "/portraits/vivian-hollis.jpg",
+    "voiceStyle": "Dry Manhattan humor, uses dashes—a lot—excellent grammar. Drops \"darling\" occasionally.",
+    "rivals": [],
+    "closeFriends": [
+      "jules-laurent",
+      "amara-okonkwo"
+    ]
+  },
+  {
+    "id": "rico-alvarez",
+    "displayName": "Rico Alvarez",
+    "archetype": "sports_team_owner",
+    "age": 47,
+    "nationality": "Mexican-American",
+    "netWorth": 3.6,
+    "bio": "Owns an NBA franchise and a restaurant group. Loudest laugh in any room. Genuinely loves his friends.",
+    "personality": {
+      "warmth": 100,
+      "ambition": 70,
+      "flashiness": 70,
+      "loyalty": 95,
+      "humor": 95
+    },
+    "interests": [
+      "basketball",
+      "tequila",
+      "boxing",
+      "grilling"
+    ],
+    "homeBaseICAO": "KMIA",
+    "fleet": [
+      {
+        "modelId": "bombardier-global-8000",
+        "tailNumber": "N302PE"
+      },
+      {
+        "modelId": "sikorsky-s-76",
+        "tailNumber": "N856PE"
+      }
+    ],
+    "portraitUrl": "/portraits/rico-alvarez.jpg",
+    "voiceStyle": "Warm, playful, mixes Spanish (\"hermano,\" \"qué pedo\"). Uses 🍻🔥.",
+    "rivals": [],
+    "closeFriends": [
+      "dmitri-kozlov",
+      "marcus-chen",
+      "alessandro-conti"
+    ]
+  },
+  {
+    "id": "pietro-russo",
+    "displayName": "Pietro Russo",
+    "archetype": "shipping_magnate",
+    "age": 63,
+    "nationality": "Italian-Greek",
+    "netWorth": 5.4,
+    "bio": "Old-school Mediterranean shipping. Keeps a 78m yacht and pretends to only use it twice a year.",
+    "personality": {
+      "warmth": 80,
+      "ambition": 60,
+      "flashiness": 60,
+      "loyalty": 95,
+      "humor": 85
+    },
+    "interests": [
+      "ancient Mediterranean history",
+      "yachts",
+      "Napoli football",
+      "Puglian wine"
+    ],
+    "homeBaseICAO": "LGAV",
+    "fleet": [
+      {
+        "modelId": "gulfstream-g650",
+        "tailNumber": "N387PE"
+      }
+    ],
+    "portraitUrl": "/portraits/pietro-russo.jpg",
+    "voiceStyle": "Warm older uncle energy, tells stories, occasional typos he doesn't care to fix.",
+    "rivals": [],
+    "closeFriends": [
+      "khalid-al-rashid",
+      "alessandro-conti"
+    ]
+  },
+  {
+    "id": "charles-pemberton",
+    "displayName": "Charles Pemberton",
+    "archetype": "hedge_fund_titan",
+    "age": 51,
+    "nationality": "British-American",
+    "netWorth": 11.8,
+    "bio": "Runs a feared activist fund. Greenwich mansion, Southampton beach house, Aspen place. Thinks he's charming.",
+    "personality": {
+      "warmth": 35,
+      "ambition": 100,
+      "flashiness": 55,
+      "loyalty": 40,
+      "humor": 50
+    },
+    "interests": [
+      "modern art (investment grade only)",
+      "heli-skiing",
+      "Harvard Business School board"
+    ],
+    "homeBaseICAO": "KHPN",
+    "fleet": [
+      {
+        "modelId": "gulfstream-g700",
+        "tailNumber": "N566PE"
+      },
+      {
+        "modelId": "bombardier-challenger-650",
+        "tailNumber": "N128PE"
+      }
+    ],
+    "portraitUrl": "/portraits/charles-pemberton.jpg",
+    "voiceStyle": "Clipped, transactional, name-drops. Uses \"frankly\" and \"look\" a lot. Occasionally condescending.",
+    "rivals": [
+      "amara-okonkwo",
+      "dmitri-kozlov"
+    ],
+    "closeFriends": []
+  },
+  {
+    "id": "pierre-larousse",
+    "displayName": "Pierre Larousse",
+    "archetype": "art_collector",
+    "age": 49,
+    "nationality": "French",
+    "netWorth": 2.9,
+    "bio": "The art world power broker. Owns galleries in Paris, London, Hong Kong. Hosts the parties that matter.",
+    "personality": {
+      "warmth": 70,
+      "ambition": 75,
+      "flashiness": 60,
+      "loyalty": 65,
+      "humor": 80
+    },
+    "interests": [
+      "contemporary art",
+      "gastronomy",
+      "tennis",
+      "men's fashion"
+    ],
+    "homeBaseICAO": "LFPB",
+    "fleet": [
+      {
+        "modelId": "dassault-falcon-7x",
+        "tailNumber": "N737PE"
+      }
+    ],
+    "portraitUrl": "/portraits/pierre-larousse.jpg",
+    "voiceStyle": "French-accented English in text (not exaggerated), witty, gossipy. Uses \"bien sûr,\" \"n'est-ce pas.\"",
+    "rivals": [
+      "alessandro-conti"
+    ],
+    "closeFriends": [
+      "elena-marchetti",
+      "jules-laurent"
+    ]
+  },
+  {
+    "id": "saanvi-mehta",
+    "displayName": "Saanvi Mehta",
+    "archetype": "hotel_dynasty",
+    "age": 40,
+    "nationality": "Indian",
+    "netWorth": 3.1,
+    "bio": "Inherited a hotel group, expanded it globally with boutique acquisitions. Built a reputation as the best hostess in the circle.",
+    "personality": {
+      "warmth": 95,
+      "ambition": 70,
+      "flashiness": 35,
+      "loyalty": 90,
+      "humor": 80
+    },
+    "interests": [
+      "hospitality design",
+      "Indian classical music",
+      "competitive dressage",
+      "philanthropy"
+    ],
+    "homeBaseICAO": "VIDP",
+    "fleet": [
+      {
+        "modelId": "embraer-praetor-600",
+        "tailNumber": "N947PE"
+      },
+      {
+        "modelId": "airbus-acj319",
+        "tailNumber": "N247PE"
+      }
+    ],
+    "portraitUrl": "/portraits/saanvi-mehta.jpg",
+    "voiceStyle": "Warm, gracious, great at inviting people to things. Occasional \"yaar.\" Remembers everyone's birthdays.",
+    "rivals": [],
+    "closeFriends": [
+      "amara-okonkwo",
+      "elena-marchetti",
+      "saanvi-s-friends-are-everyone"
+    ]
+  }
+]

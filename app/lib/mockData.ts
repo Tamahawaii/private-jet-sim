@@ -9,7 +9,7 @@ export interface CatalogItem {
   costPerNM: number;
   price: number;
   cabinSlots: number;
-  layoutImage?: string;
+  layoutImage: string | null;
 }
 
 export const SHOP_CATALOG: CatalogItem[] = aircraftData.map(a => ({

@@ -19,6 +19,17 @@ export class JetstreamDB extends Dexie {
   transactions!: Table<Transaction, string>;
   notifications!: Table<Notification, string>;
 
+  // Stubbed (Phase 5.5, 7, etc.)
+  yachts!: Table<any, string>;
+  yachtVoyages!: Table<any, string>;
+  marinas!: Table<any, string>;
+  charterBookings!: Table<any, string>;
+  neighborhoods!: Table<any, string>;
+  properties!: Table<any, string>;
+  narrativeArcs!: Table<any, string>;
+  gossipIssues!: Table<any, string>;
+  collectionItems!: Table<any, string>;
+
   constructor() {
     super('jetstream');
     this.version(1).stores({
@@ -35,6 +46,18 @@ export class JetstreamDB extends Dexie {
       resortBookings: 'id, status, checkInDate',
       transactions: 'id, occurredAt, type',
       notifications: 'id, createdAt, readAt',
+    });
+
+    this.version(2).stores({
+      yachts: 'hullId, status, charterAvailable',
+      yachtVoyages: 'id, hullId, arrivedAt',
+      marinas: 'id, prestigeTier',
+      charterBookings: 'id, hullId, startDate',
+      neighborhoods: 'id, prestigeTier, region',
+      properties: 'id, neighborhoodId, ownerType, ownerId, askingPriceUSD',
+      narrativeArcs: 'id, status',
+      gossipIssues: 'id, personaId, expiresAt',
+      collectionItems: 'id, category, acquiredAt'
     });
   }
 }

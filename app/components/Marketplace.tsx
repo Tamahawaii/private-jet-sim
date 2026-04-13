@@ -78,6 +78,7 @@ export default function Marketplace() {
                                   hoursFlown: 0,
                                   hoursSinceLastMaintenance: 0,
                                   flightPhase: 'Hangar',
+                                  currentFlightID: null,
                                   speedKnots: item.speedKnots,
                                   rangeNM: item.rangeNM,
                                   fuelBurnGPH: item.fuelBurnGPH,
@@ -85,7 +86,7 @@ export default function Marketplace() {
                                   destination: null,
                                   lockedUntil: null,
                                   launchedAt: null,
-                                  layoutImage: item.layoutImage,
+                                  layoutImage: item.layoutImage || null,
                                   cabinConfig: Array(item.cabinSlots).fill('Empty'),
                                   scheduledRoutes: []
                                });

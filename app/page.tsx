@@ -56,6 +56,7 @@ export default function Home() {
               hoursFlown: 0,
               hoursSinceLastMaintenance: 0,
               flightPhase: 'Hangar',
+              currentFlightID: null,
               speedKnots: item.speedKnots,
               rangeNM: item.rangeNM,
               fuelBurnGPH: item.fuelBurnGPH,
@@ -63,7 +64,7 @@ export default function Home() {
               destination: null,
               lockedUntil: null,
               launchedAt: null,
-              layoutImage: item.layoutImage,
+              layoutImage: item.layoutImage || null,
               cabinConfig: Array(item.cabinSlots).fill('Empty'),
               scheduledRoutes: []
            };
