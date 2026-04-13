@@ -12,21 +12,67 @@ export type Coordinates = {
   lng: number;
 };
 
-export type Player = {
+export interface PartnerEntry {
+  name: string;
+  relationship: string;
+  status: string;
+  publicly_known?: boolean;
+  location?: string;
+  occupation?: string;
+  note?: string;
+}
+
+export interface IdentityFields {
+  gender: string;
+  pronouns: string;
+  publicOrientation: string;
+  privateOrientation?: string;
+  publicRelationshipStatus?: string;
+  orientationFlexibility: string;
+  relationshipStyle: string;
+  currentPartners: PartnerEntry[];
+}
+
+export interface PersonaTastes {
+  drinks?: string;
+  wears?: string;
+  drives?: string;
+  aesthetic?: string;
+  music?: string;
+  [key: string]: string | undefined;
+}
+
+export interface Player extends IdentityFields {
   id: "player";
   displayName: string;
+  alternateName?: string;
+  age: number;
+  region: string;
+  homeBase: string;
+  homeCity: string;
+  occupation: string;
+  wealthTier: 1 | 2 | 3 | 4 | 5;
   netWorth: number;
+  publicReputation: string;
+  voiceStyle: string;
+  personality: string[];
+  tastes: PersonaTastes;
+  imageUrl: string | null;
+  monogramColors: [string, string];
+  interests: string[];
+  
+  // Dynamic Sim Data (Preserved)
   prestigeScore: number;
   createdAt: ISODateString;
   homeBaseICAO: ICAOCode;
   currentLocationICAO: ICAOCode;
-  currentResortBookingID: string | null;
   settings: {
     simSpeed: 1 | 10 | 30 | 60 | 100;
     mapMode: "satellite" | "dark" | "roads" | "flightaware";
     showFriendsOnMap: boolean;
   };
-};
+  relationshipPreferences?: Record<string, any>;
+}
 
 export type Aircraft = {
   tailNumber: TailNumber;

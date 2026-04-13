@@ -70,6 +70,10 @@ export class JetstreamDB extends Dexie {
       resorts: 'id, locationICAO, region, tier, brand',
       resortBookings: 'id, resortId, checkInAt, checkOutAt'
     });
+
+    this.version(5).stores({
+      player: 'id'
+    });
   }
 }
 

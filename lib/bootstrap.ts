@@ -6,30 +6,44 @@ import eventsData from '../data/events.json';
 import personasData from '../data/personas.json';
 import airportsData from '../data/airports.json';
 import resortsData from '../data/resorts.json';
-
-const defaultPlayer: Player = {
-  id: 'player',
-  displayName: 'Founder',
-  netWorth: 79700000000, // 79.7B
-  prestigeScore: 200,
-  createdAt: new Date().toISOString(),
-  homeBaseICAO: 'PHNL',
-  currentLocationICAO: 'PHNL',
-  currentResortBookingID: null,
-  settings: {
-    simSpeed: 1,
-    mapMode: 'dark',
-    showFriendsOnMap: true,
-  }
-};
+import playerData from '../data/player.json';
 
 export async function bootstrapWorld() {
-  // 1. Init Player if not exists
+  // 1. Init Player if not exists or merge canonical updates
   const player = await db.player.get('player');
+  const canonicalPlayer = playerData as any;
+  const now = new Date().toISOString();
+
   if (!player) {
-    await db.player.add(defaultPlayer);
-  } else if (player.homeBaseICAO === 'KATL' || player.currentLocationICAO === 'KATL') {
-    await db.player.update('player', { homeBaseICAO: 'PHNL', currentLocationICAO: 'PHNL' });
+    const newPlayer = {
+       ...canonicalPlayer,
+       prestigeScore: 200,
+       createdAt: now,
+       homeBaseICAO: canonicalPlayer.homeBase,
+       currentLocationICAO: canonicalPlayer.homeBase,
+       settings: { simSpeed: 1, mapMode: 'dark', showFriendsOnMap: true }
+    };
+    await db.player.add(newPlayer);
+  } else {
+    // Phase 6 Commit A: Idempotent migration mapping 
+    const updatedPlayer = {
+       ...player, // spread old first to retain any unknown runtime keys temporarily if strictly needed, though we overwrite manually below
+       ...canonicalPlayer,
+       // PRESERVE specifically:
+       netWorth: player.netWorth,
+       prestigeScore: player.prestigeScore || 200,
+       createdAt: player.createdAt || now,
+       currentLocationICAO: player.currentLocationICAO === 'KATL' ? 'PHNL' : player.currentLocationICAO,
+       homeBaseICAO: 'PHNL', 
+       settings: player.settings || { simSpeed: 1, mapMode: 'dark', showFriendsOnMap: true },
+       relationshipPreferences: player.relationshipPreferences
+    };
+    
+    // Clean phantom legacy field explicitly
+    if ('currentResortBookingID' in updatedPlayer) {
+       delete (updatedPlayer as any).currentResortBookingID;
+    }
+    await db.player.put(updatedPlayer);
   }
 
   // 2. Init Starter Fleet if world is completely empty

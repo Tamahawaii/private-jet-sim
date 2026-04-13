@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useStore } from '../lib/store';
-import { Globe, Plane, ShoppingCart, DollarSign, MessageCircle } from 'lucide-react';
+import { Globe, Plane, ShoppingCart, DollarSign, MessageCircle, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -58,14 +58,19 @@ export default function TopNav() {
       </div>
 
       <div className="flex items-center gap-3 md:gap-4">
-         <Link href="/social" className="relative p-2 bg-black/40 border border-white/10 hover:border-white/30 rounded-lg transition-colors flex items-center justify-center">
-             <MessageCircle size={18} className="text-zinc-300 hover:text-white transition-colors" />
-             {unreadCount > 0 && (
-                 <span className="absolute -top-1 -right-1 bg-red-600 border border-black text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center font-mono">
-                     {unreadCount > 9 ? '9+' : unreadCount}
-                 </span>
-             )}
-         </Link>
+         <div className="flex items-center gap-2">
+           <Link href="/social" className="relative p-2 bg-black/40 border border-white/10 hover:border-white/30 rounded-lg transition-colors flex items-center justify-center">
+               <MessageCircle size={18} className="text-zinc-300 hover:text-white transition-colors" />
+               {unreadCount > 0 && (
+                   <span className="absolute -top-1 -right-1 bg-red-600 border border-black text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center font-mono">
+                       {unreadCount > 9 ? '9+' : unreadCount}
+                   </span>
+               )}
+           </Link>
+           <Link href="/profile" className="p-2 bg-black/40 border border-white/10 hover:border-white/30 rounded-lg transition-colors flex items-center justify-center">
+               <User size={18} className="text-zinc-300 hover:text-white transition-colors" />
+           </Link>
+         </div>
          
          <div className="flex items-center gap-2 bg-emerald-950/40 border border-emerald-500/30 px-3 md:px-4 py-2 rounded-lg">
             <DollarSign size={14} className="text-emerald-400" />

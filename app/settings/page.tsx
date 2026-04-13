@@ -116,6 +116,32 @@ export default function SettingsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
+                {/* Profile Edit Card */}
+                <div className="bg-black/40 border border-white/10 rounded-xl p-6 md:col-span-2">
+                     <h2 className="font-bold text-lg mb-4 text-[#00f0ff] uppercase font-mono tracking-widest text-xs">Identity Core</h2>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div>
+                             <label className="text-[10px] uppercase font-mono tracking-widest text-zinc-500 mb-2 block">Display Name</label>
+                             <input 
+                                 type="text"
+                                 value={player?.displayName || ''}
+                                 onChange={(e) => db.player.update('player', { displayName: e.target.value })}
+                                 className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white font-sans text-sm focus:outline-none focus:border-[#00f0ff] transition-colors"
+                             />
+                         </div>
+                         <div>
+                             <label className="text-[10px] uppercase font-mono tracking-widest text-zinc-500 mb-2 block">Avatar URL</label>
+                             <input 
+                                 type="text"
+                                 placeholder="https://..."
+                                 value={player?.imageUrl || ''}
+                                 onChange={(e) => db.player.update('player', { imageUrl: e.target.value || null })}
+                                 className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white font-sans text-sm focus:outline-none focus:border-[#00f0ff] transition-colors"
+                             />
+                         </div>
+                     </div>
+                </div>
+                
                 {/* Export Card */}
                 <div className="bg-black/40 border border-white/10 rounded-xl p-6 group hover:border-[#00f0ff]/50 transition-colors">
                     <div className="w-12 h-12 bg-[#00f0ff]/10 rounded-lg flex items-center justify-center text-[#00f0ff] mb-4 group-hover:bg-[#00f0ff]/20 transition-colors">
