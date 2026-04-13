@@ -6,12 +6,14 @@ import { db } from '../../../../lib/db';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Send } from 'lucide-react';
 import { DMThread, DMMessage } from '../../../../types';
+import { AI_MODELS } from '../../../../lib/constants';
 
 export default function PersonaDMThread({ params }: { params: Promise<{ personaId: string }> }) {
    const resolvedParams = use(params);
    const router = useRouter();
 
    const [input, setInput] = useState('');
+   const [isTyping, setIsTyping] = useState(false);
    const scrollRef = useRef<HTMLDivElement>(null);
 
    const persona = useLiveQuery(() => db.personas.get(resolvedParams.personaId), [resolvedParams.personaId]);
@@ -54,22 +56,103 @@ export default function PersonaDMThread({ params }: { params: Promise<{ personaI
 
       const updatedMessages = [...thread.messages, playerMsg];
       
-      // Auto-stub AI placeholder for Milestone A
-      const stubAIsg: DMMessage = {
-         id: crypto.randomUUID(),
-         from: persona.id,
-         content: "AI coming soon...",
-         sentAt: new Date(Date.now() + 1000).toISOString() // 1 sec delay illusion
-      };
-      
-      updatedMessages.push(stubAIsg);
-
       await db.dmThreads.update(thread.id, {
          messages: updatedMessages,
-         lastMessageAt: stubAIsg.sentAt
+         lastMessageAt: playerMsg.sentAt
       });
 
       setInput('');
+      setIsTyping(true);
+
+      // Rate limit check
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+      const usagePastHour = await db.apiUsage
+        .filter(r => r.personaId === persona.id && r.timestamp > oneHourAgo)
+        .toArray();
+
+      if (usagePastHour.length >= 30) {
+         const rateLimitMsg: DMMessage = {
+             id: crypto.randomUUID(),
+             from: persona.id,
+             content: `${persona.displayName.split(' ')[0]} is traveling and will respond later.`,
+             sentAt: new Date().toISOString()
+         };
+         await db.dmThreads.update(thread.id, {
+             messages: [...updatedMessages, rateLimitMsg],
+             lastMessageAt: rateLimitMsg.sentAt
+         });
+         setIsTyping(false);
+         return;
+      }
+
+      // Fetch AI Response
+      try {
+          const playerContext = {
+             displayName: "Player",
+             netWorth: (await db.player.get('player'))?.netWorth || 0
+          };
+          
+          const res = await fetch('/api/ai/haiku', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  personaId: persona.id,
+                  playerContext,
+                  recentMessages: updatedMessages
+              })
+          });
+
+          if (!res.ok) {
+              const errData = await res.json().catch(() => ({}));
+              console.error("API response error:", res.status, errData);
+              throw new Error("Network error");
+          }
+
+          const data = await res.json();
+          
+          const aiMsg: DMMessage = {
+             id: crypto.randomUUID(),
+             from: persona.id,
+             content: data.content,
+             sentAt: new Date().toISOString()
+          };
+
+          await db.dmThreads.update(thread.id, {
+             messages: [...updatedMessages, aiMsg],
+             lastMessageAt: aiMsg.sentAt
+          });
+
+          // Telemetry Cost logging
+          if (data.usage?.inputTokens && data.usage?.outputTokens) {
+             const cost = (data.usage.inputTokens * (1.00 / 1000000)) + (data.usage.outputTokens * (3.00 / 1000000));
+             await db.apiUsage.add({
+                 id: crypto.randomUUID(),
+                 timestamp: new Date().toISOString(),
+                 model: AI_MODELS.HAIKU,
+                 endpoint: '/api/ai/haiku',
+                 inputTokens: data.usage.inputTokens,
+                 outputTokens: data.usage.outputTokens,
+                 estimatedCostUsd: cost,
+                 personaId: persona.id,
+                 threadId: thread.id
+             });
+          }
+
+      } catch (err) {
+          console.error("Failed handling DM:", err);
+          const failureMsg: DMMessage = {
+             id: crypto.randomUUID(),
+             from: persona.id,
+             content: `${persona.displayName.split(' ')[0]} is traveling and will respond later.`,
+             sentAt: new Date().toISOString()
+          };
+          await db.dmThreads.update(thread.id, {
+             messages: [...updatedMessages, failureMsg],
+             lastMessageAt: failureMsg.sentAt
+          });
+      } finally {
+          setIsTyping(false);
+      }
    };
 
    return (
@@ -115,6 +198,11 @@ export default function PersonaDMThread({ params }: { params: Promise<{ personaI
                   </div>
                </div>
             )}
+            {isTyping && (
+               <div className="bg-white/10 border border-white/5 text-zinc-300 self-start rounded-tl-sm max-w-[75%] rounded-xl p-4 font-mono text-sm opacity-50 animate-pulse">
+                  . . .
+               </div>
+            )}
          </div>
 
          <div className="p-4 bg-[#141419] border-t border-white/10 flex-shrink-0 pb-10">
@@ -128,7 +216,7 @@ export default function PersonaDMThread({ params }: { params: Promise<{ personaI
                />
                <button 
                   type="submit"
-                  disabled={!input.trim()}
+                  disabled={!input.trim() || isTyping}
                   className="bg-[#f5a7a7] text-black px-6 py-3 rounded font-bold transition-opacity hover:opacity-80 disabled:opacity-20 disabled:cursor-not-allowed flex items-center gap-2"
                >
                   <Send size={16} />

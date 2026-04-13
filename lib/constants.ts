@@ -16,3 +16,8 @@ export const FLIGHT_COSTS = {
   // Lifecycle degradation tax
   WEAR_AND_TEAR_HOURLY: 450
 };
+
+export const AI_MODELS = {
+  HAIKU: 'claude-haiku-4-5-20251001',
+  SONNET: 'claude-sonnet-4-6', 
+} as const;
