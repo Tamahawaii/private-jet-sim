@@ -7,6 +7,7 @@ import { aircraftRepo } from '../../../lib/repositories/aircraft';
 import BottomSheet from './_components/BottomSheet';
 import ArrivalRecap from './_components/ArrivalRecap';
 import { useRouter } from 'next/navigation';
+import { useStore } from '../../lib/store';
 
 export default function ActiveFlightPage({ params }: { params: Promise<{ flightId: string }> }) {
     const resolvedParams = use(params);
@@ -17,6 +18,10 @@ export default function ActiveFlightPage({ params }: { params: Promise<{ flightI
         () => (flight ? aircraftRepo.getAll().then(f => f.find(a => a.tailNumber === flight.tailNumber)) : undefined),
         [flight?.tailNumber]
     );
+
+    React.useEffect(() => {
+        if (aircraft) useStore.getState().setSelectedAircraftId(aircraft.id);
+    }, [aircraft?.id]);
 
     if (flight === undefined) return null;
     if (flight === null) {

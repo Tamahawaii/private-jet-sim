@@ -109,7 +109,7 @@ export async function resolveArrivals() {
              const aircraft = await db.aircraft.where('tailNumber').equals(f.tailNumber).first();
              if (aircraft) {
                  const lastPoint = f.waypoints[f.waypoints.length - 1];
-                 await db.aircraft.update(aircraft.id, {
+                 await db.aircraft.update(aircraft.tailNumber, {
                      status: 'parked',
                      currentFlightID: null,
                      currentLocationICAO: f.destinationICAO,
