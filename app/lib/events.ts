@@ -2,6 +2,7 @@ import { BillionaireEvent } from '../../types';
 import { db } from '../../lib/db';
 import { calculateDistanceNM } from './math';
 import { useStore } from './store';
+import airportsData from '../../data/airports.json';
 
 /**
  * Returns the exact event object but with its start/end dates shifted to
@@ -51,14 +52,7 @@ export async function detectEventAttendance() {
 
     if (activeEvents.length === 0) return;
 
-    let airports: any[] = [];
-    try {
-        const res = await fetch('/airports.json');
-        airports = await res.json();
-    } catch (e) {
-        console.error('Failed to load airports for attendance detection', e);
-        return;
-    }
+    let airports = airportsData;
 
     for (const aircraft of parkedFleet) {
         if (!aircraft.currentLocation) continue;

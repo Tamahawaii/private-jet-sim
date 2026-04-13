@@ -5,6 +5,7 @@ import { Search, MapPin, X, ArrowLeft, Calendar, Plane } from 'lucide-react';
 import { db } from '../../../../lib/db';
 import { getEventNextOccurrence } from '../../../lib/events';
 import { useStore } from '../../../lib/store';
+import airportsData from '../../../../data/airports.json';
 
 interface Props {
   aircraft: Aircraft;
@@ -29,10 +30,7 @@ export default function Step2Destination({ aircraft, prefillDestination, prefill
    }, []);
 
    useEffect(() => {
-      fetch('/airports.json')
-        .then(r => r.json())
-        .then(data => setAirports(data))
-        .catch(console.error);
+      setAirports(airportsData);
    }, []);
 
    useEffect(() => {

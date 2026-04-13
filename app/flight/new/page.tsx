@@ -9,6 +9,7 @@ import Step4Review from './_components/Step4Review';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { aircraftRepo } from '../../../lib/repositories/aircraft';
 import { Aircraft } from '../../../types';
+import airportsData from '../../../data/airports.json';
 
 function FlightPlannerInternal() {
   const router = useRouter();
@@ -18,12 +19,8 @@ function FlightPlannerInternal() {
   const prefillPurpose = searchParams.get('purpose');
 
   const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
-  const [airports, setAirports] = useState<any[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
 
-  useEffect(() => {
-      fetch('/airports.json').then(r => r.json()).then(setAirports).catch(console.error);
-  }, []);
-  
   const [step, setStep] = useState(prefillAircraft ? (prefillDestination ? 3 : 2) : 1);
   const [selectedAircraftId, setSelectedAircraftId] = useState<string | null>(null);
   const [selectedDestination, setSelectedDestination] = useState<any | null>(null);
@@ -38,6 +35,21 @@ function FlightPlannerInternal() {
           setStep(1);
       }
   }
+
+  useEffect(() => {
+     if (step === 2 && prefillDestination && !selectedDestination && activeAircraft) {
+         const found = airportsData.find(a => a.icao === prefillDestination);
+         if (found) {
+             const modified: any = { ...found };
+             if (prefillPurpose) {
+                 modified.purpose = prefillPurpose;
+                 modified.purposeName = prefillPurpose.startsWith('event:') ? 'Attending Event' : prefillPurpose;
+             }
+             setSelectedDestination(modified);
+             setStep(3);
+         }
+     }
+  }, [step, prefillDestination, prefillPurpose, selectedDestination, activeAircraft]);
 
   return (
     <div className="absolute inset-0 z-50 bg-[#0a0a0c] text-white flex flex-col md:flex-row overflow-hidden pointer-events-auto">

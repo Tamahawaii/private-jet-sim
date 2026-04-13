@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { LocationData } from '../lib/store';
-import airportsData from '../lib/airports.json';
+import airportsData from '../../data/airports.json';
 import { Search, MapPin } from 'lucide-react';
 
 interface Airport {
   name: string;
-  iata: string;
+  icao: string;
   lat: number;
   lng: number;
   city: string;
@@ -19,10 +19,10 @@ interface AirportSearchProps {
   value: LocationData | null;
   onChange: (loc: LocationData) => void;
   placeholder?: string;
-  excludeIata?: string;
+  excludeIcao?: string;
 }
 
-export default function AirportSearch({ value, onChange, placeholder = "Search global airport...", excludeIata }: AirportSearchProps) {
+export default function AirportSearch({ value, onChange, placeholder = "Search global airport...", excludeIcao }: AirportSearchProps) {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -43,16 +43,16 @@ export default function AirportSearch({ value, onChange, placeholder = "Search g
   }, [value]);
 
   const filtered = query.length < 2 ? [] : airports.filter(a => {
-    if (a.iata === excludeIata) return false;
+    if (a.icao === excludeIcao) return false;
     const lowerQ = (query || '').toLowerCase();
-    return (a.iata || '').toLowerCase().includes(lowerQ) || 
+    return (a.icao || '').toLowerCase().includes(lowerQ) || 
            (a.name || '').toLowerCase().includes(lowerQ) ||
            (a.city || '').toLowerCase().includes(lowerQ);
   }).slice(0, 10);
 
   const handleSelect = (a: Airport) => {
-    onChange({ lat: a.lat, lng: a.lng, name: a.iata });
-    setQuery(`${a.city} (${a.iata})`);
+    onChange({ lat: a.lat, lng: a.lng, name: a.icao });
+    setQuery(`${a.city || a.name} (${a.icao})`);
     setIsOpen(false);
   };
 
@@ -79,7 +79,7 @@ export default function AirportSearch({ value, onChange, placeholder = "Search g
         <div className="absolute top-full left-0 mt-2 w-full max-w-sm bg-[#121215] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden">
           {filtered.map(a => (
             <button
-              key={a.iata}
+              key={a.icao}
               onClick={() => handleSelect(a)}
               className="w-full text-left px-4 py-3 hover:bg-white/5 border-b border-white/5 last:border-0 flex items-center gap-3 transition-colors"
             >
@@ -87,7 +87,7 @@ export default function AirportSearch({ value, onChange, placeholder = "Search g
                 <MapPin size={16} />
               </div>
               <div className="overflow-hidden">
-                <div className="font-bold text-sm tracking-widest text-[#00f0ff]">{a.iata}</div>
+                <div className="font-bold text-sm tracking-widest text-[#00f0ff]">{a.icao}</div>
                 <div className="text-xs text-white/70 truncate">{a.name}</div>
                 <div className="text-[10px] text-white/40 uppercase tracking-widest mt-0.5">{a.city}</div>
               </div>

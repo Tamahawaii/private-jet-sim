@@ -8,12 +8,13 @@ import { db } from '../../lib/db';
 import { Aircraft } from '../../types';
 import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
-import { Layers, Maximize, Minimize, FastForward, CloudRain, Plane, MapPin, Map as MapIcon, ShieldAlert, Building, Calendar, Focus } from 'lucide-react';
+import { Layers, Maximize, Minimize, FastForward, CloudRain, Plane, MapPin, Map as MapIcon, ShieldAlert, Building, Calendar, Focus, Plus, Minus, Maximize2 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { resolveArrivals } from '../../lib/simulation';
 import { getEventNextOccurrence } from '../lib/events';
 import TimeSkipModal from './TimeSkipModal';
+import airportsData from '../../data/airports.json';
 
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -44,7 +45,7 @@ export default function MapEngine() {
   const eventsRef = useRef(rawEvents);
   const router = useRouter();
 
-  const [airportsData, setAirportsData] = useState<any[]>([]);
+  const [airportsDataState, setAirportsData] = useState<any[]>([]);
 
   useEffect(() => { fleetRef.current = fleet; }, [fleet]);
   useEffect(() => { activeFlightsRef.current = activeFlights; }, [activeFlights]);
@@ -70,11 +71,11 @@ export default function MapEngine() {
   }, [fleet, pathname, selectedAircraftId]);
 
   useEffect(() => {
-     fetch('/airports.json').then(r => r.json()).then(setAirportsData).catch(console.error);
+     setAirportsData(airportsData as any);
   }, []);
 
   useEffect(() => {
-    if (!map.current || airportsData.length === 0) return;
+    if (!map.current || airportsDataState.length === 0) return;
     const m = map.current;
     
     if (showAirports && !m.getSource('airports-source')) {
@@ -82,7 +83,7 @@ export default function MapEngine() {
          type: 'geojson',
          data: {
            type: 'FeatureCollection',
-           features: airportsData.map(a => ({
+           features: airportsDataState.map(a => ({
              type: 'Feature',
              geometry: { type: 'Point', coordinates: [a.lng, a.lat] },
              properties: { icao: a.icao, name: a.name }
@@ -107,19 +108,13 @@ export default function MapEngine() {
       m.removeLayer('airports-layer');
       m.removeSource('airports-source');
     }
-  }, [showAirports, airportsData]);
+  }, [showAirports, airportsDataState]);
 
   useEffect(() => {
     fleetRef.current = fleet;
     activeFlightsRef.current = activeFlights;
   }, [fleet, activeFlights]);
 
-  useEffect(() => {
-     fetch('/airports.json')
-       .then(r => r.json())
-       .then(data => { airportsRef.current = data; })
-       .catch(e => console.error("Failed to fetch airports DB", e));
-  }, []);
   const jet = fleet.find((j: Aircraft) => j.id === selectedAircraftId);
   const flightPhase = jet?.flightPhase;
 
