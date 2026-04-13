@@ -19,6 +19,7 @@ export const Economy = {
 
   canAfford: async (amount: number): Promise<boolean> => {
     const player = await playerRepo.get();
+    if (!player) return false;
     return player.netWorth >= amount;
   },
 
@@ -32,6 +33,7 @@ export const Economy = {
     return await db.transaction('rw', [db.aircraft, db.transactions, db.player, db.flights], async () => {
        const tailNumber = await Economy.generateUniqueTailNumber();
        const player = await playerRepo.get();
+       if (!player) throw new Error("Environment not initialized");
 
        // 1. Deduct Net Worth
        await playerRepo.update({ netWorth: player.netWorth - totalCost });
@@ -109,6 +111,7 @@ export const Economy = {
 
         const sellPrice = Math.round(aircraft.purchasePrice * 0.80);
         const player = await playerRepo.get();
+        if (!player) throw new Error("Environment not initialized");
 
         // Appreciate Net Worth
         await playerRepo.update({ netWorth: player.netWorth + sellPrice });
