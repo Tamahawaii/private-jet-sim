@@ -154,14 +154,14 @@ export default function DispatchController() {
                  <div className="flex flex-col gap-3">
                     <div className="bg-zinc-900 border border-zinc-700/50 p-3 rounded flex flex-col gap-1">
                        <span className="text-[9px] text-zinc-500 uppercase tracking-widest">Origin</span>
-                       <span className="text-sm font-mono text-white">{origin.name}</span>
-                       <span className="text-[10px] font-mono text-[#00f0ff]">{getMetar(origin.lat, origin.lng)}</span>
+                       <span className="text-sm font-mono text-white">{origin?.name}</span>
+                       <span className="text-[10px] font-mono text-[#00f0ff]">{getMetar(origin?.lat ?? 0, origin?.lng ?? 0)}</span>
                     </div>
                     <div className="w-px h-4 bg-zinc-700 mx-auto -my-1"/>
                     <div className="bg-zinc-900 border border-[#00f0ff]/50 p-3 rounded flex flex-col gap-1 shadow-[0_0_15px_rgba(0,240,255,0.1)]">
                        <span className="text-[9px] text-[#00f0ff] uppercase tracking-widest">Destination target</span>
-                       <span className="text-sm font-mono text-white">{destination.name}</span>
-                       <span className="text-[10px] font-mono text-amber-400 flex items-center gap-1"><CloudRain size={10}/> {getMetar(destination.lat, destination.lng)}</span>
+                       <span className="text-sm font-mono text-white">{destination?.name}</span>
+                       <span className="text-[10px] font-mono text-amber-400 flex items-center gap-1"><CloudRain size={10}/> {getMetar(destination?.lat ?? 0, destination?.lng ?? 0)}</span>
                     </div>
                  </div>
 

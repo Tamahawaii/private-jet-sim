@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import { useStore } from '../lib/store';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { Aircraft } from '../../types';
 import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
 import { Layers, Maximize, Minimize, FastForward, CloudRain } from 'lucide-react';

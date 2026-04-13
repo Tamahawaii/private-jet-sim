@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useStore } from '../lib/store';
+import { Aircraft } from '../../types';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { AnimatePresence, motion } from 'framer-motion';
