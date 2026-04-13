@@ -18,7 +18,7 @@ export default function ArrivalRecap({ flight, aircraft }: { flight: Flight, air
          </p>
 
          <button 
-             onClick={() => router.push('/world')}
+             onClick={() => router.push('/')}
              className="w-full max-w-sm mx-auto bg-[#00f0ff] text-black font-black font-mono tracking-widest py-4 rounded-xl hover:bg-white transition-colors"
          >
              CONTINUE TO OPERATIONS
