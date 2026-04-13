@@ -147,14 +147,34 @@ export type PersonaArchetype =
   | "pharma_heiress" | "media_empire" | "sports_team_owner" | "shipping_magnate"
   | "art_collector" | "f1_team_principal" | "hotel_dynasty";
 
-export type Persona = {
+export interface PersonaFleetEntry {
+  tailNumber: string;
+  model: string;
+  status: 'primary' | 'secondary' | 'joy/personal' | string;
+}
+
+export interface Persona extends IdentityFields {
   id: PersonaID;
   displayName: string;
   archetype: PersonaArchetype;
   age: number;
+  region: string;
+  background: string;
   nationality: string;
   bio: string;
+  residences: string[];
+  voiceStyle: string;
+  interests: string[];
+  tastes: PersonaTastes;
+  fleet: PersonaFleetEntry[];
+  preferredResorts: string[];
+  playerDynamic: string;
+  drama: string;
+  rivalries: string[];
+  wealthTier: 1 | 2 | 3 | 4 | 5;
   netWorth: number;
+  imageUrl: string | null;
+  monogramColors: [string, string];
   personality: {
     warmth: number;
     ambition: number;
@@ -162,17 +182,11 @@ export type Persona = {
     loyalty: number;
     humor: number;
   };
-  interests: string[];
   homeBaseICAO: ICAOCode;
-  fleet: {
-    modelId: AircraftModelID;
-    tailNumber: TailNumber;
-  }[];
-  portraitUrl: string;
-  voiceStyle: string;
-  rivals: PersonaID[];
-  closeFriends: PersonaID[];
-};
+  portraitUrl?: string; // backwards compatibility
+  rivals: PersonaID[]; // backwards compatibility
+  closeFriends: PersonaID[]; // backwards compatibility
+}
 
 export type PersonaState = {
   personaId: PersonaID;

@@ -74,6 +74,10 @@ export class JetstreamDB extends Dexie {
     this.version(5).stores({
       player: 'id'
     });
+
+    this.version(6).stores({
+      personas: 'id'
+    });
   }
 }
 

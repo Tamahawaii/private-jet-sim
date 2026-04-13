@@ -75,12 +75,12 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                   
                   <div className="bg-[#141419] border border-white/10 rounded-xl p-6">
                      <h2 className="text-xs font-mono text-[#f5a7a7] tracking-widest mb-4 flex items-center gap-2"><Briefcase size={14}/> DOSSIER BACKGROUND</h2>
-                     <p className="text-zinc-300 font-serif leading-relaxed text-sm">{persona.bio}</p>
+                     <p className="text-zinc-300 font-serif leading-relaxed text-sm">{persona.background}</p>
                      
                      <div className="grid grid-cols-2 gap-4 mt-6">
                         <div>
                            <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono mb-1">Age & Region</div>
-                           <div className="text-sm font-mono text-white">{persona.age} • {persona.nationality}</div>
+                           <div className="text-sm font-mono text-white">{persona.age} • {persona.region}</div>
                         </div>
                         <div>
                            <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono mb-1">Current Sector</div>
@@ -88,6 +88,56 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                         </div>
                      </div>
                   </div>
+
+                  <div className="bg-[#141419] border border-white/10 rounded-xl p-6">
+                     <h2 className="text-xs font-mono text-[#f5a7a7] tracking-widest mb-4 flex items-center gap-2"><Heart size={14}/> IDENTITY & CORE TRAITS</h2>
+                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="bg-black/30 border border-white/5 p-3 rounded">
+                           <div className="text-[9px] text-zinc-500 uppercase tracking-widest font-mono mb-1">Gender / Pronouns</div>
+                           <div className="text-xs font-mono text-white capitalize">{persona.gender} ({persona.pronouns})</div>
+                        </div>
+                        <div className="bg-black/30 border border-white/5 p-3 rounded">
+                           <div className="text-[9px] text-zinc-500 uppercase tracking-widest font-mono mb-1">Orientation</div>
+                           <div className="text-xs font-mono text-white capitalize">{persona.publicOrientation}</div>
+                        </div>
+                        <div className="col-span-2 bg-black/30 border border-white/5 p-3 rounded">
+                           <div className="text-[9px] text-zinc-500 uppercase tracking-widest font-mono mb-1">Relationship Style</div>
+                           <div className="text-xs font-mono text-white capitalize">{persona.relationshipStyle}</div>
+                        </div>
+                     </div>
+                  </div>
+
+                  {persona.currentPartners && persona.currentPartners.length > 0 && (
+                     <div className="bg-[#141419] border border-white/10 rounded-xl p-6">
+                        <h2 className="text-xs font-mono text-[#f5a7a7] tracking-widest mb-4 flex items-center gap-2"><Heart size={14} className="fill-[#f5a7a7]/20"/> KNOWN PARTNERS</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                           {persona.currentPartners.map((partner: any, idx: number) => (
+                              <div key={idx} className="bg-black/30 border border-[#f5a7a7]/10 p-4 rounded flex flex-col gap-2">
+                                 <div className="flex justify-between items-start">
+                                    <span className="text-sm font-black font-mono text-white uppercase">{partner.name}</span>
+                                    <span className="text-[9px] bg-white/10 px-2 py-0.5 rounded uppercase font-mono tracking-widest text-[#f5a7a7]">{partner.status}</span>
+                                 </div>
+                                 <div className="text-xs text-zinc-400 capitalize">{partner.relationship} {partner.location ? ` • ${partner.location}` : ''}</div>
+                                 {partner.note && <div className="text-[10px] text-zinc-500 italic mt-1">"{partner.note}"</div>}
+                              </div>
+                           ))}
+                        </div>
+                     </div>
+                  )}
+
+                  {persona.drama && (
+                     <div className="bg-[#141419] border border-white/10 rounded-xl p-6">
+                        <h2 className="text-xs font-mono text-[#f5a7a7] tracking-widest mb-4 flex items-center gap-2"><Activity size={14}/> ACTIVE DRAMA & CONTEXT</h2>
+                        <p className="text-zinc-300 font-serif leading-relaxed text-sm italic border-l-2 border-[#f5a7a7]/30 pl-4">{persona.drama}</p>
+                     </div>
+                  )}
+
+                  {persona.playerDynamic && (
+                     <div className="bg-[#141419] border border-[#f5a7a7]/20 rounded-xl p-6 shadow-[0_0_30px_rgba(245,167,167,0.03)]">
+                        <h2 className="text-xs font-mono text-[#f5a7a7] tracking-widest mb-4 flex items-center gap-2">PLAYER DYNAMIC</h2>
+                        <p className="text-[#f5a7a7]/80 font-serif leading-relaxed text-sm">{persona.playerDynamic}</p>
+                     </div>
+                  )}
 
                   <div className="bg-[#141419] border border-white/10 rounded-xl p-6">
                      <h2 className="text-xs font-mono text-[#f5a7a7] tracking-widest mb-4 flex items-center gap-2"><Activity size={14}/> LIVE TELEMETRY</h2>
@@ -108,6 +158,21 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                      <h2 className="text-xs font-mono text-[#f5a7a7] tracking-widest mb-4 flex items-center gap-2"><Award size={14}/> TASTES & FLEET</h2>
                      
                      <div className="mb-4">
+                        <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono mb-2">Tastes & Vibe</div>
+                        <div className="grid grid-cols-2 gap-3 mb-4">
+                           {persona.tastes?.drinks && (
+                              <div className="bg-black/30 border border-white/5 p-2 rounded">
+                                 <span className="block text-[9px] text-zinc-600 uppercase">Drinks</span>
+                                 <span className="text-[10px] text-zinc-300 capitalize">{persona.tastes.drinks}</span>
+                              </div>
+                           )}
+                           {persona.tastes?.wears && (
+                              <div className="bg-black/30 border border-white/5 p-2 rounded">
+                                 <span className="block text-[9px] text-zinc-600 uppercase">Wears</span>
+                                 <span className="text-[10px] text-zinc-300 capitalize">{persona.tastes.wears}</span>
+                              </div>
+                           )}
+                        </div>
                         <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono mb-2">Interests</div>
                         <div className="flex flex-wrap gap-2">
                            {persona.interests.map(i => (
@@ -121,8 +186,11 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                         <div className="flex flex-col gap-2">
                            {persona.fleet.map(craft => (
                               <div key={craft.tailNumber} className="flex justify-between items-center bg-black/40 px-3 py-2 border border-white/5 rounded text-xs font-mono">
-                                 <span className="text-[#00f0ff]">{craft.tailNumber}</span>
-                                 <span className="text-zinc-500 text-[10px]">{craft.modelId.toUpperCase()}</span>
+                                 <div className="flex flex-col">
+                                    <span className="text-[#00f0ff]">{craft.tailNumber}</span>
+                                    <span className="text-[#00f0ff]/50 text-[9px] uppercase tracking-widest">{craft.status}</span>
+                                 </div>
+                                 <span className="text-zinc-500 text-[10px]">{craft.model}</span>
                               </div>
                            ))}
                         </div>

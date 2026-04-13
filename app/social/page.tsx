@@ -68,9 +68,22 @@ export default function SocialHub() {
                      )}
                      <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black via-black/80 to-transparent">
                         <h2 className="text-2xl font-black font-mono tracking-widest text-[#f5a7a7] uppercase">{member.displayName}</h2>
-                        <h3 className="text-xs text-zinc-400 font-mono flex items-center gap-1 capitalize">
-                           {member.archetype.replace(/_/g, ' ')}
-                        </h3>
+                        
+                        <div className="flex flex-wrap gap-2 mt-2">
+                           {member.publicOrientation && (
+                              <span className="text-[9px] bg-white/10 text-zinc-300 px-2 py-0.5 rounded font-mono font-bold tracking-widest uppercase">
+                                 {member.publicOrientation}
+                              </span>
+                           )}
+                           {member.publicRelationshipStatus && (
+                              <span className="text-[9px] bg-[#f5a7a7]/10 text-[#f5a7a7] px-2 py-0.5 rounded font-mono font-bold tracking-widest uppercase">
+                                 {member.publicRelationshipStatus}
+                              </span>
+                           )}
+                           <span className="text-[9px] text-zinc-500 font-mono flex items-center gap-1 uppercase tracking-widest border border-white/10 px-2 py-0.5 rounded">
+                              {member.region}
+                           </span>
+                        </div>
                      </div>
                   </div>
 

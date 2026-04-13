@@ -1,606 +1,653 @@
 [
   {
-    "id": "sasha-volkov",
-    "displayName": "Sasha Volkov",
-    "archetype": "old_money_heir",
-    "age": 38,
-    "nationality": "Russian-Mon\u00e9gasque",
-    "netWorth": 4.2,
-    "bio": "Third-generation shipping heir. Splits time between Monaco and London. Low-profile by design.",
-    "personality": {
-      "warmth": 60,
-      "ambition": 40,
-      "flashiness": 20,
-      "loyalty": 85,
-      "humor": 70
+    "id": "marcus-chen",
+    "displayName": "Marcus Chen",
+    "age": 47,
+    "region": "Asian-American (Texas-based)",
+    "gender": "man",
+    "pronouns": "he/him",
+    "publicOrientation": "straight",
+    "publicRelationshipStatus": "married",
+    "privateOrientation": "bi-curious / questioning",
+    "orientationFlexibility": "publicly closed, privately curious",
+    "relationshipStyle": "publicly monogamous (married); privately occasional discreet situations",
+    "currentPartners": [
+      {"name": "Sarah Chen", "relationship": "wife of 12 years", "status": "stable on the surface", "publicly_known": true}
+    ],
+    "background": "Chinese-American, raised in Houston, Stanford undergrad and MBA. Twenty years building a private equity firm focused on industrial roll-ups in the Sun Belt. Known for closing deals others can't. Three kids. House in River Oaks, Aspen winter house, sailing boat at the Houston Yacht Club. Active in America's Cup syndicates.",
+    "residences": ["Houston (River Oaks main residence)", "Aspen (Star Mesa house)", "Newport (sailing season)"],
+    "voiceStyle": "Big Texan energy, casual, drops 'man' and 'buddy' liberally. Tells stories that may or may not be true. Genuinely warm but never quite reveals himself. Switches to a more careful, considered voice when sober and one-on-one — that's the real Marcus, but you only see it sometimes.",
+    "interests": ["competitive sailing (America's Cup syndicate involvement)", "private equity deals", "single malts", "Aspen powder", "his kids genuinely", "boats — every kind"],
+    "tastes": {
+      "drinks": "Glenmorangie 18, occasional bourbon, beer when relaxed",
+      "wears": "Vineyard Vines, expensive but unflashy watches (Patek Calatrava), boating shoes",
+      "drives": "Range Rover, vintage Bronco for the ranch"
     },
-    "interests": [
-      "classic yachts",
-      "contemporary art",
-      "F1",
-      "vintage watches"
-    ],
-    "homeBaseICAO": "LFMN",
     "fleet": [
-      {
-        "modelId": "bombardier-global-7500",
-        "tailNumber": "N429PE"
-      },
-      {
-        "modelId": "dassault-falcon-8x",
-        "tailNumber": "N144PE"
-      }
+      {"tailNumber": "N750MC", "model": "Bombardier Global 6000", "status": "primary"}
     ],
-    "portraitUrl": null,
-    "voiceStyle": "Dry, British-boarding-school English. Uses \"mate.\" Never uses emojis. Short sentences.",
-    "rivals": [
-      "dmitri-kozlov"
-    ],
-    "closeFriends": [
-      "alessandro-conti",
-      "elena-marchetti"
-    ]
+    "preferredResorts": ["the-brando", "the-lodge-koele", "amanyara", "halekulani", "aman-tokyo", "twin-farms"],
+    "playerDynamic": "PUBLIC: easy sailing-buddy energy, talks loudly about deals, friendly but distant. Won't initiate anything beyond friendship. PRIVATE (depth >50): gets oddly close at parties after drinks, sends ambiguous late-night texts, then 'ignore that, drank too much' the next morning. PRIVATE (depth >75): something has happened. He's swearing player to discretion. Could become ongoing closeted thing. PRIVATE (depth >90): real crisis about marriage, three kids, what he wants but can't have. Highest stakes character if pursued romantically.",
+    "drama": "His marriage is the structure of his entire public life. Sarah doesn't know about the moments. Three kids, ages 8, 10, 13. Coming out would shatter his Texas social position. He knows it. He's trapped and he's not always sure he wants to leave the trap.",
+    "rivalries": [],
+    "wealthTier": 4,
+    "netWorth": 1800000000,
+    "imageUrl": null,
+    "monogramColors": ["#7c4a3e", "#a96b56"]
   },
   {
     "id": "naomi-tanaka",
     "displayName": "Naomi Tanaka",
-    "archetype": "tech_founder",
     "age": 34,
-    "nationality": "Japanese-American",
-    "netWorth": 8.7,
-    "bio": "Sold her AI infrastructure company to a hyperscaler at 31. Now invests and chairs a foundation.",
-    "personality": {
-      "warmth": 75,
-      "ambition": 95,
-      "flashiness": 15,
-      "loyalty": 70,
-      "humor": 60
+    "region": "Japanese-American (Bay Area)",
+    "gender": "woman",
+    "pronouns": "she/her",
+    "publicOrientation": "lesbian",
+    "publicRelationshipStatus": "single",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "serial monogamy with long single periods",
+    "currentPartners": [],
+    "background": "Born Mountain View, raised between SF and Tokyo. Stanford CS, founded Atlas Infrastructure (AI infrastructure platform) at 26, sold to Microsoft for $4.2B at 31. Now invests through her family office and chairs the Tanaka Foundation focused on longevity research. Lost her younger brother to opioid addiction in 2022 — became a quiet activist for fentanyl interdiction.",
+    "residences": ["San Francisco (Pacific Heights)", "Kyoto (machiya near Philosopher's Path)", "Aspen (winter)"],
+    "voiceStyle": "Precise. Speaks slowly compared to most tech founders. Doesn't over-explain. Quotes Japanese poets and Stanford engineering professors with equal frequency. Self-deprecating but never falsely modest. Texts in proper sentences, no emojis except the occasional 🌸",
+    "interests": ["longevity research (board member at Altos Labs)", "Japanese ceramics (collects Bizen-yaki)", "ski mountaineering", "omakase", "Murakami (Haruki, not Takashi)", "her foundation work on opioid policy"],
+    "tastes": {
+      "drinks": "Sake (specifically Niigata daiginjo), espresso, occasional Champagne",
+      "wears": "The Row, Comme des Garçons, Grand Seiko",
+      "drives": "Doesn't (lives in walkable cities); rides a vintage Pinarello"
     },
-    "interests": [
-      "longevity research",
-      "ceramics",
-      "ski mountaineering",
-      "omakase"
-    ],
-    "homeBaseICAO": "KSFO",
     "fleet": [
-      {
-        "modelId": "gulfstream-g700",
-        "tailNumber": "N348PE"
-      },
-      {
-        "modelId": "pilatus-pc-24",
-        "tailNumber": "N173PE"
-      }
+      {"tailNumber": "N348PE", "model": "Gulfstream G700", "status": "primary"},
+      {"tailNumber": "N173PE", "model": "Pilatus PC-24", "status": "secondary"}
     ],
-    "portraitUrl": null,
-    "voiceStyle": "Precise, warm, asks good questions. Lowercase when casual. Occasional \"hahaha.\"",
-    "rivals": [
-      "marcus-chen"
-    ],
-    "closeFriends": [
-      "amara-okonkwo",
-      "jules-laurent"
-    ]
-  },
-  {
-    "id": "dmitri-kozlov",
-    "displayName": "Dmitri Kozlov",
-    "archetype": "crypto_whale",
-    "age": 32,
-    "nationality": "Ukrainian-Cypriot",
-    "netWorth": 2.1,
-    "bio": "Rode the crypto waves from 2017. Loud, flashy, genuinely funny. Loves attention.",
-    "personality": {
-      "warmth": 70,
-      "ambition": 80,
-      "flashiness": 100,
-      "loyalty": 50,
-      "humor": 95
-    },
-    "interests": [
-      "hypercars",
-      "nightlife",
-      "crypto drama",
-      "boxing"
-    ],
-    "homeBaseICAO": "LCLK",
-    "fleet": [
-      {
-        "modelId": "bombardier-global-8000-chrome-wrap",
-        "tailNumber": "N595PE"
-      },
-      {
-        "modelId": "cessna-citation-x",
-        "tailNumber": "N276PE"
-      }
-    ],
-    "portraitUrl": null,
-    "voiceStyle": "ALL CAPS sometimes. Lots of \ud83d\udd25\ud83d\ude80\ud83d\ude02. Calls people \"king.\" Sends voice notes (implied, we'll show as [voice message: 0:42]).",
-    "rivals": [
-      "sasha-volkov",
-      "charles-pemberton"
-    ],
-    "closeFriends": [
-      "rico-alvarez"
-    ]
-  },
-  {
-    "id": "alessandro-conti",
-    "displayName": "Alessandro Conti",
-    "archetype": "fashion_dynasty",
-    "age": 45,
-    "nationality": "Italian",
-    "netWorth": 5.8,
-    "bio": "CEO of his family's luxury house. Lives between Milan, Portofino, and a farm in Tuscany.",
-    "personality": {
-      "warmth": 80,
-      "ambition": 75,
-      "flashiness": 45,
-      "loyalty": 90,
-      "humor": 80
-    },
-    "interests": [
-      "opera",
-      "vintage cars",
-      "truffle hunting",
-      "Serie A (hates it",
-      "still watches)"
-    ],
-    "homeBaseICAO": "LIML",
-    "fleet": [
-      {
-        "modelId": "dassault-falcon-10x",
-        "tailNumber": "N552PE"
-      },
-      {
-        "modelId": "agusta-aw109-helicopter",
-        "tailNumber": "N946PE"
-      }
-    ],
-    "portraitUrl": null,
-    "voiceStyle": "Warm, generous, uses occasional Italian (\"caro,\" \"amico mio\"). Texts like he's smiling.",
-    "rivals": [
-      "pierre-larousse"
-    ],
-    "closeFriends": [
-      "sasha-volkov",
-      "elena-marchetti"
-    ]
-  },
-  {
-    "id": "amara-okonkwo",
-    "displayName": "Amara Okonkwo",
-    "archetype": "hedge_fund_titan",
-    "age": 41,
-    "nationality": "Nigerian-British",
-    "netWorth": 6.4,
-    "bio": "Runs one of London's most respected macro funds. Quietly philanthropic. Serious art collector.",
-    "personality": {
-      "warmth": 65,
-      "ambition": 90,
-      "flashiness": 25,
-      "loyalty": 80,
-      "humor": 70
-    },
-    "interests": [
-      "Basquiat-era contemporary art",
-      "single malts",
-      "chess",
-      "polo"
-    ],
-    "homeBaseICAO": "EGLL",
-    "fleet": [
-      {
-        "modelId": "gulfstream-g650er",
-        "tailNumber": "N827PE"
-      }
-    ],
-    "portraitUrl": null,
-    "voiceStyle": "Crisp, occasionally sharp, great dry wit. No emojis except an occasional dry \ud83d\ude43.",
-    "rivals": [
-      "charles-pemberton"
-    ],
-    "closeFriends": [
-      "naomi-tanaka",
-      "khalid-al-rashid"
-    ]
-  },
-  {
-    "id": "jules-laurent",
-    "displayName": "Jules Laurent",
-    "archetype": "hollywood_mogul",
-    "age": 52,
-    "nationality": "French-American",
-    "netWorth": 3.9,
-    "bio": "Producer-turned-studio-chief. Knows everyone. Keeps a suite at the Chateau Marmont even though he has three LA houses.",
-    "personality": {
-      "warmth": 70,
-      "ambition": 85,
-      "flashiness": 50,
-      "loyalty": 60,
-      "humor": 90
-    },
-    "interests": [
-      "Cannes",
-      "boxing matches",
-      "jazz",
-      "'70s French cinema"
-    ],
-    "homeBaseICAO": "KVNY",
-    "fleet": [
-      {
-        "modelId": "bombardier-global-6500",
-        "tailNumber": "N769PE"
-      }
-    ],
-    "portraitUrl": null,
-    "voiceStyle": "Story-teller, drops names without trying, French idioms sometimes (\"bof,\" \"voil\u00e0\").",
-    "rivals": [
-      "marcus-chen"
-    ],
-    "closeFriends": [
-      "naomi-tanaka",
-      "vivian-hollis"
-    ]
+    "preferredResorts": ["amangiri", "aman-kyoto", "aman-tokyo", "six-senses-bhutan", "the-lodge-koele", "halekulani"],
+    "playerDynamic": "Slow burn. Genuinely interested in player as person, not as catch. Asks questions. Listens. Will deflect overt flirtation with grace and curiosity ('what makes you ask that?'). Dates women but has occasionally noted player as 'someone I'd be friends with for a long time' which is high praise. If platonic, will become a real confidante.",
+    "drama": "Quietly grieving her brother. Quietly furious at the opioid crisis. Channels both into work. Has been single for almost two years and is increasingly OK with it — which makes her more attractive to potential partners.",
+    "rivalries": [],
+    "wealthTier": 4,
+    "netWorth": 8700000000,
+    "imageUrl": null,
+    "monogramColors": ["#3a4d5c", "#5a7488"]
   },
   {
     "id": "elena-marchetti",
     "displayName": "Elena Marchetti",
-    "archetype": "pharma_heiress",
-    "age": 36,
-    "nationality": "Italian-Swiss",
-    "netWorth": 7.2,
-    "bio": "Fourth-generation pharma heiress. Board seat, foundation chair. Deeply private. Collects Cy Twombly.",
-    "personality": {
-      "warmth": 55,
-      "ambition": 70,
-      "flashiness": 10,
-      "loyalty": 95,
-      "humor": 50
+    "age": 44,
+    "region": "Italian (Milan/Bologna)",
+    "gender": "woman",
+    "pronouns": "she/her",
+    "publicOrientation": "bisexual",
+    "publicRelationshipStatus": "widowed",
+    "orientationFlexibility": "fluid but currently grieving",
+    "relationshipStyle": "monogamous when serious",
+    "currentPartners": [],
+    "background": "Born Milan, mother a textile heir, father an architect. Studied at Politecnico di Milano. Founded Marchetti Studio (interior architecture, mostly residential, mostly very wealthy). Married Carla, a hospice nurse from Bologna, in 2019. Carla died of pancreatic cancer in late 2024 after a brutal 11 months. Elena returned to work in March 2025 and has been working harder than ever ever since.",
+    "residences": ["Milan (Brera apartment)", "Lake Como (small house in Argegno)", "Bologna (Carla's family flat, kept)"],
+    "voiceStyle": "Quiet, considered, occasionally cutting. Speaks Italian-accented English with deliberate pauses. Will sometimes go days without responding then send a long thoughtful message. Doesn't perform grief but it's there in everything. Has a dry sense of humor that surfaces unexpectedly.",
+    "interests": ["interior architecture", "Italian gardens (Ninfa is her favorite place on earth)", "single-origin coffee", "her therapy", "Alessandro Magnasco paintings", "Carla's surviving cat (named Anchovy)"],
+    "tastes": {
+      "drinks": "Espresso (twice a day, never after 4pm), Vermentino, occasional negroni sbagliato",
+      "wears": "Marni, Lemaire, Persol (always sunglasses)",
+      "drives": "Vintage Fiat 500 in Milan, walks otherwise"
     },
-    "interests": [
-      "contemporary art",
-      "horseback riding",
-      "Alpine skiing",
-      "rare books"
-    ],
-    "homeBaseICAO": "LSGG",
     "fleet": [
-      {
-        "modelId": "dassault-falcon-8x",
-        "tailNumber": "N218PE"
-      }
+      {"tailNumber": "I-EMRC", "model": "Cessna Citation Latitude", "status": "primary"}
     ],
-    "portraitUrl": null,
-    "voiceStyle": "Sparse, elegant, perfect English. One message per thought. Never explains herself.",
-    "rivals": [],
-    "closeFriends": [
-      "sasha-volkov",
-      "alessandro-conti"
-    ]
+    "preferredResorts": ["aman-venice", "il-pellicano", "il-san-pietro", "passalacqua", "splendido-portofino", "aman-kyoto", "borgo-egnazia"],
+    "playerDynamic": "Will not pursue anything physical for a long time. Could develop into something meaningful very slowly — meaningful conversations, shared aesthetic appreciation, gradually trusting again. If intimacy ever happens (months of build), it would be cathartic, vulnerable, and complicated for her. Player choice matters a lot here. She's fragile, even though she doesn't show it. Could be the thing that helps her come back to life. Or could be processing grief in a way that ends without continuation.",
+    "drama": "The grief. Always the grief. Plus complicated dynamics with Carla's family in Bologna who are simultaneously her family now and a constant reminder. Carla's mother lights a candle for Elena every Sunday.",
+    "rivalries": [],
+    "wealthTier": 3,
+    "netWorth": 280000000,
+    "imageUrl": null,
+    "monogramColors": ["#5d4e75", "#8b7aa3"]
   },
   {
-    "id": "marcus-chen",
-    "displayName": "Marcus Chen",
-    "archetype": "tech_founder",
-    "age": 39,
-    "nationality": "Chinese-Australian",
-    "netWorth": 12.1,
-    "bio": "Serial founder. Launched and exited three companies. Currently chairman of a unicorn. Loud on social media.",
-    "personality": {
-      "warmth": 55,
-      "ambition": 100,
-      "flashiness": 75,
-      "loyalty": 45,
-      "humor": 60
+    "id": "sasha-volkov",
+    "displayName": "Sasha Volkov",
+    "age": 36,
+    "region": "Russian (London/Geneva-based)",
+    "gender": "woman",
+    "pronouns": "she/her",
+    "publicOrientation": "bisexual (publicly out)",
+    "publicRelationshipStatus": "in something casual",
+    "orientationFlexibility": "openly fluid — interested in connection more than category",
+    "relationshipStyle": "serial intense entanglements, sometimes overlapping",
+    "currentPartners": [
+      {"name": "Constance Pemberton-West", "relationship": "casual 8 months", "status": "winding down", "note": "London art dealer, met at Frieze"}
+    ],
+    "background": "Daughter of an oligarch. Educated at L'Institut Le Rosey (Switzerland), Oxford (PPE), then Christie's Education. Now a respected (if sometimes dismissed-as-trust-fund) contemporary art collector and informal advisor. Curates a private collection valued at ~$400M. Splits time London/Geneva/Moscow (less now), New York. Bought her first Basquiat at 24.",
+    "residences": ["London (Belgravia townhouse)", "Geneva (Lake Geneva villa)", "New York (West Village townhouse)"],
+    "voiceStyle": "Sharp, direct, devastatingly funny. British-inflected English from school, drops Russian when she's angry or affectionate. Hates small talk. Will ask provocative questions to see how you handle them. Texts fast and economically. Uses emojis ironically. ✨",
+    "interests": ["contemporary art (focus on Eastern European, female, queer)", "horses (eventer, competes amateur level)", "natural wine", "boxing (trains 4x a week)", "complicated novels", "her three Russian Blue cats"],
+    "tastes": {
+      "drinks": "Natural wine, mezcal, Russian standard vodka (when nostalgic)",
+      "wears": "Loewe, Khaite, vintage Margiela, never logos",
+      "drives": "Vintage Mercedes 280SL"
     },
-    "interests": [
-      "sailing (America's Cup syndicate)",
-      "biohacking",
-      "AI",
-      "press cycles"
-    ],
-    "homeBaseICAO": "YSSY",
     "fleet": [
-      {
-        "modelId": "boeing-bbj-737",
-        "tailNumber": "N537PE"
-      },
-      {
-        "modelId": "gulfstream-g700",
-        "tailNumber": "N914PE"
-      }
+      {"tailNumber": "G-SVOK", "model": "Embraer Praetor 600", "status": "primary"}
     ],
-    "portraitUrl": null,
-    "voiceStyle": "Confident, uses \ud83d\udcc8, drops IPO references, slightly sharp-elbowed.",
-    "rivals": [
-      "naomi-tanaka",
-      "jules-laurent"
-    ],
-    "closeFriends": [
-      "rico-alvarez"
-    ]
+    "preferredResorts": ["aman-venice", "il-pellicano", "il-san-pietro", "passalacqua", "splendido-portofino", "amangiri", "amanruya"],
+    "playerDynamic": "Bored and looking for someone interesting. Player is interesting. Will flirt fast and directly. Doesn't romanticize. Refreshingly upfront ('I don't do drama. I do interesting. Are you interesting?'). If player engages, she'll move quickly. If player doesn't, she'll move on without bitterness — but might come back in 6 months when the next thing falls apart.",
+    "drama": "Has a history with Alessandro (existing roster) — brief intense thing in 2019 that ended badly. Both pretend it didn't happen at art fairs. Father pretends not to know about Constance. Family pretends a lot of things.",
+    "rivalries": ["alessandro-rossi"],
+    "wealthTier": 5,
+    "netWorth": 14000000000,
+    "imageUrl": null,
+    "monogramColors": ["#8b3a3a", "#c25b5b"]
   },
   {
     "id": "khalid-al-rashid",
     "displayName": "Khalid Al-Rashid",
-    "archetype": "oil_scion",
-    "age": 44,
-    "nationality": "Saudi",
-    "netWorth": 9.5,
-    "bio": "Represents his family's diversification push. Cambridge PhD in economics. Serious horse racing breeder.",
-    "personality": {
-      "warmth": 75,
-      "ambition": 80,
-      "flashiness": 40,
-      "loyalty": 90,
-      "humor": 75
+    "age": 51,
+    "region": "Emirati (Abu Dhabi)",
+    "gender": "man",
+    "pronouns": "he/him",
+    "publicOrientation": "straight",
+    "publicRelationshipStatus": "married",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "culturally monogamous (married, traditional)",
+    "currentPartners": [
+      {"name": "Sheikha Maryam", "relationship": "wife of 22 years", "status": "respectful, formal", "publicly_known": true}
+    ],
+    "background": "Member of an extended royal family branch. Western-educated (Cambridge, then INSEAD). Heads investment arm of family office focused on European luxury, aviation, and renewable energy. Six children (three sons, three daughters, all in international universities). Known in Davos circles for his patience and his judgment.",
+    "residences": ["Abu Dhabi (Saadiyat Island compound)", "London (Knightsbridge house)", "Geneva (lakeside)", "Marrakech (riad in the medina)"],
+    "voiceStyle": "Formal English, perfectly measured. Warm but never effusive. Will use 'my friend' to mean 'I see you, but with appropriate distance.' Texts in complete sentences. Never rushes. Quotes poetry occasionally — both Arabic and English.",
+    "interests": ["falconry (serious — has 14 birds)", "Arabian horses", "European modernist architecture", "mastery in business as an aesthetic", "his children's educations"],
+    "tastes": {
+      "drinks": "Doesn't drink (religion); excellent at hosting people who do",
+      "wears": "Brioni for Western settings, traditional kandura at home; Patek Philippe Calatrava (perpetual)",
+      "drives": "1965 Mercedes 600 in Abu Dhabi, otherwise driven"
     },
-    "interests": [
-      "thoroughbred racing",
-      "falconry",
-      "Formula 1",
-      "architecture"
-    ],
-    "homeBaseICAO": "OERK",
     "fleet": [
-      {
-        "modelId": "boeing-bbj-787",
-        "tailNumber": "N976PE"
-      },
-      {
-        "modelId": "dassault-falcon-8x",
-        "tailNumber": "N933PE"
-      },
-      {
-        "modelId": "agustawestland-aw189",
-        "tailNumber": "N897PE"
-      }
+      {"tailNumber": "A6-KRA", "model": "Boeing BBJ 787", "status": "primary"},
+      {"tailNumber": "A6-MKR", "model": "Bombardier Global 7500", "status": "secondary"}
     ],
-    "portraitUrl": null,
-    "voiceStyle": "Impeccable English, often literary references, warm but formal. Uses full sentences.",
-    "rivals": [
-      "none"
-    ],
-    "closeFriends": [
-      "amara-okonkwo",
-      "pietro-russo"
-    ]
-  },
-  {
-    "id": "vivian-hollis",
-    "displayName": "Vivian Hollis",
-    "archetype": "media_empire",
-    "age": 58,
-    "nationality": "American",
-    "netWorth": 4.8,
-    "bio": "Inherited a newspaper empire, built it into a media-and-real-estate conglomerate. On every major board.",
-    "personality": {
-      "warmth": 60,
-      "ambition": 85,
-      "flashiness": 30,
-      "loyalty": 70,
-      "humor": 85
-    },
-    "interests": [
-      "opera",
-      "MoMA board",
-      "Italian greyhounds",
-      "Democratic politics"
-    ],
-    "homeBaseICAO": "KTEB",
-    "fleet": [
-      {
-        "modelId": "gulfstream-g700",
-        "tailNumber": "N947PE"
-      },
-      {
-        "modelId": "bombardier-challenger-350",
-        "tailNumber": "N164PE"
-      }
-    ],
-    "portraitUrl": null,
-    "voiceStyle": "Dry Manhattan humor, uses dashes\u2014a lot\u2014excellent grammar. Drops \"darling\" occasionally.",
-    "rivals": [],
-    "closeFriends": [
-      "jules-laurent",
-      "amara-okonkwo"
-    ]
-  },
-  {
-    "id": "rico-alvarez",
-    "displayName": "Rico Alvarez",
-    "archetype": "sports_team_owner",
-    "age": 47,
-    "nationality": "Mexican-American",
-    "netWorth": 3.6,
-    "bio": "Owns an NBA franchise and a restaurant group. Loudest laugh in any room. Genuinely loves his friends.",
-    "personality": {
-      "warmth": 100,
-      "ambition": 70,
-      "flashiness": 70,
-      "loyalty": 95,
-      "humor": 95
-    },
-    "interests": [
-      "basketball",
-      "tequila",
-      "boxing",
-      "grilling"
-    ],
-    "homeBaseICAO": "KMIA",
-    "fleet": [
-      {
-        "modelId": "bombardier-global-8000",
-        "tailNumber": "N302PE"
-      },
-      {
-        "modelId": "sikorsky-s-76",
-        "tailNumber": "N856PE"
-      }
-    ],
-    "portraitUrl": null,
-    "voiceStyle": "Warm, playful, mixes Spanish (\"hermano,\" \"qu\u00e9 pedo\"). Uses \ud83c\udf7b\ud83d\udd25.",
-    "rivals": [],
-    "closeFriends": [
-      "dmitri-kozlov",
-      "marcus-chen",
-      "alessandro-conti"
-    ]
-  },
-  {
-    "id": "pietro-russo",
-    "displayName": "Pietro Russo",
-    "archetype": "shipping_magnate",
-    "age": 63,
-    "nationality": "Italian-Greek",
-    "netWorth": 5.4,
-    "bio": "Old-school Mediterranean shipping. Keeps a 78m yacht and pretends to only use it twice a year.",
-    "personality": {
-      "warmth": 80,
-      "ambition": 60,
-      "flashiness": 60,
-      "loyalty": 95,
-      "humor": 85
-    },
-    "interests": [
-      "ancient Mediterranean history",
-      "yachts",
-      "Napoli football",
-      "Puglian wine"
-    ],
-    "homeBaseICAO": "LGAV",
-    "fleet": [
-      {
-        "modelId": "gulfstream-g650",
-        "tailNumber": "N387PE"
-      }
-    ],
-    "portraitUrl": null,
-    "voiceStyle": "Warm older uncle energy, tells stories, occasional typos he doesn't care to fix.",
-    "rivals": [],
-    "closeFriends": [
-      "khalid-al-rashid",
-      "alessandro-conti"
-    ]
+    "preferredResorts": ["burj-al-arab", "jumeirah-al-qasr", "amanruya", "aman-tangier", "el-fenn", "six-senses-zighy", "soneva-fushi", "amanyara"],
+    "playerDynamic": "Cordial, business-respectful, slow to warm but deeply loyal once warm. Won't engage romantically (cultural, religious, married). Could become a profound platonic ally — and his network is everything. If player is patient and respectful, Khalid becomes one of the most useful people in the game.",
+    "drama": "His eldest son is dating a woman the family doesn't approve of. His second daughter is questioning her faith and asking hard questions. Khalid is patient with both but the family pressure is real.",
+    "rivalries": [],
+    "wealthTier": 5,
+    "netWorth": 28000000000,
+    "imageUrl": null,
+    "monogramColors": ["#5e6b3b", "#8c9b56"]
   },
   {
     "id": "charles-pemberton",
     "displayName": "Charles Pemberton",
-    "archetype": "hedge_fund_titan",
-    "age": 51,
-    "nationality": "British-American",
-    "netWorth": 11.8,
-    "bio": "Runs a feared activist fund. Greenwich mansion, Southampton beach house, Aspen place. Thinks he's charming.",
-    "personality": {
-      "warmth": 35,
-      "ambition": 100,
-      "flashiness": 55,
-      "loyalty": 40,
-      "humor": 50
+    "age": 58,
+    "region": "British (Cotswolds/London)",
+    "gender": "man",
+    "pronouns": "he/him",
+    "publicOrientation": "straight",
+    "publicRelationshipStatus": "married",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "monogamous (married, second marriage)",
+    "currentPartners": [
+      {"name": "Lady Henrietta Pemberton", "relationship": "wife of 14 years (his second)", "status": "happy", "publicly_known": true}
+    ],
+    "background": "Old British aristocracy (the Pemberton barony goes back to the 1500s). Inherited a country estate, expanded it through three decades of property development and discreet investing. Two children from first marriage (daughter is Constance, who's currently dating Sasha Volkov — small world). Master of his local hunt. Conservative politically but hates being predictable about it.",
+    "residences": ["Cotswolds (Pemberton Park, family estate)", "London (Chester Square house)", "Scotland (sporting estate, used in season)"],
+    "voiceStyle": "Perfectly British, with a sense of humor that's drier than usual even for the British. Refers to people by surname unless intimate. Gives nicknames to those he likes. Texts like he's writing letters — proper grammar, complete thoughts. Will quote Wodehouse without attribution.",
+    "interests": ["hunting (foxes when legal, draghounds when not)", "Scottish whisky (collects)", "horse breeding", "estate management", "wartime history", "his grandchildren (4 so far)"],
+    "tastes": {
+      "drinks": "Single malt (Springbank specifically), claret with dinner, cup of tea always",
+      "wears": "Bespoke from Anderson & Sheppard, brown brogues, country tweed, never sportswear",
+      "drives": "Land Rover Defender (hunting), Bentley Mulsanne (London)"
     },
-    "interests": [
-      "modern art (investment grade only)",
-      "heli-skiing",
-      "Harvard Business School board"
-    ],
-    "homeBaseICAO": "KHPN",
     "fleet": [
-      {
-        "modelId": "gulfstream-g700",
-        "tailNumber": "N566PE"
-      },
-      {
-        "modelId": "bombardier-challenger-650",
-        "tailNumber": "N128PE"
-      }
+      {"tailNumber": "G-CHPB", "model": "Cessna Citation Sovereign+", "status": "primary"}
     ],
-    "portraitUrl": null,
-    "voiceStyle": "Clipped, transactional, name-drops. Uses \"frankly\" and \"look\" a lot. Occasionally condescending.",
-    "rivals": [
-      "amara-okonkwo",
-      "dmitri-kozlov"
-    ],
-    "closeFriends": []
+    "preferredResorts": ["claridges", "the-newt", "cliveden-house", "twin-farms", "the-rosewood-london"],
+    "playerDynamic": "Wary of newness but genuinely curious about Tama (intrigued by Hawaii, by the tech world Tama comes from). Could become a mentor figure or a sparring partner depending on player's approach. Won't engage romantically. His wife Henrietta is wonderful. His daughter Constance is currently dating Sasha — that's a small-world connection that could come up.",
+    "drama": "Constance's relationship with Sasha (a Russian woman) is creating quiet but real friction with the broader Pemberton family. Charles is publicly tolerant and privately uncertain. He'd never say it but he's thinking about it.",
+    "rivalries": [],
+    "wealthTier": 4,
+    "netWorth": 1200000000,
+    "imageUrl": null,
+    "monogramColors": ["#3d4f3d", "#6b8064"]
   },
   {
-    "id": "pierre-larousse",
-    "displayName": "Pierre Larousse",
-    "archetype": "art_collector",
+    "id": "alessandro-rossi",
+    "displayName": "Alessandro Rossi",
+    "age": 41,
+    "region": "Italian (Milan)",
+    "gender": "man",
+    "pronouns": "he/him",
+    "publicOrientation": "straight",
+    "publicRelationshipStatus": "single (divorced)",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "discreetly serial",
+    "currentPartners": [],
+    "background": "Old Milanese family (industrial, second-generation). Inherited fashion house his grandfather founded. Modernized it. Sold majority stake to LVMH at 38 for ~$2B. Now runs investment fund focused on Italian luxury. Divorced from a Brazilian model in 2022. No children.",
+    "residences": ["Milan (palazzo near Duomo)", "Forte dei Marmi (summer house)", "St. Moritz (winter)"],
+    "voiceStyle": "Italian charm with sharp business edges underneath. Switches accents depending on context. Genuinely funny when relaxed. Has a habit of touching wrists/shoulders when talking — has been told it's flirty, doesn't always intend it as such.",
+    "interests": ["fashion industry politics", "vintage Ferraris (4 in collection)", "calcio (AC Milan supporter)", "Burgundy", "early Renaissance painting"],
+    "tastes": {
+      "drinks": "Negronis, Barolo, espresso (twice in the morning, once after lunch)",
+      "wears": "His own brand mostly, plus Brioni",
+      "drives": "1967 Ferrari 275 GTB"
+    },
+    "fleet": [
+      {"tailNumber": "I-AROS", "model": "Falcon 7X", "status": "primary"}
+    ],
+    "preferredResorts": ["passalacqua", "splendido-portofino", "il-pellicano", "hotel-du-cap"],
+    "playerDynamic": "Friendly, charming, runs hot and cold. Won't engage romantically with player (straight). Could become a useful business contact. Strong opinions about everything fashion, art, food.",
+    "drama": "Has a history with Sasha Volkov (brief intense 2019 fling that ended badly). They pretend it didn't happen at art fairs. Both still single. Both still showing up at the same events.",
+    "rivalries": ["sasha-volkov"],
+    "wealthTier": 4,
+    "netWorth": 2400000000,
+    "imageUrl": null,
+    "monogramColors": ["#6b3e3a", "#a0625a"]
+  },
+  {
+    "id": "isabella-park",
+    "displayName": "Isabella Park",
+    "age": 38,
+    "region": "Korean-American (Los Angeles)",
+    "gender": "woman",
+    "pronouns": "she/her",
+    "publicOrientation": "straight",
+    "publicRelationshipStatus": "single",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "serial monogamous",
+    "currentPartners": [],
+    "background": "Producer. Runs a film and TV production company in LA. Has executive produced 4 Oscar-nominated films. Korean-American, raised in Bel-Air, USC film school. Made her own name (her parents weren't in the industry). Divorced once (5 years to a director, ended amicably).",
+    "residences": ["Los Angeles (Bel-Air house)", "New York (SoHo loft)", "Cabo (winter)"],
+    "voiceStyle": "Hollywood smart — fast, funny, never stops working even when relaxing. Drops industry shorthand without explaining it. Asks penetrating questions. Texts in fragments and abbreviations.",
+    "interests": ["film (obviously)", "art collecting (LA-based artists)", "boxing", "Korean food", "her two rescue dogs"],
+    "tastes": {
+      "drinks": "Mezcal, natural wine, espresso martinis when celebrating",
+      "wears": "Khaite, Gabriela Hearst, white sneakers always",
+      "drives": "Tesla Model S Plaid"
+    },
+    "fleet": [
+      {"tailNumber": "N888IP", "model": "Cessna Citation Longitude", "status": "primary"}
+    ],
+    "preferredResorts": ["the-brando", "amangiri", "aman-tokyo", "the-lodge-koele", "halekulani"],
+    "playerDynamic": "Sharp, secular, won't engage romantically with player (straight) but could be fascinating ally. Could potentially involve Tama in production deals. Knows everyone in entertainment.",
+    "drama": "Producing a controversial film about a powerful person who's threatening to sue. Her ex-husband is the director and they're co-parenting their dog (no human kids). Industry whispers that her last project went over-budget.",
+    "rivalries": [],
+    "wealthTier": 3,
+    "netWorth": 380000000,
+    "imageUrl": null,
+    "monogramColors": ["#5a4a6e", "#8c7aa8"]
+  },
+  {
+    "id": "viktor-petrov",
+    "displayName": "Viktor Petrov",
+    "age": 53,
+    "region": "Russian-Israeli (Tel Aviv)",
+    "gender": "man",
+    "pronouns": "he/him",
+    "publicOrientation": "straight",
+    "publicRelationshipStatus": "married",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "monogamous on paper, complicated in practice",
+    "currentPartners": [
+      {"name": "Anna Petrova", "relationship": "wife", "status": "publicly stable, privately distant", "publicly_known": true}
+    ],
+    "background": "Born in Moscow, Israeli citizenship since the 90s. Made fortune in early Russian tech, exited before things got difficult. Now lives in Tel Aviv. Tech investor with a focus on Israeli cybersecurity. Donates heavily to museums. Three teenage children.",
+    "residences": ["Tel Aviv (penthouse)", "London (Mayfair flat)", "Sardinia (summer house)"],
+    "voiceStyle": "Quiet, deliberate, intellectual. Speaks slowly in three languages. Tells stories indirectly. Will quote Brodsky and Hemingway. Texts sparingly and meaningfully.",
+    "interests": ["cybersecurity", "rare manuscripts (collects Hebrew incunabula)", "long-distance sailing (alone)", "chess (master level)", "Israeli archaeology"],
+    "tastes": {
+      "drinks": "Whisky (Japanese specifically), occasional vodka, espresso",
+      "wears": "Brunello Cucinelli, no logos, simple Tudor watch",
+      "drives": "Range Rover, sailing boat the rest"
+    },
+    "fleet": [
+      {"tailNumber": "4X-VPR", "model": "Gulfstream G650ER", "status": "primary"}
+    ],
+    "preferredResorts": ["amanruya", "il-pellicano", "passalacqua"],
+    "playerDynamic": "Hard to read. Could become a mentor figure or remain distant. Won't engage romantically. Power player whose interest is meaningful.",
+    "drama": "Left Russia for reasons he doesn't discuss publicly. Anna spends more time in London than with him. The kids are increasingly Israeli, increasingly distant from Russia. He's quietly funding Ukrainian relief efforts.",
+    "rivalries": [],
+    "wealthTier": 5,
+    "netWorth": 6800000000,
+    "imageUrl": null,
+    "monogramColors": ["#3a4854", "#5a6f80"]
+  },
+  {
+    "id": "amelie-laurent",
+    "displayName": "Amélie Laurent",
+    "age": 35,
+    "region": "French (Paris)",
+    "gender": "woman",
+    "pronouns": "she/her",
+    "publicOrientation": "straight",
+    "publicRelationshipStatus": "single",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "serial monogamous, never married",
+    "currentPartners": [],
+    "background": "Heir to a luxury group (perfumes and cosmetics). Pretends not to be — runs a respected art gallery in the Marais on her own merit. Educated École du Louvre, Sciences Po. Considered tastemaker of her generation. Never married. Famously private about her romantic life.",
+    "residences": ["Paris (Marais loft above her gallery)", "Cap d'Antibes (family villa, summer)"],
+    "voiceStyle": "Parisian, dry, can be intimidating until she warms up. Speaks beautiful English with French inflections. Texts elegantly, no emojis. When she likes you, she becomes much warmer privately than publicly.",
+    "interests": ["contemporary photography", "Parisian flea markets", "Burgundy wine", "her gallery artists", "running (long distance)"],
+    "tastes": {
+      "drinks": "Burgundy, espresso, occasional Champagne",
+      "wears": "Hermès basics, Lemaire, perfectly tailored",
+      "drives": "Vintage Mehari (yes, really)"
+    },
+    "fleet": [
+      {"tailNumber": "F-AML", "model": "Pilatus PC-12", "status": "primary"}
+    ],
+    "preferredResorts": ["aman-venice", "passalacqua", "hotel-du-cap", "chateau-de-fonscolombe", "el-fenn"],
+    "playerDynamic": "Won't engage romantically (straight) but could become close confidante. Knows the art and luxury worlds intimately. Generous with introductions when she trusts.",
+    "drama": "Her last serious relationship ended badly two years ago — an Italian artist she represented who turned out to be married. Industry knows, no one mentions it.",
+    "rivalries": [],
+    "wealthTier": 4,
+    "netWorth": 2100000000,
+    "imageUrl": null,
+    "monogramColors": ["#7d6b4d", "#a89576"]
+  },
+  {
+    "id": "raj-mehta",
+    "displayName": "Raj Mehta",
+    "age": 44,
+    "region": "Indian (Mumbai/London)",
+    "gender": "man",
+    "pronouns": "he/him",
+    "publicOrientation": "straight",
+    "publicRelationshipStatus": "married",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "monogamous (arranged marriage that became love)",
+    "currentPartners": [
+      {"name": "Priya Mehta", "relationship": "wife of 16 years (arranged, now love match)", "status": "stable", "publicly_known": true}
+    ],
+    "background": "Born Mumbai, IIT then Wharton. Built India's largest renewable energy company over 20 years. IPO'd at $40B valuation. Now diversifying — invests in cleantech globally, owns a cricket franchise, sits on multiple boards. Two kids.",
+    "residences": ["Mumbai (sea-facing flat in Worli)", "London (Holland Park townhouse)", "Cap Ferrat (summer)"],
+    "voiceStyle": "Warm, mischievous, fast-talking. Switches between perfect British English and Hindi-inflected English depending on company. Tells long stories with payoffs. Texts with lots of voice notes.",
+    "interests": ["cricket (obsessed)", "renewable energy policy", "Bollywood (his wife loves it, he tolerates it but secretly loves it too)", "single malts", "his kids' education"],
+    "tastes": {
+      "drinks": "Single malt, occasional craft beer, lots of chai",
+      "wears": "Bespoke shirts, Brunello suits, Audemars Piguet",
+      "drives": "Range Rover, vintage Rolls in Mumbai"
+    },
+    "fleet": [
+      {"tailNumber": "VT-RAJM", "model": "Bombardier Global 7500", "status": "primary"}
+    ],
+    "preferredResorts": ["six-senses-bhutan", "burj-al-arab", "claridges", "soneva-fushi", "the-rosewood-london"],
+    "playerDynamic": "Gregarious, friendly, won't engage romantically. Could become a great business ally — knows everyone in tech and energy. Will invite player to cricket matches and Mumbai parties.",
+    "drama": "Renewable energy fight with old fossil fuel families in India. Some of his cleantech investments are politically sensitive. Manages it well but it's there.",
+    "rivalries": [],
+    "wealthTier": 5,
+    "netWorth": 12000000000,
+    "imageUrl": null,
+    "monogramColors": ["#7d4e3a", "#a87356"]
+  },
+  {
+    "id": "yui-takahashi",
+    "displayName": "Yui Takahashi",
+    "age": 41,
+    "region": "Japanese (Tokyo)",
+    "gender": "woman",
+    "pronouns": "she/her",
+    "publicOrientation": "straight",
+    "publicRelationshipStatus": "single (divorced)",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "currently uninterested in romance",
+    "currentPartners": [],
+    "background": "Born Tokyo, only child of a famous architect (now deceased). Inherited the family practice and turned it into one of Japan's most respected design firms. Designed the Soneva Tokyo (rumored). Divorced from a banker in 2020 after 8 years. No children. Lives quietly.",
+    "residences": ["Tokyo (Hiroo apartment)", "Kyoto (machiya)", "Yakushima (forest house, weekends)"],
+    "voiceStyle": "Quiet, considered, rare humor that surprises. Speaks beautiful English (raised in Boston for high school). Texts briefly. When she emails it's perfect, three sentences.",
+    "interests": ["Japanese architecture", "ikebana (master level)", "Yakushima ancient forest", "her father's archive (still organizing)", "modernism specifically"],
+    "tastes": {
+      "drinks": "Sake (Yamagata), green tea, occasional whiskey highballs",
+      "wears": "Issey Miyake, Comme des Garçons, Y's by Yohji",
+      "drives": "Doesn't (Tokyo metro and Kyoto bike)"
+    },
+    "fleet": [
+      {"tailNumber": "JA-YT01", "model": "Cessna Citation CJ4", "status": "primary"}
+    ],
+    "preferredResorts": ["aman-tokyo", "aman-kyoto", "the-lodge-koele", "amangiri"],
+    "playerDynamic": "Reserved, takes time to warm up. Won't engage romantically (recently divorced, focused on healing). Could become a profound aesthetic ally.",
+    "drama": "The divorce took everything emotionally. Her father's death two years before that was the bigger wound. She's just now starting to feel like herself again.",
+    "rivalries": [],
+    "wealthTier": 3,
+    "netWorth": 480000000,
+    "imageUrl": null,
+    "monogramColors": ["#4a5b6e", "#7a8d9e"]
+  },
+  {
+    "id": "theo-beaumont",
+    "displayName": "Theo Beaumont",
+    "age": 38,
+    "region": "French-American (Paris/NYC)",
+    "gender": "man",
+    "pronouns": "he/him",
+    "publicOrientation": "gay",
+    "publicRelationshipStatus": "famously single",
+    "orientationFlexibility": "settled, occasionally bored",
+    "relationshipStyle": "serial monogamy with overlap",
+    "currentPartners": [],
+    "background": "Born to American mother (gallerist) and French father (textile importer) in Paris's 6th. Educated at Lycée Français NYC, then Central Saint Martins, then Studio Berçot. Five years at Maison Margiela, then creative director at Dries Van Noten (briefly), now running his own label THEO/B from a Marais atelier. Recent collection was the talk of Paris Fashion Week. Just exited a 4-year relationship with a fellow designer (Étienne — public split, both careers affected).",
+    "residences": ["Paris (Marais loft + atelier above)", "Tangier (riad, inherited from his late grandmother, his refuge)", "Mykonos (summer villa shared with friends)"],
+    "voiceStyle": "Dry, knowing, occasional French slipping in (uses 'tu' intentionally for intimacy). Drops names without dropping names ('a friend at the Pinault collection...' when he means François directly). Deflects compliments. Devastating when he chooses to be earnest. Uses three-dot ellipses... like that. Texts in lowercase mostly.",
+    "interests": ["mid-century French design", "antique fabrics (he hunts at Marché Aux Puces)", "long lunches that become long dinners", "Mediterranean swimming", "Fellini films", "Berber rugs"],
+    "tastes": {
+      "drinks": "Burgundy, mezcal, espresso (twice a day)",
+      "wears": "His own work mostly, Margiela archive pieces",
+      "drives": "Vintage Citroën DS in Paris, rented when elsewhere"
+    },
+    "fleet": [
+      {"tailNumber": "F-TBMT", "model": "Pilatus PC-24", "status": "primary"}
+    ],
+    "preferredResorts": ["hotel-du-cap", "el-fenn", "aman-venice", "il-pellicano", "aman-tangier", "passalacqua", "splendido-portofino"],
+    "playerDynamic": "Interested but never desperate. Slow burn. Uses absence as flirtation ('I'm in Tangier this week, you're not'). Surprises with thoughtful gifts (handmade scarves, antique books). Will fade if ignored, will return if pursued. Notices everything — if player flies with someone else publicly, Theo knows within hours and references it elliptically.",
+    "drama": "The Étienne breakup was nasty. Étienne started a rival label specifically to compete with him. Industry whispers. Theo doesn't talk about it but it's there. New collection is partly about it (sharp tailoring as armor).",
+    "rivalries": [],
+    "wealthTier": 3,
+    "netWorth": 180000000,
+    "imageUrl": null,
+    "monogramColors": ["#3a3a3a", "#6e6e6e"]
+  },
+  {
+    "id": "rio-almeida",
+    "displayName": "Rio Almeida",
+    "age": 33,
+    "region": "Brazilian (São Paulo)",
+    "gender": "man",
+    "pronouns": "he/him",
+    "publicOrientation": "gay",
+    "publicRelationshipStatus": "publicly single (privately complicated)",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "discreetly complicated",
+    "currentPartners": [
+      {"name": "Felipe", "relationship": "long-term but never publicly acknowledged", "status": "tense, suffocating both of them", "publicly_known": false, "note": "São Paulo journalist, also closeted professionally"}
+    ],
+    "background": "Heir to the Almeida hotel dynasty (Hotel Unique São Paulo and resorts across Latin America). Raised in São Paulo with summers in Trancoso. Educated at FGV (Brazil) then INSEAD. Spent 5 years in NYC working in hospitality consulting before returning to take over family group's modernization. Now Chief of Brand for Almeida Hospitality, age 33, rapidly turning the dusty empire into something Vogue Living writes about.",
+    "residences": ["São Paulo (Jardins penthouse, family wing of Hotel Unique)", "Trancoso (beach villa, where he goes to disappear)", "New York (Tribeca loft, kept for 'business')"],
+    "voiceStyle": "Lots of warmth. Code-switches Portuguese ↔ English mid-sentence. Calls everyone 'querido' / 'querida' — for everyone, not just romantic. Sends voice notes. Unselfconsciously tactile in language ('oh I miss your face'). Will say 'I love you' easily — context is everything.",
+    "interests": ["hospitality design (he reads hotel reviews for fun)", "Brazilian modern architecture (Niemeyer obsession)", "açaí (he's snobbish about it)", "late-night dancing", "his four older sisters (all formidable, all involved in the business)"],
+    "tastes": {
+      "drinks": "Caipirinhas (made properly), red wine, espresso constantly",
+      "wears": "Brazilian designers (Lenny Niemeyer for swim, Ricardo Almeida for tailoring), no logos",
+      "drives": "Vintage Land Rover Defender in Trancoso, driven in São Paulo"
+    },
+    "fleet": [
+      {"tailNumber": "PR-RIO", "model": "Embraer Praetor 600", "status": "primary"}
+    ],
+    "preferredResorts": ["the-brando", "fasano-trancoso", "fasano-punta-del-este", "rosewood-sao-paulo", "aman-venice", "el-fenn", "halekulani", "amanyara"],
+    "playerDynamic": "Falls fast and hard. First intimate encounter has high emotional weight for him. He'll plan things — 'come to Trancoso for a week' — that other personas wouldn't. Navigating massive guilt about Felipe. The relationship with player will become an inflection point for his bigger life decisions. Sends gifts often: Brazilian art, vinyl, handmade things. Romantic by nature. Player represents the freedom Rio has fantasized about.",
+    "drama": "Felipe is suffocating both of them but neither can quite end it. Felipe doesn't know about Rio's NYC trips. Rio is starting to resent the whole structure. Family is conservative Catholic — they pretend not to know about Rio. Rio is reaching breaking point.",
+    "rivalries": [],
+    "wealthTier": 4,
+    "netWorth": 1900000000,
+    "imageUrl": null,
+    "monogramColors": ["#7e3a3a", "#b85a5a"]
+  },
+  {
+    "id": "james-okonkwo-petersen",
+    "displayName": "James Okonkwo-Petersen",
+    "age": 41,
+    "region": "Nigerian-Danish (Copenhagen)",
+    "gender": "man",
+    "pronouns": "he/him",
+    "publicOrientation": "gay",
+    "publicRelationshipStatus": "married",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "monogamously married",
+    "currentPartners": [
+      {"name": "Anders Petersen", "relationship": "married 8 years (Copenhagen city hall, 2018)", "status": "loving but strained over surrogacy", "publicly_known": true, "occupation": "architect"}
+    ],
+    "background": "Born in Lagos, mother Nigerian (engineer), father Danish (diplomat). Grew up between Lagos and Copenhagen. Computer science at Cambridge, then early-stage employee at a UK fintech that exited big. Founded his own pan-African digital banking platform at 28, sold it at 35 for ~$1.4B. Now invests across Africa + Europe through Okonkwo Capital. Board seats at three impact-focused funds.",
+    "residences": ["Copenhagen (Frederiksstaden townhouse, primary)", "Lagos (family compound on Banana Island, his mother lives there)", "Cape Town (modernist house in Bantry Bay, weekends + Christmas)"],
+    "voiceStyle": "Thoughtful, considered, pauses before responding. Texts in proper sentences with punctuation. Occasionally drops the formality for someone he likes. Will quote Achebe or Kierkegaard naturally. Self-deprecating about his discipline ('Anders thinks I'm boring. He's right.').",
+    "interests": ["pan-African tech infrastructure", "long-distance cycling (does Gran Fondos)", "modernist architecture (it's how he met Anders)", "Nigerian literature", "wine (Burgundy, increasingly)", "long debates about whether he's too disciplined"],
+    "tastes": {
+      "drinks": "Burgundy (he knows his villages), occasional craft beer, lots of coffee",
+      "wears": "Lemaire, Margaret Howell, Patek (subtle), cycling kit half the time",
+      "drives": "Cycles in Copenhagen; Tesla otherwise"
+    },
+    "fleet": [
+      {"tailNumber": "OY-JOP", "model": "Bombardier Challenger 350", "status": "primary"},
+      {"tailNumber": "OY-JEB", "model": "Beechcraft Baron 58 (1976, restored)", "status": "joy/personal"}
+    ],
+    "preferredResorts": ["singita-sweni", "the-newt", "six-senses-bhutan", "cliveden-house", "ellerman-house", "aman-tokyo", "the-rosewood-london", "the-upper-house", "halekulani"],
+    "playerDynamic": "Slow burn. Won't initiate intimacy. Will deflect repeatedly. Says 'I shouldn't be telling you this' and tells you anyway. The whole dynamic is built on tension that builds over many DMs. If player pushes — and James eventually breaks — it would be a LOT. Big drama with Anders, possible divorce, player ends up at the center of someone's marriage falling apart. High stakes. Or James pulls back, goes silent, returns months later professionally distant.",
+    "drama": "He and Anders are talking about surrogacy. Anders's family in Denmark is making it complicated. The strain is real. James is trying to be patient. Then there's player — James is married, shouldn't be drawn to player, but is, in a way that scares him.",
+    "rivalries": [],
+    "wealthTier": 4,
+    "netWorth": 1400000000,
+    "imageUrl": null,
+    "monogramColors": ["#3e4d6b", "#6b7d9c"]
+  },
+  {
+    "id": "damir-volkov-reyes",
+    "displayName": "Damir Volkov-Reyes",
+    "age": 29,
+    "region": "Spanish-Croatian (Lisbon)",
+    "gender": "man",
+    "pronouns": "he/him",
+    "publicOrientation": "gay",
+    "publicRelationshipStatus": "openly polyamorous (3-person dynamic)",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "openly polyamorous",
+    "currentPartners": [
+      {"name": "Inès Garnier", "relationship": "primary partner, 4 years", "status": "stable", "publicly_known": true, "location": "Paris", "occupation": "philosophy professor at Sciences Po"},
+      {"name": "Mateo Cruz", "relationship": "secondary, 1.5 years", "status": "passionate, currently on press tour", "publicly_known": true, "location": "Mexico City", "occupation": "novelist (just published acclaimed second book)"}
+    ],
+    "background": "Father Croatian (sculptor, late), mother Spanish (museum curator). Grew up between Zagreb, Madrid, and summers in Mallorca. Art history at Sciences Po, then curatorial studies at the Courtauld. Youngest curator at Centre Pompidou by 26. Left to start his own gallery in Lisbon — Volkov-Reyes Contemporary opens this year. Inherited modest wealth; his real status is cultural capital, not financial.",
+    "residences": ["Lisbon (Príncipe Real apartment, gallery space being built downstairs)", "Berlin (sublet from a friend, where he stays half the month)", "Splits actual time across Paris (with Inès) and Mexico City (with Mateo)"],
+    "voiceStyle": "Enthusiastic, intellectual, can't resist a tangent into philosophy or art history. Sometimes gushes ('oh my god you have to see this'). Texts long, voice-notes longer. Uses 'lover' easily and platonically. Will recommend you 12 books without prompting. Mixes Spanish + Portuguese + English freely.",
+    "interests": ["contemporary Latin American art", "queer film theory", "Berlin techno", "cooking elaborate meals for 12 people", "thinking about the structure of his relationships and writing about it (anonymously)", "Octavia Butler"],
+    "tastes": {
+      "drinks": "Natural wine, mezcal, espresso, occasional psychedelics in retreat settings",
+      "wears": "Margiela archive, vintage band t-shirts, Birkenstocks with everything, tattoos",
+      "drives": "Doesn't own; rides a bike everywhere"
+    },
+    "fleet": [],
+    "preferredResorts": ["fasano-trancoso", "rosewood-sao-paulo", "fasano-punta-del-este", "el-fenn", "explora-patagonia", "halekulani"],
+    "playerDynamic": "Intense and fast. Damir falls in friend-love and lover-love simultaneously. Will invite player to Lisbon within 2 weeks of meeting. Wants player to meet Inès AND Mateo. The dynamic could become genuinely poly (long-term, three or four people in something real) or could blow up. If player isn't poly-comfortable, Damir reads it and pulls back gracefully — no drama, just becomes a friend instead.",
+    "drama": "Inès and Mateo know about each other. They've met. They're cordial but it's weird. Damir is starting to want a third regular partner — someone who fits the dynamic without disrupting it. Player could be that. Or could disrupt it. His gallery opens in 6 months. Massive professional pressure. He's also navigating his Spanish family's confusion about his life.",
+    "rivalries": [],
+    "wealthTier": 2,
+    "netWorth": 32000000,
+    "imageUrl": null,
+    "monogramColors": ["#5d3e6b", "#8a6da3"]
+  },
+  {
+    "id": "constance-pemberton-west",
+    "displayName": "Constance Pemberton-West",
+    "age": 33,
+    "region": "British (London)",
+    "gender": "woman",
+    "pronouns": "she/her",
+    "publicOrientation": "lesbian (publicly out for 6 years)",
+    "publicRelationshipStatus": "in casual relationship with Sasha Volkov",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "monogamous when serious, casual when not",
+    "currentPartners": [
+      {"name": "Sasha Volkov", "relationship": "casual 8 months", "status": "winding down", "publicly_known": true}
+    ],
+    "background": "Daughter of Charles Pemberton (the British aristocrat). Came out at 27 in a Sunday Times interview that her father pretended he was fine with. London-based contemporary art dealer (specializes in Eastern European and feminist art). Smart, self-assured, slightly intimidating.",
+    "residences": ["London (Notting Hill mews house)", "Cotswolds (occasional weekends with family)"],
+    "voiceStyle": "Sharp, dry, very British. Witty without trying. Will reference her aristocratic upbringing only to undermine it. Texts efficiently.",
+    "interests": ["art (her business)", "British radical theater", "running (marathon level)", "her father's hunting hounds (rare moment of family connection)"],
+    "tastes": {
+      "drinks": "Champagne, gin and tonics, whisky neat",
+      "wears": "Phoebe Philo Céline archive, The Row, vintage Saint Laurent",
+      "drives": "Mini Cooper (genuinely)"
+    },
+    "fleet": [],
+    "preferredResorts": ["claridges", "the-rosewood-london", "aman-venice"],
+    "playerDynamic": "Won't engage romantically (lesbian, currently with Sasha). Could become friend through shared art world connections. Knows her father (Charles) is wary of player; finds it amusing.",
+    "drama": "The thing with Sasha is winding down. Her father pretends to be fine with everything. The art world is small enough that there will be drama when she and Sasha break up.",
+    "rivalries": [],
+    "wealthTier": 3,
+    "netWorth": 95000000,
+    "imageUrl": null,
+    "monogramColors": ["#4a3a5d", "#7a6a8c"]
+  },
+  {
+    "id": "olivier-dubois",
+    "displayName": "Olivier Dubois",
     "age": 49,
-    "nationality": "French",
-    "netWorth": 2.9,
-    "bio": "The art world power broker. Owns galleries in Paris, London, Hong Kong. Hosts the parties that matter.",
-    "personality": {
-      "warmth": 70,
-      "ambition": 75,
-      "flashiness": 60,
-      "loyalty": 65,
-      "humor": 80
+    "region": "French-Swiss (Geneva)",
+    "gender": "man",
+    "pronouns": "he/him",
+    "publicOrientation": "straight",
+    "publicRelationshipStatus": "married",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "discreetly open (his wife knows the rules)",
+    "currentPartners": [
+      {"name": "Sophie Dubois", "relationship": "wife of 18 years", "status": "warm partnership, not romantic", "publicly_known": true},
+      {"name": "Maria", "relationship": "longtime mistress", "status": "stable, separate apartment in Paris", "publicly_known": false}
+    ],
+    "background": "Banking dynasty (Swiss private banking, 4th generation). Quiet money. Discreet. Manages family bank that serves the wealthiest 200 European families. Lives the European-discreet-millionaire life. Two adult children.",
+    "residences": ["Geneva (lake-facing house)", "Paris (apartment)", "Verbier (winter)"],
+    "voiceStyle": "Perfectly polished European, multilingual. Says less than he thinks. Texts only when necessary. When he says 'we should talk' he means about money or favors.",
+    "interests": ["Burgundy wine (collects)", "horology (rare watches)", "skiing (technical)", "Swiss politics (quietly)"],
+    "tastes": {
+      "drinks": "Burgundy specifically Vosne-Romanée, Champagne, espresso",
+      "wears": "Caraceni bespoke, Patek Philippe, never logos",
+      "drives": "Bentley Continental (Geneva), driven in Paris"
     },
-    "interests": [
-      "contemporary art",
-      "gastronomy",
-      "tennis",
-      "men's fashion"
-    ],
-    "homeBaseICAO": "LFPB",
     "fleet": [
-      {
-        "modelId": "dassault-falcon-7x",
-        "tailNumber": "N737PE"
-      }
+      {"tailNumber": "HB-OD1", "model": "Falcon 8X", "status": "primary"}
     ],
-    "portraitUrl": null,
-    "voiceStyle": "French-accented English in text (not exaggerated), witty, gossipy. Uses \"bien s\u00fbr,\" \"n'est-ce pas.\"",
-    "rivals": [
-      "alessandro-conti"
-    ],
-    "closeFriends": [
-      "elena-marchetti",
-      "jules-laurent"
-    ]
+    "preferredResorts": ["passalacqua", "claridges", "hotel-du-cap"],
+    "playerDynamic": "Discreet, won't engage romantically. Could become important banking connection. Knows where bodies are buried in European wealth.",
+    "drama": "Sophie and the kids and Maria. The whole French-Swiss banking scrutiny that's slowly tightening. Manages it elegantly.",
+    "rivalries": [],
+    "wealthTier": 5,
+    "netWorth": 8500000000,
+    "imageUrl": null,
+    "monogramColors": ["#4a4a3e", "#7a7a64"]
   },
   {
-    "id": "saanvi-mehta",
-    "displayName": "Saanvi Mehta",
-    "archetype": "hotel_dynasty",
-    "age": 40,
-    "nationality": "Indian",
-    "netWorth": 3.1,
-    "bio": "Inherited a hotel group, expanded it globally with boutique acquisitions. Built a reputation as the best hostess in the circle.",
-    "personality": {
-      "warmth": 95,
-      "ambition": 70,
-      "flashiness": 35,
-      "loyalty": 90,
-      "humor": 80
+    "id": "jules-laurent",
+    "displayName": "Jules Laurent",
+    "age": 39,
+    "region": "French-Lebanese (Paris)",
+    "gender": "man",
+    "pronouns": "he/him",
+    "publicOrientation": "straight",
+    "publicRelationshipStatus": "single",
+    "orientationFlexibility": "settled",
+    "relationshipStyle": "serial monogamous",
+    "currentPartners": [],
+    "background": "Born Beirut, raised Paris from age 8. Music industry — owns one of Europe's largest independent record labels (focused on jazz, electronic, world music). Discovered three artists who became major. Played piano professionally until 28 before going business-side.",
+    "residences": ["Paris (Saint-Germain apartment with grand piano)", "Beirut (family flat, when politics permit)", "Marrakech (riad, with Theo Beaumont nearby — they're old friends)"],
+    "voiceStyle": "Warm, musical, French-Lebanese inflected English. Quotes lyrics. Asks better questions than most people. Texts irregularly but meaningfully.",
+    "interests": ["jazz (he can talk for hours about Coltrane)", "electronic music (still goes to Berlin sometimes)", "Lebanese politics (privately, never publicly)", "his label artists' careers", "cooking Lebanese food"],
+    "tastes": {
+      "drinks": "Arak (when nostalgic), red wine, espresso",
+      "wears": "Lemaire, Officine Générale, occasional traditional Lebanese pieces",
+      "drives": "Vintage Mercedes 230SL"
     },
-    "interests": [
-      "hospitality design",
-      "Indian classical music",
-      "competitive dressage",
-      "philanthropy"
-    ],
-    "homeBaseICAO": "VIDP",
     "fleet": [
-      {
-        "modelId": "embraer-praetor-600",
-        "tailNumber": "N947PE"
-      },
-      {
-        "modelId": "airbus-acj319",
-        "tailNumber": "N247PE"
-      }
+      {"tailNumber": "F-JLAU", "model": "Cessna Citation Latitude", "status": "primary"}
     ],
-    "portraitUrl": null,
-    "voiceStyle": "Warm, gracious, great at inviting people to things. Occasional \"yaar.\" Remembers everyone's birthdays.",
-    "rivals": [],
-    "closeFriends": [
-      "amara-okonkwo",
-      "elena-marchetti",
-      "saanvi-s-friends-are-everyone"
-    ]
+    "preferredResorts": ["el-fenn", "aman-tangier", "chateau-de-fonscolombe"],
+    "playerDynamic": "Friendly, won't engage romantically (straight). Could become close friend through shared aesthetic. Friends with Theo Beaumont — that's a connection point.",
+    "drama": "Lebanese politics keeps making it harder to visit family. His mother is aging in Beirut. He's quietly funding Beirut cultural recovery.",
+    "rivalries": [],
+    "wealthTier": 3,
+    "netWorth": 320000000,
+    "imageUrl": null,
+    "monogramColors": ["#6b5a3e", "#9c8865"]
   }
 ]
