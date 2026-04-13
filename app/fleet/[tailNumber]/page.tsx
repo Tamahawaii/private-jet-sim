@@ -9,10 +9,11 @@ import { useRouter } from 'next/navigation';
 import { Economy } from '../../../lib/economy';
 import { playerRepo } from '../../../lib/repositories/player';
 
-export default function FleetDetail({ params }: { params: { tailNumber: string } }) {
+export default function FleetDetail({ params }: { params: Promise<{ tailNumber: string }> }) {
   const router = useRouter();
+  const { tailNumber } = React.use(params);
   const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
-  const jet = fleet.find(j => j.tailNumber === params.tailNumber);
+  const jet = fleet.find(j => j.tailNumber === tailNumber);
   
   const [activeTab, setActiveTab] = useState<'SPECS' | 'MODULES' | 'FLIGHT_LOG' | 'ACTIONS'>('SPECS');
 

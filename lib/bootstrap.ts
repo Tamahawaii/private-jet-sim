@@ -75,4 +75,18 @@ export async function bootstrapWorld() {
          useStore.getState().setSelectedAircraftId((mappedFleet[0] as any).id);
      }
   }
+
+  // 3. Patch any existing aircraft missing currentLocation
+  const existingFleet = await db.aircraft.toArray();
+  for (const ac of existingFleet) {
+     if (!ac.currentLocation && ac.currentLocationICAO) {
+         // Best effort fallback
+         const fallback = { lat: 0, lng: 0, name: ac.currentLocationICAO };
+         if (ac.currentLocationICAO === 'PHNL') { fallback.lat = 21.328; fallback.lng = -157.922; fallback.name = "PHNL - Honolulu"; }
+         if (ac.currentLocationICAO === 'KJAC') { fallback.lat = 43.607; fallback.lng = -110.737; fallback.name = "KJAC - Jackson Hole"; }
+         if (ac.currentLocationICAO === 'KDAL') { fallback.lat = 32.847; fallback.lng = -96.851; fallback.name = "KDAL - Dallas Love"; }
+         if (ac.currentLocationICAO === 'SULS') { fallback.lat = -34.853; fallback.lng = -55.094; fallback.name = "SULS - Punta del Este"; }
+         await db.aircraft.update(ac.id, { currentLocation: fallback });
+     }
+  }
 }
