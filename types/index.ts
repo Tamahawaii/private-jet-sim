@@ -80,9 +80,9 @@ export type Flight = {
   tailNumber: TailNumber;
   originICAO: ICAOCode;
   destinationICAO: ICAOCode;
-  departedAt: ISODateString;
-  estimatedArrivalAt: ISODateString;
-  arrivedAt: ISODateString | null;
+  departedAt: number;
+  estimatedArrivalAt: number;
+  arrivedAt: number | null;
   distanceNM: number;
   cruiseSpeedKTS: number;
   burnGPH: number;

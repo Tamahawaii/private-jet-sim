@@ -9,11 +9,14 @@ import { useRouter } from 'next/navigation';
 import { Economy } from '../../../lib/economy';
 import { playerRepo } from '../../../lib/repositories/player';
 
+import { flightRepo } from '../../../lib/repositories/flight';
+
 export default function FleetDetail({ params }: { params: Promise<{ tailNumber: string }> }) {
   const router = useRouter();
   const { tailNumber } = React.use(params);
   const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
   const jet = fleet.find(j => j.tailNumber === tailNumber);
+  const flights = useLiveQuery(() => flightRepo.getAllByTailNumber(tailNumber), [tailNumber]) || [];
   
   const [activeTab, setActiveTab] = useState<'SPECS' | 'MODULES' | 'FLIGHT_LOG' | 'ACTIONS'>('SPECS');
 
@@ -121,14 +124,70 @@ export default function FleetDetail({ params }: { params: Promise<{ tailNumber: 
          )}
 
          {activeTab === 'FLIGHT_LOG' && (
-            <div className="flex flex-col items-center justify-center py-20 bg-[#141419] rounded-xl border border-white/5 border-dashed">
-               <h3 className="text-zinc-400 font-mono tracking-widest mb-1">NO FLIGHTS RECORDED</h3>
-               <p className="text-zinc-600 text-sm">Dispatch this aircraft to start its log.</p>
+            <div className="flex flex-col gap-2 pb-12">
+               {flights.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-20 bg-[#141419] rounded-xl border border-white/5 border-dashed">
+                     <h3 className="text-zinc-400 font-mono tracking-widest mb-1">NO FLIGHTS RECORDED</h3>
+                     <p className="text-zinc-600 text-sm">Dispatch this aircraft to start its log.</p>
+                  </div>
+               ) : (
+                  flights.map(f => (
+                     <button 
+                        key={f.id}
+                        onClick={() => router.push(`/flight/${f.id}`)}
+                        className="bg-[#141419] p-4 rounded-xl border border-white/5 hover:border-[#00f0ff]/30 transition-all flex items-center justify-between group text-left"
+                     >
+                        <div className="flex items-center gap-6">
+                           <div>
+                              <div className="text-[10px] text-zinc-500 font-mono tracking-widest mb-1">{new Date(f.departedAt).toLocaleDateString()}</div>
+                              <div className="font-mono font-black text-white group-hover:text-[#00f0ff] transition-colors">{f.originICAO} → {f.destinationICAO}</div>
+                           </div>
+                           <div className="hidden md:block">
+                              <div className="text-[10px] text-zinc-500 font-mono tracking-widest mb-1">DISTANCE</div>
+                              <div className="font-mono text-zinc-300">{Math.round(f.distanceNM)} NM</div>
+                           </div>
+                           <div className="hidden md:block">
+                              <div className="text-[10px] text-zinc-500 font-mono tracking-widest mb-1">COST</div>
+                              <div className="font-mono text-zinc-300">${f.costUSD.toLocaleString()}</div>
+                           </div>
+                        </div>
+                        <div>
+                           {f.arrivedAt ? (
+                              <span className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded">COMPLETED</span>
+                           ) : (
+                              <span className="bg-[#00f0ff]/10 border border-[#00f0ff]/20 text-[#00f0ff] animate-pulse text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded">IN TRANSIT</span>
+                           )}
+                        </div>
+                     </button>
+                  ))
+               )}
             </div>
          )}
 
          {activeTab === 'ACTIONS' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               <div className="bg-[#141419] p-6 rounded-xl border border-[#00f0ff]/30 flex flex-col gap-4 col-span-1 md:col-span-2 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                     <Plane size={100} className="rotate-45" />
+                  </div>
+                  <div className="flex items-center gap-3 relative z-10">
+                     <div className="w-10 h-10 rounded bg-[#00f0ff]/20 flex items-center justify-center text-[#00f0ff] border border-[#00f0ff]/30">
+                        <Route size={20} />
+                     </div>
+                     <div>
+                        <h3 className="font-bold text-white mb-1">Dispatch Mission</h3>
+                        <p className="text-xs text-zinc-500 leading-relaxed">Send this aircraft on a structured flight assignment or repositioning hop.</p>
+                     </div>
+                  </div>
+                  <button 
+                     disabled={jet.status !== 'parked'}
+                     onClick={() => router.push(`/flight/new?aircraft=${jet.tailNumber}`)}
+                     className={`bg-[#00f0ff] hover:bg-white text-black shadow-[0_0_20px_rgba(0,240,255,0.2)] rounded py-3 text-sm font-black font-mono tracking-widest mt-auto transition-colors relative z-10 ${jet.status !== 'parked' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                     {jet.status === 'parked' ? 'DISPATCH AIRCRAFT ⚡' : 'AIRCRAFT IN TRANSIT'}
+                  </button>
+               </div>
+               
                <div className="bg-[#141419] p-6 rounded-xl border border-white/5 flex flex-col gap-4">
                   <div>
                     <h3 className="font-bold text-white mb-1">Rename Aircraft</h3>

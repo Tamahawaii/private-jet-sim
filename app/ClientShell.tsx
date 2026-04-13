@@ -29,7 +29,7 @@ const MapEngine = dynamic(() => import('./components/MapEngine'), {
 export default function ClientShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { zenMode } = useStore();
-  const isMapActive = pathname === '/' || pathname === '/world';
+  const isMapActive = pathname === '/' || pathname === '/world' || pathname.startsWith('/flight/');
   const fleet = useLiveQuery(() => aircraftRepo.getAll());
   const [bootstrapped, setBootstrapped] = useState(false);
 

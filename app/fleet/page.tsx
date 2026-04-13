@@ -46,10 +46,10 @@ export default function FleetManager() {
                {fleet.map((jet: Aircraft) => (
                    <div key={jet.id} onClick={() => router.push(`/fleet/${jet.tailNumber}`)} className="group relative bg-[#141419] border border-white/10 rounded-xl overflow-hidden hover:border-[#00f0ff]/50 transition-all shadow-xl cursor-pointer">
                       <div className="absolute top-4 right-4 z-10 flex gap-2">
-                          {jet.flightPhase === 'Hangar' ? (
+                          {jet.status === 'parked' ? (
                              <span className="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-1 rounded font-mono font-bold">PARKED</span>
                           ) : (
-                             <span className="text-[10px] bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/30 px-2 py-1 rounded font-mono font-bold animate-pulse">{jet.flightPhase.toUpperCase()}</span>
+                             <span className="text-[10px] bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/30 px-2 py-1 rounded font-mono font-bold animate-pulse">IN TRANSIT</span>
                           )}
                       </div>
 
@@ -89,12 +89,24 @@ export default function FleetManager() {
                             </div>
                             <div className="bg-black/40 p-2 rounded border border-white/5">
                                <span className="text-zinc-500 block mb-1">Location</span>
-                               <span className="text-white flex items-center gap-2"><Route size={12} className="text-amber-400"/> {jet.flightPhase === 'Hangar' ? (jet.currentLocation?.name ?? 'Hangar') : 'In Transit'}</span>
+                               <span className="text-white flex items-center gap-2"><Route size={12} className="text-amber-400"/> {jet.status === 'parked' ? (jet.currentLocationICAO ?? 'Hangar') : 'In Transit'}</span>
                             </div>
                          </div>
 
-                         <div className="mt-2 w-full bg-[#00f0ff]/10 hover:bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/30 py-3 rounded font-bold tracking-widest text-sm transition-colors flex justify-center items-center gap-2">
-                            <MousePointerClick size={16}/> VIEW CRAFT
+                         <div className="mt-2 flex gap-2 w-full">
+                            <button 
+                               onClick={(e) => { e.stopPropagation(); router.push(`/fleet/${jet.tailNumber}`); }}
+                               className="flex-1 bg-white/5 hover:bg-white/10 text-white border border-white/10 py-3 rounded font-bold tracking-widest text-[10px] transition-colors flex justify-center items-center gap-2"
+                            >
+                               VIEW CRAFT
+                            </button>
+                            <button 
+                               disabled={jet.status !== 'parked'}
+                               onClick={(e) => { e.stopPropagation(); router.push(`/flight/new?aircraft=${jet.tailNumber}`); }}
+                               className={`flex-1 ${jet.status === 'parked' ? 'bg-[#00f0ff]/10 hover:bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/30' : 'bg-white/5 text-zinc-500 border border-white/5 cursor-not-allowed opacity-50'} py-3 rounded font-bold tracking-widest text-[10px] transition-colors flex justify-center items-center gap-2`}
+                            >
+                               DISPATCH
+                            </button>
                          </div>
                       </div>
                    </div>

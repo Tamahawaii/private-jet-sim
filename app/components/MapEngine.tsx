@@ -4,11 +4,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import { useStore } from '../lib/store';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { db } from '../lib/db';
 import { Aircraft } from '../../types';
 import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
 import { Layers, Maximize, Minimize, FastForward, CloudRain, Plane, MapPin, Map as MapIcon, ShieldAlert, Building, Calendar, Focus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import TimeSkipModal from './TimeSkipModal';
 
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -17,7 +19,9 @@ export default function MapEngine() {
 
   const { selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode, timeMultiplier, setTimeMultiplier } = useStore();
   const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
+  const activeFlights = useLiveQuery(() => db.flights.filter(f => f.arrivedAt === null).toArray()) || [];
   const fleetRef = useRef(fleet);
+  const activeFlightsRef = useRef(activeFlights);
   const pathname = usePathname();
 
   const [weatherEnabled, setWeatherEnabled] = useState(true);
@@ -25,6 +29,7 @@ export default function MapEngine() {
   const [stylePickerOpen, setStylePickerOpen] = useState(false);
   const [showFleet, setShowFleet] = useState(true);
   const [showAirports, setShowAirports] = useState(true);
+  const [timeSkipOpen, setTimeSkipOpen] = useState(false);
   
   const showFleetRef = useRef(showFleet);
   const showAirportsRef = useRef(showAirports);
@@ -76,7 +81,8 @@ export default function MapEngine() {
 
   useEffect(() => {
     fleetRef.current = fleet;
-  }, [fleet]);
+    activeFlightsRef.current = activeFlights;
+  }, [fleet, activeFlights]);
 
   useEffect(() => {
      fetch('/airports.json')
@@ -152,14 +158,14 @@ export default function MapEngine() {
                    <div>
                      <span class="text-xs text-[#00f0ff] font-black">${plane.tailNumber}</span>
                      <span class="block text-[10px] text-zinc-400 mt-1">${plane.model}</span>
-                     <span class="inline-block mt-2 px-2 py-0.5 border ${plane.flightPhase === 'Hangar' ? 'border-zinc-500 text-zinc-400' : 'border-[#00f0ff] text-[#00f0ff] animate-pulse'} text-[8px] rounded uppercase">${plane.flightPhase}</span>
+                     <span class="inline-block mt-2 px-2 py-0.5 border ${plane.status === 'parked' ? 'border-zinc-500 text-zinc-400' : 'border-[#00f0ff] text-[#00f0ff] animate-pulse'} text-[8px] rounded uppercase">${plane.status === 'parked' ? 'PARKED' : 'IN TRANSIT'}</span>
                    </div>
                    <div class="flex flex-col gap-2 mt-2 pt-2 border-t border-white/10">
                      <button data-href="/fleet/${plane.tailNumber}" class="w-full bg-white/10 hover:bg-white/20 py-1.5 rounded text-[10px] font-bold text-white transition-colors cursor-pointer popup-router-btn">VIEW CRAFT</button>
-                     ${plane.flightPhase === 'Hangar' ? `
+                     ${plane.status === 'parked' ? `
                         <button data-href="/flight/new?aircraft=${plane.tailNumber}" class="w-full bg-[#00f0ff]/10 hover:bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/20 py-1.5 rounded text-[10px] font-bold transition-colors cursor-pointer popup-router-btn">DISPATCH FLIGHT</button>
                      ` : `
-                        <button data-href="/flight/${plane.id}" class="w-full bg-[#00f0ff]/10 hover:bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/20 py-1.5 rounded text-[10px] font-bold transition-colors cursor-pointer popup-router-btn">VIEW FLIGHT</button>
+                        <button data-href="/flight/${plane.currentFlightID}" class="w-full bg-[#00f0ff]/10 hover:bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/20 py-1.5 rounded text-[10px] font-bold transition-colors cursor-pointer popup-router-btn">VIEW FLIGHT</button>
                      `}
                    </div>
                 </div>
@@ -201,25 +207,7 @@ export default function MapEngine() {
 
   }, [mapStyle]);
 
-  useEffect(() => {
-    if (!map.current) return;
-    const m = map.current;
-
-    switch (flightPhase) {
-      case 'Hangar':
-      case 'Pre-flight':
-        // Removed conflict logic in favor of pure interval
-        break;
-      case 'Taxi':
-        break;
-      case 'Takeoff':
-        break;
-      case 'Cruise':
-        break;
-      case 'Landing':
-        break;
-    }
-  }, [flightPhase, jet?.currentLocation, jet?.destination, provisionalRoute]);
+  // Engine dependencies check
 
   // Weather Radar Overlay
   useEffect(() => {
@@ -295,106 +283,61 @@ export default function MapEngine() {
         let showRoute = false;
         let showRange = false;
 
-        if (fJet.destination !== null && fJet.launchedAt !== null && fJet.currentLocation !== null && fJet.flightPhase !== 'Hangar') {
-           const timeM = useStore.getState().timeMultiplier;
-           const simPassedMs = (Date.now() - fJet.launchedAt) * timeM;
-           const mins = simPassedMs / 60000;
-           
-           // Physics Thresholds (Simulated Minutes)
-           const preFlightEnds = 10;
-           const taxiEnds = 10 + 15; // 25
-           const takeoffEnds = 25 + 5; // 30
-           
-           // Fetch total locked time which was dynamically calculated upon launch
-           const lockedUntil = fJet.lockedUntil !== null ? fJet.lockedUntil : (Date.now() + 60000);
-           const totalSimMins = ((lockedUntil - fJet.launchedAt) * timeM) / 60000;
-           const landingBegins = Math.max(takeoffEnds + 5, totalSimMins - 10);
-           
-           // Determine active physics phase mathematically
-           const calcPhase = 
-              mins < preFlightEnds ? 'Pre-flight' :
-              mins < taxiEnds ? 'Taxi' :
-              mins < takeoffEnds ? 'Takeoff' :
-              mins < landingBegins ? 'Cruise' :
-              mins < totalSimMins ? 'Landing' : 'Hangar';
+        if (fJet.status === 'in_transit' && fJet.currentFlightID) {
+           const flight = activeFlightsRef.current.find(f => f.id === fJet.currentFlightID);
+           if (flight) {
+               const now = useStore.getState().getNow();
+               const elapsed = now - flight.departedAt;
+               const total = flight.estimatedArrivalAt - flight.departedAt;
+               let progress = Math.min(1, Math.max(0, total > 0 ? elapsed / total : 1));
 
-           // Auto-shift phase in store if boundary crossed
-           if (calcPhase !== fJet.flightPhase) {
-               if (calcPhase === 'Hangar') {
-                   // Ensure it reaches exact destination
-                   aircraftRepo.update(fJet.id!, { 
-                       flightPhase: 'Hangar', 
-                       currentLocation: fJet.destination, 
-                       destination: null, 
-                       launchedAt: null, 
-                       lockedUntil: null 
-                   });
-                   return; // skip this tick
-               } else {
-                   aircraftRepo.update(fJet.id!, { flightPhase: calcPhase as any });
-                   return;
+               // Render great circle array
+               const fullArc = flight.waypoints.map(w => [w.lng, w.lat] as [number, number]);
+               if (fullArc.length > 0) {
+                  const sliceIndex = Math.floor(progress * (fullArc.length - 1));
+                  passedArcCoords = fullArc.slice(0, Math.max(2, sliceIndex + 1));
+                  futureArcCoords = fullArc.slice(Math.max(0, sliceIndex));
+                  
+                  if (passedArcCoords.length < 2) passedArcCoords = [];
+                  if (futureArcCoords.length < 2) futureArcCoords = [];
+                  
+                  // Simple linear interpolation between the two closest array nodes
+                  const currentSegmentProg = (progress * (fullArc.length - 1)) - sliceIndex;
+                  const p1 = fullArc[sliceIndex];
+                  const p2 = fullArc[Math.min(fullArc.length - 1, sliceIndex + 1)];
+                  
+                  if (p1 && p2) {
+                      const interp = interpolateFlightPosition(
+                         p1[1], p1[0], p2[1], p2[0], currentSegmentProg
+                      );
+                      planeCoords = interp.point;
+                      planeBearing = computeBearing(p1[1], p1[0], p2[1], p2[0]) - 45; 
+                  } else {
+                      planeCoords = p1 || [flight.waypoints[0].lng, flight.waypoints[0].lat];
+                      planeBearing = -45;
+                  }
+                  
+                  showRoute = true;
+               }
+           } else {
+               // Fallback if flight record missing but state is in_transit
+               if (fJet.currentLocation) {
+                  planeCoords = [fJet.currentLocation.lng, fJet.currentLocation.lat];
                }
            }
-           
-           const baseBearing = computeBearing(fJet.currentLocation.lat, fJet.currentLocation.lng, fJet.destination.lat, fJet.destination.lng);
-
-           if (fJet.flightPhase === 'Cruise') {
-             const cruiseProg = Math.min(1, Math.max(0, (mins - takeoffEnds) / (landingBegins - takeoffEnds)));
-             const interp = interpolateFlightPosition(
-               fJet.currentLocation.lat, fJet.currentLocation.lng,
-               fJet.destination.lat, fJet.destination.lng,
-               cruiseProg
-             );
-
-             const fullArc = computeGreatCirclePoints(
-               fJet.currentLocation.lat, fJet.currentLocation.lng,
-               fJet.destination.lat, fJet.destination.lng
-             );
-
-             const sliceIndex = Math.floor(cruiseProg * fullArc.length);
-             passedArcCoords = fullArc.slice(0, Math.max(2, sliceIndex + 1));
-             futureArcCoords = fullArc.slice(Math.max(0, sliceIndex));
-             
-             if (passedArcCoords.length < 2) passedArcCoords = [];
-             if (futureArcCoords.length < 2) futureArcCoords = [];
-
-             planeCoords = interp.point;
-             planeBearing = interp.bearing - 45; 
-             showRoute = true;
-           } else {
-             let distOffset = 0;
-             if (fJet.flightPhase === 'Pre-flight') {
-                 planeCoords = [fJet.currentLocation.lng, fJet.currentLocation.lat];
-             } else if (fJet.flightPhase === 'Taxi') {
-                 const taxiProg = (mins - preFlightEnds) / 15;
-                 distOffset = Math.min(0.04, taxiProg * 0.04);
-                 planeCoords = [offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lng, offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lat];
-             } else if (fJet.flightPhase === 'Takeoff') {
-                 const takeoffProg = (mins - taxiEnds) / 5;
-                 distOffset = 0.04 + Math.min(0.8, takeoffProg * 0.8);
-                 planeCoords = [offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lng, offsetCoordinate(fJet.currentLocation.lat, fJet.currentLocation.lng, distOffset, baseBearing).lat];
-             } else if (fJet.flightPhase === 'Landing') {
-                 const landingProg = (mins - landingBegins) / 10;
-                 distOffset = Math.max(0, 0.8 - (landingProg * 0.8));
-                 planeCoords = [offsetCoordinate(fJet.destination.lat, fJet.destination.lng, distOffset, baseBearing - 180).lng, offsetCoordinate(fJet.destination.lat, fJet.destination.lng, distOffset, baseBearing - 180).lat];
-             }
-             planeBearing = baseBearing - 45;
-           }
-           
-           // Cinematic Sandbox Map Tracking
-           if (fJet.id === useStore.getState().selectedAircraftId) {
-               m.setCenter(planeCoords as [number, number]);
-               if (fJet.flightPhase !== 'Cruise' && m.getZoom() < 14) m.zoomTo(15, { duration: 1000 });
-           }
-
         } else {
-           // On the ground
-           planeCoords = fJet.currentLocation ? [fJet.currentLocation.lng, fJet.currentLocation.lat] : [0, 0];
-           showRoute = false;
+           if (fJet.currentLocation) {
+               planeCoords = [fJet.currentLocation.lng, fJet.currentLocation.lat];
+           }
+        }
+        
+        // Cinematic Sandbox Map Tracking
+        if (fJet.id === useStore.getState().selectedAircraftId) {
+            m.setCenter(planeCoords as [number, number]);
         }
 
         // Dedicated Range Map for selected aircraft
-        if (fJet.id === selectedAircraftId && (fJet.flightPhase === 'Hangar' || fJet.flightPhase === 'Pre-flight') && fJet.currentLocation) {
+        if (fJet.id === selectedAircraftId && fJet.status === 'parked' && fJet.currentLocation) {
             showRange = true;
             // E.g., BBJ: 9900NM, Citation: 3500NM, Gulfstream: 7500NM
             const rangeNM = fJet.model.includes('BBJ') || fJet.model.includes('ACJ') ? 8000 : fJet.model.includes('Citation') || fJet.model.includes('Praetor') ? 3500 : 7500;
@@ -433,17 +376,17 @@ export default function MapEngine() {
              source: planeSourceId,
              paint: {
                'circle-color': '#00f0ff',
-               'circle-radius': fJet.id === selectedAircraftId ? 16 : (fJet.flightPhase === 'Hangar' ? 8 : 12),
+               'circle-radius': fJet.id === selectedAircraftId ? 16 : (fJet.status === 'parked' ? 8 : 12),
                'circle-stroke-color': '#ffffff',
-               'circle-stroke-width': fJet.id === selectedAircraftId ? 3 : (fJet.flightPhase === 'Hangar' ? 2 : 3),
+               'circle-stroke-width': fJet.id === selectedAircraftId ? 3 : (fJet.status === 'parked' ? 2 : 3),
                'circle-opacity': 0.9,
                'circle-blur': fJet.id === selectedAircraftId ? 0.3 : 0.1
              }
            });
         } else if (showFleetRef.current && m.getSource(planeSourceId)) {
            (m.getSource(planeSourceId) as any).setData(planeData);
-           m.setPaintProperty(planeLayerId, 'circle-radius', fJet.id === selectedAircraftId ? 16 : (fJet.flightPhase === 'Hangar' ? 8 : 12));
-           m.setPaintProperty(planeLayerId, 'circle-stroke-width', fJet.id === selectedAircraftId ? 3 : (fJet.flightPhase === 'Hangar' ? 2 : 3));
+           m.setPaintProperty(planeLayerId, 'circle-radius', fJet.id === selectedAircraftId ? 16 : (fJet.status === 'parked' ? 8 : 12));
+           m.setPaintProperty(planeLayerId, 'circle-stroke-width', fJet.id === selectedAircraftId ? 3 : (fJet.status === 'parked' ? 2 : 3));
            m.setPaintProperty(planeLayerId, 'circle-blur', fJet.id === selectedAircraftId ? 0.3 : 0.1);
         } else if (!showFleetRef.current && m.getLayer(planeLayerId)) {
            m.removeLayer(planeLayerId);
@@ -556,7 +499,7 @@ export default function MapEngine() {
 
       const omniSourceId = 'omni-routes';
       const omniLayerId = 'omni-layer';
-      if (true) { // Always show omni routes
+      if (false) { // Disabled Omni Routes
           const omniFeatures: any[] = [];
           fleetRef.current.forEach((fJet: Aircraft) => {
             if (fJet.scheduledRoutes && fJet.scheduledRoutes.length > 0) {
@@ -715,9 +658,16 @@ export default function MapEngine() {
                 {spd}x
               </button>
             ))}
-         </div>
-      </div>
+          </div>
+          <button 
+             onClick={() => setTimeSkipOpen(true)}
+             className="px-4 border-l border-white/10 text-xs font-mono tracking-widest font-black text-amber-500 hover:text-white transition-colors h-full flex items-center"
+          >
+             SKIP
+          </button>
+       </div>
 
+       {timeSkipOpen && <TimeSkipModal onClose={() => setTimeSkipOpen(false)} />}
     </div>
   );
 }

@@ -89,4 +89,8 @@ export async function bootstrapWorld() {
          await db.aircraft.update(ac.id, { currentLocation: fallback });
      }
   }
+
+  // 4. Resolve any offline flight arrivals that occurred while the app was closed
+  const { resolveArrivals } = require('./simulation');
+  await resolveArrivals();
 }
