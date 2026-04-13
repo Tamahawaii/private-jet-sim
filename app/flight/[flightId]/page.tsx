@@ -20,7 +20,7 @@ export default function ActiveFlightPage({ params }: { params: Promise<{ flightI
     );
 
     React.useEffect(() => {
-        if (aircraft) useStore.getState().setSelectedAircraftId(aircraft.id);
+        if (aircraft) useStore.getState().setSelectedAircraftId(aircraft.tailNumber);
     }, [aircraft?.id]);
 
     if (flight === undefined) return null;

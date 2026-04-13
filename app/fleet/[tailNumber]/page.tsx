@@ -197,7 +197,7 @@ export default function FleetDetail({ params }: { params: Promise<{ tailNumber: 
                      onClick={async () => {
                          const newName = prompt(`Enter new nickname for ${jet.tailNumber}:`, jet.nickname || '');
                          if (newName !== null) {
-                             await aircraftRepo.update(jet.id, { nickname: newName.trim() || undefined });
+                             await aircraftRepo.update(jet.tailNumber, { nickname: newName.trim() || undefined });
                          }
                      }}
                      className="bg-white/5 hover:bg-white/10 text-white rounded py-2 text-sm font-bold tracking-widest mt-auto border border-white/10 transition-colors"
@@ -227,7 +227,7 @@ export default function FleetDetail({ params }: { params: Promise<{ tailNumber: 
                   <button 
                      onClick={async () => {
                          if (confirm(`Sell ${jet.model} for $${Math.round(jet.purchasePrice * 0.8).toLocaleString()}?`)) {
-                             await Economy.sellAircraft(jet.id);
+                             await Economy.sellAircraft(jet.tailNumber);
                              router.push('/fleet');
                          }
                      }}

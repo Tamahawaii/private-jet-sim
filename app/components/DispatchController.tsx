@@ -229,7 +229,7 @@ export default function DispatchController() {
                                const dist = R * c;
                                const hours = dist / (jet.speedKnots || 500);
                                
-                               aircraftRepo.update(jet.id!, {
+                               aircraftRepo.update(jet.tailNumber, {
                                   destination: provisionalRoute.destination,
                                   flightPhase: 'Takeoff',
                                   launchedAt: Date.now(),

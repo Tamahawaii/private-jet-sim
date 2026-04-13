@@ -100,7 +100,7 @@ export default function ResortDetailPage() {
                 checkInMs: simNow,
                 nights,
                 nightlyRate: resort.nightlyRate,
-                aircraftId: selectedAircraft.id,
+                aircraftId: selectedAircraft.tailNumber,
                 originICAO,
                 destinationICAO: resort.locationICAO,
                 distanceNM,

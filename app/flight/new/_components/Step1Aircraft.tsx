@@ -32,7 +32,7 @@ export default function Step1Aircraft({ fleet, prefillError, onSelect }: Props) 
              <button 
                 key={jet.id}
                 disabled={!isParked}
-                onClick={() => isParked && onSelect(jet.id)}
+                onClick={() => isParked && onSelect(jet.tailNumber)}
                 className={`flex flex-col border p-4 rounded-xl text-left transition-all relative overflow-hidden group ${
                    isParked 
                       ? 'border-white/10 bg-black/40 hover:bg-white/5 hover:border-[#00f0ff]/50 hover:shadow-[0_0_20px_rgba(0,240,255,0.1)] outline-none' 
