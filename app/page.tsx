@@ -9,6 +9,9 @@ import DispatchController from './components/DispatchController';
 import FlightAttendant from './components/FlightAttendant';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { useStore } from './lib/store';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { aircraftRepo } from './lib/repositories/aircraft';
+import { STARTER_FLEET } from './lib/mockData';
 
 const MapEngine = dynamic(() => import('./components/MapEngine'), {
   ssr: false,
@@ -28,9 +31,20 @@ export default function Home() {
   const [isClient, setIsClient] = useState(false);
   const { zenMode, activeView } = useStore();
   
+  const fleet = useLiveQuery(() => aircraftRepo.getAll());
+
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (fleet !== undefined && fleet.length === 0) {
+       aircraftRepo.bulkPut(STARTER_FLEET as any);
+       if (STARTER_FLEET.length > 0) {
+           useStore.getState().setSelectedAircraftId(STARTER_FLEET[0].id || null);
+       }
+    }
+  }, [fleet]);
 
   if (!isClient) return (
      <div className="w-screen h-screen bg-[#0a0a0c] flex items-center justify-center text-[#00f0ff] font-mono tracking-widest animate-pulse">
