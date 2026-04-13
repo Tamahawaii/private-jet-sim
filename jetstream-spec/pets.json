@@ -1,0 +1,93 @@
+[
+  {
+    "id": "pet-bento-marcus",
+    "name": "Bento",
+    "species": "dog",
+    "breed": "Border Collie",
+    "age": 4,
+    "ownerId": "marcus-chen",
+    "ownerType": "persona",
+    "currentLocationICAO": "KIWA",
+    "personality": "obsessed with sailing — actually goes on the boat",
+    "imageUrl": null,
+    "addedAt": "2025-12-15T00:00:00.000Z"
+  },
+  {
+    "id": "pet-anchovy-elena",
+    "name": "Anchovy",
+    "species": "cat",
+    "breed": "British Shorthair",
+    "age": 7,
+    "ownerId": "elena-marchetti",
+    "ownerType": "persona",
+    "currentLocationICAO": "LIML",
+    "personality": "Carla's cat originally; refuses to acknowledge Elena's grief, demands routine",
+    "imageUrl": null,
+    "addedAt": "2025-12-15T00:00:00.000Z"
+  },
+  {
+    "id": "pet-mishka-sasha",
+    "name": "Mishka",
+    "species": "cat",
+    "breed": "Russian Blue",
+    "age": 3,
+    "ownerId": "sasha-volkov",
+    "ownerType": "persona",
+    "currentLocationICAO": "EGLC",
+    "personality": "one of three Russian Blues; Mishka is the alpha",
+    "imageUrl": null,
+    "addedAt": "2025-12-15T00:00:00.000Z"
+  },
+  {
+    "id": "pet-iris-sasha",
+    "name": "Iris",
+    "species": "cat",
+    "breed": "Russian Blue",
+    "age": 3,
+    "ownerId": "sasha-volkov",
+    "ownerType": "persona",
+    "currentLocationICAO": "EGLC",
+    "personality": "Mishka's sister; smaller, sneakier",
+    "imageUrl": null,
+    "addedAt": "2025-12-15T00:00:00.000Z"
+  },
+  {
+    "id": "pet-novalee-sasha",
+    "name": "Novalee",
+    "species": "cat",
+    "breed": "Russian Blue",
+    "age": 5,
+    "ownerId": "sasha-volkov",
+    "ownerType": "persona",
+    "currentLocationICAO": "EGLC",
+    "personality": "the eldest, wisest, most independent",
+    "imageUrl": null,
+    "addedAt": "2025-12-15T00:00:00.000Z"
+  },
+  {
+    "id": "pet-camille-theo",
+    "name": "Camille",
+    "species": "dog",
+    "breed": "French Bulldog",
+    "age": 5,
+    "ownerId": "theo-beaumont",
+    "ownerType": "persona",
+    "currentLocationICAO": "LFPB",
+    "personality": "fashion-show veteran; sleeps under the cutting table",
+    "imageUrl": null,
+    "addedAt": "2025-12-15T00:00:00.000Z"
+  },
+  {
+    "id": "pet-pelo-rio",
+    "name": "Pelo",
+    "species": "dog",
+    "breed": "Brazilian Mutt (rescue)",
+    "age": 6,
+    "ownerId": "rio-almeida",
+    "ownerType": "persona",
+    "currentLocationICAO": "SBPS",
+    "personality": "lives at the Trancoso villa; refuses to leave Bahia",
+    "imageUrl": null,
+    "addedAt": "2025-12-15T00:00:00.000Z"
+  }
+]

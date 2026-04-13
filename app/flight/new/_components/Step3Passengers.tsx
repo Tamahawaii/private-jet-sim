@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
-import { ArrowLeft, User, Users, Check } from 'lucide-react';
+import { ArrowLeft, User, Users, Check, MapPin } from 'lucide-react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../../../lib/db';
 import { PersonaAvatar } from '../../../components/PersonaAvatar';
+import { Aircraft } from '../../../../types';
 
 interface Props {
+  aircraft: Aircraft;
   selectedPassengers: string[];
   onChange: (passengers: string[]) => void;
   onNext: () => void;
   onBack: () => void;
 }
 
-export default function Step3Passengers({ selectedPassengers, onChange, onNext, onBack }: Props) {
+export default function Step3Passengers({ aircraft, selectedPassengers, onChange, onNext, onBack }: Props) {
    const personas = useLiveQuery(() => db.personas.toArray()) || [];
+   const personaStates = useLiveQuery(() => db.personaState.toArray()) || [];
 
-   const togglePersona = (id: string) => {
+   const togglePersona = (id: string, canBoard: boolean) => {
+       if (!canBoard) return;
        let next = [...selectedPassengers];
        if (next.includes(id)) {
            next = next.filter(p => p !== id);
@@ -63,22 +67,32 @@ export default function Step3Passengers({ selectedPassengers, onChange, onNext, 
                <h3 className="text-xs font-mono tracking-widest text-[#f5a7a7] mb-4 flex items-center gap-2"><Users size={14}/> SOCIAL CIRCLE DIRECTORY</h3>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {personas.map(p => {
+                     const pState = personaStates.find((s: any) => s.id === p.id);
+                     const loc = pState?.currentLocationICAO || p.homeBaseICAO;
+                     const canBoard = loc === aircraft.currentLocationICAO;
                      const isSelected = selectedPassengers.includes(p.id);
+
                      return (
-                     <button
-                        key={p.id}
-                        onClick={() => togglePersona(p.id)}
-                        className={`w-full p-4 border rounded-xl flex items-center justify-between transition-all group text-left ${isSelected ? 'border-[#f5a7a7] bg-[#f5a7a7]/10' : 'border-white/5 bg-black/20 hover:border-[#f5a7a7]/30 hover:bg-[#141419]'}`}
-                     >
-                        <div className="flex items-center gap-3">
-                           <PersonaAvatar persona={p} size={40} className={`border border-white/10 group-hover:border-[#f5a7a7]/50 ${isSelected ? 'border-[#f5a7a7]' : ''}`} />
-                           <div className="flex flex-col">
-                              <span className="font-bold font-mono tracking-widest text-white group-hover:text-[#f5a7a7] transition-colors uppercase text-sm truncate max-w-[150px]">{p.displayName}</span>
-                              <span className="text-[10px] text-zinc-500 font-mono tracking-widest capitalize">{p.archetype.replace(/_/g, ' ')}</span>
+                     <div key={p.id} className="relative group">
+                        <button
+                           onClick={() => togglePersona(p.id, canBoard)}
+                           disabled={!canBoard}
+                           className={`w-full h-full p-4 border rounded-xl flex items-center justify-between transition-all text-left overflow-hidden ${isSelected ? 'border-[#f5a7a7] bg-[#f5a7a7]/10' : (!canBoard ? 'border-white/5 bg-black/40 opacity-60 cursor-not-allowed' : 'border-white/5 bg-black/20 hover:border-[#f5a7a7]/30 hover:bg-[#141419]')}`}
+                        >
+                           <div className="flex items-center gap-3 relative z-10 w-full overflow-hidden">
+                              <PersonaAvatar persona={p} size={40} className={`border group-hover:border-[#f5a7a7]/50 transition-colors shrink-0 ${isSelected ? 'border-[#f5a7a7]' : (!canBoard ? 'border-white/10 grayscale' : 'border-white/10')}`} />
+                              <div className="flex flex-col flex-1 min-w-0">
+                                 <span className={`font-bold font-mono tracking-widest uppercase text-sm truncate w-full transition-colors ${!canBoard ? 'text-zinc-500' : (isSelected ? 'text-[#f5a7a7]' : 'text-white group-hover:text-[#f5a7a7]')}`}>{p.displayName}</span>
+                                 {!canBoard ? (
+                                    <span className="text-[10px] text-amber-500/80 font-mono tracking-widest uppercase flex items-center gap-1 mt-0.5 truncate"><MapPin size={10}/> In {loc}</span>
+                                 ) : (
+                                    <span className="text-[10px] text-zinc-500 font-mono tracking-widest capitalize mt-0.5 truncate">{p.archetype.replace(/_/g, ' ')}</span>
+                                 )}
+                              </div>
                            </div>
-                        </div>
-                        {isSelected && <Check size={16} className="text-[#f5a7a7]" />}
-                     </button>
+                           {isSelected && <Check size={16} className="text-[#f5a7a7] shrink-0 ml-2 relative z-10" />}
+                        </button>
+                     </div>
                   )})}
                </div>
             </div>

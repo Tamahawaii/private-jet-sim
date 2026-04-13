@@ -103,6 +103,7 @@ function FlightPlannerInternal() {
             )}
             {step === 3 && activeAircraft && selectedDestination && (
                <Step3Passengers 
+                  aircraft={activeAircraft}
                   selectedPassengers={passengers}
                   onChange={setPassengers}
                   onNext={() => setStep(4)} 

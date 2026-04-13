@@ -1,0 +1,254 @@
+[
+  {
+    "id": "alessandro-rossi__sasha-volkov",
+    "participantA": "alessandro-rossi",
+    "participantB": "sasha-volkov",
+    "metrics": { "affection": 35, "trust": 20, "heat": 15, "romanticTension": 25, "rivalry": 55 },
+    "status": "estranged",
+    "isPubliclyKnown": false,
+    "history": [
+      {
+        "id": "evt-ar-sv-2019-01",
+        "type": "first-meeting",
+        "at": "2019-03-15T20:00:00.000Z",
+        "description": "Met at Frieze Los Angeles 2019. Brief intense thing started immediately."
+      },
+      {
+        "id": "evt-ar-sv-2019-02",
+        "type": "first-intimacy",
+        "at": "2019-03-17T01:00:00.000Z",
+        "description": "First night together. Both later described it as 'inevitable.'"
+      },
+      {
+        "id": "evt-ar-sv-2019-03",
+        "type": "breakup",
+        "at": "2019-06-22T00:00:00.000Z",
+        "description": "Bad ending in Capri. Both still single. Both still showing up at the same events."
+      }
+    ],
+    "startedAt": "2019-03-15T20:00:00.000Z",
+    "lastInteractionAt": "2024-10-12T19:00:00.000Z",
+    "notes": "Pretend it didn't happen at art fairs. Industry knows."
+  },
+  {
+    "id": "charles-pemberton__constance-pemberton-west",
+    "participantA": "charles-pemberton",
+    "participantB": "constance-pemberton-west",
+    "metrics": { "affection": 60, "trust": 55, "heat": 0, "romanticTension": 0, "rivalry": 5 },
+    "status": "close-friends",
+    "isPubliclyKnown": true,
+    "history": [
+      {
+        "id": "evt-cp-cpw-1992",
+        "type": "first-meeting",
+        "at": "1992-08-15T00:00:00.000Z",
+        "description": "Charles's first daughter, born at home in the Cotswolds."
+      }
+    ],
+    "startedAt": "1992-08-15T00:00:00.000Z",
+    "lastInteractionAt": "2026-04-01T00:00:00.000Z",
+    "notes": "Father-daughter. Charles publicly accepting of Constance's life, privately complicated about Sasha."
+  },
+  {
+    "id": "constance-pemberton-west__sasha-volkov",
+    "participantA": "constance-pemberton-west",
+    "participantB": "sasha-volkov",
+    "metrics": { "affection": 50, "trust": 35, "heat": 30, "romanticTension": 35, "rivalry": 0 },
+    "status": "situationship",
+    "isPubliclyKnown": true,
+    "history": [
+      {
+        "id": "evt-cpw-sv-2025",
+        "type": "first-meeting",
+        "at": "2025-08-10T19:00:00.000Z",
+        "description": "Met at Frieze London 2025."
+      },
+      {
+        "id": "evt-cpw-sv-2025-02",
+        "type": "first-intimacy",
+        "at": "2025-08-12T22:00:00.000Z",
+        "description": "Started seeing each other immediately."
+      }
+    ],
+    "startedAt": "2025-08-10T19:00:00.000Z",
+    "lastInteractionAt": "2026-03-28T00:00:00.000Z",
+    "notes": "Casual 8 months. Winding down. Both know it."
+  },
+  {
+    "id": "jules-laurent__theo-beaumont",
+    "participantA": "jules-laurent",
+    "participantB": "theo-beaumont",
+    "metrics": { "affection": 75, "trust": 70, "heat": 20, "romanticTension": 5, "rivalry": 0 },
+    "status": "close-friends",
+    "isPubliclyKnown": false,
+    "history": [
+      {
+        "id": "evt-jl-tb-2014",
+        "type": "first-meeting",
+        "at": "2014-09-20T20:00:00.000Z",
+        "description": "Met at a dinner party in Paris through a mutual friend. Recognized each other immediately."
+      }
+    ],
+    "startedAt": "2014-09-20T20:00:00.000Z",
+    "lastInteractionAt": "2026-03-15T00:00:00.000Z",
+    "notes": "Decade of friendship. Spend time at each other's Marrakech places. Platonic but deep."
+  },
+  {
+    "id": "khalid-al-rashid__viktor-petrov",
+    "participantA": "khalid-al-rashid",
+    "participantB": "viktor-petrov",
+    "metrics": { "affection": 55, "trust": 65, "heat": 10, "romanticTension": 0, "rivalry": 10 },
+    "status": "friends",
+    "isPubliclyKnown": false,
+    "history": [
+      {
+        "id": "evt-ka-vp-2018",
+        "type": "first-meeting",
+        "at": "2018-01-23T18:00:00.000Z",
+        "description": "Met at Davos 2018. Quiet recognition between two careful operators."
+      }
+    ],
+    "startedAt": "2018-01-23T18:00:00.000Z",
+    "lastInteractionAt": "2026-01-25T18:00:00.000Z",
+    "notes": "Both ultra-discreet. Trust each other professionally. Don't talk about Russia."
+  },
+  {
+    "id": "marcus-chen__raj-mehta",
+    "participantA": "marcus-chen",
+    "participantB": "raj-mehta",
+    "metrics": { "affection": 65, "trust": 55, "heat": 25, "romanticTension": 0, "rivalry": 15 },
+    "status": "friends",
+    "isPubliclyKnown": true,
+    "history": [
+      {
+        "id": "evt-mc-rm-2020",
+        "type": "first-meeting",
+        "at": "2020-09-15T00:00:00.000Z",
+        "description": "Met at Cape Cod America's Cup viewing. Discovered shared cricket-fanaticism (Marcus secretly)."
+      }
+    ],
+    "startedAt": "2020-09-15T00:00:00.000Z",
+    "lastInteractionAt": "2026-02-10T00:00:00.000Z",
+    "notes": "Bro chemistry. Talk about deals, sailing, cricket. Marcus's secret, Raj knows nothing about."
+  },
+  {
+    "id": "amelie-laurent__elena-marchetti",
+    "participantA": "amelie-laurent",
+    "participantB": "elena-marchetti",
+    "metrics": { "affection": 60, "trust": 70, "heat": 15, "romanticTension": 8, "rivalry": 0 },
+    "status": "close-friends",
+    "isPubliclyKnown": false,
+    "history": [
+      {
+        "id": "evt-al-em-2017",
+        "type": "first-meeting",
+        "at": "2017-04-10T19:00:00.000Z",
+        "description": "Met at Salone del Mobile Milan 2017. Recognized aesthetic kinship instantly."
+      },
+      {
+        "id": "evt-al-em-grief",
+        "type": "dm-exchanged",
+        "at": "2024-12-01T03:00:00.000Z",
+        "description": "Amélie was the first call when Carla died. Stayed in Milan for two weeks."
+      }
+    ],
+    "startedAt": "2017-04-10T19:00:00.000Z",
+    "lastInteractionAt": "2026-03-22T00:00:00.000Z",
+    "notes": "Deep aesthetic friendship. Amélie carried Elena through the worst of grief. Slight unspoken charge that neither has acted on."
+  },
+  {
+    "id": "naomi-tanaka__yui-takahashi",
+    "participantA": "naomi-tanaka",
+    "participantB": "yui-takahashi",
+    "metrics": { "affection": 55, "trust": 50, "heat": 5, "romanticTension": 5, "rivalry": 5 },
+    "status": "friends",
+    "isPubliclyKnown": false,
+    "history": [
+      {
+        "id": "evt-nt-yt-2021",
+        "type": "first-meeting",
+        "at": "2021-11-08T17:00:00.000Z",
+        "description": "Met at Tokyo Art Week 2021. Bonded over Yui's father's architecture, which Naomi had studied."
+      }
+    ],
+    "startedAt": "2021-11-08T17:00:00.000Z",
+    "lastInteractionAt": "2026-02-14T00:00:00.000Z",
+    "notes": "Quiet aesthetic alignment. Both healing. Both private. Slow to deepen."
+  },
+  {
+    "id": "damir-volkov-reyes__rio-almeida",
+    "participantA": "damir-volkov-reyes",
+    "participantB": "rio-almeida",
+    "metrics": { "affection": 45, "trust": 30, "heat": 25, "romanticTension": 15, "rivalry": 0 },
+    "status": "friends",
+    "isPubliclyKnown": false,
+    "history": [
+      {
+        "id": "evt-dvr-ra-2024",
+        "type": "first-meeting",
+        "at": "2024-07-12T22:00:00.000Z",
+        "description": "Met at SP-Arte São Paulo 2024. Damir was researching Brazilian artists; Rio gave him a tour of the city."
+      }
+    ],
+    "startedAt": "2024-07-12T22:00:00.000Z",
+    "lastInteractionAt": "2026-01-30T00:00:00.000Z",
+    "notes": "Friendly but with subtle charge. Rio is monogamous-leaning; Damir is poly. Different rhythms."
+  },
+  {
+    "id": "james-okonkwo-petersen__theo-beaumont",
+    "participantA": "james-okonkwo-petersen",
+    "participantB": "theo-beaumont",
+    "metrics": { "affection": 40, "trust": 35, "heat": 8, "romanticTension": 5, "rivalry": 0 },
+    "status": "acquaintances",
+    "isPubliclyKnown": true,
+    "history": [
+      {
+        "id": "evt-jop-tb-2023",
+        "type": "first-meeting",
+        "at": "2023-09-28T19:00:00.000Z",
+        "description": "Met at Paris Fashion Week 2023. Brief but warm. Have run into each other in Cape Town since."
+      }
+    ],
+    "startedAt": "2023-09-28T19:00:00.000Z",
+    "lastInteractionAt": "2025-12-20T00:00:00.000Z",
+    "notes": "Both queer, both successful, both married/recent-ex. Friendly distance."
+  },
+  {
+    "id": "isabella-park__naomi-tanaka",
+    "participantA": "isabella-park",
+    "participantB": "naomi-tanaka",
+    "metrics": { "affection": 50, "trust": 45, "heat": 10, "romanticTension": 0, "rivalry": 5 },
+    "status": "friends",
+    "isPubliclyKnown": false,
+    "history": [
+      {
+        "id": "evt-ip-nt-2019",
+        "type": "first-meeting",
+        "at": "2019-06-01T20:00:00.000Z",
+        "description": "Met at Aspen Ideas Festival 2019. Both were panelists on a tech-ethics conversation."
+      }
+    ],
+    "startedAt": "2019-06-01T20:00:00.000Z",
+    "lastInteractionAt": "2025-12-18T00:00:00.000Z",
+    "notes": "Mutual respect. Talk about boards. Isabella is straight, Naomi is lesbian — pure friendship."
+  },
+  {
+    "id": "elena-marchetti__theo-beaumont",
+    "participantA": "elena-marchetti",
+    "participantB": "theo-beaumont",
+    "metrics": { "affection": 50, "trust": 50, "heat": 12, "romanticTension": 0, "rivalry": 0 },
+    "status": "friends",
+    "isPubliclyKnown": false,
+    "history": [
+      {
+        "id": "evt-em-tb-2018",
+        "type": "first-meeting",
+        "at": "2018-05-15T19:00:00.000Z",
+        "description": "Met when Theo commissioned Elena to design his Marais atelier."
+      }
+    ],
+    "startedAt": "2018-05-15T19:00:00.000Z",
+    "lastInteractionAt": "2026-02-28T00:00:00.000Z",
+    "notes": "Strong aesthetic friendship. Theo refers Elena clients in fashion. Elena is bi, but no charge here."
+  }
+]

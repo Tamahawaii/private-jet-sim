@@ -6,6 +6,12 @@ export interface LocationData {
   name: string;
 }
 
+export interface ToastMessage {
+  id: string;
+  message: string;
+  link?: string;
+}
+
 interface AppState {
   selectedAircraftId: string | null;
   weatherEnabled: boolean;
@@ -16,6 +22,11 @@ interface AppState {
   mapStyle: 'FlightAware' | 'Satellite' | 'Dark' | 'Roads';
   zenMode: boolean;
   activeView: 'Map' | 'Fleet' | 'Shop';
+
+  // Toasts
+  toasts: ToastMessage[];
+  addToast: (toast: Omit<ToastMessage, 'id'>) => void;
+  removeToast: (id: string) => void;
 
   // Sim Clock State
   baselineRealTime: number;
@@ -44,6 +55,17 @@ export const useStore = create<AppState>()((set, get) => ({
   mapStyle: 'Dark',
   zenMode: true,
   activeView: 'Map',
+
+  toasts: [],
+  addToast: (t) => {
+     const id = Math.random().toString(36).slice(2);
+     set((s) => ({ toasts: [...s.toasts, { id, ...t }] }));
+     // Auto remove after 6s
+     setTimeout(() => {
+        set((s) => ({ toasts: s.toasts.filter(toast => toast.id !== id) }));
+     }, 6000);
+  },
+  removeToast: (id) => set((s) => ({ toasts: s.toasts.filter(t => t.id !== id) })),
 
   baselineRealTime: Date.now(),
   baselineSimTime: Date.now(),

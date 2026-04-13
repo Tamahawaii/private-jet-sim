@@ -12,13 +12,13 @@
     "prestigeRequired": 600,
     "ticketPrice": 250000,
     "dressCode": "Business formal with outerwear showmanship",
-    "description": "The ultimate gathering of global leaders and billionaires. The official delegate pass is just the start—the real deals happen at the surrounding chalets.",
+    "description": "The ultimate gathering of global leaders and billionaires. The official delegate pass is just the start\u2014the real deals happen at the surrounding chalets.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "amara-okonkwo",
+      "james-okonkwo-petersen",
       "khalid-al-rashid",
       "marcus-chen",
-      "vivian-hollis",
+      "constance-pemberton-west",
       "naomi-tanaka"
     ]
   },
@@ -39,7 +39,7 @@
     "imageUrl": null,
     "confirmedAttendees": [
       "jules-laurent",
-      "vivian-hollis"
+      "constance-pemberton-west"
     ]
   },
   {
@@ -59,7 +59,7 @@
     "imageUrl": null,
     "confirmedAttendees": [
       "marcus-chen",
-      "saanvi-mehta"
+      "raj-mehta"
     ]
   },
   {
@@ -78,9 +78,9 @@
     "description": "The global art market's winter circuit. VIP previews are essential for early acquisitions.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "pierre-larousse",
+      "olivier-dubois",
       "elena-marchetti",
-      "amara-okonkwo"
+      "james-okonkwo-petersen"
     ]
   },
   {
@@ -99,7 +99,7 @@
     "description": "The ultimate American sporting spectacle. Field-side suites are the standard.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "rico-alvarez",
+      "rio-almeida",
       "marcus-chen",
       "charles-pemberton"
     ]
@@ -121,7 +121,7 @@
     "imageUrl": null,
     "confirmedAttendees": [
       "jules-laurent",
-      "amara-okonkwo"
+      "james-okonkwo-petersen"
     ]
   },
   {
@@ -141,7 +141,7 @@
     "imageUrl": null,
     "confirmedAttendees": [
       "jules-laurent",
-      "vivian-hollis",
+      "constance-pemberton-west",
       "naomi-tanaka"
     ]
   },
@@ -161,9 +161,9 @@
     "description": "Front-row access to the autumn/winter collections of the world's leading fashion houses.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "alessandro-conti",
-      "pierre-larousse",
-      "saanvi-mehta"
+      "alessandro-rossi",
+      "olivier-dubois",
+      "raj-mehta"
     ]
   },
   {
@@ -182,8 +182,8 @@
     "description": "The global benchmark for the design and furniture sector. Private previews are fiercely contested.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "alessandro-conti",
-      "saanvi-mehta",
+      "alessandro-rossi",
+      "raj-mehta",
       "elena-marchetti"
     ]
   },
@@ -203,8 +203,8 @@
     "description": "The iconic desert music festival. VIP Safari tents and exclusive artist compounds.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "rico-alvarez",
-      "dmitri-kozlov",
+      "rio-almeida",
+      "viktor-petrov",
       "jules-laurent"
     ]
   },
@@ -224,8 +224,8 @@
     "description": "The second weekend, slightly more relaxed but still an essential social event.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "dmitri-kozlov",
-      "rico-alvarez"
+      "viktor-petrov",
+      "rio-almeida"
     ]
   },
   {
@@ -245,7 +245,7 @@
     "imageUrl": null,
     "confirmedAttendees": [
       "khalid-al-rashid",
-      "vivian-hollis",
+      "constance-pemberton-west",
       "charles-pemberton"
     ]
   },
@@ -261,13 +261,13 @@
     "prestigeTier": 5,
     "prestigeRequired": 700,
     "ticketPrice": 250000,
-    "dressCode": "Thematic — whatever Anna decrees",
+    "dressCode": "Thematic \u2014 whatever Anna decrees",
     "description": "Fashion's biggest night out. Highly exclusive invite list curated by Anna Wintour.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "vivian-hollis",
-      "alessandro-conti",
-      "pierre-larousse"
+      "constance-pemberton-west",
+      "alessandro-rossi",
+      "olivier-dubois"
     ]
   },
   {
@@ -287,7 +287,7 @@
     "imageUrl": null,
     "confirmedAttendees": [
       "jules-laurent",
-      "pierre-larousse",
+      "olivier-dubois",
       "sasha-volkov"
     ]
   },
@@ -310,7 +310,7 @@
       "sasha-volkov",
       "khalid-al-rashid",
       "charles-pemberton",
-      "alessandro-conti"
+      "alessandro-rossi"
     ]
   },
   {
@@ -329,9 +329,9 @@
     "description": "The original and most prestigious of the Art Basel fairs.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "pierre-larousse",
+      "olivier-dubois",
       "elena-marchetti",
-      "amara-okonkwo"
+      "james-okonkwo-petersen"
     ]
   },
   {
@@ -351,8 +351,8 @@
     "imageUrl": null,
     "confirmedAttendees": [
       "khalid-al-rashid",
-      "amara-okonkwo",
-      "saanvi-mehta"
+      "james-okonkwo-petersen",
+      "raj-mehta"
     ]
   },
   {
@@ -372,7 +372,7 @@
     "imageUrl": null,
     "confirmedAttendees": [
       "khalid-al-rashid",
-      "amara-okonkwo"
+      "james-okonkwo-petersen"
     ]
   },
   {
@@ -392,7 +392,7 @@
     "imageUrl": null,
     "confirmedAttendees": [
       "naomi-tanaka",
-      "vivian-hollis",
+      "constance-pemberton-west",
       "marcus-chen",
       "charles-pemberton"
     ]
@@ -413,8 +413,8 @@
     "description": "A prestigious gathering of leaders and thinkers in the Rockies.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "vivian-hollis",
-      "amara-okonkwo",
+      "constance-pemberton-west",
+      "james-okonkwo-petersen",
       "naomi-tanaka"
     ]
   },
@@ -435,7 +435,7 @@
     "imageUrl": null,
     "confirmedAttendees": [
       "sasha-volkov",
-      "pietro-russo"
+      "theo-beaumont"
     ]
   },
   {
@@ -454,8 +454,8 @@
     "description": "The premier event for large custom yachts. Dealer previews and owner dinners.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "pietro-russo",
-      "dmitri-kozlov",
+      "theo-beaumont",
+      "viktor-petrov",
       "sasha-volkov"
     ]
   },
@@ -475,7 +475,7 @@
     "description": "The peak weekend of the Hamptons summer season.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "vivian-hollis",
+      "constance-pemberton-west",
       "charles-pemberton"
     ]
   },
@@ -495,9 +495,9 @@
     "description": "The world's most significant festival of music and drama.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "alessandro-conti",
+      "alessandro-rossi",
       "elena-marchetti",
-      "vivian-hollis"
+      "constance-pemberton-west"
     ]
   },
   {
@@ -516,8 +516,8 @@
     "description": "A world-class cultural event demanding VIP programming access.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "saanvi-mehta",
-      "amara-okonkwo"
+      "raj-mehta",
+      "james-okonkwo-petersen"
     ]
   },
   {
@@ -557,7 +557,7 @@
     "imageUrl": null,
     "confirmedAttendees": [
       "jules-laurent",
-      "pierre-larousse"
+      "olivier-dubois"
     ]
   },
   {
@@ -576,8 +576,8 @@
     "description": "The final major of the year. Chase suite access.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "rico-alvarez",
-      "amara-okonkwo",
+      "rio-almeida",
+      "james-okonkwo-petersen",
       "khalid-al-rashid"
     ]
   },
@@ -597,9 +597,9 @@
     "description": "The critical Spring/Summer shows. Front row is essential.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "alessandro-conti",
-      "pierre-larousse",
-      "saanvi-mehta"
+      "alessandro-rossi",
+      "olivier-dubois",
+      "raj-mehta"
     ]
   },
   {
@@ -618,8 +618,8 @@
     "description": "The center of the autumn art market. VIP previews and Masters dinners.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "pierre-larousse",
-      "amara-okonkwo",
+      "olivier-dubois",
+      "james-okonkwo-petersen",
       "elena-marchetti"
     ]
   },
@@ -661,7 +661,7 @@
     "confirmedAttendees": [
       "sasha-volkov",
       "khalid-al-rashid",
-      "alessandro-conti"
+      "alessandro-rossi"
     ]
   },
   {
@@ -716,10 +716,10 @@
     "description": "The parties are louder than the art. VIP previews, Soho Beach House, and yacht hopping.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "pierre-larousse",
-      "rico-alvarez",
-      "amara-okonkwo",
-      "dmitri-kozlov"
+      "olivier-dubois",
+      "rio-almeida",
+      "james-okonkwo-petersen",
+      "viktor-petrov"
     ]
   },
   {
@@ -738,7 +738,7 @@
     "description": "Washington's most glamorous night. Includes White House reception access.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "vivian-hollis",
+      "constance-pemberton-west",
       "jules-laurent"
     ]
   },
@@ -779,7 +779,7 @@
     "description": "Exclusive palazzo balls to ring in the new year.",
     "imageUrl": null,
     "confirmedAttendees": [
-      "alessandro-conti",
+      "alessandro-rossi",
       "elena-marchetti"
     ]
   },
@@ -800,9 +800,9 @@
     "imageUrl": null,
     "confirmedAttendees": [
       "sasha-volkov",
-      "dmitri-kozlov",
-      "pierre-larousse",
-      "rico-alvarez"
+      "viktor-petrov",
+      "olivier-dubois",
+      "rio-almeida"
     ]
   },
   {
@@ -817,12 +817,12 @@
     "prestigeTier": 3,
     "prestigeRequired": 0,
     "ticketPrice": 55000,
-    "dressCode": "Après-ski lux",
+    "dressCode": "Apr\u00e8s-ski lux",
     "description": "Private chalets, the Caribou Club, and ringing in the year on the slopes.",
     "imageUrl": null,
     "confirmedAttendees": [
       "charles-pemberton",
-      "vivian-hollis",
+      "constance-pemberton-west",
       "naomi-tanaka"
     ]
   },

@@ -3,6 +3,7 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import TopNav from './components/TopNav';
+import { ToastContainer } from './components/Toast';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { usePathname } from 'next/navigation';
 import { useStore } from './lib/store';
@@ -54,6 +55,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
     <main className="relative w-full h-screen overflow-hidden bg-[#0a0a0c]">
       <ErrorBoundary>
         <TopNav />
+        <ToastContainer />
         {/* 3D MAP LAYER (ALWAYS RENDERED) */}
         <div className={`absolute inset-0 transition-opacity ${isMapActive ? 'opacity-100 z-0 pointer-events-auto' : 'opacity-0 -z-10 pointer-events-none'}`}>
           <Suspense fallback={null}>

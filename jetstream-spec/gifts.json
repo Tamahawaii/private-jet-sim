@@ -1,0 +1,530 @@
+[
+  {
+    "id": "gift-cartier-love-bracelet",
+    "name": "Cartier Love Bracelet",
+    "category": "jewelry",
+    "basePrice": 7300,
+    "description": "The bracelet you screw onto your wrist with a tiny screwdriver. The gift that means: this is serious. Yellow gold.",
+    "affinityImpact": { "affection": 12, "heat": 15, "romanticTension": 18 },
+    "preferredBy": ["sasha-volkov", "amelie-laurent", "elena-marchetti"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-vintage-rolex-datejust",
+    "name": "Vintage Rolex Datejust (1963)",
+    "category": "jewelry",
+    "basePrice": 14500,
+    "description": "Found at auction in Geneva. Honey patina. The kind of watch that says you understand restraint.",
+    "affinityImpact": { "affection": 10, "heat": 8, "romanticTension": 6, "trust": 8 },
+    "preferredBy": ["marcus-chen", "khalid-al-rashid", "olivier-dubois", "raj-mehta"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-van-cleef-alhambra",
+    "name": "Van Cleef Vintage Alhambra Necklace",
+    "category": "jewelry",
+    "basePrice": 4200,
+    "description": "Mother-of-pearl in yellow gold. The classic. Says: I see you and I want everyone else to see I see you.",
+    "affinityImpact": { "affection": 10, "heat": 12, "romanticTension": 15 },
+    "preferredBy": ["isabella-park", "constance-pemberton-west"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-tiffany-tennis-bracelet",
+    "name": "Tiffany Diamond Tennis Bracelet",
+    "category": "jewelry",
+    "basePrice": 22000,
+    "description": "Three carats of diamonds set in platinum. Discreet. Heavy on the wrist. Statement without speech.",
+    "affinityImpact": { "affection": 14, "heat": 18, "romanticTension": 22 },
+    "preferredBy": ["amelie-laurent", "yui-takahashi"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-basquiat-print",
+    "name": "Basquiat Limited Print (signed estate edition)",
+    "category": "art",
+    "basePrice": 35000,
+    "description": "Edition of 85 from the estate. Framed by Hugo Guinness. The kind of gift that hangs.",
+    "affinityImpact": { "affection": 12, "heat": 10, "romanticTension": 8, "trust": 15 },
+    "preferredBy": ["sasha-volkov", "amelie-laurent", "isabella-park", "damir-volkov-reyes"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-vija-celmins-print",
+    "name": "Vija Celmins Lithograph",
+    "category": "art",
+    "basePrice": 18000,
+    "description": "From her ocean series. The kind of work that makes you stand still in front of it. For someone who notices.",
+    "affinityImpact": { "affection": 14, "trust": 12, "romanticTension": 6 },
+    "preferredBy": ["naomi-tanaka", "elena-marchetti", "yui-takahashi"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-commissioned-portrait",
+    "name": "Commissioned Portrait by Hope Gangloff",
+    "category": "commission",
+    "basePrice": 45000,
+    "description": "She'll paint them. Six-month wait. The gift that becomes the thing in their living room forever.",
+    "affinityImpact": { "affection": 20, "heat": 8, "romanticTension": 12, "trust": 18 },
+    "preferredBy": ["theo-beaumont", "rio-almeida", "amelie-laurent", "damir-volkov-reyes"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-romanee-conti-2015",
+    "name": "Domaine de la Romanée-Conti 2015 (single bottle)",
+    "category": "wine-spirits",
+    "basePrice": 26000,
+    "description": "One bottle. The gift that says you understand what to drink and when.",
+    "affinityImpact": { "affection": 8, "heat": 6, "trust": 10 },
+    "preferredBy": ["olivier-dubois", "james-okonkwo-petersen", "alessandro-rossi", "charles-pemberton"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-yamazaki-50",
+    "name": "Yamazaki 50 Year (single bottle)",
+    "category": "wine-spirits",
+    "basePrice": 95000,
+    "description": "One of fewer than 200 bottles ever made. For the whisky person who has everything.",
+    "affinityImpact": { "affection": 15, "heat": 12, "trust": 18 },
+    "preferredBy": ["marcus-chen", "raj-mehta", "viktor-petrov"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-springbank-30",
+    "name": "Springbank 30 Year",
+    "category": "wine-spirits",
+    "basePrice": 4800,
+    "description": "Quietly the most respected whisky on earth among people who actually drink whisky.",
+    "affinityImpact": { "affection": 10, "trust": 12 },
+    "preferredBy": ["charles-pemberton", "marcus-chen"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-clase-azul-ultra",
+    "name": "Clase Azul Ultra Añejo",
+    "category": "wine-spirits",
+    "basePrice": 2400,
+    "description": "Tequila in a hand-painted ceramic decanter. The bottle alone is the art.",
+    "affinityImpact": { "affection": 8, "heat": 8, "romanticTension": 4 },
+    "preferredBy": ["isabella-park", "rio-almeida", "damir-volkov-reyes"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-hermes-birkin-30",
+    "name": "Hermès Birkin 30 (Etoupe)",
+    "category": "fashion",
+    "basePrice": 22000,
+    "description": "The waitlist gift. Etoupe leather, palladium hardware. The classic.",
+    "affinityImpact": { "affection": 14, "heat": 16, "romanticTension": 14 },
+    "preferredBy": ["amelie-laurent", "yui-takahashi", "isabella-park"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-loro-piana-cashmere",
+    "name": "Loro Piana Cashmere Travel Set",
+    "category": "fashion",
+    "basePrice": 4800,
+    "description": "Cashmere blanket, eye mask, slippers. For long flights and short retreats. Quietly extravagant.",
+    "affinityImpact": { "affection": 10, "heat": 6, "trust": 8 },
+    "preferredBy": ["naomi-tanaka", "khalid-al-rashid", "olivier-dubois", "yui-takahashi"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-margiela-archive-coat",
+    "name": "Maison Margiela Archive Coat (1998)",
+    "category": "fashion",
+    "basePrice": 12500,
+    "description": "Sourced through a Tokyo dealer. Pristine. The kind of piece a fashion person actually weeps over.",
+    "affinityImpact": { "affection": 16, "heat": 14, "romanticTension": 12, "trust": 10 },
+    "preferredBy": ["theo-beaumont", "damir-volkov-reyes", "rio-almeida"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-bespoke-anderson-sheppard",
+    "name": "Bespoke Anderson & Sheppard Suit Commission",
+    "category": "fashion",
+    "basePrice": 8500,
+    "description": "Commissioned. Three fittings in London. The kind of gift that takes nine months and lasts thirty years.",
+    "affinityImpact": { "affection": 12, "trust": 14 },
+    "preferredBy": ["charles-pemberton", "james-okonkwo-petersen"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-private-jet-weekend",
+    "name": "Surprise Weekend Anywhere (your jet)",
+    "category": "experience",
+    "basePrice": 0,
+    "description": "Pick a destination. Tell them to pack. Send the car. The gift is the gesture.",
+    "affinityImpact": { "affection": 18, "heat": 24, "romanticTension": 22, "trust": 12 },
+    "imageUrl": null
+  },
+  {
+    "id": "gift-resort-week-aman",
+    "name": "Booked Week at Their Favorite Aman",
+    "category": "travel",
+    "basePrice": 28000,
+    "description": "All on you. Pavilion suite. Their dates. The note says: you don't have to invite me.",
+    "affinityImpact": { "affection": 16, "heat": 14, "romanticTension": 18, "trust": 14 },
+    "imageUrl": null
+  },
+  {
+    "id": "gift-helicopter-charter-day",
+    "name": "Private Helicopter Charter Day",
+    "category": "experience",
+    "basePrice": 8500,
+    "description": "Wherever they are. Whatever they want to see from above. Pilot, champagne, flexible hours.",
+    "affinityImpact": { "affection": 10, "heat": 12, "romanticTension": 10 },
+    "imageUrl": null
+  },
+  {
+    "id": "gift-michelin-omakase-night",
+    "name": "Private Three-Star Omakase Night",
+    "category": "experience",
+    "basePrice": 12000,
+    "description": "Closed counter. Twenty courses. Just them and whoever they bring.",
+    "affinityImpact": { "affection": 12, "heat": 14, "romanticTension": 16 },
+    "preferredBy": ["naomi-tanaka", "yui-takahashi", "marcus-chen"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-singing-flowers-monthly",
+    "name": "Monthly Flowers from Mark Colle (one year)",
+    "category": "flowers",
+    "basePrice": 18000,
+    "description": "Twelve months of his arrangements. Different city each month. The kind of subscription that makes them think of you when they walk into a room and stop.",
+    "affinityImpact": { "affection": 18, "heat": 12, "romanticTension": 16 },
+    "preferredBy": ["amelie-laurent", "elena-marchetti", "theo-beaumont"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-impossible-flowers-once",
+    "name": "Out-of-Season Peonies (overnighted)",
+    "category": "flowers",
+    "basePrice": 1200,
+    "description": "Their favorite flower. Out of season. There anyway.",
+    "affinityImpact": { "affection": 8, "heat": 10, "romanticTension": 10 },
+    "imageUrl": null
+  },
+  {
+    "id": "gift-first-edition-novel",
+    "name": "First Edition of Their Favorite Novel",
+    "category": "literature",
+    "basePrice": 6500,
+    "description": "Tracked down through a London dealer. Inscribed by a previous owner whose name they'll recognize.",
+    "affinityImpact": { "affection": 16, "trust": 14, "romanticTension": 8 },
+    "preferredBy": ["naomi-tanaka", "elena-marchetti", "viktor-petrov", "james-okonkwo-petersen", "damir-volkov-reyes", "amelie-laurent"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-handwritten-letter",
+    "name": "Handwritten Letter (in your hand)",
+    "category": "symbolic",
+    "basePrice": 0,
+    "description": "Three pages, your handwriting, sent priority mail. The gift that costs nothing and means most.",
+    "affinityImpact": { "affection": 14, "trust": 18, "romanticTension": 12 },
+    "imageUrl": null
+  },
+  {
+    "id": "gift-personalized-playlist",
+    "name": "Hand-Curated Playlist (sent monthly, 1 year)",
+    "category": "symbolic",
+    "basePrice": 0,
+    "description": "Twelve playlists. Twelve months. The gift that makes them think of you while driving.",
+    "affinityImpact": { "affection": 12, "heat": 8, "romanticTension": 10, "trust": 8 },
+    "imageUrl": null
+  },
+  {
+    "id": "gift-leica-q3",
+    "name": "Leica Q3",
+    "category": "tech",
+    "basePrice": 6300,
+    "description": "The camera people who already own cameras want. The kind of gift that gets used.",
+    "affinityImpact": { "affection": 10, "heat": 6, "trust": 8 },
+    "preferredBy": ["amelie-laurent", "naomi-tanaka", "rio-almeida"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-vintage-piaggio-vespa",
+    "name": "Restored 1965 Vespa GS (delivered)",
+    "category": "tech",
+    "basePrice": 18000,
+    "description": "Italian restoration shop. Mint green. Shipped to wherever they want it.",
+    "affinityImpact": { "affection": 14, "heat": 16, "romanticTension": 12 },
+    "preferredBy": ["elena-marchetti", "alessandro-rossi", "rio-almeida"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-puppy-from-breeder",
+    "name": "Puppy from Top Breeder (their breed)",
+    "category": "symbolic",
+    "basePrice": 8500,
+    "description": "Years on the waitlist. Suddenly available. The gift that becomes their whole world.",
+    "affinityImpact": { "affection": 25, "heat": 6, "trust": 22, "romanticTension": 8 },
+    "imageUrl": null
+  },
+  {
+    "id": "gift-oxford-university-donation",
+    "name": "Naming Donation in Their Name (university chair)",
+    "category": "symbolic",
+    "basePrice": 250000,
+    "description": "Endowed chair at their alma mater. Plaque with their name. Permanent legacy.",
+    "affinityImpact": { "affection": 22, "trust": 20, "romanticTension": 8 },
+    "preferredBy": ["khalid-al-rashid", "raj-mehta", "naomi-tanaka", "james-okonkwo-petersen"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-meditation-retreat-bhutan",
+    "name": "Private Meditation Retreat in Bhutan",
+    "category": "experience",
+    "basePrice": 18000,
+    "description": "Two weeks. Senior monk. The gift for someone who needs to disappear.",
+    "affinityImpact": { "affection": 18, "trust": 20, "romanticTension": 4 },
+    "preferredBy": ["naomi-tanaka", "yui-takahashi", "james-okonkwo-petersen"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-italian-cooking-week",
+    "name": "Week with a Bologna Nonna (private)",
+    "category": "experience",
+    "basePrice": 8500,
+    "description": "Seven days in her kitchen. She teaches them everything she knows. They go home different.",
+    "affinityImpact": { "affection": 16, "heat": 8, "trust": 14 },
+    "preferredBy": ["elena-marchetti", "rio-almeida", "isabella-park"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-koto-master-lesson",
+    "name": "Private Lesson with Koto Master (Kyoto)",
+    "category": "experience",
+    "basePrice": 4500,
+    "description": "Three hours with a living national treasure. They show you the instrument. You leave changed.",
+    "affinityImpact": { "affection": 14, "trust": 16 },
+    "preferredBy": ["naomi-tanaka", "yui-takahashi"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-cigar-collection",
+    "name": "Cuban Cigar Collection (rare vintage)",
+    "category": "wine-spirits",
+    "basePrice": 12000,
+    "description": "Pre-embargo Cohibas. Acquired through Geneva. The cigar gift that means business.",
+    "affinityImpact": { "affection": 10, "heat": 6, "trust": 12 },
+    "preferredBy": ["marcus-chen", "khalid-al-rashid", "raj-mehta", "viktor-petrov"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-monogrammed-stationery",
+    "name": "Monogrammed Stationery from Smythson",
+    "category": "symbolic",
+    "basePrice": 1800,
+    "description": "Their initials. Bond Street paper. The gift that reminds them daily of correspondence.",
+    "affinityImpact": { "affection": 8, "trust": 10 },
+    "preferredBy": ["charles-pemberton", "amelie-laurent", "constance-pemberton-west"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-private-concert",
+    "name": "Private Concert by Their Favorite Musician",
+    "category": "experience",
+    "basePrice": 85000,
+    "description": "They show up at your venue. Forty-minute set. Drinks after. Whatever scale they want.",
+    "affinityImpact": { "affection": 22, "heat": 18, "romanticTension": 16, "trust": 12 },
+    "preferredBy": ["jules-laurent", "isabella-park", "rio-almeida"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-arabian-horse",
+    "name": "Pure Arabian Horse (delivered to stables)",
+    "category": "symbolic",
+    "basePrice": 250000,
+    "description": "Pedigree mare from a Saudi breeder. Six-month vet quarantine handled.",
+    "affinityImpact": { "affection": 24, "heat": 14, "trust": 22 },
+    "preferredBy": ["khalid-al-rashid", "sasha-volkov"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-falcon-trained",
+    "name": "Trained Hunting Falcon (UAE)",
+    "category": "symbolic",
+    "basePrice": 65000,
+    "description": "Saker falcon, fully trained. Comes with master falconer for handover.",
+    "affinityImpact": { "affection": 20, "trust": 18 },
+    "preferredBy": ["khalid-al-rashid"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-rare-orchid",
+    "name": "Rare Orchid (from a private collection)",
+    "category": "flowers",
+    "basePrice": 4500,
+    "description": "Lady's slipper variety. Only 50 known specimens. Living gift, requires care.",
+    "affinityImpact": { "affection": 14, "trust": 12, "romanticTension": 8 },
+    "preferredBy": ["yui-takahashi", "elena-marchetti", "amelie-laurent"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-private-curator-day",
+    "name": "Day with a Private Art Curator (any city)",
+    "category": "experience",
+    "basePrice": 6500,
+    "description": "Galleries, studios, after-hours museum visits. The kind of day that opens doors.",
+    "affinityImpact": { "affection": 12, "heat": 8, "trust": 12 },
+    "preferredBy": ["sasha-volkov", "amelie-laurent", "damir-volkov-reyes", "isabella-park"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-bespoke-perfume",
+    "name": "Bespoke Perfume from Frédéric Malle",
+    "category": "fashion",
+    "basePrice": 15000,
+    "description": "Three sessions in Paris. Custom scent that's only theirs. Reorderable in their name forever.",
+    "affinityImpact": { "affection": 18, "heat": 16, "romanticTension": 18, "trust": 14 },
+    "preferredBy": ["amelie-laurent", "elena-marchetti", "theo-beaumont", "yui-takahashi"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-rare-vinyl",
+    "name": "First-Press Vinyl Collection (their genre)",
+    "category": "tech",
+    "basePrice": 8500,
+    "description": "Rare originals tracked down through Tokyo and London dealers. The collection they always meant to start.",
+    "affinityImpact": { "affection": 14, "heat": 8, "trust": 10 },
+    "preferredBy": ["jules-laurent", "rio-almeida", "damir-volkov-reyes"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-chess-set-handcarved",
+    "name": "Hand-Carved Chess Set",
+    "category": "symbolic",
+    "basePrice": 12000,
+    "description": "Russian master craftsman. One of fewer than ten he'll make per year. Pieces feel impossibly weighted.",
+    "affinityImpact": { "affection": 12, "trust": 14 },
+    "preferredBy": ["viktor-petrov"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-charity-anonymous",
+    "name": "Anonymous Donation to Their Cause",
+    "category": "symbolic",
+    "basePrice": 50000,
+    "description": "Their foundation. No attribution. They find out by accident months later.",
+    "affinityImpact": { "affection": 22, "trust": 28 },
+    "preferredBy": ["naomi-tanaka", "raj-mehta", "khalid-al-rashid", "james-okonkwo-petersen"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-private-tennis-coach",
+    "name": "Week with Top Tennis Coach (private)",
+    "category": "experience",
+    "basePrice": 12000,
+    "description": "ATP-level coach flies to wherever they are. Five days. Court access included.",
+    "affinityImpact": { "affection": 8, "heat": 10, "trust": 6 },
+    "preferredBy": ["marcus-chen", "isabella-park"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-rare-tea-collection",
+    "name": "Aged Pu-erh Tea Collection (1980s)",
+    "category": "wine-spirits",
+    "basePrice": 8500,
+    "description": "Compressed tea bricks aged forty years. The kind of gift that requires explaining.",
+    "affinityImpact": { "affection": 12, "trust": 14 },
+    "preferredBy": ["naomi-tanaka", "yui-takahashi"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-italian-leather-suitcase",
+    "name": "Bespoke Italian Leather Suitcase (Pineider)",
+    "category": "fashion",
+    "basePrice": 6500,
+    "description": "Initials embossed. Made in Florence. The gift they take everywhere.",
+    "affinityImpact": { "affection": 12, "trust": 10 },
+    "preferredBy": ["alessandro-rossi", "elena-marchetti", "amelie-laurent"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-vintage-hermes-scarf",
+    "name": "Vintage Hermès Scarf (1960s, framed)",
+    "category": "fashion",
+    "basePrice": 3500,
+    "description": "Brides de Gala in original colorway. Framed by a Paris specialist.",
+    "affinityImpact": { "affection": 10, "heat": 8, "romanticTension": 6 },
+    "preferredBy": ["amelie-laurent", "elena-marchetti", "constance-pemberton-west"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-yacht-day-charter",
+    "name": "Private Yacht Day Charter",
+    "category": "experience",
+    "basePrice": 18000,
+    "description": "120-foot yacht for a day. Crew, chef, swim platform. Wherever they want.",
+    "affinityImpact": { "affection": 14, "heat": 16, "romanticTension": 18 },
+    "imageUrl": null
+  },
+  {
+    "id": "gift-villa-week-mediterranean",
+    "name": "Villa Week (Mediterranean)",
+    "category": "travel",
+    "basePrice": 45000,
+    "description": "Eight bedrooms. Staff. Their friends invited. The week that becomes a story.",
+    "affinityImpact": { "affection": 18, "heat": 14, "romanticTension": 14, "trust": 16 },
+    "imageUrl": null
+  },
+  {
+    "id": "gift-personalized-vinyl-pressing",
+    "name": "Custom-Pressed Vinyl (their songs)",
+    "category": "symbolic",
+    "basePrice": 1500,
+    "description": "A record they helped make or that means something. Pressed in an edition of one. Sleeve designed.",
+    "affinityImpact": { "affection": 14, "heat": 10, "romanticTension": 14, "trust": 12 },
+    "imageUrl": null
+  },
+  {
+    "id": "gift-meaningful-photograph",
+    "name": "Framed Photograph (a moment they don't remember being captured)",
+    "category": "symbolic",
+    "basePrice": 800,
+    "description": "Caught them laughing somewhere. Printed properly. Framed. The kind of gift they keep.",
+    "affinityImpact": { "affection": 18, "heat": 8, "romanticTension": 14, "trust": 16 },
+    "imageUrl": null
+  },
+  {
+    "id": "gift-rolls-royce-driver",
+    "name": "Private Driver + Rolls (one month)",
+    "category": "experience",
+    "basePrice": 35000,
+    "description": "A car and a driver in their city for a month. The gift that disappears all the small frictions of life.",
+    "affinityImpact": { "affection": 12, "heat": 8, "trust": 10 },
+    "preferredBy": ["khalid-al-rashid", "olivier-dubois", "raj-mehta"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-tattoo-session",
+    "name": "Session with Their Favorite Tattoo Artist",
+    "category": "experience",
+    "basePrice": 4500,
+    "description": "Booking the artist they've been on a 2-year waitlist for. You pay. They go.",
+    "affinityImpact": { "affection": 14, "heat": 12, "romanticTension": 10 },
+    "preferredBy": ["damir-volkov-reyes", "rio-almeida", "isabella-park"],
+    "imageUrl": null
+  },
+  {
+    "id": "gift-rare-perfume-discontinued",
+    "name": "Discontinued Perfume (their old favorite)",
+    "category": "fashion",
+    "basePrice": 2200,
+    "description": "Tracked down a bottle of the perfume they wore in college. The gift that smells like memory.",
+    "affinityImpact": { "affection": 16, "heat": 14, "romanticTension": 16, "trust": 14 },
+    "imageUrl": null
+  },
+  {
+    "id": "gift-language-immersion-week",
+    "name": "Private Language Immersion Week",
+    "category": "experience",
+    "basePrice": 12000,
+    "description": "Native tutor, private villa, the language they always meant to learn. One week. Total immersion.",
+    "affinityImpact": { "affection": 12, "trust": 14 },
+    "preferredBy": ["naomi-tanaka", "amelie-laurent", "james-okonkwo-petersen"],
+    "imageUrl": null
+  }
+]

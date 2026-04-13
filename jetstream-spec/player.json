@@ -1,0 +1,46 @@
+{
+  "id": "player",
+  "displayName": "Tama",
+  "alternateName": "Brian",
+  "age": 38,
+  "region": "Native Hawaiian / Asian-American (Honolulu)",
+  "gender": "man",
+  "pronouns": "he/him",
+  "orientation": "gay",
+  "orientationFlexibility": "settled — no curiosity questions",
+  "relationshipStyle": "abundant, multiple connections, no commitments, on my terms",
+  "currentPartners": [],
+  "homeBase": "PHNL",
+  "homeCity": "Honolulu, Hawai'i",
+  "occupation": "Tech founder / business owner",
+  "wealthTier": 5,
+  "netWorth": 79700000000,
+  "publicReputation": "magnetic host, generous, never married, attends everything but gives nothing he doesn't want to",
+  "voiceStyle": "casual, fast, warm but never desperate. Doesn't chase. Receives attention like it's natural air. Curious about people but never anxious about losing them.",
+  "personality": [
+    "abundant",
+    "sovereign",
+    "warm",
+    "decisive",
+    "discerning",
+    "uncomplicated about his own desires"
+  ],
+  "tastes": {
+    "aesthetic": "Hawaiian-modern with Japanese restraint",
+    "drinks": "Mezcal, natural wine, espresso",
+    "music": "House, bossa nova, Hawaiian slack-key",
+    "wears": "Loro Piana, vintage Levi's, Birkenstocks, sometimes nothing",
+    "drives": "2023 Hyundai Palisade (refuses to be performative about cars)"
+  },
+  "imageUrl": null,
+  "monogramColors": ["#0b6e8c", "#2ca5c4"],
+  "interests": [
+    "his businesses",
+    "Hawaiian culture and language preservation",
+    "tech founder community (gives back quietly)",
+    "art collecting (focused on Pacific Rim)",
+    "surfing (still does, when the swells are right)",
+    "his network of friends across continents",
+    "nightlife when he's in the mood"
+  ]
+}
