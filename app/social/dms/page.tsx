@@ -44,7 +44,9 @@ export default function DMInbox() {
                            {t.persona?.portraitUrl ? (
                               <div className="absolute inset-0 bg-cover bg-center grayscale" style={{ backgroundImage: `url(${t.persona.portraitUrl})` }} />
                            ) : (
-                              <div className="w-full h-full flex items-center justify-center font-mono text-xs text-zinc-500">?</div>
+                              <div className="w-full h-full flex items-center justify-center font-mono text-[10px] font-bold tracking-tighter text-zinc-500 uppercase bg-zinc-900">
+                                  {t.persona?.displayName.split(' ').map((n: string) => n[0]).join('')}
+                              </div>
                            )}
                            {t.unreadCount > 0 && (
                               <div className="absolute top-0 right-0 w-3 h-3 bg-[#f5a7a7] rounded-full animate-pulse" />

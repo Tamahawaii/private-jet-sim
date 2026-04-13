@@ -44,7 +44,11 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                      {persona.portraitUrl ? (
                          <div className="absolute inset-0 bg-cover bg-center opacity-70 grayscale hover:grayscale-0 transition-all duration-700" style={{ backgroundImage: `url(${persona.portraitUrl})` }} />
                      ) : (
-                         <div className="absolute inset-0 flex items-center justify-center text-zinc-800"><p>?</p></div>
+                         <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-zinc-800 to-black">
+                             <span className="text-8xl font-black font-mono text-zinc-800/80 uppercase tracking-tighter">
+                                 {persona.displayName.split(' ').map((n: string) => n[0]).join('')}
+                             </span>
+                         </div>
                      )}
                      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
                         <div className="text-white text-xl font-black font-mono shadow-sm tracking-widest uppercase">${persona.netWorth.toFixed(1)}B NW</div>

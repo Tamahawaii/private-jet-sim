@@ -80,8 +80,12 @@ export default function PersonaDMThread({ params }: { params: Promise<{ personaI
             </button>
             <div className="flex items-center gap-3">
                <div className="w-10 h-10 rounded-full bg-zinc-800 overflow-hidden relative">
-                  {persona.portraitUrl && (
+                  {persona.portraitUrl ? (
                      <div className="absolute inset-0 bg-cover bg-center grayscale" style={{ backgroundImage: `url(${persona.portraitUrl})` }} />
+                  ) : (
+                     <div className="w-full h-full flex items-center justify-center font-mono text-[10px] font-bold tracking-tighter text-zinc-500 uppercase bg-zinc-900">
+                         {persona.displayName.split(' ').map((n: string) => n[0]).join('')}
+                     </div>
                   )}
                </div>
                <div className="flex flex-col">

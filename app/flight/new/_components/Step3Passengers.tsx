@@ -50,8 +50,12 @@ export default function Step3Passengers({ onNext, onBack }: Props) {
                      >
                         <div className="flex items-center gap-3">
                            <div className="w-10 h-10 rounded-full bg-zinc-800 overflow-hidden relative border border-white/10 group-hover:border-[#f5a7a7]/50 transition-colors">
-                              {p.portraitUrl && (
+                              {p.portraitUrl ? (
                                  <div className="absolute inset-0 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all" style={{ backgroundImage: `url(${p.portraitUrl})` }} />
+                              ) : (
+                                 <div className="w-full h-full flex items-center justify-center font-mono text-[10px] font-bold tracking-tighter text-zinc-500 uppercase bg-zinc-900">
+                                     {p.displayName.split(' ').map((n: string) => n[0]).join('')}
+                                 </div>
                               )}
                            </div>
                            <div className="flex flex-col">

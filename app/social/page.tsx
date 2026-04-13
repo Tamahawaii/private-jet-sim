@@ -57,8 +57,14 @@ export default function SocialHub() {
                   </div>
 
                   <div className="w-full aspect-[21/9] bg-gradient-to-b from-zinc-800 to-black relative">
-                     {member.portraitUrl && (
+                     {member.portraitUrl ? (
                         <div className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity mix-blend-luminosity" style={{ backgroundImage: `url(${member.portraitUrl})` }} />
+                     ) : (
+                         <div className="absolute inset-0 flex items-center justify-center bg-zinc-900/50">
+                             <span className="text-4xl font-black font-mono text-zinc-700/50 uppercase tracking-tighter mix-blend-overlay">
+                                 {member.displayName.split(' ').map((n: string) => n[0]).join('')}
+                             </span>
+                         </div>
                      )}
                      <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black via-black/80 to-transparent">
                         <h2 className="text-2xl font-black font-mono tracking-widest text-[#f5a7a7] uppercase">{member.displayName}</h2>
