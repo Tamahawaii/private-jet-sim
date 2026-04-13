@@ -135,15 +135,6 @@ export default function MapEngine() {
        }
     });
 
-    const handlePopupClick = (e: MouseEvent) => {
-        const target = e.target as HTMLElement;
-        const href = target.getAttribute('data-href');
-        if (href) {
-             const { push } = require('next/navigation').useRouter();
-             // Just a hack inside event listener, much cleaner to use router
-        }
-    };
-
     m.on('click', (e) => {
        const features = m.queryRenderedFeatures(e.point);
        const planeFeature = features.find(f => f.layer.id.startsWith('plane-layer-'));
