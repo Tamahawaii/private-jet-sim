@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Clock, Zap, CheckCircle } from 'lucide-react';
 import { useStore } from '../lib/store';
-import { db } from '../lib/db';
-import { resolveArrivals } from '../lib/simulation';
+import { db } from '../../lib/db';
+import { resolveArrivals } from '../../lib/simulation';
 
 interface Props {
   onClose: () => void;

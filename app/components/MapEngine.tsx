@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import { useStore } from '../lib/store';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db } from '../lib/db';
+import { db } from '../../lib/db';
 import { Aircraft } from '../../types';
 import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
@@ -19,7 +19,7 @@ export default function MapEngine() {
 
   const { selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode, timeMultiplier, setTimeMultiplier } = useStore();
   const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
-  const activeFlights = useLiveQuery(() => db.flights.filter(f => f.arrivedAt === null).toArray()) || [];
+  const activeFlights = useLiveQuery(() => db.flights.filter((f: any) => f.arrivedAt === null).toArray()) || [];
   const fleetRef = useRef(fleet);
   const activeFlightsRef = useRef(activeFlights);
   const pathname = usePathname();
@@ -275,7 +275,7 @@ export default function MapEngine() {
         let showRange = false;
 
         if (fJet.status === 'in_transit' && fJet.currentFlightID) {
-           const flight = activeFlightsRef.current.find(f => f.id === fJet.currentFlightID);
+           const flight = activeFlightsRef.current.find((f: any) => f.id === fJet.currentFlightID);
            if (flight) {
                const now = useStore.getState().getNow();
                const elapsed = now - flight.departedAt;
@@ -283,7 +283,7 @@ export default function MapEngine() {
                let progress = Math.min(1, Math.max(0, total > 0 ? elapsed / total : 1));
 
                // Render great circle array
-               const fullArc = flight.waypoints.map(w => [w.lng, w.lat] as [number, number]);
+               const fullArc = flight.waypoints.map((w: any) => [w.lng, w.lat] as [number, number]);
                if (fullArc.length > 0) {
                   const sliceIndex = Math.floor(progress * (fullArc.length - 1));
                   passedArcCoords = fullArc.slice(0, Math.max(2, sliceIndex + 1));

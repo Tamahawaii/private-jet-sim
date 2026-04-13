@@ -81,8 +81,8 @@ export async function launchFlight(params: {
        await db.transactions.add({
            id: crypto.randomUUID(),
            occurredAt: new Date(now).toISOString(),
-           type: 'flight_expense',
-           amountUSD: params.cost,
+           type: 'flight_cost',
+           amount: params.cost,
            description: `Flight ${aircraft.tailNumber} to ${params.destinationICAO}`
        });
    });
@@ -120,10 +120,12 @@ export async function resolveArrivals() {
                  createdAt: new Date(now).toISOString(),
                  readAt: null,
                  title: 'Flight Arrived',
-                 message: `${f.tailNumber} has arrived at ${f.destinationICAO}.`,
+                 body: `${f.tailNumber} has arrived at ${f.destinationICAO}.`,
                  type: 'system',
-                 relatedEntityId: f.id
+                 linkTo: `/fleet/${f.tailNumber}`
              });
          });
     }
+    
+    return pendingFlights;
 }

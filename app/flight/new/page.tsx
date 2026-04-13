@@ -69,7 +69,7 @@ function FlightPlannerInternal() {
             {step === 1 && (
                <Step1Aircraft 
                   fleet={fleet} 
-                  prefillError={prefillAircraft && (!activeAircraft || activeAircraft.status !== 'parked')}
+                  prefillError={prefillAircraft ? (!activeAircraft || activeAircraft.status !== 'parked') : false}
                   onSelect={(id) => { setSelectedAircraftId(id); setStep(2); }} 
                />
             )}
