@@ -24,6 +24,7 @@ function FlightPlannerInternal() {
   const [step, setStep] = useState(prefillAircraft ? (prefillDestination ? 3 : 2) : 1);
   const [selectedAircraftId, setSelectedAircraftId] = useState<string | null>(null);
   const [selectedDestination, setSelectedDestination] = useState<any | null>(null);
+  const [passengers, setPassengers] = useState<string[]>(['player']);
 
   // Compute active aircraft falling back to query param
   const activeAircraft = fleet.find(j => j.id === selectedAircraftId) 
@@ -102,6 +103,8 @@ function FlightPlannerInternal() {
             )}
             {step === 3 && activeAircraft && selectedDestination && (
                <Step3Passengers 
+                  selectedPassengers={passengers}
+                  onChange={setPassengers}
                   onNext={() => setStep(4)} 
                   onBack={() => setStep(2)}
                />
@@ -110,6 +113,7 @@ function FlightPlannerInternal() {
                <Step4Review 
                   aircraft={activeAircraft}
                   destination={selectedDestination}
+                  passengers={passengers}
                   onBack={() => setStep(3)}
                />
             )}

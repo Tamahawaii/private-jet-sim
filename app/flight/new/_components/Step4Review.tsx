@@ -5,10 +5,14 @@ import { calculateFlightBriefing, launchFlight } from '../../../../lib/simulatio
 import { ArrowLeft, Zap, DollarSign, Clock, MapPin } from 'lucide-react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { db } from '../../../../lib/db';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { PersonaAvatar } from '../../../components/PersonaAvatar';
 
 interface Props {
   aircraft: Aircraft;
   destination: any;
+  passengers: string[];
   onBack: () => void;
 }
 
@@ -16,11 +20,13 @@ function fmt(n: number) {
     return '$' + n.toLocaleString(undefined, { maximumFractionDigits: 0 });
 }
 
-export default function Step4Review({ aircraft, destination, onBack }: Props) {
+export default function Step4Review({ aircraft, destination, passengers, onBack }: Props) {
    const router = useRouter();
    const mapContainer = useRef<HTMLDivElement>(null);
    const [isLaunching, setIsLaunching] = useState(false);
    
+   const personas = useLiveQuery(() => db.personas.where('id').anyOf(passengers).toArray(), [passengers]) || [];
+
    // Compute the briefing securely based on the immutable selected props
    const brief = aircraft.currentLocation ? calculateFlightBriefing(
      aircraft, 
@@ -89,6 +95,7 @@ export default function Step4Review({ aircraft, destination, onBack }: Props) {
                durationHours: brief.durationHours,
                cost: brief.totalCost,
                waypoints: brief.waypoints,
+               passengers: passengers,
                purpose: { type: 'leisure' } // Stubbed default
            });
            
@@ -123,6 +130,19 @@ export default function Step4Review({ aircraft, destination, onBack }: Props) {
                      <div>
                         <div className="text-[10px] text-[#00f0ff] font-mono tracking-widest uppercase mb-1">Total Cost</div>
                         <div className="text-4xl font-black font-mono tracking-tighter text-white">{fmt(brief.totalCost)}</div>
+                     </div>
+                     <div className="text-right flex flex-col items-end">
+                        <div className="text-[10px] text-zinc-500 font-mono tracking-widest uppercase mb-2">Manifest ({passengers.length})</div>
+                        <div className="flex -space-x-3">
+                           {passengers.includes('player') && (
+                              <div className="w-8 h-8 rounded-full bg-zinc-800 border-2 border-[#0a0a0c] flex items-center justify-center font-mono text-[10px] text-white">PL</div>
+                           )}
+                           {personas.map(p => (
+                              <div key={p.id} className="w-8 h-8 rounded-full border-2 border-[#0a0a0c] overflow-hidden">
+                                 <PersonaAvatar persona={p} size={32} />
+                              </div>
+                           ))}
+                        </div>
                      </div>
                   </div>
                   

@@ -13,6 +13,7 @@ export default function Home() {
   const [simNow] = useState(() => useStore.getState().getNow());
 
   const rawEvents = useLiveQuery(() => db.events.toArray()) || [];
+  const personas = useLiveQuery(() => db.personas.toArray()) || [];
   
   const upcoming = React.useMemo(() => {
      if (rawEvents.length === 0) return [];
@@ -66,6 +67,30 @@ export default function Home() {
                                 Tier {evt.prestigeTier}
                             </div>
                         </div>
+
+                        {evt.confirmedAttendees && evt.confirmedAttendees.length > 0 && personas.length > 0 && (
+                            <div className="flex items-center gap-2 mb-3 bg-[#f5a7a7]/10 border border-[#f5a7a7]/20 rounded p-2">
+                                <div className="flex -space-x-2">
+                                    {evt.confirmedAttendees.slice(0, 3).map((id, i) => {
+                                        const p = personas.find(x => x.id === id);
+                                        return p ? (
+                                            <div key={i} className="w-5 h-5 rounded-full bg-[#f5a7a7] border border-black flex items-center justify-center font-mono text-[6px] font-black text-black">
+                                                {p.displayName.split(' ').map((n: string) => n[0]).join('')}
+                                            </div>
+                                        ) : null;
+                                    })}
+                                </div>
+                                <span className="text-[9px] font-mono text-[#f5a7a7] uppercase tracking-widest leading-tight">
+                                    {(() => {
+                                        const firstNames = evt.confirmedAttendees.slice(0, 2).map((id) => personas.find(x => x.id === id)?.displayName.split(' ')[0] || id).filter(Boolean);
+                                        const remainder = Math.max(0, evt.confirmedAttendees.length - 2);
+                                        const namesStr = firstNames.join(', ');
+                                        if (remainder > 0) return `${namesStr} & ${remainder} ${remainder === 1 ? 'other' : 'others'} attending`;
+                                        return `${namesStr.replace(', ', ' & ')} attending`;
+                                    })()}
+                                </span>
+                            </div>
+                        )}
 
                         <div className="flex items-center gap-1.5 text-zinc-400 text-[10px] font-mono uppercase tracking-widest mb-1.5">
                             <Calendar size={12} className="text-[#00f0ff]"/> {dateStr}

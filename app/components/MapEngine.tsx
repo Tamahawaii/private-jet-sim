@@ -611,55 +611,94 @@ export default function MapEngine() {
           if (m.getSource(eventsSourceId)) m.removeSource(eventsSourceId);
       }
 
-      // Friends Overlay Navigation Layer
-      const friendsSourceId = 'friends-source';
-      const friendsLayerId = 'friends-layer';
-      
-      if (showFriendsRef.current) {
-          const friendsFeatures = personasRef.current.map(p => {
-             const state = personaStatesRef.current.find(s => s.personaId === p.id);
-             if (!state || !state.currentCoords || isNaN(state.currentCoords.lat) || isNaN(state.currentCoords.lng)) return null;
-             return {
-                 type: 'Feature',
-                 properties: { id: p.id, name: p.displayName },
-                 geometry: { type: 'Point', coordinates: [state.currentCoords.lng, state.currentCoords.lat] }
-             };
-          }).filter(Boolean);
-          
-          if (!m.getSource(friendsSourceId)) {
-              m.addSource(friendsSourceId, { type: 'geojson', data: { type: 'FeatureCollection', features: friendsFeatures } as any });
-              m.addLayer({
-                  id: friendsLayerId,
-                  type: 'circle',
-                  source: friendsSourceId,
-                  paint: {
-                      'circle-color': '#f5a7a7',
-                      'circle-radius': 5,
-                      'circle-stroke-width': 2,
-                      'circle-stroke-color': '#000000'
-                  }
-              });
-              
-              m.on('click', friendsLayerId, (e: any) => {
-                 if (!e.features || e.features.length === 0) return;
-                 const pid = e.features[0].properties.id;
-                 router.push(`/social/${pid}`);
-              });
 
-              m.on('mouseenter', friendsLayerId, () => { m.getCanvas().style.cursor = 'pointer'; });
-              m.on('mouseleave', friendsLayerId, () => { m.getCanvas().style.cursor = ''; });
-          } else {
-              (m.getSource(friendsSourceId) as any).setData({ type: 'FeatureCollection', features: friendsFeatures });
-          }
-      } else {
-          if (m.getLayer(friendsLayerId)) m.removeLayer(friendsLayerId);
-          if (m.getSource(friendsSourceId)) m.removeSource(friendsSourceId);
-      }
 
     }, 100);
 
     return () => clearInterval(intervalId);
   }, [fleet, selectedAircraftId, provisionalRoute]);
+
+  // NATIVE PERSONA MAP MARKERS
+  const friendMarkersRef = useRef<Record<string, maplibregl.Marker>>({});
+
+  useEffect(() => {
+     if (!map.current) return;
+     const m = map.current;
+
+     if (!m.isStyleLoaded()) return;
+
+     if (!showFriends || (pathname !== '/' && pathname !== '/world' && pathname !== '/social')) {
+         Object.values(friendMarkersRef.current).forEach(marker => marker.remove());
+         friendMarkersRef.current = {};
+         return;
+     }
+
+     const currentIds = new Set<string>();
+
+     personasRef.current.forEach((p: any) => {
+         const state = personaStatesRef.current.find((s: any) => s.personaId === p.id);
+         if (!state || !state.currentCoords || isNaN(state.currentCoords.lat) || isNaN(state.currentCoords.lng)) return;
+
+         currentIds.add(p.id);
+
+         if (!friendMarkersRef.current[p.id]) {
+             // Create element
+             const el = document.createElement('div');
+             el.className = 'w-6 h-6 rounded-full cursor-pointer relative flex items-center justify-center pointer-events-auto hover:scale-110 transition-transform';
+             
+             // Pulse ring
+             const pulse = document.createElement('div');
+             pulse.className = 'absolute inset-0 bg-[#f5a7a7] rounded-full animate-ping opacity-30';
+             
+             // Inner monogram
+             const inner = document.createElement('div');
+             inner.className = 'w-4 h-4 bg-[#f5a7a7] text-black rounded-full flex items-center justify-center font-mono text-[8px] font-black z-10 uppercase tracking-tighter shadow-[0_0_10px_rgba(245,167,167,0.5)]';
+             
+             // Setup inner letters
+             const letters = document.createElement('span');
+             letters.innerText = p.displayName.split(' ').map((n: string) => n[0]).join('');
+             inner.appendChild(letters);
+             
+             el.appendChild(pulse);
+             el.appendChild(inner);
+
+             // Tooltip logic mapping explicitly requested schema
+             const popupHtml = `
+               <div class="p-3 bg-[#0a0a0c] border border-white/10 rounded-lg min-w-[200px]">
+                  <div class="flex flex-col gap-1 mb-4">
+                     <span class="text-xs font-mono tracking-widest text-[#f5a7a7] font-black uppercase">${p.displayName}</span>
+                     <span class="text-[10px] font-mono text-zinc-500 uppercase">${state.currentLocationICAO || 'IN TRANSIT'}</span>
+                  </div>
+                  <div class="flex flex-col gap-2">
+                     <button onclick="window.location.href='/social/dms/${p.id}'" class="w-full text-[10px] font-mono tracking-widest bg-[#f5a7a7] text-black px-2 py-2 hover:opacity-80 transition-opacity">SEND DM</button>
+                     <button onclick="window.location.href='/social/${p.id}'" class="w-full text-[10px] font-mono tracking-widest border border-white/10 text-white px-2 py-2 hover:bg-white/10 transition-colors">VIEW DOSSIER</button>
+                  </div>
+               </div>
+             `;
+
+             const popup = new maplibregl.Popup({ offset: 15, closeButton: false, className: 'persona-popup' })
+                 .setHTML(popupHtml);
+
+             const marker = new maplibregl.Marker({ element: el })
+                 .setLngLat([state.currentCoords.lng, state.currentCoords.lat])
+                 .setPopup(popup)
+                 .addTo(m);
+
+             friendMarkersRef.current[p.id] = marker;
+         } else {
+             friendMarkersRef.current[p.id].setLngLat([state.currentCoords.lng, state.currentCoords.lat]);
+         }
+     });
+
+     // Cleanup removed
+     Object.keys(friendMarkersRef.current).forEach(id => {
+         if (!currentIds.has(id)) {
+             friendMarkersRef.current[id].remove();
+             delete friendMarkersRef.current[id];
+         }
+     });
+
+  }, [rawPersonas, rawPersonaStates, showFriends, pathname]);
 
   return (
     <div className="absolute inset-0 z-0 bg-[#0a0a0c]">

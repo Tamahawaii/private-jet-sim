@@ -17,6 +17,7 @@ export default function PersonaDMThread({ params }: { params: Promise<{ personaI
    const scrollRef = useRef<HTMLDivElement>(null);
 
    const persona = useLiveQuery(() => db.personas.get(resolvedParams.personaId), [resolvedParams.personaId]);
+   const personaState = useLiveQuery(() => db.personaState.where('personaId').equals(resolvedParams.personaId).first(), [resolvedParams.personaId]);
    const thread = useLiveQuery(() => db.dmThreads.where('personaId').equals(resolvedParams.personaId).first(), [resolvedParams.personaId]);
 
    // Auto-create thread if doesn't exist
@@ -98,6 +99,7 @@ export default function PersonaDMThread({ params }: { params: Promise<{ personaI
               body: JSON.stringify({
                   personaId: persona.id,
                   playerContext,
+                  personaState, // passes IndexedDb contextual tracker explicitly!
                   recentMessages: updatedMessages
               })
           });

@@ -7,6 +7,7 @@ import { getEventNextOccurrence } from '../../lib/events';
 import { useStore } from '../../lib/store';
 import { ArrowLeft, Calendar, MapPin, Tag, Navigation2 } from 'lucide-react';
 import Link from 'next/link';
+import { PersonaAvatar } from '../../components/PersonaAvatar';
 
 export default function EventDetailPage({ params }: { params: Promise<{ eventId: string }> }) {
     const resolvedParams = use(params);
@@ -16,6 +17,34 @@ export default function EventDetailPage({ params }: { params: Promise<{ eventId:
     const rawEvent = useLiveQuery(
         () => db.events.get(resolvedParams.eventId),
         [resolvedParams.eventId]
+    );
+
+    const attendances = useLiveQuery(
+        () => db.eventAttendance.filter(ea => ea.eventId === resolvedParams.eventId).toArray(),
+        [resolvedParams.eventId]
+    );
+
+    const combinedAttendeeIds = React.useMemo(() => {
+        if (!rawEvent) return [];
+        const set = new Set<string>();
+        // 1. Static confirmed
+        if (rawEvent.confirmedAttendees) {
+            rawEvent.confirmedAttendees.forEach(id => set.add(id));
+        }
+        // 2. Dynamic from system attendances
+        if (attendances) {
+            attendances.forEach(a => {
+                if (a.companionPersonaIds) {
+                    a.companionPersonaIds.forEach(id => set.add(id));
+                }
+            });
+        }
+        return Array.from(set);
+    }, [rawEvent, attendances]);
+
+    const attendeePersonas = useLiveQuery(
+        () => db.personas.where('id').anyOf(combinedAttendeeIds).toArray(),
+        [combinedAttendeeIds]
     );
 
     if (rawEvent === undefined) return <div className="p-8 text-white font-mono uppercase text-xs tracking-widest bg-[#0a0a0c] h-screen">Checking dossier...</div>;
@@ -107,14 +136,18 @@ export default function EventDetailPage({ params }: { params: Promise<{ eventId:
                             </div>
                             
                             <div>
-                                <h3 className="text-white text-sm font-bold tracking-widest font-mono uppercase mb-3 text-[#00f0ff]">Expected Network</h3>
-                                <div className="flex flex-wrap gap-2">
-                                    {event.confirmedAttendees.map(p => (
-                                       <span key={p} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-mono uppercase text-zinc-300 tracking-widest">
-                                           {p}
-                                       </span>
+                                <h3 className="text-white text-sm font-bold tracking-widest font-mono uppercase mb-3 text-[#f5a7a7]">Expected Network</h3>
+                                <div className="flex flex-col gap-3">
+                                    {attendeePersonas && attendeePersonas.map(p => (
+                                       <Link href={`/social/${p.id}`} key={p.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 transition-colors group">
+                                           <PersonaAvatar persona={p} size={32} />
+                                           <div className="flex flex-col">
+                                              <span className="text-xs uppercase font-mono tracking-widest text-zinc-300 group-hover:text-white transition-colors">{p.displayName}</span>
+                                              <span className="text-[10px] text-zinc-500 font-mono tracking-widest capitalize">{p.archetype.replace(/_/g, ' ')}</span>
+                                           </div>
+                                       </Link>
                                     ))}
-                                    {event.confirmedAttendees.length === 0 && <span className="text-zinc-500 font-mono text-xs uppercase">No intelligence available</span>}
+                                    {(!attendeePersonas || attendeePersonas.length === 0) && <span className="text-zinc-500 font-mono text-xs uppercase">No intelligence available</span>}
                                 </div>
                             </div>
                         </div>

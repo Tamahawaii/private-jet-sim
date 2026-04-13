@@ -151,6 +151,11 @@ export type PersonaState = {
   lastDmSentAt?: ISODateString;
   mood: "happy" | "neutral" | "annoyed" | "envious" | "thrilled" | "casual" | "formal" | "elated" | "concerned";
   rivalryTargets: string[]; // Added for 4.5
+  lastFlightWithPlayer?: {
+     originICAO: string;
+     destinationICAO: string;
+     arrivedAt: ISODateString;
+  };
 };
 
 export type DMMessage = {

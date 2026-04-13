@@ -36,6 +36,7 @@ export async function launchFlight(params: {
    durationHours: number,
    cost: number,
    waypoints: { lat: number, lng: number }[],
+   passengers: string[],
    purpose: any
 }) {
    const now = useStore.getState().getNow();
@@ -102,7 +103,7 @@ export async function resolveArrivals() {
          .toArray();
          
     for (const f of pendingFlights) {
-         await db.transaction('rw', [db.aircraft, db.flights, db.player, db.notifications], async () => {
+         await db.transaction('rw', [db.aircraft, db.flights, db.player, db.notifications, db.personaState], async () => {
              // Mark flight arrived chronologically at its precise arrival time
              await db.flights.update(f.id, { arrivedAt: f.estimatedArrivalAt });
              
@@ -127,6 +128,43 @@ export async function resolveArrivals() {
                  type: 'system',
                  linkTo: `/fleet/${f.tailNumber}`
              });
+
+             // Teleport companions automatically upon successful arrival 
+             if (f.passengers && f.passengers.length > 0) {
+                 for (const pid of f.passengers) {
+                     if (pid === 'player') continue;
+                     
+                     // Upsert state implicitly creating the persona footprint if absent
+                     const st = await db.personaState.where('personaId').equals(pid).first();
+                     if (st) {
+                         await db.personaState.update(pid, {
+                             currentLocationICAO: f.destinationICAO,
+                             lastFlightWithPlayer: {
+                                 originICAO: f.originICAO,
+                                 destinationICAO: f.destinationICAO,
+                                 arrivedAt: new Date(f.estimatedArrivalAt).toISOString()
+                             }
+                         });
+                     } else {
+                         await db.personaState.add({
+                             personaId: pid as any,
+                             currentLocationICAO: f.destinationICAO,
+                             currentFlightState: null,
+                             nextPlannedFlight: null,
+                             friendshipWithPlayer: 0,
+                             relationshipDepth: 0,
+                             lastInteractionAt: null,
+                             mood: 'neutral',
+                             rivalryTargets: [],
+                             lastFlightWithPlayer: {
+                                 originICAO: f.originICAO,
+                                 destinationICAO: f.destinationICAO,
+                                 arrivedAt: new Date(f.estimatedArrivalAt).toISOString()
+                             }
+                         });
+                     }
+                 }
+             }
          });
     }
     if (pendingFlights.length > 0) {

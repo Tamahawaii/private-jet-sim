@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'API key missing' }, { status: 500 });
     }
 
-    const { personaId, playerContext, recentMessages } = await req.json();
+    const { personaId, playerContext, personaState, recentMessages } = await req.json();
 
     if (!personaId || !recentMessages) {
       return NextResponse.json({ error: 'Missing payload requirements' }, { status: 400 });
@@ -48,6 +48,8 @@ PERSONALITY:
 INTERESTS: ${persona.interests.join(", ")}
 
 You are DMing your friend the player (name: ${playerContext.displayName}). Net worth tier: peer.
+Current state: You are physically at ${personaState?.currentLocationICAO || persona.homeBaseICAO}. ${personaState?.lastFlightWithPlayer ? `\n\n[CRITICAL CONTEXT: YOU JUST LANDED HERE AT ${personaState.currentLocationICAO} WITH THE PLAYER RECENTLY, FLYING FROM ${personaState.lastFlightWithPlayer.originICAO}. Incorporate this subtly if naturally relevant.]`: ''}
+
 This is a real-time messaging thread. Your messages should feel like authentic texts — short, natural, in your voice.
 You are a fictional character in a simulation. Stay in character. Keep responses under 3 sentences unless asked for more. Don't reveal you are an AI. Don't break the fourth wall.`;
 
