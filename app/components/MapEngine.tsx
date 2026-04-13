@@ -22,6 +22,7 @@ export default function MapEngine() {
 
   const [weatherEnabled, setWeatherEnabled] = useState(true);
   const [layersOpen, setLayersOpen] = useState(false);
+  const [stylePickerOpen, setStylePickerOpen] = useState(false);
   const [showFleet, setShowFleet] = useState(true);
   const [showAirports, setShowAirports] = useState(true);
 
@@ -80,6 +81,15 @@ export default function MapEngine() {
        }
     });
 
+    const handlePopupClick = (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        const href = target.getAttribute('data-href');
+        if (href) {
+             const { push } = require('next/navigation').useRouter();
+             // Just a hack inside event listener, much cleaner to use router
+        }
+    };
+
     m.on('click', (e) => {
        const features = m.queryRenderedFeatures(e.point);
        const planeFeature = features.find(f => f.layer.id.startsWith('plane-layer-'));
@@ -87,40 +97,39 @@ export default function MapEngine() {
        if (planeFeature) {
           const id = planeFeature.layer.id.replace('plane-layer-', '');
           useStore.getState().setSelectedAircraftId(id);
-          return;
-       }
-
-       const state = useStore.getState();
-       if (state.selectedAircraftId) {
-          const plane = fleetRef.current.find((j: Aircraft) => j.id === state.selectedAircraftId);
-          if (plane && (plane.flightPhase === 'Hangar' || plane.flightPhase === 'Pre-flight' || plane.flightPhase === 'Cruise')) {
-              
-              let targetLat = e.lngLat.lat;
-              let targetLng = e.lngLat.lng;
-              let targetName = `WP ${Math.floor(targetLat)}, ${Math.floor(targetLng)}`;
-
-              let minSq = Infinity;
-              let nearest = null;
-              
-              for (const ap of airportsRef.current) {
-                  const dl = ap.lat - targetLat;
-                  const dg = ap.lng - targetLng;
-                  const sq = dl*dl + dg*dg; 
-                  if (sq < minSq) {
-                     minSq = sq;
-                     nearest = ap;
-                  }
-              }
-
-              if (nearest && plane.currentLocation) {
-                  targetLat = nearest.lat;
-                  targetLng = nearest.lng;
-                  targetName = `${nearest.iata} - ${nearest.name}`;
-                  state.setProvisionalRoute({
-                     origin: plane.currentLocation,
-                     destination: { lat: targetLat, lng: targetLng, name: targetName }
-                  });
-              }
+          const plane = fleetRef.current.find((j: Aircraft) => j.id === id);
+          if (plane) {
+              const htmlContent = `
+                <div class="p-3 bg-black/90 border border-[#00f0ff]/30 text-white font-mono tracking-widest flex flex-col gap-3 min-w-[200px] rounded backdrop-blur">
+                   <div>
+                     <span class="text-xs text-[#00f0ff] font-black">${plane.tailNumber}</span>
+                     <span class="block text-[10px] text-zinc-400 mt-1">${plane.model}</span>
+                     <span class="inline-block mt-2 px-2 py-0.5 border ${plane.flightPhase === 'Hangar' ? 'border-zinc-500 text-zinc-400' : 'border-[#00f0ff] text-[#00f0ff] animate-pulse'} text-[8px] rounded uppercase">${plane.flightPhase}</span>
+                   </div>
+                   <div class="flex flex-col gap-2 mt-2 pt-2 border-t border-white/10">
+                     <button data-href="/fleet/${plane.tailNumber}" class="w-full bg-white/10 hover:bg-white/20 py-1.5 rounded text-[10px] font-bold text-white transition-colors cursor-pointer popup-router-btn">VIEW CRAFT</button>
+                     ${plane.flightPhase === 'Hangar' ? `
+                        <button data-href="/flight/new?aircraft=${plane.tailNumber}" class="w-full bg-[#00f0ff]/10 hover:bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/20 py-1.5 rounded text-[10px] font-bold transition-colors cursor-pointer popup-router-btn">DISPATCH FLIGHT</button>
+                     ` : `
+                        <button data-href="/flight/${plane.id}" class="w-full bg-[#00f0ff]/10 hover:bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/20 py-1.5 rounded text-[10px] font-bold transition-colors cursor-pointer popup-router-btn">VIEW FLIGHT</button>
+                     `}
+                   </div>
+                </div>
+              `;
+              new maplibregl.Popup({ offset: 15, closeButton: true, className: "jetstream-popup" })
+                .setLngLat(e.lngLat)
+                .setHTML(htmlContent)
+                .addTo(m);
+                
+              // Attach to the newly rendered buttons safely by deferring to next tick
+              setTimeout(() => {
+                 document.querySelectorAll('.popup-router-btn').forEach(btn => {
+                     btn.addEventListener('click', (ev) => {
+                          const href = (ev.currentTarget as HTMLElement).getAttribute('data-href');
+                          if (href) window.location.href = href; // force navigation fallback
+                     });
+                 });
+              }, 100);
           }
        }
     });
@@ -376,15 +385,18 @@ export default function MapEngine() {
              source: planeSourceId,
              paint: {
                'circle-color': '#00f0ff',
-               'circle-radius': fJet.flightPhase === 'Cruise' ? 6 : 4,
+               'circle-radius': fJet.id === selectedAircraftId ? 16 : (fJet.flightPhase === 'Hangar' ? 8 : 12),
                'circle-stroke-color': '#ffffff',
-               'circle-stroke-width': 1.5,
-               'circle-opacity': 0.9
+               'circle-stroke-width': fJet.id === selectedAircraftId ? 3 : (fJet.flightPhase === 'Hangar' ? 2 : 3),
+               'circle-opacity': 0.9,
+               'circle-blur': fJet.id === selectedAircraftId ? 0.3 : 0.1
              }
            });
         } else if (showFleet && m.getSource(planeSourceId)) {
            (m.getSource(planeSourceId) as any).setData(planeData);
-           m.setPaintProperty(planeLayerId, 'circle-radius', fJet.flightPhase === 'Cruise' ? 6 : 4);
+           m.setPaintProperty(planeLayerId, 'circle-radius', fJet.id === selectedAircraftId ? 16 : (fJet.flightPhase === 'Hangar' ? 8 : 12));
+           m.setPaintProperty(planeLayerId, 'circle-stroke-width', fJet.id === selectedAircraftId ? 3 : (fJet.flightPhase === 'Hangar' ? 2 : 3));
+           m.setPaintProperty(planeLayerId, 'circle-blur', fJet.id === selectedAircraftId ? 0.3 : 0.1);
         } else if (!showFleet && m.getLayer(planeLayerId)) {
            m.removeLayer(planeLayerId);
            m.removeSource(planeSourceId);
@@ -580,9 +592,25 @@ export default function MapEngine() {
             </div>
          )}
          
+         {stylePickerOpen && (
+            <div className="flex flex-col gap-2 bg-black/80 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl w-64 mb-2">
+               <h3 className="text-xs uppercase font-bold text-zinc-500 tracking-widest mb-2 border-b border-white/10 pb-2">Map Base Style</h3>
+               
+               {['FlightAware', 'Satellite', 'Dark', 'Roads'].map((style) => (
+                  <button 
+                     key={style}
+                     onClick={() => { setMapStyle(style as any); setStylePickerOpen(false); }} 
+                     className={`p-2 rounded text-left transition-all ${mapStyle === style ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/50' : 'hover:bg-white/10 text-white border border-transparent'}`}
+                  >
+                     <span className="text-xs font-bold tracking-widest">{style.toUpperCase()}</span>
+                  </button>
+               ))}
+            </div>
+         )}
+         
          {/* The 4-Button Vertical Stack */}
          <button 
-            onClick={() => setLayersOpen(!layersOpen)}
+            onClick={() => { setLayersOpen(!layersOpen); setStylePickerOpen(false); }}
             className="w-11 h-11 bg-white text-black rounded shadow-2xl flex items-center justify-center hover:scale-105 transition-transform"
             title="Map Layers"
          >
@@ -590,11 +618,11 @@ export default function MapEngine() {
          </button>
          
          <button 
-            onClick={() => setMapStyle(mapStyle === 'FlightAware' ? 'Dark' : 'FlightAware')}
-            className={`w-11 h-11 rounded shadow-2xl flex items-center justify-center hover:scale-105 transition-all outline outline-1 outline-white/20 ${mapStyle === 'FlightAware' ? 'bg-[#00f0ff] text-black outline-none' : 'bg-black/60 backdrop-blur-xl text-white'}`}
-            title="Map Style: Dark / FlightAware"
+            onClick={() => { setStylePickerOpen(!stylePickerOpen); setLayersOpen(false); }}
+            className={`w-11 h-11 rounded shadow-2xl flex items-center justify-center hover:scale-105 transition-all outline outline-1 outline-white/20 ${stylePickerOpen ? 'bg-[#00f0ff] text-black outline-none' : 'bg-black/60 backdrop-blur-xl text-white'}`}
+            title="Map Style"
          >
-            {mapStyle === 'FlightAware' ? <MapIcon size={20}/> : <MapIcon size={20} className="opacity-50"/>}
+            <MapIcon size={20} className={stylePickerOpen ? "opacity-100" : "opacity-80"}/>
          </button>
 
          <button 

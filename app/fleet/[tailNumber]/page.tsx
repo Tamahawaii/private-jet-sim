@@ -16,8 +16,17 @@ export default function FleetDetail({ params }: { params: { tailNumber: string }
   
   const [activeTab, setActiveTab] = useState<'SPECS' | 'MODULES' | 'FLIGHT_LOG' | 'ACTIONS'>('SPECS');
 
-  if (!jet) return null;
-
+  if (fleet.length === 0) return (
+     <div className="absolute inset-0 z-40 bg-[#0a0a0c] pt-24 flex items-center justify-center font-mono text-[#00f0ff] animate-pulse tracking-widest text-sm">
+        ACCESSING DATABASE...
+     </div>
+  );
+  if (!jet) return (
+     <div className="absolute inset-0 z-40 bg-[#0a0a0c] pt-24 flex flex-col items-center justify-center gap-4 text-white">
+        <h2 className="font-mono text-xl tracking-widest text-red-500">ASSET NOT FOUND</h2>
+        <button onClick={() => router.push('/fleet')} className="text-zinc-400 hover:text-white border-b border-zinc-500 pb-1 text-xs">Return to Roster</button>
+     </div>
+  );
   return (
     <div className="absolute inset-0 z-40 bg-[#0a0a0c] pt-24 px-10 pb-10 overflow-y-auto text-white">
       <div className="max-w-4xl mx-auto flex flex-col gap-6">
