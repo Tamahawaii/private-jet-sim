@@ -1,1451 +1,930 @@
 [
   {
+    "id": "amangiri",
+    "name": "Amangiri",
+    "brand": "Aman",
+    "locationICAO": "KPGA",
+    "nearestAirport": "Page Municipal Airport, Utah",
+    "city": "Canyon Point, Utah",
+    "country": "United States",
+    "region": "Americas",
+    "category": "desert",
+    "tier": 4,
+    "nightlyRate": 4500,
+    "currency": "USD",
+    "lat": 36.95,
+    "lng": -111.42,
+    "description": "Carved into the desert plateau of southern Utah, Amangiri is architectural reverence in stone. Forty-five suites face the sandstone monoliths. Pools are cut from rock. Silence is the amenity. Guests come to disappear and reorient.",
+    "shortDescription": "The desert as cathedral. Architectural minimalism meets monumental landscape.",
+    "amenities": ["spa", "private pools", "fitness", "yoga pavilion", "private dining", "library", "boutique"],
+    "dressCode": "Resort casual; thoughtfully chosen",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "monument-valley-helicopter", "name": "Helicopter to Monument Valley", "price": 15000, "description": "Private helicopter charter at golden hour. Land at restricted overlooks. Champagne service."},
+      {"id": "slot-canyon-private", "name": "Private Slot Canyon Excursion", "price": 8500, "description": "Antelope Canyon to yourselves before the public arrives. Photographer included."},
+      {"id": "navajo-storyteller-dinner", "name": "Navajo Storyteller Dinner", "price": 12000, "description": "Private fire dinner with a tribal elder. Stories under the desert sky."},
+      {"id": "stargazing-astronomer", "name": "Private Astronomer Stargazing", "price": 6500, "description": "Observatory-grade telescope with personal astronomer. Champagne and small plates."}
+    ],
+    "preferredBy": ["naomi-tanaka", "sasha-volkov", "james-okonkwo-petersen"]
+  },
+  {
+    "id": "the-brando",
+    "name": "The Brando",
+    "brand": "Pacific Beachcomber",
+    "locationICAO": "NTGT",
+    "nearestAirport": "Tetiaroa Airport (private), French Polynesia",
+    "city": "Tetiaroa Atoll",
+    "country": "French Polynesia",
+    "region": "Pacific",
+    "category": "private-island",
+    "tier": 5,
+    "nightlyRate": 8200,
+    "currency": "USD",
+    "lat": -17.01,
+    "lng": -149.57,
+    "description": "Marlon Brando's private atoll, now a 35-villa carbon-neutral resort. Each villa has its own beach access, private pool, and unobstructed lagoon views. Bring nothing. Want for nothing. Leave changed.",
+    "shortDescription": "Marlon Brando's island. Carbon neutral. Lagoon-fronted villas.",
+    "amenities": ["spa", "private beach", "lagoon access", "diving", "fitness", "library", "marine biology center"],
+    "dressCode": "Barefoot luxury",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "lagoon-yacht-sunset", "name": "Lagoon Sunset Yacht Charter", "price": 25000, "description": "Private catamaran with chef. Sunset sail across the atoll. Anchored dinner."},
+      {"id": "moorea-helicopter", "name": "Helicopter to Moorea", "price": 12000, "description": "Day trip via private helicopter to Moorea. Lunch at Sofitel beach club."},
+      {"id": "private-motu", "name": "Private Motu Picnic", "price": 18000, "description": "Helicopter to your own private motu (small island) for the day. Personal staff."},
+      {"id": "marine-biologist-dive", "name": "Private Marine Biologist Dive", "price": 9500, "description": "Resident marine biologist guides you through the lagoon's coral nurseries."}
+    ],
+    "preferredBy": ["marcus-chen", "rio-almeida", "khalid-al-rashid"]
+  },
+  {
+    "id": "aman-venice",
+    "name": "Aman Venice",
+    "brand": "Aman",
+    "locationICAO": "LIPZ",
+    "nearestAirport": "Venice Marco Polo Airport",
+    "city": "Venice",
+    "country": "Italy",
+    "region": "Europe",
+    "category": "urban-historic",
+    "tier": 4,
+    "nightlyRate": 3800,
+    "currency": "USD",
+    "lat": 45.434,
+    "lng": 12.337,
+    "description": "Sixteenth-century palazzo on the Grand Canal. Tiepolo ceilings. Twenty-four suites. Rooftop garden over Venice. Where you stay when you want Venice to feel like it once did.",
+    "shortDescription": "Tiepolo-ceilinged palazzo on the Grand Canal. Twenty-four suites only.",
+    "amenities": ["spa", "Grand Canal access", "private boats", "rooftop garden", "library", "private dining"],
+    "dressCode": "Continental elegance",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "private-palazzo-dinner", "name": "Private Palazzo Dinner", "price": 18000, "description": "Closed-museum dinner at Ca' Rezzonico. Quartet, candles, Venetian feast."},
+      {"id": "gondola-dawn-tour", "name": "Gondola Dawn Tour", "price": 8000, "description": "Private gondola through quiet morning canals. Cappuccino at a closed cafe opened just for you."},
+      {"id": "murano-glassmaker-private", "name": "Private Murano Glassmaker Session", "price": 12000, "description": "Private workshop with master glassmaker. Create a piece. Ship home."},
+      {"id": "aperitivo-on-water", "name": "Aperitivo on Private Yacht", "price": 9500, "description": "Sunset spritzes on private vintage motoscafo through the lagoon."}
+    ],
+    "preferredBy": ["theo-beaumont", "elena-marchetti", "rio-almeida", "damir-volkov-reyes"]
+  },
+  {
     "id": "aman-tokyo",
     "name": "Aman Tokyo",
     "brand": "Aman",
     "locationICAO": "RJTT",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 3200,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "nearestAirport": "Tokyo Haneda",
+    "city": "Tokyo",
+    "country": "Japan",
+    "region": "Asia",
+    "category": "urban-modern",
+    "tier": 4,
+    "nightlyRate": 2400,
+    "currency": "USD",
+    "lat": 35.685,
+    "lng": 139.762,
+    "description": "Top six floors of the Otemachi Tower. Views across to Mt. Fuji on clear days. Onsen-style spa. Tokyo distilled to its most refined essence.",
+    "shortDescription": "Top of Otemachi Tower. Onsen spa. Tokyo at its quietest.",
+    "amenities": ["onsen spa", "fitness", "library", "tea ceremony room", "private dining", "Mt. Fuji views"],
+    "dressCode": "Considered minimalism",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Private tea ceremony",
-        "priceUSD": 2800,
-        "description": "Exclusive Private tea ceremony"
-      },
-      {
-        "name": "helicopter to Hakone",
-        "priceUSD": 9500,
-        "description": "Exclusive helicopter to Hakone"
-      }
+      {"id": "private-sushi-omakase", "name": "Private Sushi Omakase", "price": 15000, "description": "After-hours at three-Michelin sushi master's counter. Twenty courses. No phones."},
+      {"id": "imperial-palace-private", "name": "Imperial Palace Private Tour", "price": 10000, "description": "Restricted access tour of Imperial Palace gardens with palace historian."},
+      {"id": "ginza-bespoke-tailoring", "name": "Bespoke Tailoring Day", "price": 8500, "description": "Master tailor visits suite. Three garments commissioned, shipped home."},
+      {"id": "tea-master-ceremony", "name": "Private Tea Master Ceremony", "price": 5500, "description": "Centuries-old tea ceremony at private temple. Just you."}
     ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Aman Tokyo.",
-    "imageUrl": "/imagery/resorts/aman-tokyo.jpg"
+    "preferredBy": ["naomi-tanaka", "marcus-chen", "james-okonkwo-petersen"]
   },
   {
     "id": "aman-kyoto",
     "name": "Aman Kyoto",
     "brand": "Aman",
     "locationICAO": "RJOO",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 2900,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "nearestAirport": "Osaka Itami / Kyoto by car",
+    "city": "Kyoto",
+    "country": "Japan",
+    "region": "Asia",
+    "category": "garden-retreat",
+    "tier": 4,
+    "nightlyRate": 3200,
+    "currency": "USD",
+    "lat": 35.058,
+    "lng": 135.732,
+    "description": "Hidden in a forested garden at the foot of Mount Hidari Daimonji. Pavilions among ancient cedars. Eight-acre secret garden. The opposite of speed.",
+    "shortDescription": "Hidden forest pavilions in a centuries-old Kyoto garden.",
+    "amenities": ["onsen", "private gardens", "tea house", "library", "kaiseki dining"],
+    "dressCode": "Considered minimalism",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Private maiko dinner",
-        "priceUSD": 4500,
-        "description": "Exclusive Private maiko dinner"
-      },
-      {
-        "name": "textile atelier visit",
-        "priceUSD": 2200,
-        "description": "Exclusive textile atelier visit"
-      }
+      {"id": "geisha-private-evening", "name": "Private Geisha Evening", "price": 22000, "description": "Closed teahouse in Gion. Maiko and geiko entertainment. Kaiseki dinner."},
+      {"id": "monastery-meditation", "name": "Private Monastery Meditation Retreat", "price": 6500, "description": "Day at active Zen monastery with abbot. Meditation, calligraphy, vegetarian lunch."},
+      {"id": "kintsugi-master", "name": "Kintsugi Master Workshop", "price": 8000, "description": "Master shows you the art of golden joinery. Repair a piece you bring or one provided."}
     ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Aman Kyoto.",
-    "imageUrl": "/imagery/resorts/aman-kyoto.jpg"
+    "preferredBy": ["naomi-tanaka", "elena-marchetti"]
   },
   {
-    "id": "amanzoe-greece",
-    "name": "Amanzoe, Greece",
-    "brand": "Amanzoe,",
-    "locationICAO": "LGAV",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 4500,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "id": "aman-tangier",
+    "name": "Aman Tangier",
+    "brand": "Aman",
+    "locationICAO": "GMTT",
+    "nearestAirport": "Tangier Ibn Battouta",
+    "city": "Tangier",
+    "country": "Morocco",
+    "region": "Africa",
+    "category": "coastal-historic",
+    "tier": 4,
+    "nightlyRate": 2800,
+    "currency": "USD",
+    "lat": 35.778,
+    "lng": -5.804,
+    "description": "Hillside above the Strait of Gibraltar where Africa meets Europe by sight. Old World drama, North African material restraint, twentieth-century literary ghosts.",
+    "shortDescription": "Hillside above the Strait. Where Bowles, Burroughs, and the Beats lived.",
+    "amenities": ["spa", "infinity pool", "fitness", "private beach access", "library", "rooftop terraces"],
+    "dressCode": "Casual sophistication, kaftans encouraged",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Private gulet charter",
-        "priceUSD": 18000,
-        "description": "Exclusive Private gulet charter"
-      },
-      {
-        "name": "Mycenae archaeology tour",
-        "priceUSD": 3500,
-        "description": "Exclusive Mycenae archaeology tour"
-      }
+      {"id": "medina-private-tour", "name": "Private Medina with Historian", "price": 4500, "description": "Closed-shop tour of Tangier medina with cultural historian. Mint tea in hidden riads."},
+      {"id": "chefchaouen-day", "name": "Helicopter to Chefchaouen", "price": 9500, "description": "Day trip to the blue city via helicopter. Lunch at private guesthouse."},
+      {"id": "private-yacht-strait", "name": "Strait of Gibraltar Yacht Day", "price": 14000, "description": "Private yacht to Spain and back. Lunch in Tarifa."}
     ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Amanzoe, Greece.",
-    "imageUrl": "/imagery/resorts/amanzoe-greece.jpg"
+    "preferredBy": ["theo-beaumont", "khalid-al-rashid"]
   },
   {
-    "id": "amangiri-utah",
-    "name": "Amangiri, Utah",
-    "brand": "Amangiri,",
-    "locationICAO": "KBCE",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 5200,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "id": "el-fenn",
+    "name": "El Fenn",
+    "brand": "Independent",
+    "locationICAO": "GMMX",
+    "nearestAirport": "Marrakech Menara",
+    "city": "Marrakech",
+    "country": "Morocco",
+    "region": "Africa",
+    "category": "riad-historic",
+    "tier": 3,
+    "nightlyRate": 950,
+    "currency": "USD",
+    "lat": 31.628,
+    "lng": -7.987,
+    "description": "Restored medina riad complex by Vanessa Branson. Twenty-eight unique suites across former merchant houses. Rooftop bar with Atlas Mountain views. Quietly the best in Marrakech.",
+    "shortDescription": "Vanessa Branson's medina labyrinth. The cool one.",
+    "amenities": ["spa", "rooftop bar", "library", "art collection", "private dining", "swimming pool"],
+    "dressCode": "Bohemian elegance",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Slot canyon hike with chef picnic",
-        "priceUSD": 2800,
-        "description": "Exclusive Slot canyon hike with chef picnic"
-      },
-      {
-        "name": "helicopter Grand Canyon",
-        "priceUSD": 7500,
-        "description": "Exclusive helicopter Grand Canyon"
-      }
+      {"id": "atlas-mountains-day", "name": "Atlas Mountains Private Day", "price": 5500, "description": "4x4 to remote Berber village. Lunch with local family. Hammam back at riad."},
+      {"id": "souk-private-shopper", "name": "Private Shopper through the Souk", "price": 3500, "description": "Insider with relationships at every important vendor. Pieces shipped home."},
+      {"id": "yves-saint-laurent-museum", "name": "After-Hours YSL Museum", "price": 4000, "description": "Private after-hours visit with curator. Champagne in Majorelle Garden after."}
     ],
-    "prestigeTier": 5,
-    "description": "The world-renowned Amangiri, Utah.",
-    "imageUrl": "/imagery/resorts/amangiri-utah.jpg"
+    "preferredBy": ["theo-beaumont", "rio-almeida", "damir-volkov-reyes"]
   },
   {
-    "id": "nihi-sumba-indonesia",
-    "name": "Nihi Sumba, Indonesia",
-    "brand": "Nihi",
-    "locationICAO": "WADD",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 4800,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "id": "hotel-du-cap",
+    "name": "Hôtel du Cap-Eden-Roc",
+    "brand": "Oetker Collection",
+    "locationICAO": "LFMD",
+    "nearestAirport": "Cannes Mandelieu",
+    "city": "Antibes",
+    "country": "France",
+    "region": "Europe",
+    "category": "coastal-classic",
+    "tier": 4,
+    "nightlyRate": 5200,
+    "currency": "USD",
+    "lat": 43.553,
+    "lng": 7.124,
+    "description": "Cap d'Antibes since 1870. The cabanas, the saltwater pool carved into rock, the gardens, the legend. Where Cannes Film Festival actually happens, in private.",
+    "shortDescription": "The Cap d'Antibes original. Where the legend lives.",
+    "amenities": ["spa", "saltwater pool", "private cabanas", "tennis", "fitness", "private beach", "boutique"],
+    "dressCode": "Riviera classic",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Nihi Oka spa safari",
-        "priceUSD": 1200,
-        "description": "Exclusive Nihi Oka spa safari"
-      },
-      {
-        "name": "private wave guide",
-        "priceUSD": 3500,
-        "description": "Exclusive private wave guide"
-      }
+      {"id": "yacht-day-corsica", "name": "Day Yacht to Corsica", "price": 35000, "description": "Private superyacht charter to Corsican coves. Crew, chef, swim platform."},
+      {"id": "monaco-helicopter-day", "name": "Helicopter to Monaco", "price": 12000, "description": "GP weekend or otherwise. Pit access arranged separately."},
+      {"id": "private-cabana-season", "name": "Private Cabana Reservation", "price": 8500, "description": "Same cabana every day of stay, butler-staffed. Lunch service in cabana."}
     ],
-    "prestigeTier": 5,
-    "description": "The world-renowned Nihi Sumba, Indonesia.",
-    "imageUrl": "/imagery/resorts/nihi-sumba-indonesia.jpg"
+    "preferredBy": ["theo-beaumont", "khalid-al-rashid", "marcus-chen"]
   },
   {
-    "id": "the-brando-french-polynesia",
-    "name": "The Brando, French Polynesia",
-    "brand": "The",
-    "locationICAO": "NTGJ",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 6500,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "id": "il-pellicano",
+    "name": "Hotel Il Pellicano",
+    "brand": "Pellicano Hotels",
+    "locationICAO": "LIRP",
+    "nearestAirport": "Pisa / by car to Tuscany coast",
+    "city": "Porto Ercole",
+    "country": "Italy",
+    "region": "Europe",
+    "category": "coastal-classic",
+    "tier": 4,
+    "nightlyRate": 2800,
+    "currency": "USD",
+    "lat": 42.392,
+    "lng": 11.205,
+    "description": "Tuscan coast cliff-cling since 1965. Slim Aarons photographs were taken here. Still feels like that. The pool deck is the world.",
+    "shortDescription": "Slim Aarons's Italy. Still exists. Still magic.",
+    "amenities": ["spa", "saltwater pool", "private rocks beach", "fitness", "tennis", "private dining"],
+    "dressCode": "Effortless Italian classic",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Lagoon photography with marine biologist",
-        "priceUSD": 2000,
-        "description": "Exclusive Lagoon photography with marine biologist"
-      },
-      {
-        "name": "private motu picnic",
-        "priceUSD": 4800,
-        "description": "Exclusive private motu picnic"
-      }
+      {"id": "private-boat-giglio", "name": "Private Boat to Giglio", "price": 12000, "description": "Vintage motoscafo to Giglio Island. Lunch on the boat."},
+      {"id": "tuscan-vineyard-private", "name": "Private Vineyard Day", "price": 6500, "description": "Helicopter to Brunello producer. Lunch and tasting at the family estate."}
     ],
-    "prestigeTier": 5,
-    "description": "The world-renowned The Brando, French Polynesia.",
-    "imageUrl": "/imagery/resorts/the-brando-french-polynesia.jpg"
+    "preferredBy": ["theo-beaumont", "elena-marchetti", "sasha-volkov"]
   },
   {
-    "id": "soneva-jani-maldives",
-    "name": "Soneva Jani, Maldives",
+    "id": "il-san-pietro",
+    "name": "Il San Pietro di Positano",
+    "brand": "Independent",
+    "locationICAO": "LIRN",
+    "nearestAirport": "Naples / by car or boat",
+    "city": "Positano",
+    "country": "Italy",
+    "region": "Europe",
+    "category": "coastal-cliff",
+    "tier": 4,
+    "nightlyRate": 2400,
+    "currency": "USD",
+    "lat": 40.620,
+    "lng": 14.491,
+    "description": "Carved into the cliff outside Positano. Private beach via elevator through the rock. Lemon groves, candles, terraces. The Amalfi Coast at its most operatic.",
+    "shortDescription": "Amalfi cliff palace with private beach via cliff elevator.",
+    "amenities": ["private beach", "elevator through cliff", "spa", "tennis", "private boats", "lemon grove"],
+    "dressCode": "Elegant resort",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "capri-private-day", "name": "Capri Day on Private Boat", "price": 11000, "description": "Vintage gozzo to Capri. Lunch at Da Paolino. Blue Grotto when the crowd thins."},
+      {"id": "private-cooking-class", "name": "Private Cooking Class with Nonna", "price": 4500, "description": "Local nonna teaches you Positanese classics in your suite kitchen."}
+    ],
+    "preferredBy": ["elena-marchetti", "rio-almeida", "sasha-volkov"]
+  },
+  {
+    "id": "claridges",
+    "name": "Claridge's",
+    "brand": "Maybourne",
+    "locationICAO": "EGLC",
+    "nearestAirport": "London City Airport",
+    "city": "London",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "category": "urban-historic",
+    "tier": 4,
+    "nightlyRate": 2200,
+    "currency": "USD",
+    "lat": 51.512,
+    "lng": -0.148,
+    "description": "Mayfair's grande dame since 1856. Art Deco bones, modern grace. Where royalty stays. Where Beaton photographed. Where you stay when London demands its full ceremonial weight.",
+    "shortDescription": "Mayfair grande dame. Royalty's hotel.",
+    "amenities": ["spa", "fitness", "afternoon tea", "fine dining", "private dining", "boutique"],
+    "dressCode": "Smart London — jacket required after 6pm",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "private-bond-street-shopper", "name": "Private Bond Street Shopper", "price": 5500, "description": "Personal shopper opens doors at major houses after-hours. No press, no crowds."},
+      {"id": "afternoon-tea-private", "name": "Private Foyer Afternoon Tea", "price": 3500, "description": "Closed Foyer. Pianist. Just your party. Champagne service."},
+      {"id": "white-glove-museum", "name": "Private V&A or British Museum Visit", "price": 7500, "description": "After-hours curator-led tour of restricted collections."}
+    ],
+    "preferredBy": ["charles-pemberton", "james-okonkwo-petersen", "naomi-tanaka"]
+  },
+  {
+    "id": "the-newt",
+    "name": "The Newt in Somerset",
+    "brand": "Karoo Trust",
+    "locationICAO": "EGGD",
+    "nearestAirport": "Bristol Airport",
+    "city": "Bruton",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "category": "countryside",
+    "tier": 4,
+    "nightlyRate": 1800,
+    "currency": "USD",
+    "lat": 51.107,
+    "lng": -2.440,
+    "description": "Country estate hotel in Somerset. Heritage gardens, private cyder works, Roman villa onsite, deer park. England as it imagines itself.",
+    "shortDescription": "Somerset estate. Cyder, deer park, restored gardens, Roman ruins.",
+    "amenities": ["spa", "gardens", "fitness", "fine dining", "estate walks", "cyder works"],
+    "dressCode": "English countryside",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "private-game-shoot", "name": "Private Pheasant Shoot", "price": 8500, "description": "Estate shoot with gamekeepers. Country lunch in shooting hut after."},
+      {"id": "garden-design-master", "name": "Private Garden Tour with Head Gardener", "price": 3500, "description": "Behind-the-scenes garden tour. Cuttings to take home."}
+    ],
+    "preferredBy": ["charles-pemberton", "james-okonkwo-petersen"]
+  },
+  {
+    "id": "cliveden-house",
+    "name": "Cliveden House",
+    "brand": "Iconic Luxury Hotels",
+    "locationICAO": "EGLF",
+    "nearestAirport": "Farnborough / by car",
+    "city": "Berkshire",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "category": "countryside-historic",
+    "tier": 4,
+    "nightlyRate": 1500,
+    "currency": "USD",
+    "lat": 51.560,
+    "lng": -0.692,
+    "description": "Astor family estate above the Thames. Three centuries of scandal, statesmanship, and immaculately maintained gardens. The Profumo affair started here. Now you stay here.",
+    "shortDescription": "Astor estate above the Thames. Centuries of scandal preserved in amber.",
+    "amenities": ["spa", "tennis", "swimming pool", "private dining", "gardens", "fitness", "Thames boats"],
+    "dressCode": "English country smart",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "thames-boat-day", "name": "Private Thames Boat Day", "price": 5500, "description": "Vintage launch up the Thames. Picnic lunch on board."},
+      {"id": "library-private-dinner", "name": "Private Library Dinner", "price": 8500, "description": "Astor's library, candlelit. Multi-course tasting menu. Just your party."}
+    ],
+    "preferredBy": ["charles-pemberton", "james-okonkwo-petersen"]
+  },
+  {
+    "id": "six-senses-bhutan",
+    "name": "Six Senses Bhutan",
+    "brand": "Six Senses",
+    "locationICAO": "VQPR",
+    "nearestAirport": "Paro International",
+    "city": "Paro / Thimphu / Punakha (5 lodges)",
+    "country": "Bhutan",
+    "region": "Asia",
+    "category": "wellness-mountain",
+    "tier": 4,
+    "nightlyRate": 4200,
+    "currency": "USD",
+    "lat": 27.434,
+    "lng": 89.412,
+    "description": "Five lodges across Bhutan's western valleys. Each a different elevation, climate, story. Move between them on a 7-14 day journey. Buddhist monks bless your arrival. The opposite of striving.",
+    "shortDescription": "Five lodges across Bhutan. Move between them. Be transformed.",
+    "amenities": ["wellness center at each lodge", "meditation", "yoga", "private guides", "monastery visits"],
+    "dressCode": "Modest, layered, comfortable",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "tigers-nest-private", "name": "Private Tiger's Nest Pilgrimage", "price": 6500, "description": "Predawn ascent to Paro Taktsang. Monk blessing at the top."},
+      {"id": "bhutan-helicopter-tour", "name": "Private Helicopter Across Valleys", "price": 18000, "description": "See all five lodges from the air. Land at remote monastery for lunch."},
+      {"id": "buddhist-master-meditation", "name": "Multi-Day Meditation with Monk", "price": 8000, "description": "Personal meditation instruction with senior monk. Three days of guided practice."}
+    ],
+    "preferredBy": ["naomi-tanaka", "james-okonkwo-petersen"]
+  },
+  {
+    "id": "six-senses-zighy",
+    "name": "Six Senses Zighy Bay",
+    "brand": "Six Senses",
+    "locationICAO": "OOMS",
+    "nearestAirport": "Muscat International",
+    "city": "Musandam Peninsula",
+    "country": "Oman",
+    "region": "Middle East",
+    "category": "coastal-remote",
+    "tier": 4,
+    "nightlyRate": 2200,
+    "currency": "USD",
+    "lat": 26.069,
+    "lng": 56.243,
+    "description": "Hidden bay on Oman's Musandam Peninsula. Only accessible by 4x4, boat, or paragliding arrival. Stone villas with private pools facing the sea. Total disappearance.",
+    "shortDescription": "Oman's hidden bay. Arrive by paraglider if you wish.",
+    "amenities": ["spa", "private beach", "diving center", "fitness", "private pools", "yoga"],
+    "dressCode": "Resort barefoot",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "paraglide-arrival", "name": "Paraglide Arrival", "price": 12000, "description": "Tandem paraglide from mountaintop into resort beach. The legendary entrance."},
+      {"id": "private-dhow-fjords", "name": "Private Dhow through Musandam Fjords", "price": 8500, "description": "Traditional dhow through the 'Norway of Arabia'. Snorkeling. Beach lunch."},
+      {"id": "desert-camp-overnight", "name": "Private Desert Camp", "price": 9500, "description": "Overnight in luxury desert camp. Falconer demonstration. Stars."}
+    ],
+    "preferredBy": ["khalid-al-rashid", "james-okonkwo-petersen"]
+  },
+  {
+    "id": "amanruya",
+    "name": "Amanruya",
+    "brand": "Aman",
+    "locationICAO": "LTFE",
+    "nearestAirport": "Bodrum-Milas",
+    "city": "Bodrum",
+    "country": "Turkey",
+    "region": "Mediterranean",
+    "category": "coastal-mediterranean",
+    "tier": 4,
+    "nightlyRate": 3400,
+    "currency": "USD",
+    "lat": 37.030,
+    "lng": 27.398,
+    "description": "Aegean cliff above a private cove. Stone cottages with private pools and sea views. Olive groves. The understated Aman approach to the Mediterranean.",
+    "shortDescription": "Aegean cliff cottages. Private cove. Olive groves.",
+    "amenities": ["spa", "private cove", "fitness", "tennis", "private pools", "boats"],
+    "dressCode": "Coastal Mediterranean elegance",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "private-gulet-charter", "name": "Private Gulet Day Charter", "price": 18000, "description": "Traditional Turkish gulet for the day. Cove hopping, lunch on board."},
+      {"id": "ephesus-private-tour", "name": "Private Ephesus Excursion", "price": 8500, "description": "Helicopter to Ephesus. Closed-site archaeologist tour."}
+    ],
+    "preferredBy": ["khalid-al-rashid", "elena-marchetti", "sasha-volkov"]
+  },
+  {
+    "id": "burj-al-arab",
+    "name": "Burj Al Arab",
+    "brand": "Jumeirah",
+    "locationICAO": "OMDB",
+    "nearestAirport": "Dubai International",
+    "city": "Dubai",
+    "country": "United Arab Emirates",
+    "region": "Middle East",
+    "category": "urban-iconic",
+    "tier": 5,
+    "nightlyRate": 6500,
+    "currency": "USD",
+    "lat": 25.141,
+    "lng": 55.185,
+    "description": "Sail-shaped icon. Suite-only. Helipad. Gold leaf. Excessive in every dimension and unapologetic about it. Where the Gulf flexes.",
+    "shortDescription": "The sail. Gold-leafed suites. Helipad arrival.",
+    "amenities": ["spa", "helipad", "private beach access", "multiple pools", "fine dining", "boutique"],
+    "dressCode": "Statement luxury",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "helipad-arrival", "name": "Helicopter Arrival via Helipad", "price": 15000, "description": "Arrive on the iconic helipad. Tea on arrival."},
+      {"id": "private-yacht-palm", "name": "Private Yacht around Palm Jumeirah", "price": 22000, "description": "Sunset cruise around Palm Jumeirah. Champagne, canapes."},
+      {"id": "desert-falconry-private", "name": "Private Desert Falconry Camp", "price": 14000, "description": "4x4 deep into desert. Falconer, oud player, traditional feast."}
+    ],
+    "preferredBy": ["khalid-al-rashid", "marcus-chen"]
+  },
+  {
+    "id": "jumeirah-al-qasr",
+    "name": "Jumeirah Al Qasr",
+    "brand": "Jumeirah",
+    "locationICAO": "OMDB",
+    "nearestAirport": "Dubai International",
+    "city": "Dubai",
+    "country": "United Arab Emirates",
+    "region": "Middle East",
+    "category": "urban-resort",
+    "tier": 4,
+    "nightlyRate": 1800,
+    "currency": "USD",
+    "lat": 25.135,
+    "lng": 55.183,
+    "description": "Madinat Jumeirah complex's flagship. Arabian palace aesthetic. Private beach, abra waterways winding through the property, souk attached. The grown-up choice in Dubai.",
+    "shortDescription": "Madinat Jumeirah flagship. Arabian palace. Abras and souks.",
+    "amenities": ["spa", "multiple pools", "private beach", "abra transport", "souk access", "kids club"],
+    "dressCode": "Resort elegant",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "private-souk-shopping", "name": "Private Souk Shopping Experience", "price": 4500, "description": "Insider shopper through Madinat souk after hours."},
+      {"id": "desert-glamping", "name": "Private Desert Glamping Night", "price": 12000, "description": "Overnight in private desert camp with full butler service."}
+    ],
+    "preferredBy": ["khalid-al-rashid"]
+  },
+  {
+    "id": "singita-sweni",
+    "name": "Singita Sweni Lodge",
+    "brand": "Singita",
+    "locationICAO": "FAKN",
+    "nearestAirport": "Kruger Mpumalanga",
+    "city": "Kruger National Park",
+    "country": "South Africa",
+    "region": "Africa",
+    "category": "safari",
+    "tier": 5,
+    "nightlyRate": 4500,
+    "currency": "USD",
+    "lat": -24.490,
+    "lng": 31.778,
+    "description": "Six-suite lodge on the Sweni River in Kruger. Glass walls onto the bushveld. Big Five at your doorstep. Conservation-driven luxury.",
+    "shortDescription": "Six suites on the Sweni River. Big Five. Glass walls.",
+    "amenities": ["spa", "wildlife center", "fitness", "private dining", "wine cellar", "library"],
+    "dressCode": "Safari neutrals",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "private-safari-vehicle", "name": "Private Safari Vehicle for Stay", "price": 8500, "description": "Dedicated vehicle, ranger, tracker. Set your own schedule."},
+      {"id": "walking-safari-private", "name": "Private Walking Safari with Master Tracker", "price": 5500, "description": "On-foot bush experience with senior tracker. All five senses engaged."},
+      {"id": "helicopter-safari", "name": "Helicopter Safari Day", "price": 18000, "description": "Aerial game viewing. Land for bush brunch. Visit remote conservation sites."}
+    ],
+    "preferredBy": ["james-okonkwo-petersen", "khalid-al-rashid"]
+  },
+  {
+    "id": "ellerman-house",
+    "name": "Ellerman House",
+    "brand": "Independent",
+    "locationICAO": "FACT",
+    "nearestAirport": "Cape Town International",
+    "city": "Cape Town",
+    "country": "South Africa",
+    "region": "Africa",
+    "category": "coastal-urban",
+    "tier": 4,
+    "nightlyRate": 2200,
+    "currency": "USD",
+    "lat": -33.910,
+    "lng": 18.385,
+    "description": "Edwardian mansion above Bantry Bay. Private South African art collection (one of the country's finest). Wine cellar of national significance. Eleven suites only.",
+    "shortDescription": "Above Bantry Bay. Museum-grade SA art. Eleven suites.",
+    "amenities": ["spa", "private art gallery", "wine cellar", "infinity pool", "fitness", "private dining"],
+    "dressCode": "Cape sophistication",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "wine-tour-helicopter", "name": "Helicopter Wine Tour Stellenbosch", "price": 9500, "description": "Heli to top three estates. Tastings and lunch at private cellars."},
+      {"id": "private-art-curator", "name": "Private Art Tour with Curator", "price": 3500, "description": "Owner's collection tour with house curator. Champagne service."}
+    ],
+    "preferredBy": ["james-okonkwo-petersen", "naomi-tanaka"]
+  },
+  {
+    "id": "fasano-trancoso",
+    "name": "Fasano Trancoso",
+    "brand": "Fasano",
+    "locationICAO": "SBPS",
+    "nearestAirport": "Porto Seguro Airport",
+    "city": "Trancoso, Bahia",
+    "country": "Brazil",
+    "region": "Americas",
+    "category": "coastal-tropical",
+    "tier": 4,
+    "nightlyRate": 1800,
+    "currency": "USD",
+    "lat": -16.589,
+    "lng": -39.092,
+    "description": "Trancoso's quasi-secret beach hideaway. Bungalows in the jungle, infinity pool over the Atlantic. Brazilian high society's worst-kept secret.",
+    "shortDescription": "Trancoso's hidden Fasano. Brazilian aristocracy's secret.",
+    "amenities": ["spa", "infinity pool", "private beach", "fitness", "tropical dining"],
+    "dressCode": "Bahian beach chic",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "private-quadricycle-villages", "name": "Private Quadricycle Beach Villages Tour", "price": 3500, "description": "Beach villages day tour. Lunch at remote pousada."},
+      {"id": "private-schooner-coast", "name": "Private Schooner Coastal Day", "price": 6500, "description": "Sail to neighboring beach coves. Fresh seafood lunch on board."}
+    ],
+    "preferredBy": ["rio-almeida", "damir-volkov-reyes"]
+  },
+  {
+    "id": "fasano-punta-del-este",
+    "name": "Fasano Punta del Este",
+    "brand": "Fasano",
+    "locationICAO": "SULS",
+    "nearestAirport": "Punta del Este Laguna del Sauce",
+    "city": "Punta del Este",
+    "country": "Uruguay",
+    "region": "Americas",
+    "category": "coastal-design",
+    "tier": 4,
+    "nightlyRate": 1500,
+    "currency": "USD",
+    "lat": -34.879,
+    "lng": -55.073,
+    "description": "Isay Weinfeld-designed bungalows in the dunes outside Punta. Brazilian South American sophistication. Where the Latin American art world summers.",
+    "shortDescription": "Isay Weinfeld bungalows in Punta dunes. Latin elegance.",
+    "amenities": ["spa", "private beach", "fitness", "fine dining", "wine cellar"],
+    "dressCode": "Resort cool",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "polo-private-day", "name": "Private Polo Day at La Bagatelle", "price": 12000, "description": "Match arranged. Lunch at estancia. Optional ride."},
+      {"id": "carmelo-vineyards", "name": "Carmelo Wineries Day", "price": 6500, "description": "Helicopter to Garzón vineyards. Lunch with the winemaker."}
+    ],
+    "preferredBy": ["rio-almeida", "damir-volkov-reyes"]
+  },
+  {
+    "id": "rosewood-sao-paulo",
+    "name": "Rosewood São Paulo",
+    "brand": "Rosewood",
+    "locationICAO": "SBSP",
+    "nearestAirport": "São Paulo Congonhas",
+    "city": "São Paulo",
+    "country": "Brazil",
+    "region": "Americas",
+    "category": "urban-design",
+    "tier": 4,
+    "nightlyRate": 1400,
+    "currency": "USD",
+    "lat": -23.557,
+    "lng": -46.652,
+    "description": "Jean Nouvel-designed tower in Bela Vista. 175 rooms, four restaurants, art collection of major Brazilian works. The new center of São Paulo society.",
+    "shortDescription": "Jean Nouvel's tower. Brazilian art. New SP society HQ.",
+    "amenities": ["spa", "rooftop pool", "art collection", "multiple restaurants", "fitness", "library"],
+    "dressCode": "São Paulo urban polish",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "private-art-gallery-tour", "name": "Private SP Art Gallery Day", "price": 4500, "description": "Insider tour of top galleries (Mendes Wood, Fortes D'Aloia). Studio visits arranged."},
+      {"id": "samba-school-private", "name": "Private Samba School Visit", "price": 5500, "description": "Behind-the-scenes at top Carnaval samba school. Rehearsal access."}
+    ],
+    "preferredBy": ["rio-almeida", "damir-volkov-reyes"]
+  },
+  {
+    "id": "halekulani",
+    "name": "Halekulani",
+    "brand": "Halekulani Corporation",
+    "locationICAO": "PHNL",
+    "nearestAirport": "Honolulu",
+    "city": "Honolulu, Oʻahu",
+    "country": "United States",
+    "region": "Pacific",
+    "category": "coastal-classic",
+    "tier": 4,
+    "nightlyRate": 1100,
+    "currency": "USD",
+    "lat": 21.281,
+    "lng": -157.835,
+    "description": "House Befitting Heaven. Waikiki since 1917. Refined Hawaiian luxury. Where Tama hosts. The home court advantage.",
+    "shortDescription": "Tama's Honolulu home court. House Befitting Heaven.",
+    "amenities": ["spa", "Waikiki beach access", "infinity pool", "fitness", "fine dining", "House Without a Key (live music)"],
+    "dressCode": "Refined island",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "private-luau", "name": "Private Beachfront Luau", "price": 8500, "description": "Closed luau experience for your party. Hawaiian musicians and dancers."},
+      {"id": "north-shore-helicopter", "name": "North Shore Helicopter Day", "price": 9500, "description": "Helicopter to North Shore. Surf lesson with Olympic surfer arranged."},
+      {"id": "private-lanai-omakase", "name": "Private Lanai Omakase", "price": 6500, "description": "Top sushi master visits your suite. Twelve-course omakase on private lanai."}
+    ],
+    "preferredBy": ["marcus-chen", "naomi-tanaka", "theo-beaumont", "rio-almeida", "james-okonkwo-petersen", "damir-volkov-reyes"]
+  },
+  {
+    "id": "the-lodge-koele",
+    "name": "Sensei Lānaʻi (formerly The Lodge at Kōʻele)",
+    "brand": "Four Seasons / Sensei",
+    "locationICAO": "PHNY",
+    "nearestAirport": "Lanai City Airport",
+    "city": "Lanai",
+    "country": "United States",
+    "region": "Pacific",
+    "category": "wellness-island",
+    "tier": 5,
+    "nightlyRate": 4500,
+    "currency": "USD",
+    "lat": 20.825,
+    "lng": -156.918,
+    "description": "Larry Ellison bought the island. Then turned this into a wellness sanctuary. Adults only, deeply private, individualized programs. The richest people you've never heard of are usually here.",
+    "shortDescription": "Larry Ellison's island wellness sanctuary. Adults only.",
+    "amenities": ["spa", "personalized wellness", "fitness", "meditation", "private dining", "island activities"],
+    "dressCode": "Wellness comfortable",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "personalized-wellness-program", "name": "Personalized Wellness Sensei Program", "price": 12000, "description": "Bespoke physical, nutritional, mental program designed for you over your stay."},
+      {"id": "private-island-tour", "name": "Private Lanai Island Tour", "price": 5500, "description": "4x4 to remote beaches and Garden of the Gods. Private picnic at hidden cove."}
+    ],
+    "preferredBy": ["naomi-tanaka", "marcus-chen"]
+  },
+  {
+    "id": "amanyara",
+    "name": "Amanyara",
+    "brand": "Aman",
+    "locationICAO": "MBPV",
+    "nearestAirport": "Providenciales",
+    "city": "Providenciales",
+    "country": "Turks and Caicos",
+    "region": "Caribbean",
+    "category": "coastal-tropical",
+    "tier": 4,
+    "nightlyRate": 3800,
+    "currency": "USD",
+    "lat": 21.831,
+    "lng": -72.288,
+    "description": "Northwest tip of Providenciales, on a nature reserve. Pavilions in pine forest with reflecting pools. Private. Quiet. Aman discipline applied to Caribbean blue.",
+    "shortDescription": "Aman in Turks and Caicos. Reflecting pools. Caribbean quiet.",
+    "amenities": ["spa", "private beach", "private pools", "fitness", "diving center", "library"],
+    "dressCode": "Resort barefoot",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "private-yacht-day", "name": "Private Yacht to Iguana Island", "price": 14000, "description": "Catamaran to nearby uninhabited island. Snorkel, lunch on board, swim with rock iguanas."},
+      {"id": "private-conch-experience", "name": "Local Conch Diving + Cooking", "price": 5500, "description": "Free dive for conch with local fisherman. Cook with chef on the beach after."}
+    ],
+    "preferredBy": ["marcus-chen", "rio-almeida", "khalid-al-rashid"]
+  },
+  {
+    "id": "twin-farms",
+    "name": "Twin Farms",
+    "brand": "Independent",
+    "locationICAO": "KLEB",
+    "nearestAirport": "Lebanon Municipal NH",
+    "city": "Barnard, Vermont",
+    "country": "United States",
+    "region": "Americas",
+    "category": "countryside-american",
+    "tier": 4,
+    "nightlyRate": 2500,
+    "currency": "USD",
+    "lat": 43.722,
+    "lng": -72.617,
+    "description": "300-acre Vermont estate. Twenty cottages and lodges. All-inclusive. Whatever you want, whenever. The American answer to a country estate.",
+    "shortDescription": "Vermont's secret. 300 acres. All-inclusive Americana.",
+    "amenities": ["spa", "fitness", "tennis", "fly fishing", "skiing in season", "library", "farm dinners"],
+    "dressCode": "Country house casual",
+    "imageUrl": null,
+    "signatureExperiences": [
+      {"id": "private-fly-fishing", "name": "Private Fly Fishing Guide", "price": 3500, "description": "Master fly fisher. Vermont rivers. Picnic lunch streamside."},
+      {"id": "syrup-harvest", "name": "Maple Sugaring Private Experience", "price": 2500, "description": "Sugar shack to bottle. Take your own syrup home."}
+    ],
+    "preferredBy": ["charles-pemberton", "marcus-chen"]
+  },
+  {
+    "id": "soneva-fushi",
+    "name": "Soneva Fushi",
     "brand": "Soneva",
     "locationICAO": "VRMM",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 4200,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "nearestAirport": "Malé International",
+    "city": "Baa Atoll",
+    "country": "Maldives",
+    "region": "Indian Ocean",
+    "category": "private-island",
+    "tier": 4,
+    "nightlyRate": 4200,
+    "currency": "USD",
+    "lat": 5.104,
+    "lng": 73.078,
+    "description": "Maldives original barefoot luxury island. Each villa with private pool, observatory access, slow design. Sustainability-focused. The blueprint everyone copies.",
+    "shortDescription": "Maldives original. Barefoot. Observatory. Sustainable.",
+    "amenities": ["spa", "observatory", "private pools", "fitness", "diving center", "cinema in jungle", "ice cream room"],
+    "dressCode": "Barefoot",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Over-water observatory dinner",
-        "priceUSD": 3800,
-        "description": "Exclusive Over-water observatory dinner"
-      },
-      {
-        "name": "dolphin cruise",
-        "priceUSD": 2400,
-        "description": "Exclusive dolphin cruise"
-      }
+      {"id": "private-yacht-overnight", "name": "Private Yacht Overnight", "price": 22000, "description": "Sleep on private yacht in remote atoll. Crew, chef, deserted beaches."},
+      {"id": "manta-ray-private", "name": "Private Manta Ray Encounter", "price": 8500, "description": "Marine biologist guides snorkel with manta squadron in Hanifaru Bay (season)."}
     ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Soneva Jani, Maldives.",
-    "imageUrl": "/imagery/resorts/soneva-jani-maldives.jpg"
+    "preferredBy": ["khalid-al-rashid", "naomi-tanaka", "marcus-chen"]
   },
   {
-    "id": "four-seasons-bora-bora",
-    "name": "Four Seasons Bora Bora",
-    "brand": "Four",
-    "locationICAO": "NTTB",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 2400,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "id": "the-upper-house",
+    "name": "The Upper House",
+    "brand": "Swire",
+    "locationICAO": "VHHH",
+    "nearestAirport": "Hong Kong International",
+    "city": "Hong Kong",
+    "country": "Hong Kong",
+    "region": "Asia",
+    "category": "urban-design",
+    "tier": 4,
+    "nightlyRate": 1200,
+    "currency": "USD",
+    "lat": 22.276,
+    "lng": 114.166,
+    "description": "Andre Fu-designed, Pacific Place. 117 suites, no front desk, deeply considered. The grown-up's Hong Kong choice.",
+    "shortDescription": "Andre Fu's Hong Kong. No front desk. Considered everything.",
+    "amenities": ["spa", "fitness", "fine dining", "private dining", "library lounge"],
+    "dressCode": "Hong Kong international",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Lagoon sanctuary tour",
-        "priceUSD": 1800,
-        "description": "Exclusive Lagoon sanctuary tour"
-      },
-      {
-        "name": "private motu",
-        "priceUSD": 5500,
-        "description": "Exclusive private motu"
-      }
+      {"id": "tailored-suit-private", "name": "Bespoke Tailoring Day", "price": 6500, "description": "Master tailor visits suite. Three garments, shipped home."},
+      {"id": "junk-boat-private", "name": "Private Junk Boat Day", "price": 8500, "description": "Restored junk through Hong Kong waters. Lunch on board. Beach stop."}
     ],
-    "prestigeTier": 3,
-    "description": "The world-renowned Four Seasons Bora Bora.",
-    "imageUrl": "/imagery/resorts/four-seasons-bora-bora.jpg"
+    "preferredBy": ["james-okonkwo-petersen", "naomi-tanaka", "marcus-chen"]
   },
   {
-    "id": "aman-bhutan",
-    "name": "Aman Bhutan",
-    "brand": "Aman",
-    "locationICAO": "VQPR",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 3800,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "id": "passalacqua",
+    "name": "Passalacqua",
+    "brand": "Independent (De Santis Family)",
+    "locationICAO": "LIMC",
+    "nearestAirport": "Milan Malpensa",
+    "city": "Lake Como (Moltrasio)",
+    "country": "Italy",
+    "region": "Europe",
+    "category": "lake-historic",
+    "tier": 5,
+    "nightlyRate": 4500,
+    "currency": "USD",
+    "lat": 45.876,
+    "lng": 9.106,
+    "description": "Eighteenth-century villa on Lake Como, opened as hotel in 2022. Twenty-four suites. Voted world's best hotel within a year. Frescoes restored, gardens magic, the lake just there.",
+    "shortDescription": "Lake Como's new icon. Eighteenth-century villa. Twenty-four suites.",
+    "amenities": ["spa", "infinity pool over lake", "private boats", "fitness", "tennis", "fine dining", "music room"],
+    "dressCode": "Lake elegance",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Tiger's Nest hike with private guide",
-        "priceUSD": 2200,
-        "description": "Exclusive Tiger's Nest hike with private guide"
-      }
+      {"id": "private-vintage-riva", "name": "Private Vintage Riva Day", "price": 12000, "description": "Vintage Riva motorboat for the day. Captain. Lunch at Bellagio."},
+      {"id": "private-villa-tour", "name": "Closed-Villa Tour with Curator", "price": 5500, "description": "Behind-velvet-rope tour of frescoes and grounds. Aperitivo in private salon."}
     ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Aman Bhutan.",
-    "imageUrl": "/imagery/resorts/aman-bhutan.jpg"
+    "preferredBy": ["elena-marchetti", "theo-beaumont", "sasha-volkov", "rio-almeida"]
   },
   {
-    "id": "capella-ubud-bali",
-    "name": "Capella Ubud, Bali",
-    "brand": "Capella",
-    "locationICAO": "WADD",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 2400,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "id": "borgo-egnazia",
+    "name": "Borgo Egnazia",
+    "brand": "Independent",
+    "locationICAO": "LIBD",
+    "nearestAirport": "Bari Karol Wojtyła",
+    "city": "Puglia",
+    "country": "Italy",
+    "region": "Europe",
+    "category": "coastal-regional",
+    "tier": 4,
+    "nightlyRate": 1500,
+    "currency": "USD",
+    "lat": 40.890,
+    "lng": 17.385,
+    "description": "Recreated Pugliese village on the Adriatic. Limestone, courtyards, olive trees. Madonna got married here. Now you stay here.",
+    "shortDescription": "Built-from-scratch Pugliese village. Madonna's wedding venue.",
+    "amenities": ["spa", "private beach", "tennis", "fitness", "kids program", "olive oil cellar"],
+    "dressCode": "Italian summer",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Rice terrace gastronomy",
-        "priceUSD": 1500,
-        "description": "Exclusive Rice terrace gastronomy"
-      },
-      {
-        "name": "jungle spa journey",
-        "priceUSD": 900,
-        "description": "Exclusive jungle spa journey"
-      }
+      {"id": "alberobello-trullo-day", "name": "Private Trullo Country Day", "price": 4500, "description": "Visit medieval trulli in Alberobello. Lunch at private masseria."},
+      {"id": "private-pasta-master", "name": "Private Pasta Master Class", "price": 2800, "description": "Nonna teaches you orecchiette and Pugliese sauces."}
     ],
-    "prestigeTier": 3,
-    "description": "The world-renowned Capella Ubud, Bali.",
-    "imageUrl": "/imagery/resorts/capella-ubud-bali.jpg"
+    "preferredBy": ["elena-marchetti", "rio-almeida"]
   },
   {
-    "id": "umaid-bhawan-palace-jaipur",
-    "name": "Umaid Bhawan Palace, Jaipur",
-    "brand": "Umaid",
-    "locationICAO": "VIJP",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 3200,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Royal dining with polo team",
-        "priceUSD": 3500,
-        "description": "Exclusive Royal dining with polo team"
-      },
-      {
-        "name": "falconry",
-        "priceUSD": 1800,
-        "description": "Exclusive falconry"
-      }
-    ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Umaid Bhawan Palace, Jaipur.",
-    "imageUrl": "/imagery/resorts/umaid-bhawan-palace-jaipur.jpg"
-  },
-  {
-    "id": "cheval-blanc-paris",
-    "name": "Cheval Blanc Paris",
-    "brand": "Cheval",
-    "locationICAO": "LFPB",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 5800,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Private Seine yacht",
-        "priceUSD": 4500,
-        "description": "Exclusive Private Seine yacht"
-      },
-      {
-        "name": "after-hours Louvre",
-        "priceUSD": 8500,
-        "description": "Exclusive after-hours Louvre"
-      }
-    ],
-    "prestigeTier": 5,
-    "description": "The world-renowned Cheval Blanc Paris.",
-    "imageUrl": "/imagery/resorts/cheval-blanc-paris.jpg"
-  },
-  {
-    "id": "aman-venice-palazzo-papadopoli",
-    "name": "Aman Venice (Palazzo Papadopoli)",
-    "brand": "Aman",
-    "locationICAO": "LIPZ",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 4400,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Private water taxi to Torcello with picnic",
-        "priceUSD": 2800,
-        "description": "Exclusive Private water taxi to Torcello with picnic"
-      }
-    ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Aman Venice (Palazzo Papadopoli).",
-    "imageUrl": "/imagery/resorts/aman-venice-palazzo-papadopoli.jpg"
-  },
-  {
-    "id": "h-tel-du-cap-eden-roc",
-    "name": "Hôtel du Cap-Eden-Roc",
-    "brand": "Hôtel",
-    "locationICAO": "LFMN",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 3800,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Cabana + lunch at Eden-Roc",
-        "priceUSD": 1200,
-        "description": "Exclusive Cabana + lunch at Eden-Roc"
-      },
-      {
-        "name": "yacht day",
-        "priceUSD": 8500,
-        "description": "Exclusive yacht day"
-      }
-    ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Hôtel du Cap-Eden-Roc.",
-    "imageUrl": "/imagery/resorts/h-tel-du-cap-eden-roc.jpg"
-  },
-  {
-    "id": "eden-rock-st-barths",
-    "name": "Eden Rock St Barths",
-    "brand": "Eden",
-    "locationICAO": "TFFJ",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 4200,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Sandy Beach villa takeover + chef",
-        "priceUSD": 18000,
-        "description": "Exclusive Sandy Beach villa takeover + chef"
-      },
-      {
-        "name": "catamaran day",
-        "priceUSD": 6500,
-        "description": "Exclusive catamaran day"
-      }
-    ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Eden Rock St Barths.",
-    "imageUrl": "/imagery/resorts/eden-rock-st-barths.jpg"
-  },
-  {
-    "id": "hotel-splendido-portofino",
-    "name": "Hotel Splendido, Portofino",
-    "brand": "Hotel",
+    "id": "splendido-portofino",
+    "name": "Splendido, A Belmond Hotel",
+    "brand": "Belmond",
     "locationICAO": "LIMJ",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 3900,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "nearestAirport": "Genova Cristoforo Colombo",
+    "city": "Portofino",
+    "country": "Italy",
+    "region": "Europe",
+    "category": "coastal-classic",
+    "tier": 4,
+    "nightlyRate": 3200,
+    "currency": "USD",
+    "lat": 44.305,
+    "lng": 9.207,
+    "description": "Above Portofino harbor, with the postcard view. Sixty-four rooms, gardens, infinity pool, helipad. Where the harbor regulars stay.",
+    "shortDescription": "Above Portofino. The postcard view. Where the regulars stay.",
+    "amenities": ["spa", "infinity pool", "tennis", "fitness", "private beach access", "helipad"],
+    "dressCode": "Italian Riviera classic",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Private boat to Cinque Terre",
-        "priceUSD": 4800,
-        "description": "Exclusive Private boat to Cinque Terre"
-      },
-      {
-        "name": "truffle hunt",
-        "priceUSD": 2400,
-        "description": "Exclusive truffle hunt"
-      }
+      {"id": "private-gozzo-cinque-terre", "name": "Private Gozzo to Cinque Terre", "price": 8500, "description": "Wooden boat captain takes you down the coast. Lunch in Vernazza."},
+      {"id": "san-fruttuoso-private", "name": "Private San Fruttuoso Excursion", "price": 4500, "description": "Boat to abbey accessible only by sea. Private monastery tour."}
     ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Hotel Splendido, Portofino.",
-    "imageUrl": "/imagery/resorts/hotel-splendido-portofino.jpg"
+    "preferredBy": ["elena-marchetti", "sasha-volkov", "theo-beaumont"]
   },
   {
-    "id": "il-pellicano-tuscany",
-    "name": "Il Pellicano, Tuscany",
-    "brand": "Il",
-    "locationICAO": "LIRA",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 3200,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "id": "explora-patagonia",
+    "name": "Explora Patagonia",
+    "brand": "Explora",
+    "locationICAO": "SCNT",
+    "nearestAirport": "Puerto Natales",
+    "city": "Torres del Paine",
+    "country": "Chile",
+    "region": "Americas",
+    "category": "remote-wilderness",
+    "tier": 4,
+    "nightlyRate": 2200,
+    "currency": "USD",
+    "lat": -51.062,
+    "lng": -73.025,
+    "description": "Inside Torres del Paine National Park. Forty-nine rooms facing the towers. All-inclusive expeditions: trekking, riding, kayaking. Wilderness as the only program.",
+    "shortDescription": "Torres del Paine. Forty-nine rooms. The towers as wallpaper.",
+    "amenities": ["spa", "all-inclusive guided expeditions", "fitness", "library", "outdoor hot tubs"],
+    "dressCode": "Patagonia technical",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Beach club cabana",
-        "priceUSD": 950,
-        "description": "Exclusive Beach club cabana"
-      },
-      {
-        "name": "private Maremma day",
-        "priceUSD": 3800,
-        "description": "Exclusive private Maremma day"
-      }
+      {"id": "private-helicopter-glaciers", "name": "Private Helicopter Glaciers Day", "price": 18000, "description": "Land on glacier. Champagne on ice. Aerial tour of Southern Ice Field."},
+      {"id": "private-horseback-multiday", "name": "Multi-Day Private Horseback", "price": 8500, "description": "Two-day ride to remote estancia. Sleep under stars. Gauchos as guides."}
     ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Il Pellicano, Tuscany.",
-    "imageUrl": "/imagery/resorts/il-pellicano-tuscany.jpg"
+    "preferredBy": ["damir-volkov-reyes", "naomi-tanaka", "marcus-chen"]
   },
   {
-    "id": "grand-h-tel-du-cap-ferrat",
-    "name": "Grand-Hôtel du Cap-Ferrat",
-    "brand": "Grand-Hôtel",
-    "locationICAO": "LFMN",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 3600,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Olympic pool cabana",
-        "priceUSD": 1100,
-        "description": "Exclusive Olympic pool cabana"
-      },
-      {
-        "name": "yacht day Villefranche",
-        "priceUSD": 7200,
-        "description": "Exclusive yacht day Villefranche"
-      }
-    ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Grand-Hôtel du Cap-Ferrat.",
-    "imageUrl": "/imagery/resorts/grand-h-tel-du-cap-ferrat.jpg"
-  },
-  {
-    "id": "claridge-s-london",
-    "name": "Claridge's, London",
-    "brand": "Claridge's,",
-    "locationICAO": "EGLL",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 3100,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Royal Suite takeover",
-        "priceUSD": 18000,
-        "description": "Exclusive Royal Suite takeover"
-      },
-      {
-        "name": "Daniel Humm tasting",
-        "priceUSD": 1100,
-        "description": "Exclusive Daniel Humm tasting"
-      }
-    ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Claridge's, London.",
-    "imageUrl": "/imagery/resorts/claridge-s-london.jpg"
-  },
-  {
-    "id": "the-connaught-london",
-    "name": "The Connaught, London",
-    "brand": "The",
-    "locationICAO": "EGLL",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 2900,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Private Aman Spa experience",
-        "priceUSD": 1800,
-        "description": "Exclusive Private Aman Spa experience"
-      }
-    ],
-    "prestigeTier": 4,
-    "description": "The world-renowned The Connaught, London.",
-    "imageUrl": "/imagery/resorts/the-connaught-london.jpg"
-  },
-  {
-    "id": "le-sirenuse-positano",
-    "name": "Le Sirenuse, Positano",
-    "brand": "Le",
-    "locationICAO": "LIRN",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 2800,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Private boat to Li Galli",
-        "priceUSD": 3500,
-        "description": "Exclusive Private boat to Li Galli"
-      },
-      {
-        "name": "cooking class",
-        "priceUSD": 1400,
-        "description": "Exclusive cooking class"
-      }
-    ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Le Sirenuse, Positano.",
-    "imageUrl": "/imagery/resorts/le-sirenuse-positano.jpg"
-  },
-  {
-    "id": "hotel-de-russie-rome",
-    "name": "Hotel de Russie, Rome",
-    "brand": "Hotel",
-    "locationICAO": "LIRA",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 2200,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Private Vatican afterhours",
-        "priceUSD": 7500,
-        "description": "Exclusive Private Vatican afterhours"
-      },
-      {
-        "name": "Cinecittà tour",
-        "priceUSD": 3200,
-        "description": "Exclusive Cinecittà tour"
-      }
-    ],
-    "prestigeTier": 3,
-    "description": "The world-renowned Hotel de Russie, Rome.",
-    "imageUrl": "/imagery/resorts/hotel-de-russie-rome.jpg"
-  },
-  {
-    "id": "the-mark-nyc",
-    "name": "The Mark, NYC",
-    "brand": "The",
-    "locationICAO": "KTEB",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 3200,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Bergdorf after-hours stylist",
-        "priceUSD": 2500,
-        "description": "Exclusive Bergdorf after-hours stylist"
-      },
-      {
-        "name": "MoMA private curator",
-        "priceUSD": 4500,
-        "description": "Exclusive MoMA private curator"
-      }
-    ],
-    "prestigeTier": 4,
-    "description": "The world-renowned The Mark, NYC.",
-    "imageUrl": "/imagery/resorts/the-mark-nyc.jpg"
-  },
-  {
-    "id": "the-carlyle-nyc",
-    "name": "The Carlyle, NYC",
-    "brand": "The",
-    "locationICAO": "KTEB",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 2400,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Bemelmans private session",
-        "priceUSD": 3200,
-        "description": "Exclusive Bemelmans private session"
-      }
-    ],
-    "prestigeTier": 3,
-    "description": "The world-renowned The Carlyle, NYC.",
-    "imageUrl": "/imagery/resorts/the-carlyle-nyc.jpg"
-  },
-  {
-    "id": "rosewood-mansion-dallas",
-    "name": "Rosewood Mansion, Dallas",
+    "id": "the-rosewood-london",
+    "name": "Rosewood London",
     "brand": "Rosewood",
-    "locationICAO": "KDAL",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 1800,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "locationICAO": "EGLC",
+    "nearestAirport": "London City Airport",
+    "city": "London",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "category": "urban-historic",
+    "tier": 4,
+    "nightlyRate": 1400,
+    "currency": "USD",
+    "lat": 51.518,
+    "lng": -0.118,
+    "description": "Edwardian Belle Époque manor in Holborn. Marble grand staircase, courtyard, deeply considered service. The London hotel for people who don't want Mayfair.",
+    "shortDescription": "Edwardian Holborn manor. The anti-Mayfair London choice.",
+    "amenities": ["spa", "fitness", "fine dining", "afternoon tea", "private dining", "library"],
+    "dressCode": "London elegant",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "private skeet shoot",
-        "priceUSD": 2400,
-        "description": "Exclusive private skeet shoot"
-      },
-      {
-        "name": "ranch helicopter",
-        "priceUSD": 4800,
-        "description": "Exclusive ranch helicopter"
-      }
+      {"id": "private-savile-row", "name": "Private Savile Row Tailoring Tour", "price": 5500, "description": "Insider tour of three legendary tailors. Bespoke order at one of them."},
+      {"id": "private-tate-tour", "name": "Private After-Hours Tate Modern", "price": 8500, "description": "Closed museum tour with senior curator. Champagne in the Turbine Hall."}
     ],
-    "prestigeTier": 3,
-    "description": "The world-renowned Rosewood Mansion, Dallas.",
-    "imageUrl": "/imagery/resorts/rosewood-mansion-dallas.jpg"
+    "preferredBy": ["james-okonkwo-petersen", "charles-pemberton"]
   },
   {
-    "id": "auberge-du-soleil-napa",
-    "name": "Auberge du Soleil, Napa",
-    "brand": "Auberge",
-    "locationICAO": "KAPC",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 2200,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [],
-    "prestigeTier": 3,
-    "description": "The world-renowned Auberge du Soleil, Napa.",
-    "imageUrl": "/imagery/resorts/auberge-du-soleil-napa.jpg"
-  },
-  {
-    "id": "the-little-nell-aspen",
-    "name": "The Little Nell, Aspen",
-    "brand": "The",
-    "locationICAO": "KASE",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 3400,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
+    "id": "chateau-de-fonscolombe",
+    "name": "Château de Fonscolombe",
+    "brand": "Independent",
+    "locationICAO": "LFML",
+    "nearestAirport": "Marseille Provence",
+    "city": "Provence",
+    "country": "France",
+    "region": "Europe",
+    "category": "countryside-historic",
+    "tier": 3,
+    "nightlyRate": 850,
+    "currency": "USD",
+    "lat": 43.625,
+    "lng": 5.473,
+    "description": "Eighteenth-century château outside Aix-en-Provence. Vineyards, lavender, library. Forty rooms. The Provence of imagination, made real.",
+    "shortDescription": "Eighteenth-century Provence château. Lavender, vines, library.",
+    "amenities": ["spa", "vineyards", "swimming pool", "tennis", "fine dining", "library", "horse riding"],
+    "dressCode": "Provençal casual",
+    "imageUrl": null,
     "signatureExperiences": [
-      {
-        "name": "Private ski guide + heli",
-        "priceUSD": 8500,
-        "description": "Exclusive Private ski guide + heli"
-      },
-      {
-        "name": "Element 47 wine dinner",
-        "priceUSD": 2800,
-        "description": "Exclusive Element 47 wine dinner"
-      }
+      {"id": "lavender-harvest", "name": "Private Lavender Harvest Day", "price": 3500, "description": "Help with harvest. Distillery tour. Take home essential oil bottle."},
+      {"id": "cezanne-studio-private", "name": "Cézanne Studio Private Visit", "price": 2500, "description": "Closed visit to Cézanne's atelier in Aix. Curator-led."}
     ],
-    "prestigeTier": 4,
-    "description": "The world-renowned The Little Nell, Aspen.",
-    "imageUrl": "/imagery/resorts/the-little-nell-aspen.jpg"
-  },
-  {
-    "id": "hotel-bel-air-la",
-    "name": "Hotel Bel-Air, LA",
-    "brand": "Hotel",
-    "locationICAO": "KVNY",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 3200,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Wolfgang Puck chef's table",
-        "priceUSD": 3500,
-        "description": "Exclusive Wolfgang Puck chef's table"
-      },
-      {
-        "name": "private swan garden dinner",
-        "priceUSD": 5500,
-        "description": "Exclusive private swan garden dinner"
-      }
-    ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Hotel Bel-Air, LA.",
-    "imageUrl": "/imagery/resorts/hotel-bel-air-la.jpg"
-  },
-  {
-    "id": "the-post-ranch-inn-big-sur",
-    "name": "The Post Ranch Inn, Big Sur",
-    "brand": "The",
-    "locationICAO": "KMRY",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 2800,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Shamanic experience",
-        "priceUSD": 1400,
-        "description": "Exclusive Shamanic experience"
-      },
-      {
-        "name": "private stargazing",
-        "priceUSD": 1100,
-        "description": "Exclusive private stargazing"
-      }
-    ],
-    "prestigeTier": 4,
-    "description": "The world-renowned The Post Ranch Inn, Big Sur.",
-    "imageUrl": "/imagery/resorts/the-post-ranch-inn-big-sur.jpg"
-  },
-  {
-    "id": "royal-mansour-marrakech",
-    "name": "Royal Mansour, Marrakech",
-    "brand": "Royal",
-    "locationICAO": "GMMX",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 3800,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Private riad takeover",
-        "priceUSD": 22000,
-        "description": "Exclusive Private riad takeover"
-      },
-      {
-        "name": "medina photography walk",
-        "priceUSD": 1800,
-        "description": "Exclusive medina photography walk"
-      }
-    ],
-    "prestigeTier": 4,
-    "description": "The world-renowned Royal Mansour, Marrakech.",
-    "imageUrl": "/imagery/resorts/royal-mansour-marrakech.jpg"
-  },
-  {
-    "id": "bulgari-dubai",
-    "name": "Bulgari Dubai",
-    "brand": "Bulgari",
-    "locationICAO": "OMDB",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 2400,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Private yacht Palm tour",
-        "priceUSD": 5800,
-        "description": "Exclusive Private yacht Palm tour"
-      },
-      {
-        "name": "desert stargazing dinner",
-        "priceUSD": 3200,
-        "description": "Exclusive desert stargazing dinner"
-      }
-    ],
-    "prestigeTier": 3,
-    "description": "The world-renowned Bulgari Dubai.",
-    "imageUrl": "/imagery/resorts/bulgari-dubai.jpg"
-  },
-  {
-    "id": "singita-sabi-sand-south-africa",
-    "name": "Singita Sabi Sand, South Africa",
-    "brand": "Singita",
-    "locationICAO": "FASZ",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 4200,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Hot air balloon safari",
-        "priceUSD": 3500,
-        "description": "Exclusive Hot air balloon safari"
-      },
-      {
-        "name": "private bush dinner",
-        "priceUSD": 1800,
-        "description": "Exclusive private bush dinner"
-      }
-    ],
-    "prestigeTier": 5,
-    "description": "The world-renowned Singita Sabi Sand, South Africa.",
-    "imageUrl": "/imagery/resorts/singita-sabi-sand-south-africa.jpg"
-  },
-  {
-    "id": "qasr-al-sarab-uae",
-    "name": "Qasr Al Sarab, UAE",
-    "brand": "Qasr",
-    "locationICAO": "OMAA",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 1900,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [
-      {
-        "name": "Camel trek + stargazing",
-        "priceUSD": 1400,
-        "description": "Exclusive Camel trek + stargazing"
-      }
-    ],
-    "prestigeTier": 3,
-    "description": "The world-renowned Qasr Al Sarab, UAE.",
-    "imageUrl": "/imagery/resorts/qasr-al-sarab-uae.jpg"
-  },
-  {
-    "id": "north-island-seychelles",
-    "name": "North Island, Seychelles",
-    "brand": "North",
-    "locationICAO": "FSIA",
-    "locationCity": "Local City",
-    "locationCountry": "Local Country",
-    "nightlyRateUSD": 7500,
-    "suiteOptions": [
-      {
-        "name": "Standard Suite",
-        "rateMultiplier": 1
-      },
-      {
-        "name": "Premium Villa",
-        "rateMultiplier": 2
-      },
-      {
-        "name": "Owner's Residence",
-        "rateMultiplier": 4.5
-      }
-    ],
-    "amenities": [
-      "Spa",
-      "Fine Dining",
-      "Private Transfers",
-      "Infinity Pool"
-    ],
-    "signatureExperiences": [],
-    "prestigeTier": 5,
-    "description": "The world-renowned North Island, Seychelles.",
-    "imageUrl": "/imagery/resorts/north-island-seychelles.jpg"
+    "preferredBy": ["theo-beaumont", "elena-marchetti", "sasha-volkov"]
   }
 ]

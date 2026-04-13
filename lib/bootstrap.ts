@@ -5,6 +5,7 @@ import { useStore } from '../app/lib/store';
 import eventsData from '../data/events.json';
 import personasData from '../data/personas.json';
 import airportsData from '../data/airports.json';
+import resortsData from '../data/resorts.json';
 
 const defaultPlayer: Player = {
   id: 'player',
@@ -154,6 +155,26 @@ export async function bootstrapWorld() {
        }
      } catch (e) {
        console.error("Failed to seed personas:", e);
+     }
+  }
+
+  // 7. Init Resorts (Phase 5)
+  const resortCount = await db.resorts.count();
+  if (resortCount === 0) {
+     try {
+       if (resortsData && resortsData.length > 0) {
+         await db.resorts.bulkAdd(resortsData as any[]);
+       }
+     } catch (e) {
+       console.error("Failed to seed resorts:", e);
+     }
+  } else if (resortsData && resortCount < resortsData.length) {
+     // Safe top-up using bulkAdd explicitly avoiding overwrites
+     const existingIds = new Set((await db.resorts.toArray()).map(r => r.id));
+     const missing = (resortsData as any[]).filter(r => !existingIds.has(r.id));
+     if (missing.length > 0) {
+         console.log(`[BOOTSTRAP] Topping up ${missing.length} missing resorts via bulkAdd.`);
+         await db.resorts.bulkAdd(missing);
      }
   }
 }

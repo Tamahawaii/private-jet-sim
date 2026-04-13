@@ -65,6 +65,11 @@ export class JetstreamDB extends Dexie {
     this.version(3).stores({
       apiUsage: 'id, timestamp, endpoint'
     });
+
+    this.version(4).stores({
+      resorts: 'id, locationICAO, region, tier, brand',
+      resortBookings: 'id, resortId, checkInAt, checkOutAt'
+    });
   }
 }
 

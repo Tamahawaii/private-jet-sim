@@ -224,44 +224,6 @@ export type EventAttendance = {
   leftAt?: ISODateString | null;
 };
 
-export type Resort = {
-  id: ResortID;
-  name: string;
-  brand: string;
-  locationICAO: ICAOCode;
-  locationCity: string;
-  locationCountry: string;
-  nightlyRateUSD: number;
-  suiteOptions: {
-    name: string;
-    rateMultiplier: number;
-  }[];
-  amenities: string[];
-  signatureExperiences: {
-    name: string;
-    priceUSD: number;
-    description: string;
-  }[];
-  prestigeTier: 1 | 2 | 3 | 4 | 5;
-  description: string;
-  imageUrl: string;
-};
-
-export type ResortBooking = {
-  id: string;
-  resortId: ResortID;
-  suiteOption: string;
-  checkInDate: ISODateString;
-  checkOutDate: ISODateString;
-  nightsBooked: number;
-  experiencesBooked: {
-    name: string;
-    priceUSD: number;
-  }[];
-  totalCostUSD: number;
-  status: "upcoming" | "active" | "completed" | "cancelled";
-};
-
 export type TransactionType =
   | "aircraft_purchase" | "aircraft_sale"
   | "flight_cost" | "fuel" | "crew_salary" | "hangar_fee"
@@ -300,4 +262,79 @@ export interface ApiUsageRecord {
   estimatedCostUsd: number;
   personaId?: string;      // which persona (if DM-related)
   threadId?: string;       // which DM thread (if applicable)
+}
+
+// -----------------------------------------------------------------------------
+// RESORTS (Phase 5)
+// -----------------------------------------------------------------------------
+
+export interface SignatureExperience {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+}
+
+export type ResortCategory =
+  | 'desert'
+  | 'private-island'
+  | 'urban-historic'
+  | 'urban-modern'
+  | 'urban-design'
+  | 'urban-iconic'
+  | 'urban-resort'
+  | 'garden-retreat'
+  | 'coastal-historic'
+  | 'coastal-classic'
+  | 'coastal-cliff'
+  | 'coastal-mediterranean'
+  | 'coastal-tropical'
+  | 'coastal-design'
+  | 'coastal-urban'
+  | 'coastal-remote'
+  | 'countryside'
+  | 'countryside-historic'
+  | 'countryside-american'
+  | 'wellness-mountain'
+  | 'wellness-island'
+  | 'safari'
+  | 'remote-wilderness'
+  | 'lake-historic'
+  | 'riad-historic'
+  | 'coastal-regional'
+  | 'mountain-classic';
+
+export interface Resort {
+  id: string;
+  name: string;
+  brand: string;
+  locationICAO: string;
+  nearestAirport: string;
+  city: string;
+  country: string;
+  region: string;
+  category: ResortCategory;
+  tier: 1 | 2 | 3 | 4 | 5;
+  nightlyRate: number;
+  currency: string;
+  lat: number;
+  lng: number;
+  description: string;
+  shortDescription: string;
+  amenities: string[];
+  dressCode: string;
+  imageUrl: string | null;
+  signatureExperiences: SignatureExperience[];
+  preferredBy: string[];
+}
+
+export interface ResortBooking {
+  id: string;
+  resortId: string;
+  checkInAt: ISODateString;
+  checkOutAt: ISODateString | null;
+  defaultNights: number;
+  extendedNights: number;
+  totalCharged: number;
+  experiencesPurchased: string[];
 }
