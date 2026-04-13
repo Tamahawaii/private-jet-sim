@@ -9,7 +9,7 @@ import { Globe, GlassWater, Building2 } from 'lucide-react';
 
 export default function DestinationsPage() {
     const [activeTab, setActiveTab] = useState<'events' | 'resorts' | 'cities'>('events');
-    const simNow = useStore(state => state.getNow());
+    const [simNow] = useState(() => useStore.getState().getNow());
     
     // Fetch and dynamically sort events
     const rawEvents = useLiveQuery(() => db.events.toArray(), []) || [];

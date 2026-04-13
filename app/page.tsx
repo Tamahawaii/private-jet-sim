@@ -10,7 +10,7 @@ import { BillionaireEvent } from '../types';
 
 export default function Home() {
   const [isDismissed, setIsDismissed] = useState(false);
-  const simNow = useStore(state => state.getNow());
+  const [simNow] = useState(() => useStore.getState().getNow());
 
   const rawEvents = useLiveQuery(() => db.events.toArray()) || [];
   
