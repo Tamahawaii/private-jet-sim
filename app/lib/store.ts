@@ -13,7 +13,6 @@ interface AppState {
   provisionalRoute: { origin: LocationData, destination: LocationData } | null;
   
   playerLevel: number;
-  playerCash: number;
   mapStyle: 'FlightAware' | 'Satellite' | 'Dark' | 'Roads';
   zenMode: boolean;
   activeView: 'Map' | 'Fleet' | 'Shop';
@@ -25,7 +24,6 @@ interface AppState {
   setActiveView: (view: 'Map' | 'Fleet' | 'Shop') => void;
   setMapStyle: (style: 'FlightAware' | 'Satellite' | 'Dark' | 'Roads') => void;
   setTimeMultiplier: (m: number) => void;
-  setPlayerCash: (amount: number) => void;
 }
 
 export const useStore = create<AppState>()((set, get) => ({
@@ -35,7 +33,6 @@ export const useStore = create<AppState>()((set, get) => ({
   provisionalRoute: null,
   
   playerLevel: 1,
-  playerCash: 79700000000, // $79.7B matching spec
   mapStyle: 'FlightAware',
   zenMode: true,
   activeView: 'Map',
@@ -46,6 +43,5 @@ export const useStore = create<AppState>()((set, get) => ({
   setZenMode: (enabled) => set({ zenMode: enabled }),
   setActiveView: (view) => set({ activeView: view }),
   setMapStyle: (style) => set({ mapStyle: style }),
-  setTimeMultiplier: (m) => set({ timeMultiplier: m }),
-  setPlayerCash: (amount) => set({ playerCash: amount })
+  setTimeMultiplier: (m) => set({ timeMultiplier: m })
 }));

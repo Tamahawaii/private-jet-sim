@@ -73,11 +73,17 @@ function LiveTelemetryBlock({ jet, distance, timeMultiplier }: { jet: Aircraft, 
 
 import { useLiveQuery } from 'dexie-react-hooks';
 import { aircraftRepo } from '../../lib/repositories/aircraft';
+import { db } from '../../lib/db';
 
 export default function DispatchController() {
   const { selectedAircraftId, provisionalRoute, setProvisionalRoute, timeMultiplier } = useStore();
   const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
   const jet = fleet.find((j: Aircraft) => j.id === selectedAircraftId);
+  const activeFlight = useLiveQuery(
+    () => (jet?.currentFlightID ? db.flights.get(jet.currentFlightID) : undefined),
+    [jet?.currentFlightID]
+  );
+  const isDelivery = activeFlight?.purpose?.type === 'delivery';
 
   if (!jet) return null;
 
@@ -167,7 +173,14 @@ export default function DispatchController() {
 
                  {/* Costing Block */}
                  <div className="flex flex-col gap-2 mt-4">
-                    <h3 className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mb-1">Flight Envelope & Costing</h3>
+                    {isDelivery ? (
+                      <div className="bg-[#00f0ff]/10 border border-[#00f0ff]/30 p-4 rounded-lg flex flex-col items-center justify-center gap-2 mt-2">
+                        <span className="text-[#00f0ff] font-bold tracking-widest text-sm uppercase">DELIVERY IN PROGRESS</span>
+                        <span className="text-zinc-400 font-mono text-[10px] uppercase">Inbound from Factory</span>
+                      </div>
+                    ) : (
+                      <>
+                        <h3 className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mb-1">Flight Envelope & Costing</h3>
                     <div className="grid grid-cols-2 gap-2">
                         <div className="bg-white/5 border border-white/10 p-2 rounded">
                            <span className="block text-[9px] text-zinc-500 uppercase tracking-widest">Distance</span>
@@ -184,7 +197,9 @@ export default function DispatchController() {
                            </div>
                            <span className="text-lg font-mono text-[#ff0055] font-black">{fmt(tripCost)}</span>
                         </div>
-                    </div>
+                        </div>
+                      </>
+                    )}
                     
                     {jet.flightPhase === 'Hangar' && provisionalRoute && (
                        <button 

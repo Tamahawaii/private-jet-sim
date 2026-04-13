@@ -8,6 +8,7 @@ import { Aircraft } from '../../types';
 import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
 import { Layers, Maximize, Minimize, FastForward, CloudRain } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 export default function MapEngine() {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -17,6 +18,7 @@ export default function MapEngine() {
   const { selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode, timeMultiplier, setTimeMultiplier, weatherEnabled, setWeatherEnabled } = useStore();
   const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
   const fleetRef = useRef(fleet);
+  const pathname = usePathname();
 
   useEffect(() => {
     fleetRef.current = fleet;
@@ -216,6 +218,7 @@ export default function MapEngine() {
 
     const intervalId = setInterval(() => {
       if (!m.isStyleLoaded()) return;
+      if (pathname !== '/' && pathname !== '/world') return;
 
       fleetRef.current.forEach((fJet: Aircraft) => {
         const routeSourceId = `route-source-${fJet.id}`;

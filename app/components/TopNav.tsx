@@ -3,6 +3,8 @@
 import React from 'react';
 import { useStore } from '../lib/store';
 import { Globe, Plane, ShoppingCart, DollarSign } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 function fmt(n: number) {
     if (n >= 1000000000) return '$' + (n / 1000000000).toFixed(1) + 'B';
@@ -10,8 +12,13 @@ function fmt(n: number) {
     return '$' + n.toLocaleString();
 }
 
+import { playerRepo } from '../lib/repositories/player';
+import { useLiveQuery } from 'dexie-react-hooks';
+
 export default function TopNav() {
-  const { activeView, setActiveView, playerCash } = useStore();
+  const pathname = usePathname();
+  const player = useLiveQuery(() => playerRepo.get());
+  const netWorth = player?.netWorth || 0;
 
   return (
     <div className="absolute top-0 left-0 right-0 h-16 bg-black/60 backdrop-blur-xl border-b border-white/10 z-[100] flex items-center justify-between px-8 pointer-events-auto">
@@ -25,27 +32,30 @@ export default function TopNav() {
 
       <div className="flex gap-1 bg-black/40 p-1 rounded-lg border border-white/5">
         {[
-          { id: 'Map', icon: Globe, label: 'CMD CENTER' },
-          { id: 'Fleet', icon: Plane, label: 'FLEET ROSTER' },
-          { id: 'Shop', icon: ShoppingCart, label: 'ACQUISITIONS' }
-        ].map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveView(tab.id as any)}
-            className={`flex items-center gap-2 px-5 py-2 text-xs font-bold uppercase tracking-widest rounded-md transition-all ${
-              activeView === tab.id 
-                ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)]' 
-                : 'text-zinc-500 hover:text-white hover:bg-white/10'
-            }`}
-          >
-            <tab.icon size={14} /> {tab.label}
-          </button>
-        ))}
+          { id: '/', activeCheck: '/', icon: Globe, label: 'CMD CENTER' },
+          { id: '/fleet', activeCheck: '/fleet', icon: Plane, label: 'FLEET ROSTER' },
+          { id: '/acquisitions', activeCheck: '/acquisitions', icon: ShoppingCart, label: 'ACQUISITIONS' }
+        ].map(tab => {
+          const isActive = pathname === tab.activeCheck || pathname?.startsWith(tab.activeCheck + '/');
+          return (
+            <Link
+              key={tab.id}
+              href={tab.id}
+              className={`flex items-center gap-2 px-5 py-2 text-xs font-bold uppercase tracking-widest rounded-md transition-all ${
+                isActive 
+                  ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)]' 
+                  : 'text-zinc-500 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              <tab.icon size={14} /> {tab.label}
+            </Link>
+          );
+        })}
       </div>
 
       <div className="flex items-center gap-2 bg-emerald-950/40 border border-emerald-500/30 px-4 py-2 rounded-lg">
          <DollarSign size={14} className="text-emerald-400" />
-         <span className="text-emerald-400 font-black font-mono tracking-widest text-sm">{fmt(playerCash)}</span>
+         <span className="text-emerald-400 font-black font-mono tracking-widest text-sm">{fmt(netWorth)}</span>
       </div>
 
     </div>

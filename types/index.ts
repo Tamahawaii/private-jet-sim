@@ -90,8 +90,8 @@ export type Flight = {
   waypoints: Coordinates[];
   passengers: PersonaID[];
   purpose: {
-    type: "event" | "resort" | "leisure";
-    targetId: EventID | ResortID;
+    type: "event" | "resort" | "leisure" | "delivery";
+    targetId?: EventID | ResortID;
   } | null;
 };
 
