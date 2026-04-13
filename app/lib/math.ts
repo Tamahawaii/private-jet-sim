@@ -101,6 +101,8 @@ export function interpolateFlightPosition(lat1: number, lng1: number, lat2: numb
   const R = 3440.065; // Earth radius in NM
   const d = calculateDistanceNM(lat1, lng1, lat2, lng2) / R;
   
+  if (d < 1e-6) return { point: [lng2, lat2] as [number, number], bearing: 0 };
+  
   const lat1Rad = lat1 * Math.PI / 180;
   const lng1Rad = lng1 * Math.PI / 180;
   const lat2Rad = lat2 * Math.PI / 180;

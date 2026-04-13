@@ -353,7 +353,11 @@ export default function MapEngine() {
         
         // Cinematic Sandbox Map Tracking
         if (fJet.id === useStore.getState().selectedAircraftId) {
-            m.setCenter(planeCoords as [number, number]);
+            if (!isNaN(planeCoords[0]) && !isNaN(planeCoords[1])) {
+                m.setCenter(planeCoords as [number, number]);
+            } else {
+                console.warn('NaN coords for', fJet.tailNumber, 'skipping setCenter');
+            }
         }
 
         // Dedicated Range Map for selected aircraft
