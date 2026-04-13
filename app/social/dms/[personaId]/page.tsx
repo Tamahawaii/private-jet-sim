@@ -110,10 +110,15 @@ export default function PersonaDMThread({ params }: { params: Promise<{ personaI
 
           const data = await res.json();
           
+          let generatedContent = data.content;
+          if (!generatedContent) {
+              generatedContent = `${persona.displayName.split(' ')[0]} is quiet today...`;
+          }
+
           const aiMsg: DMMessage = {
              id: crypto.randomUUID(),
              from: persona.id,
-             content: data.content,
+             content: generatedContent,
              sentAt: new Date().toISOString()
           };
 

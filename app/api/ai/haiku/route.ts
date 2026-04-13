@@ -6,11 +6,9 @@ import { AI_MODELS } from '../../../../lib/constants';
 
 interface DMMessage {
   id: string;
-  senderId: string;
-  recipientId: string;
+  from: string;
   content: string;
-  timestamp: string;
-  read: boolean;
+  sentAt: string;
 }
 
 export async function POST(req: Request) {
@@ -56,9 +54,15 @@ You are a fictional character in a simulation. Stay in character. Keep responses
     // 3. Construct Claude Messages
     // Slice to 20 window context and format them with correct 'user' or 'assistant'
     const formattedMessages = recentMessages.slice(-20).filter((m: DMMessage) => m.content !== 'AI coming soon...').map((m: DMMessage) => ({
-       role: m.senderId === 'player' ? 'user' : 'assistant',
+       role: m.from === 'player' ? 'user' : 'assistant',
        content: m.content
     }));
+
+    // Anthropic requires conversations to start with a 'user' turn.
+    // If the first message in the window is an 'assistant' message, prepend a system/user initialization to satisfy the API.
+    if (formattedMessages.length > 0 && formattedMessages[0].role === 'assistant') {
+       formattedMessages.unshift({ role: 'user', content: '[Thread recovered. Continue context.]' });
+    }
 
     if (formattedMessages.length === 0) {
        // Start the conversation if no previous valid texts exist
@@ -67,6 +71,9 @@ You are a fictional character in a simulation. Stay in character. Keep responses
            content: 'Hey!'
        });
     }
+
+    console.log(`[API REQUEST] To: ${persona.displayName} (${personaId})`);
+    console.log('[API PAYLOAD]', JSON.stringify(formattedMessages, null, 2));
 
     // 4. Hit Anthropic
     const client = new Anthropic({ apiKey });
@@ -77,7 +84,14 @@ You are a fictional character in a simulation. Stay in character. Keep responses
       messages: formattedMessages
     });
 
-    const replyContent = (response.content[0] as any).text || "";
+    console.log('[API RESPONSE]', JSON.stringify(response, null, 2));
+
+    let replyContent = (response.content[0] as any).text || "";
+    
+    // Safety fallback for empty content causing crashes on UI side
+    if (!replyContent || replyContent.trim().length <= 2) {
+       replyContent = ""; 
+    }
 
     return NextResponse.json({
         content: replyContent,
