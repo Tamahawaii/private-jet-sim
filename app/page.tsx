@@ -52,9 +52,13 @@ export default function Home() {
 
                 return (
                     <div key={evt.id} className="block group">
-                        <div className="h-24 bg-zinc-900 rounded-lg overflow-hidden relative mb-3">
-                            <img src={evt.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={evt.name} />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                        <div className="h-24 bg-zinc-900 rounded-lg overflow-hidden relative mb-3 flex items-center justify-center">
+                            {evt.imageUrl ? (
+                                <img src={evt.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 absolute inset-0" alt={evt.name} />
+                            ) : (
+                                <span className="text-[8px] font-mono tracking-widest text-[#00f0ff]/50 uppercase z-10 relative">IMAGE PENDING</span>
+                            )}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
                             <div className="absolute bottom-2 left-2 right-2">
                                 <h3 className="text-white font-sans font-black text-sm leading-tight group-hover:text-[#00f0ff] transition-colors">{evt.name}</h3>
                             </div>

@@ -24,13 +24,19 @@ export default function EventCard({ event, simNow }: Props) {
     return (
         <div className="w-full bg-black/40 border border-white/10 hover:border-[#00f0ff]/50 hover:bg-white/5 transition-all rounded-xl p-4 md:p-6 group flex flex-col md:flex-row gap-6">
             {/* Event Snapshot Image */}
-            <div className="w-full md:w-48 h-32 bg-zinc-900 rounded-lg overflow-hidden shrink-0 relative">
-                <img 
-                   src={event.imageUrl} 
-                   alt={event.name} 
-                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                   loading="lazy"
-                />
+            <div className="w-full md:w-48 h-32 bg-zinc-900 rounded-lg overflow-hidden shrink-0 relative flex flex-col items-center justify-center">
+                {event.imageUrl ? (
+                    <img 
+                       src={event.imageUrl} 
+                       alt={event.name} 
+                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                       loading="lazy"
+                    />
+                ) : (
+                    <span className="text-[10px] font-mono tracking-widest text-[#00f0ff]/50 uppercase text-center px-4 leading-relaxed">
+                        IMAGE PENDING
+                    </span>
+                )}
                 <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-md px-2 py-1 rounded text-[10px] font-mono tracking-widest text-amber-500 uppercase border border-amber-500/20">
                     Tier {event.prestigeTier}
                 </div>

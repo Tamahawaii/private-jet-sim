@@ -8,25 +8,25 @@ import { useStore } from '../../../lib/store';
 
 interface Props {
   aircraft: Aircraft;
+  prefillDestination?: string | null;
+  prefillPurpose?: string | null;
   onSelect: (destination: any) => void;
   onBack: () => void;
 }
 
-export default function Step2Destination({ aircraft, onSelect, onBack }: Props) {
-   const [query, setQuery] = useState('');
+export default function Step2Destination({ aircraft, prefillDestination, prefillPurpose, onSelect, onBack }: Props) {
+   const [query, setQuery] = useState(prefillDestination && !prefillPurpose?.startsWith('event:') ? prefillDestination : '');
    const [airports, setAirports] = useState<any[]>([]);
    const [results, setResults] = useState<any[]>([]);
-   const [activeTab, setActiveTab] = useState<'airports'|'events'>('airports');
+   const [activeTab, setActiveTab] = useState<'airports'|'events'>(prefillPurpose?.startsWith('event:') ? 'events' : 'airports');
    const [events, setEvents] = useState<any[]>([]);
-   const simNow = useStore(state => state.getNow());
-
    useEffect(() => {
      db.events.toArray().then(raw => {
-       const mapped = raw.map(e => getEventNextOccurrence(e, simNow));
+       const mapped = raw.map(e => getEventNextOccurrence(e, useStore.getState().getNow()));
        mapped.sort((a,b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
        setEvents(mapped);
      });
-   }, [simNow]);
+   }, []);
 
    useEffect(() => {
       fetch('/airports.json')
@@ -155,8 +155,12 @@ export default function Step2Destination({ aircraft, onSelect, onBack }: Props) 
                         className="w-full p-4 bg-black/20 hover:bg-white/5 border border-white/5 hover:border-[#00f0ff]/50 rounded-xl flex items-center justify-between text-left transition-all group"
                      >
                         <div className="flex items-center gap-4">
-                           <div className="w-12 h-12 bg-zinc-900 rounded overflow-hidden shrink-0 hidden sm:block">
-                               <img src={evt.imageUrl} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                           <div className="w-12 h-12 bg-zinc-900 rounded overflow-hidden shrink-0 hidden sm:flex items-center justify-center">
+                               {evt.imageUrl ? (
+                                   <img src={evt.imageUrl} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                               ) : (
+                                   <span className="text-[8px] font-mono tracking-widest text-[#00f0ff] uppercase text-center block leading-tight">IMG<br/>PND</span>
+                               )}
                            </div>
                            <div>
                               <div className="font-mono text-base font-black text-white group-hover:text-[#00f0ff] transition-colors tracking-widest uppercase">{evt.name}</div>

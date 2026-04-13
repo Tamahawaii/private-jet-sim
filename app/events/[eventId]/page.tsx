@@ -34,8 +34,12 @@ export default function EventDetailPage({ params }: { params: Promise<{ eventId:
             <div className="relative w-full max-w-5xl h-full max-h-[85vh] bg-[#0c0c0e] border border-white/10 shadow-2xl rounded-2xl flex flex-col md:flex-row overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-700">
                 
                 {/* Left: Imagery Hero */}
-                <div className="w-full md:w-2/5 h-64 md:h-full relative shrink-0">
-                    <img src={event.imageUrl} className="w-full h-full object-cover" alt={event.name} />
+                <div className="w-full md:w-2/5 h-64 md:h-full relative shrink-0 bg-zinc-900 flex items-center justify-center">
+                    {event.imageUrl ? (
+                        <img src={event.imageUrl} className="w-full h-full object-cover" alt={event.name} />
+                    ) : (
+                         <span className="text-xs font-mono tracking-widest text-[#00f0ff]/50 uppercase">IMAGE PENDING</span>
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#0c0c0e] via-black/40 to-transparent" />
                     <button 
                        onClick={() => router.back()}

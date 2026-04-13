@@ -32,22 +32,6 @@ function FlightPlannerInternal() {
   const activeAircraft = fleet.find(j => j.id === selectedAircraftId) 
      || (prefillAircraft ? fleet.find(j => j.tailNumber === prefillAircraft) : undefined);
 
-  // Step 2 query param routing
-  useEffect(() => {
-     if (step === 2 && prefillDestination && airports.length > 0 && !selectedDestination && activeAircraft) {
-         const found = airports.find(a => a.icao === prefillDestination);
-         if (found) {
-             const modified = { ...found };
-             if (prefillPurpose) {
-                 modified.purpose = prefillPurpose;
-                 modified.purposeName = prefillPurpose.startsWith('event:') ? 'Attending Event' : prefillPurpose;
-             }
-             setSelectedDestination(modified);
-             setStep(3);
-         }
-     }
-  }, [step, prefillDestination, prefillPurpose, airports, selectedDestination, activeAircraft]);
-
   // If prefilled but aircraft isn't valid or parked, force Step 1
   if (prefillAircraft && step === 2 && fleet.length > 0) {
       if (!activeAircraft || activeAircraft.status !== 'parked') {
@@ -98,6 +82,8 @@ function FlightPlannerInternal() {
             {step === 2 && activeAircraft && (
                <Step2Destination 
                   aircraft={activeAircraft}
+                  prefillDestination={prefillDestination}
+                  prefillPurpose={prefillPurpose}
                   onSelect={(dest) => { setSelectedDestination(dest); setStep(3); }} 
                   onBack={() => setStep(1)}
                />
