@@ -21,7 +21,7 @@ export const SHOP_CATALOG: CatalogItem[] = aircraftData.map(a => ({
   costPerNM: a.costPerNM,
   price: a.price,
   cabinSlots: a.moduleSlots,
-  layoutImage: `/layouts/${a.id.replace(/-/g, '_')}.png`
+  layoutImage: (a as any).layoutImage
 }));
 
 // Provide the starter selection from the catalog based on expected specs

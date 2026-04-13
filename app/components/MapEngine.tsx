@@ -7,7 +7,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { Aircraft } from '../../types';
 import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
-import { Layers, Maximize, Minimize, FastForward, CloudRain } from 'lucide-react';
+import { Layers, Maximize, Minimize, FastForward, CloudRain, Plane, Map as MapIcon, ShieldAlert, Building, Calendar } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 export default function MapEngine() {
@@ -15,10 +15,15 @@ export default function MapEngine() {
   const map = useRef<maplibregl.Map | null>(null);
   const airportsRef = useRef<any[]>([]);
 
-  const { selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode, timeMultiplier, setTimeMultiplier, weatherEnabled, setWeatherEnabled } = useStore();
+  const { selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode, timeMultiplier, setTimeMultiplier } = useStore();
   const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
   const fleetRef = useRef(fleet);
   const pathname = usePathname();
+
+  const [weatherEnabled, setWeatherEnabled] = useState(true);
+  const [layersOpen, setLayersOpen] = useState(false);
+  const [showFleet, setShowFleet] = useState(true);
+  const [showAirports, setShowAirports] = useState(true);
 
   useEffect(() => {
     fleetRef.current = fleet;
@@ -32,7 +37,6 @@ export default function MapEngine() {
   }, []);
   const jet = fleet.find((j: Aircraft) => j.id === selectedAircraftId);
   const flightPhase = jet?.flightPhase;
-  const [layersOpen, setLayersOpen] = useState(false);
 
   useEffect(() => {
     if (map.current || !mapContainer.current) return;
@@ -364,7 +368,7 @@ export default function MapEngine() {
            features: showRange ? [{ type: 'Feature', geometry: { type: 'Polygon', coordinates: [rangeCoords] } }] : []
         };
 
-        if (!m.getSource(planeSourceId)) {
+        if (showFleet && !m.getSource(planeSourceId)) {
            m.addSource(planeSourceId, { type: 'geojson', data: planeData as any });
            m.addLayer({
              id: planeLayerId,
@@ -384,12 +388,15 @@ export default function MapEngine() {
                'text-opacity': 1
              }
            });
-        } else {
+        } else if (showFleet && m.getSource(planeSourceId)) {
            (m.getSource(planeSourceId) as any).setData(planeData);
            m.setLayoutProperty(planeLayerId, 'text-size', fJet.flightPhase === 'Cruise' ? 82 : 52);
+        } else if (!showFleet && m.getLayer(planeLayerId)) {
+           m.removeLayer(planeLayerId);
+           m.removeSource(planeSourceId);
         }
 
-        if (showRoute) {
+        if (showFleet && showRoute) {
            if (!m.getSource(routeSourceId)) {
                m.addSource(routeSourceId, { type: 'geojson', data: routeData as any });
                m.addLayer({
@@ -544,23 +551,44 @@ export default function MapEngine() {
       {/* Dynamic Layer Toggle */}
       <div className="absolute bottom-10 right-[420px] z-50 flex flex-col items-end gap-2 pointer-events-auto">
          {layersOpen && (
-            <div className="flex flex-col gap-1 bg-black/80 backdrop-blur border border-white/10 p-2 rounded-lg shadow-xl">
-               {(['FlightAware', 'Satellite', 'Dark', 'Roads'] as const).map(s => (
-                  <button 
-                     key={s} 
-                     onClick={() => setMapStyle(s)}
-                     className={`px-4 py-2 text-xs font-bold uppercase tracking-widest rounded transition-all text-left ${mapStyle === s ? 'bg-white text-black' : 'text-white/60 hover:bg-white/10 hover:text-white'}`}
-                  >
-                     {s} Mode
-                  </button>
-               ))}
-               <div className="w-full h-px bg-white/20 my-1"/>
-               <button 
-                  onClick={() => setWeatherEnabled(!weatherEnabled)}
-                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest rounded transition-all text-left ${weatherEnabled ? 'bg-[#00f0ff] text-black' : 'text-[#00f0ff] hover:bg-[#00f0ff]/10'}`}
-               >
-                  <CloudRain size={14}/> {weatherEnabled ? 'LIVE RADAR: ON' : 'LIVE RADAR: OFF'}
+            <div className="flex flex-col gap-1 bg-black/80 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl w-64">
+               <h3 className="text-xs uppercase font-bold text-zinc-500 tracking-widest mb-2 border-b border-white/10 pb-2">Map Layers</h3>
+               
+               <button onClick={() => setShowFleet(!showFleet)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
+                  <Plane size={16} className={showFleet ? "text-emerald-400" : "text-zinc-600"}/>
+                  <span className={`text-xs font-bold tracking-widest ${showFleet ? 'text-white' : 'text-zinc-500'}`}>MY AIRCRAFT</span>
                </button>
+
+               <button onClick={() => setWeatherEnabled(!weatherEnabled)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
+                  <CloudRain size={16} className={weatherEnabled ? "text-[#00f0ff]" : "text-zinc-600"}/>
+                  <span className={`text-xs font-bold tracking-widest ${weatherEnabled ? 'text-white' : 'text-zinc-500'}`}>LIVE WEATHER</span>
+               </button>
+
+               <button onClick={() => setShowAirports(!showAirports)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
+                  <MapIcon size={16} className={showAirports ? "text-amber-400" : "text-zinc-600"}/>
+                  <span className={`text-xs font-bold tracking-widest ${showAirports ? 'text-white' : 'text-zinc-500'}`}>AIRPORTS</span>
+               </button>
+
+               <div className="w-full h-px bg-white/10 my-2"/>
+               
+               <button className="flex items-center gap-3 p-2 rounded text-left opacity-30 cursor-not-allowed">
+                  <ShieldAlert size={16} className="text-zinc-400"/>
+                  <span className="text-xs font-bold tracking-widest text-zinc-400 flex-1">FRIENDS</span>
+                  <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 4</span>
+               </button>
+
+               <button className="flex items-center gap-3 p-2 rounded text-left opacity-30 cursor-not-allowed">
+                  <Building size={16} className="text-zinc-400"/>
+                  <span className="text-xs font-bold tracking-widest text-zinc-400 flex-1">PROPERTIES</span>
+                  <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 8</span>
+               </button>
+
+               <button className="flex items-center gap-3 p-2 rounded text-left opacity-30 cursor-not-allowed">
+                  <Calendar size={16} className="text-zinc-400"/>
+                  <span className="text-xs font-bold tracking-widest text-zinc-400 flex-1">EVENTS</span>
+                  <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 3</span>
+               </button>
+               
             </div>
          )}
          <button 
@@ -584,7 +612,7 @@ export default function MapEngine() {
             <span className="text-[10px] font-mono tracking-widest font-black uppercase">Sim Speed</span>
          </div>
          <div className="flex px-2 gap-1">
-            {[1, 10, 30, 60, 300].map((spd) => (
+            {[1, 10, 30, 60, 100].map((spd) => (
               <button 
                 key={spd}
                 onClick={() => setTimeMultiplier(spd)}
