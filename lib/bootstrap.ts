@@ -79,22 +79,24 @@ export async function bootstrapWorld() {
      }
   }
 
-  // Hotfix: Sync corrupted event dates if they deviate from JSON source
-  if (eventCount > 0 && eventsData && eventsData.length > 0) {
-      const existingEvents = await db.events.toArray();
-      const updates = [];
-      for (const ev of existingEvents) {
-          const source = eventsData.find((sd: any) => sd.id === ev.id);
-          if (source && (source.startDate !== ev.startDate || source.endDate !== ev.endDate)) {
-              updates.push({ id: ev.id, changes: { startDate: source.startDate, endDate: source.endDate } });
-          }
-      }
-      if (updates.length > 0) {
-          console.log(`[BOOTSTRAP] Fixing ${updates.length} corrupted event dates in IndexedDB cache`);
-          for (const up of updates) {
-              await db.events.update(up.id, up.changes);
-          }
-      }
+  // 2.5 Init Events if missing
+  const eventCount = await db.events.count();
+  if (eventCount === 0) {
+     try {
+       if (eventsData && eventsData.length > 0) {
+         await db.events.bulkPut(eventsData as any);
+       }
+     } catch (e) {
+       console.error("Failed to seed events.json:", e);
+     }
+  } else if (eventsData && eventCount < eventsData.length) {
+     // Top up missing events
+     const existingIds = new Set((await db.events.toArray()).map(e => e.id));
+     const missing = (eventsData as any[]).filter(e => !existingIds.has(e.id));
+     if (missing.length > 0) {
+         console.log(`[BOOTSTRAP] Topping up ${missing.length} missing events.`);
+         await db.events.bulkPut(missing);
+     }
   }
 
   // 3. Patch any existing aircraft with corrupted currentLocation
