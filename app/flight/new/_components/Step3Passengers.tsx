@@ -1,5 +1,6 @@
-import React from 'react';
-import { ArrowLeft, User, Users, Lock } from 'lucide-react';
+import { ArrowLeft, User, Users } from 'lucide-react';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db } from '../../../../lib/db';
 
 interface Props {
   onNext: () => void;
@@ -7,8 +8,10 @@ interface Props {
 }
 
 export default function Step3Passengers({ onNext, onBack }: Props) {
+   const personas = useLiveQuery(() => db.personas.toArray()) || [];
+
    return (
-      <div className="w-full max-w-2xl animate-in fade-in slide-in-from-right-4 duration-500">
+      <div className="w-full max-w-2xl animate-in fade-in slide-in-from-right-4 duration-500 pb-20">
          <div className="flex items-center gap-4 mb-2">
            <button onClick={onBack} className="text-zinc-500 hover:text-white transition-colors">
               <ArrowLeft size={20} />
@@ -36,15 +39,28 @@ export default function Step3Passengers({ onNext, onBack }: Props) {
                </div>
             </button>
 
-            <div className="w-full p-6 border border-white/5 bg-black/20 rounded-xl flex items-center gap-4 opacity-50 select-none">
-               <div className="w-12 h-12 rounded-full bg-white/5 text-zinc-500 flex items-center justify-center border border-white/10">
-                  <Users size={20} />
-               </div>
-               <div>
-                  <div className="text-zinc-300 font-mono font-bold tracking-widest flex items-center gap-2">
-                     INVITE FRIENDS <Lock size={12} className="text-zinc-500"/>
-                  </div>
-                  <div className="text-zinc-500 text-xs font-sans mt-1">Multiplayer network coming in Phase 4.</div>
+            <div className="pt-6 mt-6 border-t border-white/10">
+               <h3 className="text-xs font-mono tracking-widest text-[#f5a7a7] mb-4 flex items-center gap-2"><Users size={14}/> SOCIAL CIRCLE DIRECTORY</h3>
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {personas.map(p => (
+                     <button
+                        key={p.id}
+                        onClick={onNext}
+                        className="w-full p-4 border border-white/5 bg-black/20 rounded-xl flex items-center justify-between hover:border-[#f5a7a7]/30 hover:bg-[#141419] transition-all group text-left"
+                     >
+                        <div className="flex items-center gap-3">
+                           <div className="w-10 h-10 rounded-full bg-zinc-800 overflow-hidden relative border border-white/10 group-hover:border-[#f5a7a7]/50 transition-colors">
+                              {p.portraitUrl && (
+                                 <div className="absolute inset-0 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all" style={{ backgroundImage: `url(${p.portraitUrl})` }} />
+                              )}
+                           </div>
+                           <div className="flex flex-col">
+                              <span className="font-bold font-mono tracking-widest text-white group-hover:text-[#f5a7a7] transition-colors uppercase text-sm truncate max-w-[150px]">{p.displayName}</span>
+                              <span className="text-[10px] text-zinc-500 font-mono tracking-widest capitalize">{p.archetype.replace(/_/g, ' ')}</span>
+                           </div>
+                        </div>
+                     </button>
+                  ))}
                </div>
             </div>
          </div>

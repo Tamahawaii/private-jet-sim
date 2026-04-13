@@ -1,7 +1,8 @@
 import Dexie, { Table } from 'dexie';
 import {
   Player, Aircraft, Flight, Persona, PersonaState, DMThread, GroupChat,
-  BillionaireEvent, EventAttendance, Resort, ResortBooking, Transaction, Notification
+  BillionaireEvent, EventAttendance, Resort, ResortBooking, Transaction, Notification,
+  ApiUsageRecord
 } from '../types';
 
 export class JetstreamDB extends Dexie {
@@ -18,6 +19,7 @@ export class JetstreamDB extends Dexie {
   resortBookings!: Table<ResortBooking, string>;
   transactions!: Table<Transaction, string>;
   notifications!: Table<Notification, string>;
+  apiUsage!: Table<ApiUsageRecord, string>;
 
   // Stubbed (Phase 5.5, 7, etc.)
   yachts!: Table<any, string>;
@@ -58,6 +60,10 @@ export class JetstreamDB extends Dexie {
       narrativeArcs: 'id, status',
       gossipIssues: 'id, personaId, expiresAt',
       collectionItems: 'id, category, acquiredAt'
+    });
+
+    this.version(3).stores({
+      apiUsage: 'id, timestamp, endpoint'
     });
   }
 }

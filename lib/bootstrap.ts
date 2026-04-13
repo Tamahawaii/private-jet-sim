@@ -3,6 +3,8 @@ import { Player } from '../types';
 import { STARTER_FLEET } from '../app/lib/mockData';
 import { useStore } from '../app/lib/store';
 import eventsData from '../data/events.json';
+import personasData from '../data/personas.json';
+import airportsData from '../data/airports.json';
 
 const defaultPlayer: Player = {
   id: 'player',
@@ -110,4 +112,37 @@ export async function bootstrapWorld() {
   // 5. Detect offline event occurrences
   const { detectEventAttendance } = require('../app/lib/events');
   await detectEventAttendance();
+
+  // 6. Init AI Personas if missing
+  const personaCount = await db.personas.count();
+  if (personaCount === 0) {
+     try {
+       if (personasData && personasData.length > 0) {
+         await db.personas.bulkPut(personasData as any);
+         
+         const states = personasData.map((p: any) => {
+             const hq = airportsData.find((a: any) => a.icao === p.homeBaseICAO);
+             const coords = hq && typeof hq.lat === 'number' && !isNaN(hq.lat) && typeof hq.lng === 'number' && !isNaN(hq.lng) 
+               ? { lat: hq.lat, lng: hq.lng, name: hq.name } 
+               : undefined;
+               
+             return {
+                 personaId: p.id,
+                 currentLocationICAO: p.homeBaseICAO,
+                 currentCoords: coords,
+                 currentFlightState: null,
+                 nextPlannedFlight: null,
+                 friendshipWithPlayer: 0,
+                 relationshipDepth: 0,
+                 lastInteractionAt: null,
+                 mood: "neutral",
+                 rivalryTargets: []
+             };
+         });
+         await db.personaState.bulkPut(states as any);
+       }
+     } catch (e) {
+       console.error("Failed to seed personas:", e);
+     }
+  }
 }

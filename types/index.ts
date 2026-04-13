@@ -131,6 +131,7 @@ export type Persona = {
 export type PersonaState = {
   personaId: PersonaID;
   currentLocationICAO: ICAOCode;
+  currentCoords?: { lat: number; lng: number; name?: string };
   currentFlightState: {
     originICAO: ICAOCode;
     destinationICAO: ICAOCode;
@@ -145,8 +146,11 @@ export type PersonaState = {
     reason: string;
   } | null;
   friendshipWithPlayer: number;
+  relationshipDepth: number; // 0-100 simple scalar for Milestone A
   lastInteractionAt: ISODateString | null;
-  mood: "happy" | "neutral" | "annoyed" | "envious" | "thrilled";
+  lastDmSentAt?: ISODateString;
+  mood: "happy" | "neutral" | "annoyed" | "envious" | "thrilled" | "casual" | "formal" | "elated" | "concerned";
+  rivalryTargets: string[]; // Added for 4.5
 };
 
 export type DMMessage = {

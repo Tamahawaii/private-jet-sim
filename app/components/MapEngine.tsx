@@ -35,14 +35,22 @@ export default function MapEngine() {
   const [showFleet, setShowFleet] = useState(true);
   const [showAirports, setShowAirports] = useState(true);
   const [showEvents, setShowEvents] = useState(false);
+  const [showFriends, setShowFriends] = useState(true);
   const [timeSkipOpen, setTimeSkipOpen] = useState(false);
   
   const showFleetRef = useRef(showFleet);
   const showAirportsRef = useRef(showAirports);
   const showEventsRef = useRef(showEvents);
+  const showFriendsRef = useRef(showFriends);
   
   const rawEvents = useLiveQuery(() => db.events.toArray()) || [];
   const eventsRef = useRef(rawEvents);
+
+  const rawPersonas = useLiveQuery(() => db.personas.toArray()) || [];
+  const rawPersonaStates = useLiveQuery(() => db.personaState.toArray()) || [];
+  const personasRef = useRef(rawPersonas);
+  const personaStatesRef = useRef(rawPersonaStates);
+  
   const router = useRouter();
 
   const [airportsDataState, setAirportsData] = useState<any[]>([]);
@@ -52,7 +60,10 @@ export default function MapEngine() {
   useEffect(() => { showFleetRef.current = showFleet; }, [showFleet]);
   useEffect(() => { showAirportsRef.current = showAirports; }, [showAirports]);
   useEffect(() => { showEventsRef.current = showEvents; }, [showEvents]);
+  useEffect(() => { showFriendsRef.current = showFriends; }, [showFriends]);
   useEffect(() => { eventsRef.current = rawEvents; }, [rawEvents]);
+  useEffect(() => { personasRef.current = rawPersonas; }, [rawPersonas]);
+  useEffect(() => { personaStatesRef.current = rawPersonaStates; }, [rawPersonaStates]);
 
   // Fit bounds to fleet on initial CMD CENTER mount
   useEffect(() => {
@@ -602,6 +613,51 @@ export default function MapEngine() {
           if (m.getSource(eventsSourceId)) m.removeSource(eventsSourceId);
       }
 
+      // Friends Overlay Navigation Layer
+      const friendsSourceId = 'friends-source';
+      const friendsLayerId = 'friends-layer';
+      
+      if (showFriendsRef.current) {
+          const friendsFeatures = personasRef.current.map(p => {
+             const state = personaStatesRef.current.find(s => s.personaId === p.id);
+             if (!state || !state.currentCoords || isNaN(state.currentCoords.lat) || isNaN(state.currentCoords.lng)) return null;
+             return {
+                 type: 'Feature',
+                 properties: { id: p.id, name: p.displayName },
+                 geometry: { type: 'Point', coordinates: [state.currentCoords.lng, state.currentCoords.lat] }
+             };
+          }).filter(Boolean);
+          
+          if (!m.getSource(friendsSourceId)) {
+              m.addSource(friendsSourceId, { type: 'geojson', data: { type: 'FeatureCollection', features: friendsFeatures } as any });
+              m.addLayer({
+                  id: friendsLayerId,
+                  type: 'circle',
+                  source: friendsSourceId,
+                  paint: {
+                      'circle-color': '#f5a7a7',
+                      'circle-radius': 5,
+                      'circle-stroke-width': 2,
+                      'circle-stroke-color': '#000000'
+                  }
+              });
+              
+              m.on('click', friendsLayerId, (e: any) => {
+                 if (!e.features || e.features.length === 0) return;
+                 const pid = e.features[0].properties.id;
+                 router.push(`/social/${pid}`);
+              });
+
+              m.on('mouseenter', friendsLayerId, () => { m.getCanvas().style.cursor = 'pointer'; });
+              m.on('mouseleave', friendsLayerId, () => { m.getCanvas().style.cursor = ''; });
+          } else {
+              (m.getSource(friendsSourceId) as any).setData({ type: 'FeatureCollection', features: friendsFeatures });
+          }
+      } else {
+          if (m.getLayer(friendsLayerId)) m.removeLayer(friendsLayerId);
+          if (m.getSource(friendsSourceId)) m.removeSource(friendsSourceId);
+      }
+
     }, 100);
 
     return () => clearInterval(intervalId);
@@ -659,23 +715,20 @@ export default function MapEngine() {
             <div className="flex flex-col gap-1 bg-black/80 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl w-64 mt-2">
                <h3 className="text-xs uppercase font-bold text-zinc-500 tracking-widest mb-2 border-b border-white/10 pb-2">Map Layers</h3>
                
-               <button onClick={() => setShowFleet(!showFleet)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
-                  <Plane size={16} className={showFleet ? "text-[#00f0ff]" : "text-zinc-600"}/>
-                  <span className={`text-xs font-bold tracking-widest ${showFleet ? 'text-white' : 'text-zinc-500'}`}>MY AIRCRAFT</span>
+               <button onClick={() => setShowFleet(!showFleet)} className={`w-full text-left px-4 py-2 hover:bg-white/10 ${!showFleet && 'opacity-50'} text-xs font-mono font-bold tracking-widest text-[#00f0ff]`}>
+                  JETSTREAM FLEET {showFleet && '✓'}
                </button>
-
-               <button onClick={() => setShowAirports(!showAirports)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
-                  <MapPin size={16} className={showAirports ? "text-amber-400" : "text-zinc-600"}/>
-                  <span className={`text-xs font-bold tracking-widest ${showAirports ? 'text-white' : 'text-zinc-500'}`}>AIRPORTS</span>
+               <button onClick={() => setShowEvents(!showEvents)} className={`w-full text-left px-4 py-2 hover:bg-white/10 ${!showEvents && 'opacity-50'} text-xs font-mono font-bold tracking-widest text-amber-300`}>
+                  GLOBAL EVENTS {showEvents && '✓'}
+               </button>
+               <button onClick={() => setShowFriends(!showFriends)} className={`w-full text-left px-4 py-2 hover:bg-white/10 ${!showFriends && 'opacity-50'} text-xs font-mono font-bold tracking-widest text-[#f5a7a7]`}>
+                  NETWORK {showFriends && '✓'}
+               </button>
+               <button onClick={() => setShowAirports(!showAirports)} className={`w-full text-left px-4 py-2 hover:bg-white/10 ${!showAirports && 'opacity-50'} text-xs font-mono font-bold tracking-widest text-zinc-300`}>
+                  AIRPORTS {showAirports && '✓'}
                </button>
 
                <div className="w-full h-px bg-white/10 my-2"/>
-               
-               <button className="flex items-center gap-3 p-2 rounded text-left opacity-30 cursor-not-allowed">
-                  <ShieldAlert size={16} className="text-zinc-400"/>
-                  <span className="text-xs font-bold tracking-widest text-zinc-400 flex-1">FRIENDS</span>
-                  <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 4</span>
-               </button>
 
                <button className="flex items-center gap-3 p-2 rounded text-left opacity-30 cursor-not-allowed">
                   <Building size={16} className="text-zinc-400"/>
