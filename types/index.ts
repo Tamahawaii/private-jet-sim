@@ -284,3 +284,15 @@ export type Notification = {
   readAt: ISODateString | null;
   linkTo?: string;
 };
+
+export interface ApiUsageRecord {
+  id: string;              // uuid
+  timestamp: ISODateString;
+  model: 'claude-haiku-4-5-20251001' | 'claude-sonnet-4-6';
+  endpoint: string;        // '/api/ai/haiku' etc
+  inputTokens: number;
+  outputTokens: number;
+  estimatedCostUsd: number;
+  personaId?: string;      // which persona (if DM-related)
+  threadId?: string;       // which DM thread (if applicable)
+}

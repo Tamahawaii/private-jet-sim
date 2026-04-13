@@ -4,7 +4,7 @@ import React, { use } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../../lib/db';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, MessageCircle, MapPin, Plane, Award, Heart, Briefcase, Glasses, Activity } from 'lucide-react';
+import { ArrowLeft, MessageCircle, MapPin, Plane, Award, Heart, Briefcase, Glasses, Activity, Compass } from 'lucide-react';
 
 export default function PersonaDossier({ params }: { params: Promise<{ personaId: string }> }) {
    const resolvedParams = use(params);
