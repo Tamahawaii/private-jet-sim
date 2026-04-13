@@ -40,9 +40,16 @@ export default function FleetDetail({ params }: { params: { tailNumber: string }
 
              <div className="h-64 w-full flex justify-center items-center opacity-80 mb-6">
                  {jet.layoutImage ? (
-                    <img src={jet.layoutImage} alt={jet.model} className="h-full object-contain filter drop-shadow-2xl brightness-125" />
+                    <img src={jet.layoutImage} alt={jet.model} onError={(e) => { e.currentTarget.style.display = 'none'; }} className="h-full object-contain filter drop-shadow-2xl brightness-125" />
                  ) : (
-                    <Plane size={64} className="text-zinc-600" />
+                    <div className="aspect-video bg-white/5 border border-white/10 rounded flex items-center justify-center p-12">
+                      <div className="text-center">
+                        <Plane className="w-12 h-12 text-white/20 mx-auto mb-2" strokeWidth={1} />
+                        <span className="text-[10px] font-mono uppercase tracking-widest text-white/30">
+                          No blueprint available
+                        </span>
+                      </div>
+                    </div>
                  )}
              </div>
 

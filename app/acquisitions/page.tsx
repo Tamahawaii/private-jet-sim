@@ -4,7 +4,7 @@ import React from 'react';
 import { useStore } from '../lib/store';
 import { SHOP_CATALOG } from '../lib/mockData';
 import { aircraftRepo } from '../../lib/repositories/aircraft';
-import { Compass, Fuel, DollarSign, Package } from 'lucide-react';
+import { Compass, Fuel, DollarSign, Package, Plane } from 'lucide-react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { playerRepo } from '../../lib/repositories/player';
 import { Economy } from '../../lib/economy';
@@ -77,9 +77,16 @@ export default function Marketplace() {
                 <div key={i} className="flex flex-col md:flex-row bg-[#141419] border border-white/10 rounded-xl overflow-hidden shadow-xl group hover:border-white/30 transition-all">
                    <div className="w-full md:w-1/3 bg-black border-b md:border-b-0 md:border-r border-white/10 flex items-center justify-center p-4 min-h-[160px]">
                       {item.layoutImage ? (
-                         <img src={item.layoutImage} alt={item.model} className="w-full h-full object-contain filter invert opacity-50 group-hover:opacity-100 transition-all" />
+                         <img src={item.layoutImage} alt={item.model} onError={(e) => { e.currentTarget.style.display = 'none'; }} className="w-full h-full object-contain filter invert opacity-50 group-hover:opacity-100 transition-all" />
                       ) : (
-                         <div className="text-zinc-700 text-xs font-mono tracking-widest text-center">NO BLUEPRINT<br/>AVAILABLE</div>
+                         <div className="aspect-video bg-white/5 border border-white/10 rounded flex items-center justify-center w-full h-full">
+                           <div className="text-center">
+                             <Plane className="w-8 h-8 text-white/20 mx-auto mb-2" strokeWidth={1} />
+                             <span className="text-[8px] font-mono uppercase tracking-widest text-white/30">
+                               No blueprint available
+                             </span>
+                           </div>
+                         </div>
                       )}
                    </div>
 

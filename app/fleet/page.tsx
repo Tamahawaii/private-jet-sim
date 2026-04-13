@@ -55,9 +55,16 @@ export default function FleetManager() {
 
                       <div className="w-full h-48 bg-gradient-to-b from-white/5 to-transparent flex items-center justify-center p-6 relative">
                           {jet.layoutImage ? (
-                             <img src={jet.layoutImage} alt={jet.model} className="w-full h-full object-contain filter group-hover:brightness-125 transition-all opacity-80" />
+                             <img src={jet.layoutImage} alt={jet.model} onError={(e) => { e.currentTarget.style.display = 'none'; }} className="w-full h-full object-contain filter group-hover:brightness-125 transition-all opacity-80" />
                           ) : (
-                             <Plane size={48} className="text-zinc-600" />
+                             <div className="aspect-video w-full bg-white/5 border border-white/10 rounded flex items-center justify-center">
+                               <div className="text-center">
+                                 <Plane className="w-8 h-8 text-white/20 mx-auto mb-2" strokeWidth={1} />
+                                 <span className="text-[8px] font-mono uppercase tracking-widest text-white/30">
+                                   No blueprint available
+                                 </span>
+                               </div>
+                             </div>
                           )}
                       </div>
 

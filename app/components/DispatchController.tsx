@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../lib/store';
-import { CloudRain, Wind, AlertTriangle, Route as RouteIcon, DollarSign, Zap } from 'lucide-react';
+import { CloudRain, Wind, AlertTriangle, Route as RouteIcon, DollarSign, Zap, Plane } from 'lucide-react';
 
 function fmt(n: number) {
     if (n >= 1000000000) return '$' + (n / 1000000000).toFixed(1) + 'B';
@@ -126,9 +126,22 @@ export default function DispatchController() {
 
       <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-6">
 
-         {jet.layoutImage && (
+         {jet.layoutImage ? (
             <div className="w-full h-32 relative bg-gradient-to-b from-white/5 to-transparent border border-white/10 rounded-lg overflow-hidden flex items-center justify-center p-2 group">
-               <img src={jet.layoutImage} alt={jet.model} className="w-full h-full object-contain filter group-hover:brightness-125 transition-all drop-shadow-[0_0_15px_rgba(0,240,255,0.3)]" />
+               <img src={jet.layoutImage} alt={jet.model} onError={(e) => { e.currentTarget.style.display = 'none'; }} className="w-full h-full object-contain filter group-hover:brightness-125 transition-all drop-shadow-[0_0_15px_rgba(0,240,255,0.3)]" />
+               <div className="absolute bottom-2 left-2 flex gap-2">
+                 <span className="bg-black/80 px-2 py-1 text-[8px] text-zinc-400 border border-white/10 rounded font-mono uppercase tracking-widest">{jet.cabinConfig.length} Modules</span>
+                 <span className="bg-black/80 px-2 py-1 text-[8px] text-zinc-400 border border-white/10 rounded font-mono uppercase tracking-widest">{jet.fuelBurnGPH} GPH</span>
+               </div>
+            </div>
+         ) : (
+            <div className="w-full h-32 relative bg-white/5 border border-white/10 rounded-lg overflow-hidden flex items-center justify-center p-2">
+               <div className="text-center">
+                 <Plane className="w-8 h-8 text-white/20 mx-auto mb-2" strokeWidth={1} />
+                 <span className="text-[8px] font-mono uppercase tracking-widest text-white/30">
+                   No blueprint available
+                 </span>
+               </div>
                <div className="absolute bottom-2 left-2 flex gap-2">
                  <span className="bg-black/80 px-2 py-1 text-[8px] text-zinc-400 border border-white/10 rounded font-mono uppercase tracking-widest">{jet.cabinConfig.length} Modules</span>
                  <span className="bg-black/80 px-2 py-1 text-[8px] text-zinc-400 border border-white/10 rounded font-mono uppercase tracking-widest">{jet.fuelBurnGPH} GPH</span>
