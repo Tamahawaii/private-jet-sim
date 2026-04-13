@@ -23,11 +23,11 @@ export function PersonaAvatar({ persona, size = 64, className = '' }: Props) {
                width: size, 
                height: size, 
                fontSize: Math.max(10, size * 0.35),
-               background: persona.portraitUrl ? 'bg-zinc-800' : `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`
+               background: persona.imageUrl ? 'bg-zinc-800' : `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`
            }}
         >
-           {persona.portraitUrl ? (
-               <div className="absolute inset-0 bg-cover bg-center grayscale mix-blend-luminosity opacity-80 hover:opacity-100 hover:grayscale-0 transition-all" style={{ backgroundImage: `url(${persona.portraitUrl})` }} />
+           {persona.imageUrl ? (
+               <div className="absolute inset-0 bg-cover bg-center grayscale mix-blend-luminosity opacity-80 hover:opacity-100 hover:grayscale-0 transition-all" style={{ backgroundImage: `url(${persona.imageUrl})` }} />
            ) : (
                <span className="opacity-90 mix-blend-overlay text-white">{persona.displayName.split(' ').map((n: string) => n[0]).join('')}</span>
            )}

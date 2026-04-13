@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     }
 
     // 2. Build system prompt
-    const systemPrompt = `You are ${persona.displayName}, a ${persona.age}-year-old ${persona.nationality} ${persona.archetype}. 
+    const systemPrompt = `You are ${persona.displayName}, a ${persona.age}-year-old resident of ${persona.region}. 
 Net worth: $${persona.netWorth}B. Based in ${persona.homeBaseICAO}.
 
 VOICE: ${persona.voiceStyle}

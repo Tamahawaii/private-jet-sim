@@ -57,8 +57,8 @@ export default function SocialHub() {
                   </div>
 
                   <div className="w-full aspect-[21/9] bg-gradient-to-b from-zinc-800 to-black relative">
-                     {member.portraitUrl ? (
-                        <div className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity mix-blend-luminosity" style={{ backgroundImage: `url(${member.portraitUrl})` }} />
+                     {member.imageUrl ? (
+                        <div className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-opacity mix-blend-luminosity" style={{ backgroundImage: `url(${member.imageUrl})` }} />
                      ) : (
                          <div className="absolute inset-0 flex items-center justify-center bg-zinc-900/50">
                              <span className="text-4xl font-black font-mono text-zinc-700/50 uppercase tracking-tighter mix-blend-overlay">
@@ -88,7 +88,7 @@ export default function SocialHub() {
                   </div>
 
                   <div className="p-4 flex flex-col gap-4 flex-1">
-                     <p className="text-xs text-zinc-500 italic line-clamp-2">"{member.bio}"</p>
+                     <p className="text-xs text-zinc-500 italic line-clamp-2">"{member.background}"</p>
 
                      <div className="grid grid-cols-1 gap-2 mt-auto">
                         <div className="bg-black/40 p-2 rounded border border-white/5 flex items-center gap-3">

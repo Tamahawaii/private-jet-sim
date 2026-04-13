@@ -143,7 +143,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ eventId:
                                            <PersonaAvatar persona={p} size={32} />
                                            <div className="flex flex-col">
                                               <span className="text-xs uppercase font-mono tracking-widest text-zinc-300 group-hover:text-white transition-colors">{p.displayName}</span>
-                                              <span className="text-[10px] text-zinc-500 font-mono tracking-widest capitalize">{p.archetype.replace(/_/g, ' ')}</span>
+                                              <span className="text-[10px] text-zinc-500 font-mono tracking-widest capitalize">{p.region || `Tier ${p.wealthTier} VIP`}</span>
                                            </div>
                                        </Link>
                                     ))}

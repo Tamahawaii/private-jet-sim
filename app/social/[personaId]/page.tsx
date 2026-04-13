@@ -41,8 +41,8 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                {/* Avatar & Exec Info */}
                <div className="col-span-1 border border-white/10 bg-[#141419] rounded-xl overflow-hidden shadow-2xl flex flex-col">
                   <div className="aspect-[4/5] bg-black relative">
-                     {persona.portraitUrl ? (
-                         <div className="absolute inset-0 bg-cover bg-center opacity-70 grayscale hover:grayscale-0 transition-all duration-700" style={{ backgroundImage: `url(${persona.portraitUrl})` }} />
+                     {persona.imageUrl ? (
+                         <div className="absolute inset-0 bg-cover bg-center opacity-70 grayscale hover:grayscale-0 transition-all duration-700" style={{ backgroundImage: `url(${persona.imageUrl})` }} />
                      ) : (
                          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-zinc-800 to-black">
                              <span className="text-8xl font-black font-mono text-zinc-800/80 uppercase tracking-tighter">
@@ -83,8 +83,8 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                            <div className="text-sm font-mono text-white">{persona.age} • {persona.region}</div>
                         </div>
                         <div>
-                           <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono mb-1">Current Sector</div>
-                           <div className="text-sm font-mono text-white capitalize">{persona.archetype.replace(/_/g, ' ')}</div>
+                           <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono mb-1">Global Standing</div>
+                           <div className="text-sm font-mono text-white capitalize">Tier {persona.wealthTier} VIP</div>
                         </div>
                      </div>
                   </div>

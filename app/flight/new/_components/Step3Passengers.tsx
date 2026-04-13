@@ -86,7 +86,7 @@ export default function Step3Passengers({ aircraft, selectedPassengers, onChange
                                  {!canBoard ? (
                                     <span className="text-[10px] text-amber-500/80 font-mono tracking-widest uppercase flex items-center gap-1 mt-0.5 truncate"><MapPin size={10}/> In {loc}</span>
                                  ) : (
-                                    <span className="text-[10px] text-zinc-500 font-mono tracking-widest capitalize mt-0.5 truncate">{p.archetype.replace(/_/g, ' ')}</span>
+                                    <span className="text-[10px] text-zinc-500 font-mono tracking-widest capitalize mt-0.5 truncate">{p.region || `VIP Tier ${p.wealthTier}`}</span>
                                  )}
                               </div>
                            </div>

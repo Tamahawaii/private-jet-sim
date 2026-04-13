@@ -360,7 +360,7 @@ export default function ResortDetailPage() {
                                             <PersonaAvatar persona={p} size={36} className="border border-white/10 group-hover:border-[#f5a7a7]/50" />
                                             <div>
                                                 <div className="font-mono tracking-widest uppercase text-sm font-bold text-white group-hover:text-[#f5a7a7] transition-colors">{p.displayName}</div>
-                                                <div className="text-[10px] text-zinc-500 font-sans">{p.archetype.replace(/_/g, ' ')}</div>
+                                                <div className="text-[10px] text-zinc-500 font-sans">{p.region || `Tier ${p.wealthTier} VIP`}</div>
                                             </div>
                                          </div>
                                      ))}

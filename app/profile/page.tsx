@@ -40,7 +40,7 @@ export default function PlayerProfilePage() {
                         className="w-full h-full flex items-center justify-center relative overflow-hidden" 
                         style={{ background: `linear-gradient(135deg, ${player.monogramColors?.[0] || '#222'}, ${player.monogramColors?.[1] || '#111'})` }}
                      >
-                         <div className="absolute inset-0 opacity-20 mix-blend-overlay bg-[url('/noise.png')] pointer-events-none"></div>
+
                          <span className="text-[120px] text-white/30 font-serif leading-none tracking-tighter mix-blend-overlay">{initials}</span>
                      </div>
                  )}

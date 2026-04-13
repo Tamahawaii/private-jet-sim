@@ -41,8 +41,8 @@ export default function DMInbox() {
                   {enrichThreads.map(t => (
                      <div key={t.id} onClick={() => router.push(`/social/dms/${t.personaId}`)} className="flex items-center gap-4 p-4 bg-[#141419] border border-white/5 hover:border-[#f5a7a7]/30 cursor-pointer rounded-xl transition-all">
                         <div className="w-12 h-12 rounded-full bg-zinc-800 overflow-hidden flex-shrink-0 relative">
-                           {t.persona?.portraitUrl ? (
-                              <div className="absolute inset-0 bg-cover bg-center grayscale" style={{ backgroundImage: `url(${t.persona.portraitUrl})` }} />
+                           {t.persona?.imageUrl ? (
+                              <div className="absolute inset-0 bg-cover bg-center grayscale" style={{ backgroundImage: `url(${t.persona.imageUrl})` }} />
                            ) : (
                               <div className="w-full h-full flex items-center justify-center font-mono text-[10px] font-bold tracking-tighter text-zinc-500 uppercase bg-zinc-900">
                                   {t.persona?.displayName.split(' ').map((n: string) => n[0]).join('')}
