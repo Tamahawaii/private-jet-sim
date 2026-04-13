@@ -10,7 +10,7 @@ function fmt(n: number) {
     return '$' + n.toLocaleString();
 }
 
-import { Aircraft } from '../lib/store';
+import { Aircraft } from '../../types';
 
 function LiveTelemetryBlock({ jet, distance, timeMultiplier }: { jet: Aircraft, distance: number, timeMultiplier: number }) {
   const [now, setNow] = useState(Date.now());
