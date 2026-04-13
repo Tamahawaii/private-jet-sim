@@ -3,7 +3,7 @@
 import React from 'react';
 import { useStore } from '../lib/store';
 import { SHOP_CATALOG } from '../lib/mockData';
-import { aircraftRepo } from '../lib/repositories/aircraft';
+import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { Compass, Fuel, DollarSign, Package } from 'lucide-react';
 
 function fmt(n: number) {
@@ -68,8 +68,10 @@ export default function Marketplace() {
                                   tailNumber: 'N' + Math.floor(100 + Math.random() * 900) + 'JS',
                                   modelId: item.model.toLowerCase().replace(/\s+/g, '-'),
                                   modelName: item.model,
+                                  model: item.model,
+                                  costPerNM: item.costPerNM,
                                   acquiredAt: new Date().toISOString(),
-                                  purchasePrice: item.basePrice,
+                                  purchasePrice: item.price,
                                   currentLocationICAO: 'KATL', // Default
                                   status: 'parked',
                                   modules: [],
@@ -86,7 +88,7 @@ export default function Marketplace() {
                                   cabinConfig: Array(item.cabinSlots).fill('Empty'),
                                   scheduledRoutes: []
                                });
-                               setPlayerCash(playerCash - item.basePrice);
+                               setPlayerCash(playerCash - item.price);
                                setSelectedAircraftId(newJetId);
                                setActiveView('Fleet');
                             }}

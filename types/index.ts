@@ -45,6 +45,8 @@ export type Aircraft = {
   
   // Legacy MVP fields (Phase 0 -> Phase 2 compat)
   id?: string;
+  model?: string;
+  costPerNM?: number;
   flightPhase?: 'Hangar' | 'Pre-flight' | 'Taxi' | 'Takeoff' | 'Cruise' | 'Landing';
   speedKnots?: number;
   fuelBurnGPH?: number;

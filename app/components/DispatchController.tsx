@@ -72,7 +72,7 @@ function LiveTelemetryBlock({ jet, distance, timeMultiplier }: { jet: Aircraft, 
 }
 
 import { useLiveQuery } from 'dexie-react-hooks';
-import { aircraftRepo } from '../lib/repositories/aircraft';
+import { aircraftRepo } from '../../lib/repositories/aircraft';
 
 export default function DispatchController() {
   const { selectedAircraftId, provisionalRoute, setProvisionalRoute, timeMultiplier } = useStore();

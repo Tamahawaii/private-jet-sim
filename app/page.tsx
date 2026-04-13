@@ -10,7 +10,7 @@ import FlightAttendant from './components/FlightAttendant';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { useStore } from './lib/store';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { aircraftRepo } from './lib/repositories/aircraft';
+import { aircraftRepo } from '../lib/repositories/aircraft';
 import { STARTER_FLEET } from './lib/mockData';
 
 const MapEngine = dynamic(() => import('./components/MapEngine'), {
@@ -39,9 +39,39 @@ export default function Home() {
 
   useEffect(() => {
     if (fleet !== undefined && fleet.length === 0) {
-       aircraftRepo.bulkPut(STARTER_FLEET as any);
-       if (STARTER_FLEET.length > 0) {
-           useStore.getState().setSelectedAircraftId(STARTER_FLEET[0].id || null);
+       const mappedFleet = STARTER_FLEET.map((item, index) => {
+           const newId = crypto.randomUUID();
+           const payload: any = {
+              id: newId,
+              tailNumber: 'N' + Math.floor(100 + Math.random() * 900) + 'JS',
+              modelId: item.model.toLowerCase().replace(/\s+/g, '-'),
+              modelName: item.model,
+              model: item.model,
+              costPerNM: item.costPerNM,
+              acquiredAt: new Date().toISOString(),
+              purchasePrice: item.price,
+              currentLocationICAO: 'KATL',
+              status: 'parked',
+              modules: [],
+              hoursFlown: 0,
+              hoursSinceLastMaintenance: 0,
+              flightPhase: 'Hangar',
+              speedKnots: item.speedKnots,
+              fuelBurnGPH: item.fuelBurnGPH,
+              currentLocation: { lat: 33.64, lng: -84.42, name: 'KATL - Atlanta' },
+              destination: null,
+              lockedUntil: null,
+              launchedAt: null,
+              layoutImage: item.layoutImage,
+              cabinConfig: Array(item.cabinSlots).fill('Empty'),
+              scheduledRoutes: []
+           };
+           return payload;
+       });
+       if (mappedFleet.length > 0) {
+           aircraftRepo.bulkPut(mappedFleet).then(() => {
+               useStore.getState().setSelectedAircraftId(mappedFleet[0].id);
+           });
        }
     }
   }, [fleet]);
