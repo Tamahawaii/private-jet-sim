@@ -2,6 +2,7 @@ import { db } from './db';
 import { Player } from '../types';
 import { STARTER_FLEET } from '../app/lib/mockData';
 import { useStore } from '../app/lib/store';
+import eventsData from '../data/events.json';
 
 const defaultPlayer: Player = {
   id: 'player',
@@ -80,10 +81,8 @@ export async function bootstrapWorld() {
   const eventCount = await db.events.count();
   if (eventCount === 0) {
      try {
-       const res = await fetch('/data/events.json');
-       const events = await res.json();
-       if (events && events.length > 0) {
-         await db.events.bulkPut(events);
+       if (eventsData && eventsData.length > 0) {
+         await db.events.bulkPut(eventsData as any);
        }
      } catch (e) {
        console.error("Failed to seed events.json:", e);
