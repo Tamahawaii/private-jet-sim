@@ -3,6 +3,7 @@
 import React from 'react';
 import { useStore } from '../lib/store';
 import { SHOP_CATALOG } from '../lib/mockData';
+import { aircraftRepo } from '../lib/repositories/aircraft';
 import { Compass, Fuel, DollarSign, Package } from 'lucide-react';
 
 function fmt(n: number) {
@@ -12,7 +13,7 @@ function fmt(n: number) {
 }
 
 export default function Marketplace() {
-  const { buyAircraft, playerCash, setActiveView } = useStore();
+  const { playerCash, setPlayerCash, setActiveView, setSelectedAircraftId } = useStore();
 
   return (
     <div className="absolute inset-0 z-40 bg-[#0a0a0c] pt-24 px-10 pb-10 overflow-y-auto text-white">
@@ -60,8 +61,33 @@ export default function Marketplace() {
                          <span className="text-xl font-black font-mono text-white">${item.price.toLocaleString()}</span>
                          <button 
                             disabled={!canAfford}
-                            onClick={() => {
-                               buyAircraft(item);
+                            onClick={async () => {
+                               const newJetId = crypto.randomUUID();
+                               await aircraftRepo.create({
+                                  id: newJetId,
+                                  tailNumber: 'N' + Math.floor(100 + Math.random() * 900) + 'JS',
+                                  modelId: item.model.toLowerCase().replace(/\s+/g, '-'),
+                                  modelName: item.model,
+                                  acquiredAt: new Date().toISOString(),
+                                  purchasePrice: item.basePrice,
+                                  currentLocationICAO: 'KATL', // Default
+                                  status: 'parked',
+                                  modules: [],
+                                  hoursFlown: 0,
+                                  hoursSinceLastMaintenance: 0,
+                                  flightPhase: 'Hangar',
+                                  speedKnots: item.speedKnots,
+                                  fuelBurnGPH: item.fuelBurnGPH,
+                                  currentLocation: { lat: 33.64, lng: -84.42, name: 'KATL - Atlanta' },
+                                  destination: null,
+                                  lockedUntil: null,
+                                  launchedAt: null,
+                                  layoutImage: item.layoutImage,
+                                  cabinConfig: Array(item.cabinSlots).fill('Empty'),
+                                  scheduledRoutes: []
+                               });
+                               setPlayerCash(playerCash - item.basePrice);
+                               setSelectedAircraftId(newJetId);
                                setActiveView('Fleet');
                             }}
                             className={`px-6 py-2 rounded font-bold tracking-widest text-sm transition-all shadow-[0_0_15px_rgba(255,255,255,0.1)] ${canAfford ? 'bg-white text-black hover:scale-105' : 'bg-white/10 text-white/30 cursor-not-allowed'}`}

@@ -71,8 +71,12 @@ function LiveTelemetryBlock({ jet, distance, timeMultiplier }: { jet: Aircraft, 
   );
 }
 
+import { useLiveQuery } from 'dexie-react-hooks';
+import { aircraftRepo } from '../lib/repositories/aircraft';
+
 export default function DispatchController() {
-  const { fleet, selectedAircraftId, provisionalRoute, quickLaunchFlight, setProvisionalRoute, timeMultiplier } = useStore();
+  const { selectedAircraftId, provisionalRoute, setProvisionalRoute, timeMultiplier } = useStore();
+  const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
   const jet = fleet.find(j => j.id === selectedAircraftId);
 
   if (!jet) return null;
@@ -185,8 +189,26 @@ export default function DispatchController() {
                     {jet.flightPhase === 'Hangar' && provisionalRoute && (
                        <button 
                          onClick={() => {
-                            quickLaunchFlight(jet.id, provisionalRoute.destination);
-                            setProvisionalRoute(null);
+                            if (provisionalRoute?.destination && jet.currentLocation) {
+                               const toRad = (v: number) => v * Math.PI / 180;
+                               const R = 3440; // NM
+                               const dLat = toRad(provisionalRoute.destination.lat - jet.currentLocation.lat);
+                               const dLon = toRad(provisionalRoute.destination.lng - jet.currentLocation.lng);
+                               const lat1 = toRad(jet.currentLocation.lat);
+                               const lat2 = toRad(provisionalRoute.destination.lat);
+                               const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+                               const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+                               const dist = R * c;
+                               const hours = dist / (jet.speedKnots || 500);
+                               
+                               aircraftRepo.update(jet.id!, {
+                                  destination: provisionalRoute.destination,
+                                  flightPhase: 'Takeoff',
+                                  launchedAt: Date.now(),
+                                  lockedUntil: Date.now() + ((hours * 3600000) / timeMultiplier)
+                               });
+                               setProvisionalRoute(null);
+                            }
                          }}
                          className="w-full mt-4 bg-gradient-to-r from-[#00f0ff] to-[#0088ff] text-black font-black uppercase text-sm tracking-widest rounded px-4 py-4 flex items-center justify-center gap-2 hover:brightness-125 transition-all shadow-[0_0_20px_rgba(0,240,255,0.4)]"
                        >

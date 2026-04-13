@@ -3,6 +3,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import { useStore } from '../lib/store';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { aircraftRepo } from '../lib/repositories/aircraft';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
 import { Layers, Maximize, Minimize, FastForward, CloudRain } from 'lucide-react';
 
@@ -11,7 +13,13 @@ export default function MapEngine() {
   const map = useRef<maplibregl.Map | null>(null);
   const airportsRef = useRef<any[]>([]);
 
-  const { fleet, selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode, timeMultiplier, setTimeMultiplier, weatherEnabled, setWeatherEnabled } = useStore();
+  const { selectedAircraftId, provisionalRoute, mapStyle, setMapStyle, zenMode, setZenMode, timeMultiplier, setTimeMultiplier, weatherEnabled, setWeatherEnabled } = useStore();
+  const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
+  const fleetRef = useRef(fleet);
+
+  useEffect(() => {
+    fleetRef.current = fleet;
+  }, [fleet]);
 
   useEffect(() => {
      fetch('/airports.json')
@@ -209,7 +217,7 @@ export default function MapEngine() {
     const intervalId = setInterval(() => {
       if (!m.isStyleLoaded()) return;
 
-      fleet.forEach(fJet => {
+      fleetRef.current.forEach(fJet => {
         const routeSourceId = `route-source-${fJet.id}`;
         const routeLayerId = `route-layer-${fJet.id}`;
         const planeSourceId = `plane-source-${fJet.id}`;
@@ -249,16 +257,17 @@ export default function MapEngine() {
            // Auto-shift phase in store if boundary crossed
            if (calcPhase !== fJet.flightPhase) {
                if (calcPhase === 'Hangar') {
-                   useStore.getState().updateAircraft(fJet.id, { 
+                   // Ensure it reaches exact destination
+                   aircraftRepo.update(fJet.id!, { 
                        flightPhase: 'Hangar', 
-                       currentLocation: fJet.destination, 
+                       currentLocation: fJet.destination || undefined, 
                        destination: null, 
                        launchedAt: null, 
                        lockedUntil: null 
                    });
                    return; // skip this tick
                } else {
-                   useStore.getState().updateAircraft(fJet.id, { flightPhase: calcPhase as any });
+                   aircraftRepo.update(fJet.id!, { flightPhase: calcPhase as any });
                    return;
                }
            }
@@ -485,7 +494,7 @@ export default function MapEngine() {
       const omniLayerId = 'omni-layer';
       if (true) { // Always show omni routes
           const omniFeatures: any[] = [];
-          fleet.forEach(fJet => {
+          fleetRef.current.forEach(fJet => {
             if (fJet.scheduledRoutes && fJet.scheduledRoutes.length > 0) {
                fJet.scheduledRoutes.forEach(leg => {
                   const points = computeGreatCirclePoints(leg.origin.lat, leg.origin.lng, leg.destination.lat, leg.destination.lng);

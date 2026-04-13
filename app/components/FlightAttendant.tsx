@@ -2,10 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { useStore } from '../lib/store';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { aircraftRepo } from '../lib/repositories/aircraft';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function FlightAttendant() {
-  const { selectedAircraftId, fleet } = useStore();
+  const { selectedAircraftId } = useStore();
+  const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
   const [dialogue, setDialogue] = useState('');
   const [show, setShow] = useState(true);
 

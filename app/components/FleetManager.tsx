@@ -1,11 +1,15 @@
 'use client';
 
 import React from 'react';
-import { useStore, Aircraft } from '../lib/store';
+import { useStore } from '../lib/store';
+import { Aircraft } from '../../types';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { aircraftRepo } from '../lib/repositories/aircraft';
 import { Plane, Compass, Fuel, LayoutGrid, Route, MousePointerClick } from 'lucide-react';
 
 export default function FleetManager() {
-  const { fleet, setSelectedAircraftId, setActiveView } = useStore();
+  const { setSelectedAircraftId, setActiveView } = useStore();
+  const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
 
   return (
     <div className="absolute inset-0 z-40 bg-[#0a0a0c] pt-24 px-10 pb-10 overflow-y-auto text-white">
