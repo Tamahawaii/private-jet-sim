@@ -7,7 +7,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { Aircraft } from '../../types';
 import { aircraftRepo } from '../../lib/repositories/aircraft';
 import { interpolateFlightPosition, computeGreatCirclePoints, computeBearing, offsetCoordinate, computeRangeCirclePoints } from '../lib/math';
-import { Layers, Maximize, Minimize, FastForward, CloudRain, Plane, Map as MapIcon, ShieldAlert, Building, Calendar, Focus } from 'lucide-react';
+import { Layers, Maximize, Minimize, FastForward, CloudRain, Plane, MapPin, Map as MapIcon, ShieldAlert, Building, Calendar, Focus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 export default function MapEngine() {
@@ -25,6 +25,54 @@ export default function MapEngine() {
   const [stylePickerOpen, setStylePickerOpen] = useState(false);
   const [showFleet, setShowFleet] = useState(true);
   const [showAirports, setShowAirports] = useState(true);
+  
+  const showFleetRef = useRef(showFleet);
+  const showAirportsRef = useRef(showAirports);
+
+  const [airportsData, setAirportsData] = useState<any[]>([]);
+
+  useEffect(() => { showFleetRef.current = showFleet; }, [showFleet]);
+  useEffect(() => { showAirportsRef.current = showAirports; }, [showAirports]);
+
+  useEffect(() => {
+     fetch('/airports.json').then(r => r.json()).then(setAirportsData).catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (!map.current || airportsData.length === 0) return;
+    const m = map.current;
+    
+    if (showAirports && !m.getSource('airports-source')) {
+      m.addSource('airports-source', {
+         type: 'geojson',
+         data: {
+           type: 'FeatureCollection',
+           features: airportsData.map(a => ({
+             type: 'Feature',
+             geometry: { type: 'Point', coordinates: [a.lng, a.lat] },
+             properties: { icao: a.icao, name: a.name }
+           }))
+         }
+      });
+      m.addLayer({
+         id: 'airports-layer',
+         type: 'circle',
+         source: 'airports-source',
+         minzoom: 4,
+         paint: {
+           'circle-radius': 3,
+           'circle-color': '#888',
+           'circle-opacity': 0.5,
+           'circle-stroke-width': 1,
+           'circle-stroke-color': '#fff',
+           'circle-stroke-opacity': 0.3
+         }
+      });
+    } else if (!showAirports && m.getLayer('airports-layer')) {
+      m.removeLayer('airports-layer');
+      m.removeSource('airports-source');
+    }
+  }, [showAirports, airportsData]);
 
   useEffect(() => {
     fleetRef.current = fleet;
@@ -377,7 +425,7 @@ export default function MapEngine() {
            features: showRange ? [{ type: 'Feature', geometry: { type: 'Polygon', coordinates: [rangeCoords] } }] : []
         };
 
-        if (showFleet && !m.getSource(planeSourceId)) {
+        if (showFleetRef.current && !m.getSource(planeSourceId)) {
            m.addSource(planeSourceId, { type: 'geojson', data: planeData as any });
            m.addLayer({
              id: planeLayerId,
@@ -392,17 +440,17 @@ export default function MapEngine() {
                'circle-blur': fJet.id === selectedAircraftId ? 0.3 : 0.1
              }
            });
-        } else if (showFleet && m.getSource(planeSourceId)) {
+        } else if (showFleetRef.current && m.getSource(planeSourceId)) {
            (m.getSource(planeSourceId) as any).setData(planeData);
            m.setPaintProperty(planeLayerId, 'circle-radius', fJet.id === selectedAircraftId ? 16 : (fJet.flightPhase === 'Hangar' ? 8 : 12));
            m.setPaintProperty(planeLayerId, 'circle-stroke-width', fJet.id === selectedAircraftId ? 3 : (fJet.flightPhase === 'Hangar' ? 2 : 3));
            m.setPaintProperty(planeLayerId, 'circle-blur', fJet.id === selectedAircraftId ? 0.3 : 0.1);
-        } else if (!showFleet && m.getLayer(planeLayerId)) {
+        } else if (!showFleetRef.current && m.getLayer(planeLayerId)) {
            m.removeLayer(planeLayerId);
            m.removeSource(planeSourceId);
         }
 
-        if (showFleet && showRoute) {
+        if (showFleetRef.current && showRoute) {
            if (!m.getSource(routeSourceId)) {
                m.addSource(routeSourceId, { type: 'geojson', data: routeData as any });
                m.addLayer({
@@ -554,60 +602,8 @@ export default function MapEngine() {
          style={mapStyle === 'FlightAware' ? { filter: 'sepia(100%) hue-rotate(185deg) saturate(300%) brightness(85%) contrast(120%)' } : {}}
       />
       
-      {/* Dynamic Map Controls Stack (Bottom Right of Map Area) */}
-      <div className="absolute bottom-24 right-[420px] z-50 flex flex-col items-end gap-2 pointer-events-auto">
-         {layersOpen && (
-            <div className="flex flex-col gap-1 bg-black/80 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl w-64 mb-2">
-               <h3 className="text-xs uppercase font-bold text-zinc-500 tracking-widest mb-2 border-b border-white/10 pb-2">Map Layers</h3>
-               
-               <button onClick={() => setShowFleet(!showFleet)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
-                  <Plane size={16} className={showFleet ? "text-emerald-400" : "text-zinc-600"}/>
-                  <span className={`text-xs font-bold tracking-widest ${showFleet ? 'text-white' : 'text-zinc-500'}`}>MY AIRCRAFT</span>
-               </button>
-
-               <button onClick={() => setShowAirports(!showAirports)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
-                  <MapIcon size={16} className={showAirports ? "text-amber-400" : "text-zinc-600"}/>
-                  <span className={`text-xs font-bold tracking-widest ${showAirports ? 'text-white' : 'text-zinc-500'}`}>AIRPORTS</span>
-               </button>
-
-               <div className="w-full h-px bg-white/10 my-2"/>
-               
-               <button className="flex items-center gap-3 p-2 rounded text-left opacity-30 cursor-not-allowed">
-                  <ShieldAlert size={16} className="text-zinc-400"/>
-                  <span className="text-xs font-bold tracking-widest text-zinc-400 flex-1">FRIENDS</span>
-                  <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 4</span>
-               </button>
-
-               <button className="flex items-center gap-3 p-2 rounded text-left opacity-30 cursor-not-allowed">
-                  <Building size={16} className="text-zinc-400"/>
-                  <span className="text-xs font-bold tracking-widest text-zinc-400 flex-1">PROPERTIES</span>
-                  <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 8</span>
-               </button>
-
-               <button className="flex items-center gap-3 p-2 rounded text-left opacity-30 cursor-not-allowed">
-                  <Calendar size={16} className="text-zinc-400"/>
-                  <span className="text-xs font-bold tracking-widest text-zinc-400 flex-1">EVENTS</span>
-                  <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 3</span>
-               </button>
-            </div>
-         )}
-         
-         {stylePickerOpen && (
-            <div className="flex flex-col gap-2 bg-black/80 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl w-64 mb-2">
-               <h3 className="text-xs uppercase font-bold text-zinc-500 tracking-widest mb-2 border-b border-white/10 pb-2">Map Base Style</h3>
-               
-               {['FlightAware', 'Satellite', 'Dark', 'Roads'].map((style) => (
-                  <button 
-                     key={style}
-                     onClick={() => { setMapStyle(style as any); setStylePickerOpen(false); }} 
-                     className={`p-2 rounded text-left transition-all ${mapStyle === style ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/50' : 'hover:bg-white/10 text-white border border-transparent'}`}
-                  >
-                     <span className="text-xs font-bold tracking-widest">{style.toUpperCase()}</span>
-                  </button>
-               ))}
-            </div>
-         )}
-         
+      {/* Dynamic Map Controls Stack (Top Right of Map Area) */}
+      <div className="absolute top-20 right-6 z-50 flex flex-col items-end gap-2 pointer-events-auto">
          {/* The 4-Button Vertical Stack */}
          <button 
             onClick={() => { setLayersOpen(!layersOpen); setStylePickerOpen(false); }}
@@ -644,6 +640,59 @@ export default function MapEngine() {
          >
             <Focus size={20} />
          </button>
+
+         {/* Popups expand downward since they are below the buttons in flex-col list */}
+         {layersOpen && (
+            <div className="flex flex-col gap-1 bg-black/80 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl w-64 mt-2">
+               <h3 className="text-xs uppercase font-bold text-zinc-500 tracking-widest mb-2 border-b border-white/10 pb-2">Map Layers</h3>
+               
+               <button onClick={() => setShowFleet(!showFleet)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
+                  <Plane size={16} className={showFleet ? "text-[#00f0ff]" : "text-zinc-600"}/>
+                  <span className={`text-xs font-bold tracking-widest ${showFleet ? 'text-white' : 'text-zinc-500'}`}>MY AIRCRAFT</span>
+               </button>
+
+               <button onClick={() => setShowAirports(!showAirports)} className="flex items-center gap-3 p-2 rounded hover:bg-white/10 transition-all text-left">
+                  <MapPin size={16} className={showAirports ? "text-amber-400" : "text-zinc-600"}/>
+                  <span className={`text-xs font-bold tracking-widest ${showAirports ? 'text-white' : 'text-zinc-500'}`}>AIRPORTS</span>
+               </button>
+
+               <div className="w-full h-px bg-white/10 my-2"/>
+               
+               <button className="flex items-center gap-3 p-2 rounded text-left opacity-30 cursor-not-allowed">
+                  <ShieldAlert size={16} className="text-zinc-400"/>
+                  <span className="text-xs font-bold tracking-widest text-zinc-400 flex-1">FRIENDS</span>
+                  <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 4</span>
+               </button>
+
+               <button className="flex items-center gap-3 p-2 rounded text-left opacity-30 cursor-not-allowed">
+                  <Building size={16} className="text-zinc-400"/>
+                  <span className="text-xs font-bold tracking-widest text-zinc-400 flex-1">PROPERTIES</span>
+                  <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 8</span>
+               </button>
+
+               <button className="flex items-center gap-3 p-2 rounded text-left opacity-30 cursor-not-allowed">
+                  <Calendar size={16} className="text-zinc-400"/>
+                  <span className="text-xs font-bold tracking-widest text-zinc-400 flex-1">EVENTS</span>
+                  <span className="text-[8px] bg-white/10 px-1 rounded">PHASE 3</span>
+               </button>
+            </div>
+         )}
+         
+         {stylePickerOpen && (
+            <div className="flex flex-col gap-2 bg-black/80 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl w-64 mt-2">
+               <h3 className="text-xs uppercase font-bold text-zinc-500 tracking-widest mb-2 border-b border-white/10 pb-2">Map Base Style</h3>
+               
+               {['FlightAware', 'Satellite', 'Dark', 'Roads'].map((style) => (
+                  <button 
+                     key={style}
+                     onClick={() => { setMapStyle(style as any); setStylePickerOpen(false); }} 
+                     className={`p-2 rounded text-left transition-all ${mapStyle === style ? 'bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/50' : 'hover:bg-white/10 text-white border border-transparent'}`}
+                  >
+                     <span className="text-xs font-bold tracking-widest">{style.toUpperCase()}</span>
+                  </button>
+               ))}
+            </div>
+         )}
       </div>
 
       {/* Speed Controls */}
