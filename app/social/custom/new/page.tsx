@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { db } from '../../../../lib/db';
 import { ArrowLeft, Wand2, Settings2, Globe, Heart, Activity, Briefcase } from 'lucide-react';
+import { seedPlayerRelationship } from '../../../../lib/relationships/helpers';
 
 export default function CustomPersonaNew() {
    const router = useRouter();
@@ -85,6 +86,7 @@ export default function CustomPersonaNew() {
          mood: 'neutral',
          rivalryTargets: []
       });
+      await seedPlayerRelationship(personaObj.id);
       router.push(`/social/${personaObj.id}`);
    };
 

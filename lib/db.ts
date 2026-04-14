@@ -33,6 +33,12 @@ export class JetstreamDB extends Dexie {
   gossipIssues!: Table<any, string>;
   collectionItems!: Table<any, string>;
 
+  // Phase 8
+  relationships!: Table<any, string>;
+  relationshipEvents!: Table<any, string>;
+  giftItems!: Table<any, string>;
+  giftsSent!: Table<any, string>;
+
   constructor() {
     super('jetstream');
     this.version(1).stores({
@@ -82,6 +88,13 @@ export class JetstreamDB extends Dexie {
 
     this.version(7).stores({
       pets: 'id, ownerId'
+    });
+
+    this.version(8).stores({
+      relationships: 'id, participantA, participantB, status, lastInteractionAt',
+      relationshipEvents: 'id, relationshipId, type, at',
+      giftItems: 'id, category, basePrice',
+      giftsSent: 'id, fromId, toId, sentAt'
     });
   }
 }

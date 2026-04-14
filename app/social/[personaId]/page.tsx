@@ -4,7 +4,9 @@ import React, { use } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../../lib/db';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, MessageCircle, MapPin, Plane, Award, Heart, Briefcase, Glasses, Activity, Compass, PawPrint } from 'lucide-react';
+import { ArrowLeft, MessageCircle, MapPin, Plane, Award, Heart, Briefcase, Glasses, Activity, Compass, PawPrint, Users } from 'lucide-react';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import { relationshipId, relationshipDepth } from '../../../lib/relationships/affinity';
 
 export default function PersonaDossier({ params }: { params: Promise<{ personaId: string }> }) {
    const resolvedParams = use(params);
@@ -13,6 +15,27 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
    const persona = useLiveQuery(() => db.personas.get(resolvedParams.personaId), [resolvedParams.personaId]);
    const state = useLiveQuery(() => db.personaState.where('personaId').equals(resolvedParams.personaId).first(), [resolvedParams.personaId]);
    const pets = useLiveQuery(() => db.pets.where('ownerId').equals(resolvedParams.personaId).toArray(), [resolvedParams.personaId]);
+
+   const myRelId = relationshipId('player', resolvedParams.personaId);
+   const myRel = useLiveQuery(() => db.relationships.get(myRelId), [myRelId]);
+   const allRels = useLiveQuery(() => db.relationships.toArray()) || [];
+   const allPersonas = useLiveQuery(() => db.personas.toArray()) || [];
+
+   const myDepth = myRel ? relationshipDepth(myRel.metrics) : 0;
+   const connections = allRels.filter(r => 
+       r.id !== myRelId && 
+       (r.participantA === resolvedParams.personaId || r.participantB === resolvedParams.personaId) &&
+       (r.isPubliclyKnown || myDepth > 50)
+   );
+
+   const safeMetrics = myRel?.metrics || { affection: 0, trust: 0, heat: 0, romanticTension: 0, rivalry: 0 };
+   const radarData = [
+     { axis: 'AFFECTION', value: safeMetrics.affection, fullMark: 100 },
+     { axis: 'TRUST', value: safeMetrics.trust, fullMark: 100 },
+     { axis: 'HEAT', value: safeMetrics.heat, fullMark: 100 },
+     { axis: 'ROMANTIC', value: safeMetrics.romanticTension, fullMark: 100 },
+     { axis: 'RIVALRY', value: safeMetrics.rivalry, fullMark: 100 },
+   ];
 
    if (persona === undefined) return null;
    if (persona === null) {
@@ -180,8 +203,74 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
 
                   {persona.playerDynamic && (
                      <div className="bg-[#141419] border border-[#f5a7a7]/20 rounded-xl p-6 shadow-[0_0_30px_rgba(245,167,167,0.03)]">
-                        <h2 className="text-xs font-mono text-[#f5a7a7] tracking-widest mb-4 flex items-center gap-2">PLAYER DYNAMIC</h2>
+                        <h2 className="text-xs font-mono text-[#f5a7a7] tracking-widest mb-4 flex items-center gap-2">PLAYER DYNAMIC (LORE)</h2>
                         <p className="text-[#f5a7a7]/80 font-serif leading-relaxed text-sm">{persona.playerDynamic}</p>
+                     </div>
+                  )}
+
+                  {/* RELATIONSHIP WITH PLAYER  */}
+                  <div className="bg-[#141419] border border-white/10 rounded-xl p-6">
+                     <h2 className="text-xs font-mono text-[#f5a7a7] tracking-widest mb-4 flex items-center gap-2"><Heart size={14}/> RELATIONSHIP WITH YOU</h2>
+                     
+                     {/* Badge */}
+                     <div className="flex justify-center mb-2">
+                        <span className={`px-4 py-1 rounded text-xs font-mono uppercase tracking-widest font-black 
+                           ${myRel?.status === 'estranged' || myRel?.status?.includes('rival') || myRel?.status === 'enemies' ? 'bg-red-900/40 text-red-400' :
+                           myRel?.status?.includes('friend') ? 'bg-green-900/40 text-green-400' :
+                           myRel?.status?.includes('flirt') || myRel?.status?.includes('roman') || myRel?.status?.includes('dat') || myRel?.status?.includes('part') || myRel?.status?.includes('marr') || myRel?.status?.includes('situa') ? 'bg-pink-900/40 text-pink-400' :
+                           'bg-zinc-800 text-zinc-400'}`}>
+                           {myRel?.status || 'STRANGERS'}
+                        </span>
+                     </div>
+
+                     <div className="w-full h-72">
+                        <ResponsiveContainer>
+                           <RadarChart data={radarData}>
+                              <PolarGrid stroke="#3f3f46" />
+                              <PolarAngleAxis dataKey="axis" tick={{ fontSize: 10, fill: '#a1a1aa', letterSpacing: '0.05em' }} />
+                              <PolarRadiusAxis angle={90} domain={[0, 100]} tick={false} axisLine={false} />
+                              <Radar dataKey="value" stroke="#f5a7a7" fill="#f5a7a7" fillOpacity={0.3} animationDuration={800} />
+                           </RadarChart>
+                        </ResponsiveContainer>
+                     </div>
+
+                     {/* History Timeline */}
+                     {myRel && myRel.history && myRel.history.length > 0 && (
+                        <div className="mt-8 border-t border-white/10 pt-6">
+                           <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono mb-4">Recent History</div>
+                           <div className="flex flex-col gap-3 pl-2 border-l-2 border-zinc-800">
+                              {myRel.history.slice().reverse().slice(0, 5).map((ev: any) => (
+                                 <div key={ev.id} className="relative pl-4">
+                                    <div className="absolute w-2 h-2 rounded-full bg-zinc-600 -left-[5px] top-1.5 ring-4 ring-[#141419]" />
+                                    <div className="text-xs text-white mb-0.5">{ev.description}</div>
+                                    <div className="text-[9px] text-zinc-500 font-mono tracking-widest uppercase bg-black/30 inline-block px-1 rounded">{new Date(ev.at).toLocaleDateString()}</div>
+                                 </div>
+                              ))}
+                           </div>
+                        </div>
+                     )}
+                  </div>
+
+                  {/* CONNECTED PERSONAS */}
+                  {connections.length > 0 && (
+                     <div className="bg-[#141419] border border-white/10 rounded-xl p-6">
+                        <h2 className="text-xs font-mono text-[#f5a7a7] tracking-widest mb-4 flex items-center gap-2"><Users size={14}/> NETWORK</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                           {connections.map(r => {
+                              const targetId = r.participantA === resolvedParams.personaId ? r.participantB : r.participantA;
+                              const target = allPersonas.find(p => p.id === targetId);
+                              if (!target) return null;
+                              return (
+                                 <button key={r.id} onClick={() => router.push(`/social/${target.id}`)} className="text-left bg-black/30 hover:bg-black/50 transition-colors border border-white/5 p-4 rounded flex flex-col gap-2">
+                                    <div className="flex justify-between items-start">
+                                       <span className="text-sm font-black font-mono text-white uppercase truncate pr-2">{target.displayName}</span>
+                                       <span className="text-[9px] bg-white/10 px-2 py-0.5 rounded uppercase font-mono tracking-widest text-[#f5a7a7] whitespace-nowrap">{r.status}</span>
+                                    </div>
+                                    {!r.isPubliclyKnown && <div className="text-[9px] text-yellow-500/80 font-mono italic">PRIVATE (VISIBLE DUE TO TIE STRENGTH)</div>}
+                                 </button>
+                              );
+                           })}
+                        </div>
                      </div>
                   )}
 

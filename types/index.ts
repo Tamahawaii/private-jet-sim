@@ -429,3 +429,125 @@ export interface CustomPersonaSeed {
   region: string;
   archetypeHint: string;
 }
+
+// -----------------------------------------------------------------------------
+// RELATIONSHIP STATE (Phase 8)
+// -----------------------------------------------------------------------------
+
+export interface RelationshipMetrics {
+  affection: number;        // baseline warmth, friendship-coded
+  trust: number;            // willingness to be vulnerable, share secrets
+  heat: number;             // current intensity of recent interactions
+  romanticTension: number;  // sexual/romantic charge specifically
+  rivalry: number;          // competitive, antagonistic energy
+}
+
+export type RelationshipStatus = 
+  | 'strangers'
+  | 'acquaintances'
+  | 'friends'
+  | 'close-friends'
+  | 'flirting'
+  | 'romantic-interest'
+  | 'dating'
+  | 'situationship'
+  | 'intimate-occasional'
+  | 'partners'
+  | 'married'
+  | 'estranged'
+  | 'rivals'
+  | 'enemies';
+
+export interface Relationship {
+  id: string;                    // composite: 'persona1Id__persona2Id' (sorted)
+  participantA: string;
+  participantB: string;
+  metrics: RelationshipMetrics;
+  status: RelationshipStatus;
+  isPubliclyKnown: boolean;
+  history: RelationshipEvent[];
+  startedAt: ISODateString;
+  lastInteractionAt: ISODateString;
+  notes?: string;
+}
+
+export type RelationshipEventType =
+  | 'first-meeting'
+  | 'shared-flight'
+  | 'shared-event'
+  | 'shared-resort-stay'
+  | 'gift-sent'
+  | 'gift-received'
+  | 'dm-exchanged'
+  | 'flirtation'
+  | 'first-kiss'
+  | 'first-intimacy'
+  | 'argument'
+  | 'reconciliation'
+  | 'public-appearance-together'
+  | 'breakup'
+  | 'relationship-defined'
+  | 'rivalry-declared'
+  | 'gossip-spread'
+  | 'jealousy-incident';
+
+export interface RelationshipEvent {
+  id: string;
+  type: RelationshipEventType;
+  at: ISODateString;
+  description: string;
+  metricsDelta?: Partial<RelationshipMetrics>;
+  contextRefs?: {
+    eventId?: string;
+    flightId?: string;
+    resortBookingId?: string;
+    giftId?: string;
+    dmThreadId?: string;
+  };
+}
+
+// -----------------------------------------------------------------------------
+// GIFTS (Phase 8)
+// -----------------------------------------------------------------------------
+
+export type GiftCategory =
+  | 'jewelry'
+  | 'art'
+  | 'wine-spirits'
+  | 'fashion'
+  | 'experience'
+  | 'travel'
+  | 'flowers'
+  | 'literature'
+  | 'tech'
+  | 'commission'
+  | 'symbolic';
+
+export interface GiftItem {
+  id: string;
+  name: string;
+  category: GiftCategory;
+  basePrice: number;
+  description: string;
+  affinityImpact: {
+    affection?: number;
+    heat?: number;
+    romanticTension?: number;
+    trust?: number;
+  };
+  preferredBy?: string[];
+  imageUrl: string | null;
+}
+
+export interface GiftSent {
+  id: string;
+  giftItemId: string;
+  fromId: string;
+  toId: string;
+  occasion?: string;
+  personalNote?: string;
+  sentAt: ISODateString;
+  receivedAt: ISODateString | null;
+  reactionDM?: string;
+  metricsApplied: Partial<RelationshipMetrics>;
+}

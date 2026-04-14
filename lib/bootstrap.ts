@@ -8,6 +8,9 @@ import airportsData from '../data/airports.json';
 import resortsData from '../data/resorts.json';
 import playerData from '../data/player.json';
 import petsData from '../data/pets.json';
+import giftsData from '../data/gifts.json';
+import relationshipsData from '../data/persona-relationships.json';
+import { seedPlayerRelationship } from './relationships/helpers';
 
 export async function bootstrapWorld() {
   // 1. Init Player if not exists or merge canonical updates
@@ -217,5 +220,28 @@ export async function bootstrapWorld() {
      }
   } catch (e) {
      console.error("Failed to seed pets:", e);
+  }
+
+  // 9. Init Gifts and Relationships (Phase 8)
+  try {
+     const giftCount = await db.giftItems.count();
+     if (giftCount === 0 && giftsData && giftsData.length > 0) {
+        console.log(`[BOOTSTRAP] Seeding ${giftsData.length} gift items.`);
+        await db.giftItems.bulkAdd(giftsData as any[]);
+     }
+     
+     const relCount = await db.relationships.count();
+     if (relCount === 0 && relationshipsData && relationshipsData.length > 0) {
+        console.log(`[BOOTSTRAP] Seeding canonical relationships.`);
+        await db.relationships.bulkAdd(relationshipsData as any[]);
+     }
+
+     // Ensure all personas have player relationships
+     const allPersonas = await db.personas.toArray();
+     for (const p of allPersonas) {
+        await seedPlayerRelationship(p.id);
+     }
+  } catch (e) {
+     console.error("Failed to seed relationships/gifts:", e);
   }
 }
