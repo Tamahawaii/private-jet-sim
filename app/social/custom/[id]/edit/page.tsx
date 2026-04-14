@@ -43,9 +43,10 @@ export default function CustomPersonaEdit({ params }: { params: Promise<{ id: st
          gender: advanced.gender,
          pronouns: advanced.pronouns,
          publicOrientation: advanced.publicOrientation,
-         privateOrientation: advanced.publicOrientation,
+         privateOrientation: advanced.privateOrientation,
          publicRelationshipStatus: advanced.publicRelationshipStatus,
          relationshipStyle: advanced.relationshipStyle,
+         orientationFlexibility: String(advanced.orientationFlexibility || "50"),
          interests: advanced.interests.split(',').map((s: string) => s.trim()),
          tastes: {
             ...persona.tastes,
@@ -92,6 +93,52 @@ export default function CustomPersonaEdit({ params }: { params: Promise<{ id: st
                   <input type="text" value={advanced.region} onChange={e => setAdvanced({...advanced, region: e.target.value})} placeholder="Region (Paris, France)" className="bg-black border border-white/10 p-2 text-sm max-w-sm rounded focus:border-[#f5a7a7]/50 focus:outline-none"/>
                   <input type="number" value={advanced.wealthTier} onChange={e => setAdvanced({...advanced, wealthTier: parseInt(e.target.value)})} placeholder="Wealth Tier (1-5)" className="bg-black border border-white/10 p-2 text-sm max-w-[100px] rounded focus:border-[#f5a7a7]/50 focus:outline-none"/>
                   <input type="number" value={advanced.netWorth} onChange={e => setAdvanced({...advanced, netWorth: parseInt(e.target.value)})} placeholder="Net Worth (Raw Dollars e.g. 5000000000)" className="bg-black border border-white/10 p-2 text-sm max-w-sm rounded font-mono focus:border-[#f5a7a7]/50 focus:outline-none"/>
+               </div>
+               {/* Identity & Relationships */}
+               <div className="flex flex-col gap-4">
+                  <h3 className="text-sm font-mono text-[#f5a7a7] uppercase tracking-widest border-b border-white/10 pb-2">Identity & Relationships</h3>
+                  <select value={advanced.gender} onChange={e => setAdvanced({...advanced, gender: e.target.value})} className="bg-black border border-white/10 p-2 text-sm max-w-sm rounded focus:border-[#f5a7a7]/50 focus:outline-none">
+                     <option value="man">Man</option>
+                     <option value="woman">Woman</option>
+                     <option value="non-binary">Non-Binary</option>
+                  </select>
+                  <select value={advanced.pronouns} onChange={e => setAdvanced({...advanced, pronouns: e.target.value})} className="bg-black border border-white/10 p-2 text-sm max-w-sm rounded focus:border-[#f5a7a7]/50 focus:outline-none">
+                     <option value="he/him">he/him</option>
+                     <option value="she/her">she/her</option>
+                     <option value="they/them">they/them</option>
+                     <option value="she/they">she/they</option>
+                     <option value="he/they">he/they</option>
+                     <option value="any">any</option>
+                  </select>
+                  <select value={advanced.publicOrientation} onChange={e => setAdvanced({...advanced, publicOrientation: e.target.value})} className="bg-black border border-white/10 p-2 text-sm max-w-sm rounded focus:border-[#f5a7a7]/50 focus:outline-none">
+                     <option value="straight">Straight</option>
+                     <option value="gay">Gay</option>
+                     <option value="lesbian">Lesbian</option>
+                     <option value="bisexual">Bisexual</option>
+                     <option value="queer">Queer</option>
+                     <option value="pansexual">Pansexual</option>
+                  </select>
+                  <select value={advanced.privateOrientation} onChange={e => setAdvanced({...advanced, privateOrientation: e.target.value})} className="bg-black border border-white/10 p-2 text-sm max-w-sm rounded focus:border-[#f5a7a7]/50 focus:outline-none">
+                     <option value="straight">Straight</option>
+                     <option value="gay">Gay</option>
+                     <option value="lesbian">Lesbian</option>
+                     <option value="bisexual">Bisexual</option>
+                     <option value="queer">Queer</option>
+                     <option value="pansexual">Pansexual</option>
+                  </select>
+                  <select value={advanced.publicRelationshipStatus} onChange={e => setAdvanced({...advanced, publicRelationshipStatus: e.target.value})} className="bg-black border border-white/10 p-2 text-sm max-w-sm rounded focus:border-[#f5a7a7]/50 focus:outline-none">
+                     <option value="single">Single</option>
+                     <option value="dating">Dating</option>
+                     <option value="married">Married</option>
+                     <option value="divorced">Divorced</option>
+                     <option value="complicated">It's Complicated</option>
+                  </select>
+                  <select value={advanced.relationshipStyle} onChange={e => setAdvanced({...advanced, relationshipStyle: e.target.value})} className="bg-black border border-white/10 p-2 text-sm max-w-sm rounded focus:border-[#f5a7a7]/50 focus:outline-none">
+                     <option value="monogamous">Monogamous</option>
+                     <option value="open">Open</option>
+                     <option value="polyamorous">Polyamorous</option>
+                  </select>
+                  <input type="number" value={advanced.orientationFlexibility} onChange={e => setAdvanced({...advanced, orientationFlexibility: parseInt(e.target.value)})} placeholder="Orientation Flexibility (0-100)" className="bg-black border border-white/10 p-2 text-sm max-w-[200px] rounded focus:border-[#f5a7a7]/50 focus:outline-none"/>
                </div>
                {/* Persona Config */}
                <div className="flex flex-col gap-4">

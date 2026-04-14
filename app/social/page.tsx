@@ -12,15 +12,16 @@ export default function SocialHub() {
   
   const personas = useLiveQuery(() => db.personas.toArray()) || [];
   const states = useLiveQuery(() => db.personaState.toArray()) || [];
+  const threads = useLiveQuery(() => db.dmThreads.toArray()) || [];
   
   // Combine persona + state
-  const roster = personas.map(p => {
+  let roster = personas.map(p => {
      const state = states.find(s => s.personaId === p.id);
      return { ...p, state };
   }).filter(Boolean);
   
   if (filter === 'CLOSE') {
-     roster.sort((a, b) => ((b.state?.relationshipDepth || 0) - (a.state?.relationshipDepth || 0)));
+     roster = roster.filter(p => threads.some(t => t.personaId === p.id));
   }
 
   return (
