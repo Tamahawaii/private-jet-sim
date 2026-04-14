@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import Anthropic from '@anthropic-ai/sdk';
+import { getDefaultProvider } from '../../../../lib/llm/registry';
 import { AI_MODELS } from '../../../../lib/constants';
 
 interface DMMessage {
@@ -79,18 +79,28 @@ You are a fictional character in a simulation. Stay in character. Keep responses
     console.log(`[API REQUEST] To: ${persona.displayName} (${personaId})`);
     console.log('[API PAYLOAD]', JSON.stringify(formattedMessages, null, 2));
 
-    // 4. Hit Anthropic
-    const client = new Anthropic({ apiKey });
-    const response = await client.messages.create({
-      model: AI_MODELS.HAIKU,
-      max_tokens: 300,
-      system: systemPrompt,
-      messages: formattedMessages
+    // 4. Hit LLM Provider
+    const provider = getDefaultProvider();
+    const response = await provider.complete({
+      systemPrompt: systemPrompt,
+      messages: formattedMessages,
+      maxTokens: 300,
+      temperature: 0.85,
+      metadata: {
+        personaId: persona.id,
+        purpose: 'dm',
+      },
     });
 
-    console.log('[API RESPONSE]', JSON.stringify(response, null, 2));
+    console.log('[API RESPONSE]', JSON.stringify({
+       content: response.content,
+       inputTokens: response.inputTokens,
+       outputTokens: response.outputTokens,
+       cost: response.estimatedCostUsd,
+       provider: response.providerId,
+    }, null, 2));
 
-    let replyContent = (response.content[0] as any).text || "";
+    let replyContent = response.content || "";
     
     // Safety fallback for empty content causing crashes on UI side
     if (!replyContent || replyContent.trim().length <= 2) {
@@ -100,8 +110,10 @@ You are a fictional character in a simulation. Stay in character. Keep responses
     return NextResponse.json({
         content: replyContent,
         usage: {
-            inputTokens: response.usage.input_tokens,
-            outputTokens: response.usage.output_tokens
+            inputTokens: response.inputTokens,
+            outputTokens: response.outputTokens,
+            estimatedCostUsd: response.estimatedCostUsd,
+            providerId: response.providerId
         }
     });
 
