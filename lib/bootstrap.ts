@@ -153,7 +153,7 @@ export async function bootstrapWorld() {
 
        if (missingPersonas.length > 0) {
            const states = missingPersonas.map((p: any) => {
-               let spawnIcao = p.homeBaseICAO;
+               let spawnIcao = 'PHNL';
                if (Math.random() < 0.3) {
                    const preferred = (resortsData as any[]).filter(r => r.preferredBy && r.preferredBy.includes(p.id));
                    if (preferred.length > 0) {
@@ -168,7 +168,7 @@ export async function bootstrapWorld() {
                  
                return {
                    personaId: p.id,
-                   currentLocationICAO: spawnIcao,
+                   currentLocationICAO: hq ? hq.icao : 'PHNL',
                    currentCoords: coords,
                    currentFlightState: null,
                    nextPlannedFlight: null,

@@ -68,7 +68,7 @@ export default function Step3Passengers({ aircraft, selectedPassengers, onChange
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {personas.map(p => {
                      const pState = personaStates.find((s: any) => s.id === p.id);
-                     const loc = pState?.currentLocationICAO || p.homeBaseICAO;
+                     const loc = pState?.currentLocationICAO || 'Unknown';
                      const canBoard = loc === aircraft.currentLocationICAO;
                      const isSelected = selectedPassengers.includes(p.id);
 
