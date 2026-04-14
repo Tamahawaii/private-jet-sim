@@ -52,7 +52,7 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                          </div>
                      )}
                      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
-                        <div className="text-white text-xl font-black font-mono shadow-sm tracking-widest uppercase">${persona.netWorth.toFixed(1)}B NW</div>
+                        <div className="text-white text-xl font-black font-mono shadow-sm tracking-widest uppercase">${(persona.netWorth / 1e9).toFixed(1)}B NW</div>
                      </div>
                   </div>
                   <div className="p-4 flex flex-col gap-3">
@@ -82,7 +82,7 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                                  if (p === "DELETE") {
                                     await db.transaction('rw', [db.personas, db.personaState, db.dmThreads], async () => {
                                        await db.dmThreads.where('personaId').equals(persona.id).delete();
-                                       await db.personaState.where('personaId').equals(persona.id).delete();
+                                       await db.personaState.delete(persona.id);
                                        await db.personas.delete(persona.id);
                                     });
                                     router.push('/social');

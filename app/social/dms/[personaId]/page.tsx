@@ -100,6 +100,7 @@ export default function PersonaDMThread({ params }: { params: Promise<{ personaI
                   personaId: persona.id,
                   playerContext,
                   personaState, // passes IndexedDb contextual tracker explicitly!
+                  persona, // universally passes persona config cleanly bridging client custom + canonical bounds
                   recentMessages: updatedMessages
               })
           });

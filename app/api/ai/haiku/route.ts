@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import { getDefaultProvider } from '../../../../lib/llm/registry';
 import { AI_MODELS } from '../../../../lib/constants';
 
@@ -18,19 +16,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'API key missing' }, { status: 500 });
     }
 
-    const { personaId, playerContext, personaState, recentMessages } = await req.json();
+    const { personaId, playerContext, personaState, recentMessages, persona } = await req.json();
 
-    if (!personaId || !recentMessages) {
+    if (!personaId || !recentMessages || !persona) {
       return NextResponse.json({ error: 'Missing payload requirements' }, { status: 400 });
-    }
-
-    // 1. Fetch persona profiles
-    const personasFile = fs.readFileSync(path.join(process.cwd(), 'data/personas.json'), 'utf8');
-    const personas = JSON.parse(personasFile);
-    const persona = personas.find((p: any) => p.id === personaId);
-    
-    if (!persona) {
-      return NextResponse.json({ error: 'Persona not found' }, { status: 404 });
     }
 
     // 2. Build system prompt

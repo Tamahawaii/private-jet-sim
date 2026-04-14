@@ -60,7 +60,7 @@ export default function SocialHub() {
                         </span>
                      )}
                      <span className="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-1 rounded font-mono font-bold flex items-center gap-1 opacity-80">
-                        {member.netWorth.toFixed(1)}B
+                        {(member.netWorth / 1e9).toFixed(1)}B
                      </span>
                   </div>
 
