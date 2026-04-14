@@ -293,7 +293,7 @@ export type TransactionType =
   | "resort_booking" | "resort_experience"
   | "event_ticket"
   | "charter_income" | "investment_yield" | "appearance_fee"
-  | "monthly_burn";
+  | "monthly_burn" | "gift";
 
 export type Transaction = {
   id: string;

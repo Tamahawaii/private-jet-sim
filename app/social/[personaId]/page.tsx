@@ -1,16 +1,18 @@
 'use client';
 
-import React, { use } from 'react';
+import React, { use, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../../lib/db';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, MessageCircle, MapPin, Plane, Award, Heart, Briefcase, Glasses, Activity, Compass, PawPrint, Users } from 'lucide-react';
+import { ArrowLeft, MessageCircle, MapPin, Plane, Award, Heart, Briefcase, Glasses, Activity, Compass, PawPrint, Users, Gift } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { relationshipId, relationshipDepth } from '../../../lib/relationships/affinity';
+import { GiftModal } from '../../components/social/GiftModal';
 
 export default function PersonaDossier({ params }: { params: Promise<{ personaId: string }> }) {
    const resolvedParams = use(params);
    const router = useRouter();
+   const [isGiftModalOpen, setIsGiftModalOpen] = useState(false);
 
    const persona = useLiveQuery(() => db.personas.get(resolvedParams.personaId), [resolvedParams.personaId]);
    const state = useLiveQuery(() => db.personaState.where('personaId').equals(resolvedParams.personaId).first(), [resolvedParams.personaId]);
@@ -20,6 +22,9 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
    const myRel = useLiveQuery(() => db.relationships.get(myRelId), [myRelId]);
    const allRels = useLiveQuery(() => db.relationships.toArray()) || [];
    const allPersonas = useLiveQuery(() => db.personas.toArray()) || [];
+   
+   const giftsSent = useLiveQuery(() => db.giftsSent.where('toId').equals(resolvedParams.personaId).reverse().sortBy('sentAt'), [resolvedParams.personaId]) || [];
+   const giftCatalog = useLiveQuery(() => db.giftItems.toArray()) || [];
 
    const myDepth = myRel ? relationshipDepth(myRel.metrics) : 0;
    const connections = allRels.filter(r => 
@@ -79,12 +84,20 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                      </div>
                   </div>
                   <div className="p-4 flex flex-col gap-3">
-                     <button 
-                        onClick={() => router.push(`/social/dms/${persona.id}`)}
-                        className="w-full bg-[#f5a7a7]/10 hover:bg-[#f5a7a7]/20 text-[#f5a7a7] border border-[#f5a7a7]/30 py-3 rounded font-bold tracking-widest text-[10px] transition-colors flex items-center justify-center gap-2"
-                     >
-                        <MessageCircle size={14} /> SEND DIRECT MESSAGE
-                     </button>
+                     <div className="flex gap-2">
+                        <button 
+                           onClick={() => router.push(`/social/dms/${persona.id}`)}
+                           className="flex-1 bg-[#f5a7a7]/10 hover:bg-[#f5a7a7]/20 text-[#f5a7a7] border border-[#f5a7a7]/30 py-3 rounded font-bold tracking-widest text-[10px] transition-colors flex items-center justify-center gap-2"
+                        >
+                           <MessageCircle size={14} /> DM
+                        </button>
+                        <button 
+                           onClick={() => setIsGiftModalOpen(true)}
+                           className="flex-1 bg-yellow-900/20 hover:bg-yellow-900/40 text-yellow-500 border border-yellow-900/30 py-3 rounded font-bold tracking-widest text-[10px] transition-colors flex items-center justify-center gap-2"
+                        >
+                           <Gift size={14} /> GIFT
+                        </button>
+                     </div>
                      <button 
                         onClick={() => router.push(`/flight/new?passenger=${persona.id}`)}
                         className="w-full bg-white/5 hover:bg-white/10 text-white border border-white/10 py-3 rounded font-bold tracking-widest text-[10px] transition-colors flex items-center justify-center gap-2"
@@ -249,6 +262,43 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                            </div>
                         </div>
                      )}
+
+                     {/* Gift History */}
+                     {giftsSent && giftsSent.length > 0 && (
+                        <div className="mt-8 border-t border-white/10 pt-6">
+                           <div className="text-[10px] text-zinc-500 uppercase tracking-widest font-mono mb-4 flex justify-between items-end">
+                              <span>Gift Ledger</span>
+                              <span>{giftsSent.length} total</span>
+                           </div>
+                           <div className="flex flex-col gap-3">
+                              {giftsSent.slice().reverse().slice(0, 5).map(gift => {
+                                 const itemDef = giftCatalog.find(c => c.id === gift.giftItemId);
+                                 const firstSentence = gift.reactionDM ? gift.reactionDM.split(/[.!?]/)[0] + '...' : 'Awaiting response...';
+                                 
+                                 return (
+                                     <button 
+                                        key={gift.id} 
+                                        onClick={() => router.push(`/social/dms/${persona.id}`)}
+                                        className="text-left bg-black/40 hover:bg-white/5 transition-colors border border-white/5 p-4 rounded-xl flex flex-col gap-2 relative group overflow-hidden"
+                                     >
+                                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-yellow-900/40 group-hover:bg-yellow-500/80 transition-colors" />
+                                        <div className="flex justify-between items-start w-full gap-4">
+                                           <span className="text-xs font-bold font-serif text-white truncate pr-2">{itemDef ? itemDef.name : 'Unknown Item'}</span>
+                                           <span className="text-[9px] text-zinc-500 font-mono tracking-widest uppercase whitespace-nowrap bg-black/50 px-2 py-0.5 rounded">{new Date(gift.sentAt).toLocaleDateString()}</span>
+                                        </div>
+                                        <div className="text-[11px] text-zinc-400 font-serif italic border-l-2 border-white/10 pl-3 leading-relaxed mt-1">"{firstSentence}"</div>
+                                        <div className="flex gap-2 mt-2 pt-2 border-t border-white/5 w-full">
+                                           {gift.metricsApplied?.affection ? <span className="text-[9px] font-mono text-green-500/80 tracking-widest">+{gift.metricsApplied.affection} AFF</span> : null}
+                                           {gift.metricsApplied?.heat ? <span className="text-[9px] font-mono text-pink-500/80 tracking-widest">+{gift.metricsApplied.heat} HEAT</span> : null}
+                                           {gift.metricsApplied?.trust ? <span className="text-[9px] font-mono text-blue-500/80 tracking-widest">+{gift.metricsApplied.trust} TRST</span> : null}
+                                           {gift.metricsApplied?.romanticTension ? <span className="text-[9px] font-mono text-purple-500/80 tracking-widest">+{gift.metricsApplied.romanticTension} ROM</span> : null}
+                                        </div>
+                                     </button>
+                                 );
+                              })}
+                           </div>
+                        </div>
+                     )}
                   </div>
 
                   {/* CONNECTED PERSONAS */}
@@ -335,6 +385,14 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                </div>
             </div>
          </div>
+         {isGiftModalOpen && (
+            <GiftModal 
+               personaId={persona.id} 
+               personaName={persona.displayName} 
+               onClose={() => setIsGiftModalOpen(false)} 
+               onGiftSent={() => setIsGiftModalOpen(false)} 
+            />
+         )}
       </div>
    );
 }

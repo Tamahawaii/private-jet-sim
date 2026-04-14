@@ -16,7 +16,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'API key missing' }, { status: 500 });
     }
 
-    const { personaId, playerContext, personaState, recentMessages, persona } = await req.json();
+    const reqBody = await req.json();
+    const { personaId, playerContext, personaState, recentMessages, persona, giftContext } = reqBody;
 
     if (!personaId || !recentMessages || !persona) {
       return NextResponse.json({ error: 'Missing payload requirements' }, { status: 400 });
@@ -36,10 +37,19 @@ THE DYNAMIC
 You are DMing your friend the player (name: ${playerContext.displayName}).
 ${persona.playerDynamic}
 
-PRIVATE DRAMA (Use subtly if appropriate)
+Private drama context:
 ${persona.drama}
 
-Current state: You are physically at ${personaState?.currentLocationICAO || persona.residences?.[0] || 'your primary residence'}. ${personaState?.lastFlightWithPlayer ? `\n\n[CRITICAL CONTEXT: YOU JUST LANDED HERE AT ${personaState.currentLocationICAO} WITH THE PLAYER RECENTLY, FLYING FROM ${personaState.lastFlightWithPlayer.originICAO}. Incorporate this subtly if naturally relevant.]`: ''}
+Current locale: ${personaState?.currentLocationICAO || persona.residences?.[0] || 'Unknown address'}. ${personaState?.lastFlightWithPlayer ? `[CRITICAL CONTEXT: Flew with player from ${personaState.lastFlightWithPlayer.originICAO} to ${personaState.currentLocationICAO} recently.]`: ''}
+${giftContext ? `
+[CRITICAL EVENT: THE PLAYER JUST SENT YOU A GIFT]
+Gift Details: ${giftContext.giftName} - "${giftContext.description}"
+Player's Optional Note: "${giftContext.personalNote || 'No personal note provided'}"
+
+React to receiving this gift AUTHENTICALLY and in your exact voice. 
+Keep your response short (1-3 sentences max).
+Do NOT be generically grateful or write "oh my god thank you so much" UNLESS that fits your character perfectly. If your character is suspicious, be guarded. If you are analytical, analyze the gesture's meaning. If you are wealthy and bored, be amused or dismissive. If you are romantic but careful, show hesitation. Match your canonical tone impeccably. You are responding in a text message format directly to them.
+` : ''}
 
 This is a real-time messaging thread. Your messages should feel like authentic texts — short, natural, in your voice.
 You are a fictional character in a simulation. Stay in character. Keep responses under 3 sentences unless asked for more. Don't reveal you are an AI. Don't break the fourth wall.`;
