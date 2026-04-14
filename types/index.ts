@@ -155,6 +155,8 @@ export interface PersonaFleetEntry {
 
 export interface Persona extends IdentityFields {
   id: PersonaID;
+  isCustom?: boolean;
+  createdBy?: string;
   displayName: string;
   archetype: PersonaArchetype;
   age: number;
@@ -412,4 +414,18 @@ export interface Pet {
   personality: string;
   imageUrl: string | null;
   addedAt: ISODateString;
+}
+
+export interface CustomPersona extends Persona {
+  isCustom: true;
+  createdBy: 'player';
+  createdAt: ISODateString;
+  updatedAt: ISODateString;
+}
+
+export interface CustomPersonaSeed {
+  displayName: string;
+  age: number;
+  region: string;
+  archetypeHint: string;
 }

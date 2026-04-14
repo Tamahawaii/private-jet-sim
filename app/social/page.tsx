@@ -34,12 +34,20 @@ export default function SocialHub() {
                   <button onClick={() => setFilter('CLOSE')} className={`text-xs font-mono tracking-widest font-bold pb-2 border-b-2 ${filter === 'CLOSE' ? 'text-[#f5a7a7] border-[#f5a7a7]' : 'text-zinc-600 border-transparent hover:text-white'}`}>INNER CIRCLE</button>
                </div>
             </div>
-            <button 
-               onClick={() => router.push('/social/dms')}
-               className="bg-white/5 hover:bg-white/10 border border-white/20 text-xs px-4 py-2 font-bold tracking-widest transition-colors rounded mb-2 flex items-center gap-2"
-            >
-               <MessageCircle size={14} /> ACTIVE CHATS
-            </button>
+            <div className="flex gap-2 items-center mb-2">
+               <button 
+                  onClick={() => router.push('/social/custom/new')}
+                  className="bg-[#f5a7a7]/10 hover:bg-[#f5a7a7]/20 border border-[#f5a7a7]/30 text-[#f5a7a7] text-xs px-4 py-2 font-bold tracking-widest transition-colors rounded flex items-center gap-2"
+               >
+                  <Star size={14} fill="currentColor" /> NEW PERSONA
+               </button>
+               <button 
+                  onClick={() => router.push('/social/dms')}
+                  className="bg-white/5 hover:bg-white/10 border border-white/20 text-xs px-4 py-2 font-bold tracking-widest transition-colors rounded flex items-center gap-2"
+               >
+                  <MessageCircle size={14} /> CHATS
+               </button>
+            </div>
          </div>
 
          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

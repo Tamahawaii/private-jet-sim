@@ -68,6 +68,32 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                      >
                         <Plane size={14} /> INVITE AS PASSENGER
                      </button>
+                     {persona.isCustom && (
+                        <div className="flex gap-2 w-full mt-2">
+                           <button 
+                              onClick={() => router.push(`/social/custom/${persona.id}/edit`)}
+                              className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white border border-white/10 py-2 rounded font-bold tracking-widest text-[10px] transition-colors"
+                           >
+                              EDIT
+                           </button>
+                           <button 
+                              onClick={async () => {
+                                 const p = prompt("Type DELETE to confirm permanently destroying this custom persona:");
+                                 if (p === "DELETE") {
+                                    await db.transaction('rw', [db.personas, db.personaState, db.dmThreads], async () => {
+                                       await db.dmThreads.where('personaId').equals(persona.id).delete();
+                                       await db.personaState.where('personaId').equals(persona.id).delete();
+                                       await db.personas.delete(persona.id);
+                                    });
+                                    router.push('/social');
+                                 }
+                              }}
+                              className="flex-1 bg-red-900/20 hover:bg-red-900/40 text-red-500 border border-red-900/30 py-2 rounded font-bold tracking-widest text-[10px] transition-colors"
+                           >
+                              DELETE
+                           </button>
+                        </div>
+                     )}
                   </div>
                </div>
 
