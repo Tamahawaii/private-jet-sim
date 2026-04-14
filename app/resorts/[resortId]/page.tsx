@@ -16,7 +16,7 @@ export default function ResortDetailPage() {
     const params = useParams();
     const router = useRouter();
     const resortId = typeof params?.resortId === 'string' ? params.resortId : '';
-    const simNow = useStore((state: any) => state.now);
+    const simNow = useStore((state: any) => state.getNow());
     
     const resort = useLiveQuery(() => db.resorts.get(resortId), [resortId]);
     const preferences = useLiveQuery(() => 
@@ -355,7 +355,9 @@ export default function ResortDetailPage() {
                              <h3 className="text-xs font-bold font-mono tracking-widest uppercase text-white/50 mb-6 flex items-center gap-2"><GlassWater size={14} /> Social Circle</h3>
                              {preferences.length > 0 ? (
                                  <div className="flex flex-col gap-4">
-                                     {preferences.map((p: any) => (
+                                     {preferences.map((p: any) => {
+                                         if (!p) return null;
+                                         return (
                                          <div key={p.id} className="flex items-center gap-3 group cursor-pointer hover:bg-white/5 p-2 -mx-2 rounded transition-colors">
                                             <PersonaAvatar persona={p} size={36} className="border border-white/10 group-hover:border-[#f5a7a7]/50" />
                                             <div>
@@ -363,7 +365,7 @@ export default function ResortDetailPage() {
                                                 <div className="text-[10px] text-zinc-500 font-sans">{p.region || `Tier ${p.wealthTier} VIP`}</div>
                                             </div>
                                          </div>
-                                     ))}
+                                     )})}
                                  </div>
                              ) : (
                                  <p className="text-xs text-zinc-500 font-mono tracking-widest leading-relaxed uppercase">No established personas frequently request this asset.</p>

@@ -138,7 +138,9 @@ export default function EventDetailPage({ params }: { params: Promise<{ eventId:
                             <div>
                                 <h3 className="text-white text-sm font-bold tracking-widest font-mono uppercase mb-3 text-[#f5a7a7]">Expected Network</h3>
                                 <div className="flex flex-col gap-3">
-                                    {attendeePersonas && attendeePersonas.map(p => (
+                                    {attendeePersonas && attendeePersonas.map(p => {
+                                       if (!p) return null;
+                                       return (
                                        <Link href={`/social/${p.id}`} key={p.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 transition-colors group">
                                            <PersonaAvatar persona={p} size={32} />
                                            <div className="flex flex-col">
@@ -146,7 +148,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ eventId:
                                               <span className="text-[10px] text-zinc-500 font-mono tracking-widest capitalize">{p.region || `Tier ${p.wealthTier} VIP`}</span>
                                            </div>
                                        </Link>
-                                    ))}
+                                    )})}
                                     {(!attendeePersonas || attendeePersonas.length === 0) && <span className="text-zinc-500 font-mono text-xs uppercase">No intelligence available</span>}
                                 </div>
                             </div>

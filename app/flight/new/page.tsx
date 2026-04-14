@@ -27,7 +27,7 @@ function FlightPlannerInternal() {
   const [passengers, setPassengers] = useState<string[]>(['player']);
 
   // Compute active aircraft falling back to query param
-  const activeAircraft = fleet.find(j => j.id === selectedAircraftId) 
+  const activeAircraft = fleet.find(j => j.tailNumber === selectedAircraftId) 
      || (prefillAircraft ? fleet.find(j => j.tailNumber === prefillAircraft) : undefined);
 
   // If prefilled but aircraft isn't valid or parked, force Step 1
