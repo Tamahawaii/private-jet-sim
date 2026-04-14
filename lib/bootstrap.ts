@@ -7,6 +7,7 @@ import personasData from '../data/personas.json';
 import airportsData from '../data/airports.json';
 import resortsData from '../data/resorts.json';
 import playerData from '../data/player.json';
+import petsData from '../data/pets.json';
 
 export async function bootstrapWorld() {
   // 1. Init Player if not exists or merge canonical updates
@@ -204,5 +205,17 @@ export async function bootstrapWorld() {
          console.log(`[BOOTSTRAP] Topping up ${missing.length} missing resorts via bulkAdd.`);
          await db.resorts.bulkAdd(missing);
      }
+  }
+
+  // 8. Init Pets (Phase 6C)
+  try {
+     const existingPetIds = new Set((await db.pets.toArray()).map(p => p.id));
+     const missingPets = (petsData as any[]).filter((p: any) => !existingPetIds.has(p.id));
+     if (missingPets.length > 0) {
+         console.log(`[BOOTSTRAP] Seeding ${missingPets.length} missing pets.`);
+         await db.pets.bulkAdd(missingPets);
+     }
+  } catch (e) {
+     console.error("Failed to seed pets:", e);
   }
 }

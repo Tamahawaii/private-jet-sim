@@ -2,7 +2,7 @@ import Dexie, { Table } from 'dexie';
 import {
   Player, Aircraft, Flight, Persona, PersonaState, DMThread, GroupChat,
   BillionaireEvent, EventAttendance, Resort, ResortBooking, Transaction, Notification,
-  ApiUsageRecord
+  ApiUsageRecord, Pet
 } from '../types';
 
 export class JetstreamDB extends Dexie {
@@ -20,6 +20,7 @@ export class JetstreamDB extends Dexie {
   transactions!: Table<Transaction, string>;
   notifications!: Table<Notification, string>;
   apiUsage!: Table<ApiUsageRecord, string>;
+  pets!: Table<Pet, string>;
 
   // Stubbed (Phase 5.5, 7, etc.)
   yachts!: Table<any, string>;
@@ -77,6 +78,10 @@ export class JetstreamDB extends Dexie {
 
     this.version(6).stores({
       personas: 'id'
+    });
+
+    this.version(7).stores({
+      pets: 'id, ownerId'
     });
   }
 }

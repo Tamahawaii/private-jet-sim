@@ -4,7 +4,7 @@ import React, { use } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../../lib/db';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, MessageCircle, MapPin, Plane, Award, Heart, Briefcase, Glasses, Activity, Compass } from 'lucide-react';
+import { ArrowLeft, MessageCircle, MapPin, Plane, Award, Heart, Briefcase, Glasses, Activity, Compass, PawPrint } from 'lucide-react';
 
 export default function PersonaDossier({ params }: { params: Promise<{ personaId: string }> }) {
    const resolvedParams = use(params);
@@ -12,6 +12,7 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
 
    const persona = useLiveQuery(() => db.personas.get(resolvedParams.personaId), [resolvedParams.personaId]);
    const state = useLiveQuery(() => db.personaState.where('personaId').equals(resolvedParams.personaId).first(), [resolvedParams.personaId]);
+   const pets = useLiveQuery(() => db.pets.where('ownerId').equals(resolvedParams.personaId).toArray(), [resolvedParams.personaId]);
 
    if (persona === undefined) return null;
    if (persona === null) {
@@ -119,6 +120,25 @@ export default function PersonaDossier({ params }: { params: Promise<{ personaId
                                  </div>
                                  <div className="text-xs text-zinc-400 capitalize">{partner.relationship} {partner.location ? ` • ${partner.location}` : ''}</div>
                                  {partner.note && <div className="text-[10px] text-zinc-500 italic mt-1">"{partner.note}"</div>}
+                              </div>
+                           ))}
+                        </div>
+                     </div>
+                  )}
+
+                  {pets && pets.length > 0 && (
+                     <div className="bg-[#141419] border border-white/10 rounded-xl p-6">
+                        <h2 className="text-xs font-mono text-[#f5a7a7] tracking-widest mb-4 flex items-center gap-2"><PawPrint size={14}/> COMPANIONS</h2>
+                        <div className="flex flex-wrap gap-4">
+                           {pets.map((pet: any) => (
+                              <div key={pet.id} className="flex items-center gap-3 bg-black/40 border border-white/5 py-2 px-3 rounded-full">
+                                 <div className="w-8 h-8 flex-shrink-0 rounded-full bg-[#f5a7a7]/10 flex items-center justify-center border border-[#f5a7a7]/30 text-sm opacity-80">
+                                     {pet.species === 'cat' ? '🐈' : pet.species === 'dog' ? '🐕' : '🐾'}
+                                 </div>
+                                 <div className="flex flex-col pr-2">
+                                     <span className="text-sm font-bold font-mono text-white leading-none">{pet.name} <span className="text-[10px] font-sans text-zinc-500 font-normal ml-1">({pet.breed})</span></span>
+                                     <span className="text-[12px] text-zinc-400 mt-0.5">{pet.personality}</span>
+                                 </div>
                               </div>
                            ))}
                         </div>

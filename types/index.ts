@@ -398,3 +398,17 @@ export interface ResortBooking {
   totalCharged: number;
   experiencesPurchased: string[];
 }
+
+export interface Pet {
+  id: string;
+  name: string;
+  species: string;
+  breed: string;
+  age: number;
+  ownerId: string;
+  ownerType: 'player' | 'persona';
+  currentLocationICAO: string;
+  personality: string;
+  imageUrl: string | null;
+  addedAt: ISODateString;
+}
