@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { ArrowLeft, User, Users, Check, MapPin } from 'lucide-react';
+import React from 'react';
+import { ArrowLeft, User, Users, Check, MapPin, ArrowRight } from 'lucide-react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../../../lib/db';
 import { PersonaAvatar } from '../../../components/PersonaAvatar';
 import { Aircraft } from '../../../../types';
+import { getAirport, shortCity } from '../../../../lib/flight/airports';
 
 interface Props {
   aircraft: Aircraft;
@@ -20,91 +21,73 @@ export default function Step3Passengers({ aircraft, selectedPassengers, onChange
    const togglePersona = (id: string, canBoard: boolean) => {
        if (!canBoard) return;
        let next = [...selectedPassengers];
-       if (next.includes(id)) {
-           next = next.filter(p => p !== id);
-       } else {
-           next.push(id);
-       }
-       if (next.length === 0) next = ['player'];
+       if (next.includes(id)) next = next.filter(p => p !== id);
+       else next.push(id);
+       if (!next.includes('player')) next.unshift('player');
        onChange(next);
    };
 
-   const setSolo = () => {
-       onChange(['player']);
-       onNext();
-   };
+   const here = getAirport(aircraft.currentLocationICAO);
+   const sorted = [...personas].sort((a, b) => {
+      const la = personaStates.find(s => s.personaId === a.id)?.currentLocationICAO === aircraft.currentLocationICAO ? 0 : 1;
+      const lb = personaStates.find(s => s.personaId === b.id)?.currentLocationICAO === aircraft.currentLocationICAO ? 0 : 1;
+      return la - lb;
+   });
+   const companions = selectedPassengers.filter(p => p !== 'player');
+   const nearby = sorted.filter(p => personaStates.find(s => s.personaId === p.id)?.currentLocationICAO === aircraft.currentLocationICAO).length;
 
    return (
-      <div className="w-full max-w-2xl animate-in fade-in slide-in-from-right-4 duration-500 pb-20">
-         <div className="flex items-center gap-4 mb-2">
-           <button onClick={onBack} className="text-zinc-500 hover:text-white transition-colors">
-              <ArrowLeft size={20} />
-           </button>
-           <h2 className="text-2xl font-black font-mono tracking-widest uppercase">Manifest</h2>
+      <div className="w-full animate-in fade-in slide-in-from-right-4 duration-500 pb-28 md:pb-6">
+         <div className="flex items-center gap-3 mb-1">
+           <button onClick={onBack} className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-300"><ArrowLeft size={18} /></button>
+           <h2 className="font-serif text-[28px] text-white">Who&apos;s coming?</h2>
          </div>
-         <p className="text-zinc-400 font-mono text-xs tracking-widest mb-8 uppercase">Assign VIPs and passengers to the flight manifest.</p>
-         
-         <div className="space-y-4">
-            <button 
-               onClick={setSolo}
-               className={`w-full p-6 border rounded-xl flex items-center justify-between transition-all group text-left ${selectedPassengers.length === 1 && selectedPassengers[0] === 'player' ? 'border-[#00f0ff] bg-[#00f0ff]/10 shadow-[0_0_20px_rgba(0,240,255,0.1)]' : 'border-[#00f0ff]/30 bg-[#00f0ff]/5 hover:bg-[#00f0ff]/10 hover:shadow-[0_0_20px_rgba(0,240,255,0.1)]'}`}
-            >
-               <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#00f0ff]/20 text-[#00f0ff] flex items-center justify-center border border-[#00f0ff]/40">
-                     <User size={20} />
-                  </div>
-                  <div>
-                     <div className="text-white font-mono font-bold tracking-widest group-hover:text-[#00f0ff] transition-colors">FLY SOLO</div>
-                     <div className="text-zinc-400 text-xs font-sans mt-1">Player acts as sole passenger. Standard costs apply.</div>
-                  </div>
-               </div>
-               <div className="text-[#00f0ff] text-xs font-mono tracking-widest border border-[#00f0ff]/30 px-3 py-1 rounded">
-                  {selectedPassengers.length === 1 && selectedPassengers[0] === 'player' ? 'SELECTED' : 'SELECT'}
-               </div>
-            </button>
+         <p className="text-[12.5px] text-zinc-400 mb-5 ml-12">{nearby === 0 ? `Nobody in your circle is in ${shortCity(here, aircraft.currentLocationICAO)} right now — fly solo, or invite them later.` : `${nearby} friend${nearby > 1 ? 's' : ''} in ${shortCity(here, aircraft.currentLocationICAO)} can board.`}</p>
 
-            <div className="pt-6 mt-6 border-t border-white/10">
-               <h3 className="text-xs font-mono tracking-widest text-[#f5a7a7] mb-4 flex items-center gap-2"><Users size={14}/> SOCIAL CIRCLE DIRECTORY</h3>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {personas.map(p => {
-                     const pState = personaStates.find((s: any) => s.id === p.id);
-                     const loc = pState?.currentLocationICAO || 'Unknown';
-                     const canBoard = loc === aircraft.currentLocationICAO;
-                     const isSelected = selectedPassengers.includes(p.id);
+         <button
+            onClick={() => onChange(['player'])}
+            className={`w-full px-4 py-3.5 border rounded-2xl flex items-center justify-between transition-all text-left mb-4 ${companions.length === 0 ? 'border-[var(--accent)]/60 bg-[var(--accent)]/10' : 'border-white/8 bg-white/[0.03] hover:bg-white/[0.06]'}`}
+         >
+            <div className="flex items-center gap-3">
+               <div className="w-10 h-10 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] flex items-center justify-center border border-[var(--accent)]/40"><User size={16} /></div>
+               <div>
+                  <div className="text-[14px] text-white font-medium">Fly solo</div>
+                  <div className="text-[11.5px] text-zinc-500">Just you and the crew.</div>
+               </div>
+            </div>
+            {companions.length === 0 && <Check size={16} className="text-[var(--accent)]" />}
+         </button>
 
-                     return (
-                     <div key={p.id} className="relative group">
-                        <button
-                           onClick={() => togglePersona(p.id, canBoard)}
-                           disabled={!canBoard}
-                           className={`w-full h-full p-4 border rounded-xl flex items-center justify-between transition-all text-left overflow-hidden ${isSelected ? 'border-[#f5a7a7] bg-[#f5a7a7]/10' : (!canBoard ? 'border-white/5 bg-black/40 opacity-60 cursor-not-allowed' : 'border-white/5 bg-black/20 hover:border-[#f5a7a7]/30 hover:bg-[#141419]')}`}
-                        >
-                           <div className="flex items-center gap-3 relative z-10 w-full overflow-hidden">
-                              <PersonaAvatar persona={p} size={40} className={`border group-hover:border-[#f5a7a7]/50 transition-colors shrink-0 ${isSelected ? 'border-[#f5a7a7]' : (!canBoard ? 'border-white/10 grayscale' : 'border-white/10')}`} />
-                              <div className="flex flex-col flex-1 min-w-0">
-                                 <span className={`font-bold font-mono tracking-widest uppercase text-sm truncate w-full transition-colors ${!canBoard ? 'text-zinc-500' : (isSelected ? 'text-[#f5a7a7]' : 'text-white group-hover:text-[#f5a7a7]')}`}>{p.displayName}</span>
-                                 {!canBoard ? (
-                                    <span className="text-[10px] text-amber-500/80 font-mono tracking-widest uppercase flex items-center gap-1 mt-0.5 truncate"><MapPin size={10}/> In {loc}</span>
-                                 ) : (
-                                    <span className="text-[10px] text-zinc-500 font-mono tracking-widest capitalize mt-0.5 truncate">{p.region || `VIP Tier ${p.wealthTier}`}</span>
-                                 )}
-                              </div>
-                           </div>
-                           {isSelected && <Check size={16} className="text-[#f5a7a7] shrink-0 ml-2 relative z-10" />}
-                        </button>
+         <div className="eyebrow mb-2 flex items-center gap-1.5"><Users size={11} /> Your circle</div>
+         <div className="grid grid-cols-1 gap-2">
+            {sorted.map(p => {
+               const pState = personaStates.find(s => s.personaId === p.id);
+               const loc = pState?.currentLocationICAO || 'Unknown';
+               const canBoard = loc === aircraft.currentLocationICAO;
+               const isSelected = selectedPassengers.includes(p.id);
+               const locAirport = getAirport(loc);
+               return (
+                  <button
+                     key={p.id}
+                     onClick={() => togglePersona(p.id, canBoard)}
+                     disabled={!canBoard}
+                     className={`w-full px-3.5 py-2.5 border rounded-2xl flex items-center gap-3 transition-all text-left ${isSelected ? 'border-[var(--rose)]/60 bg-[var(--rose)]/10' : (!canBoard ? 'border-white/5 bg-black/20 opacity-50 cursor-not-allowed' : 'border-white/8 bg-white/[0.03] hover:border-[var(--rose)]/40 hover:bg-white/[0.06]')}`}
+                  >
+                     <PersonaAvatar persona={p} size={38} className={`border shrink-0 ${isSelected ? 'border-[var(--rose)]' : 'border-white/10'} ${!canBoard ? 'grayscale' : ''}`} />
+                     <div className="flex flex-col flex-1 min-w-0">
+                        <span className={`text-[14px] truncate ${isSelected ? 'text-[var(--rose)]' : 'text-white'}`}>{p.displayName}</span>
+                        <span className="text-[11px] text-zinc-500 truncate flex items-center gap-1"><MapPin size={10} /> {canBoard ? 'Here — can board' : `In ${shortCity(locAirport, loc)}`}</span>
                      </div>
-                  )})}
-               </div>
-            </div>
-            
-            <div className="fixed bottom-0 left-0 md:relative md:mt-8 w-full bg-[#0a0a0c] md:bg-transparent border-t border-white/10 md:border-t-0 p-4 md:p-0 flex justify-end z-20">
-               <button 
-                   onClick={onNext}
-                   className="bg-[#00f0ff] text-black px-8 py-3 rounded font-bold transition-opacity hover:opacity-80 font-mono text-sm tracking-widest uppercase flex items-center gap-2"
-               >
-                   Confirm Manifest <ArrowLeft size={16} className="rotate-180" />
-               </button>
-            </div>
+                     {isSelected && <Check size={16} className="text-[var(--rose)] shrink-0" />}
+                  </button>
+               );
+            })}
+         </div>
+
+         <div className="fixed md:sticky bottom-0 left-0 right-0 md:mt-6 p-4 md:p-0 bg-gradient-to-t from-[#070b12] via-[#070b12]/90 to-transparent md:bg-none md:from-transparent" style={{ paddingBottom: 'calc(16px + var(--safe-bottom))' }}>
+            <button onClick={onNext} className="w-full md:w-auto md:ml-auto h-12 md:px-6 rounded-xl bg-[var(--accent)] text-black font-semibold text-[13px] flex items-center justify-center gap-2 hover:bg-white transition-colors">
+                {companions.length === 0 ? 'Continue solo' : `Continue with ${companions.length}`} <ArrowRight size={15} />
+            </button>
          </div>
       </div>
    );

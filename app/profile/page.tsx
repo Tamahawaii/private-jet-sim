@@ -5,6 +5,7 @@ import { db } from '../../lib/db';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, Edit3, User, Shield, Briefcase, Heart, Utensils, Music, Glasses, Coffee, Car } from 'lucide-react';
 import { Player, PartnerEntry } from '../../types';
+import Passport from './_components/Passport';
 
 export default function PlayerProfilePage() {
     const player = useLiveQuery(() => db.player.get('player')) as Player;
@@ -15,9 +16,9 @@ export default function PlayerProfilePage() {
     const initials = player.displayName.split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase();
 
     return (
-        <div className="w-full h-full overflow-y-auto bg-[#0a0a0c] text-white">
+        <div className="w-full h-full overflow-y-auto bg-[#070b12] text-white pb-tabs" style={{ paddingTop: 'calc(var(--nav-h) + var(--safe-top))' }}>
             {/* Top Navigation */}
-            <div className="sticky top-0 z-50 bg-[#0a0a0c]/90 backdrop-blur-md border-b border-white/10 p-4 md:px-8 flex items-center justify-between">
+            <div className="sticky top-0 z-50 bg-[#070b12]/90 backdrop-blur-md border-b border-white/10 p-4 md:px-8 flex items-center justify-between">
                 <Link href="/" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors font-mono tracking-widest text-xs uppercase">
                     <ArrowLeft size={16} /> Dashboard
                 </Link>
@@ -65,6 +66,7 @@ export default function PlayerProfilePage() {
             </div>
 
             <div className="max-w-4xl mx-auto p-6 md:p-12 pb-32">
+                <div className="mb-14"><Passport player={player} /></div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                     
                     {/* Left Column */}

@@ -1,19 +1,44 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0c;
-  --foreground: #e0e0e0;
-  
-  /* Accents */
-  --color-gold: #d4af37;
-  --color-cyan: #00f0ff;
-  
-  /* UI elements */
-  --panel-bg: rgba(20, 20, 25, 0.45);
-  --panel-border: rgba(255, 255, 255, 0.1);
-  --panel-glow: rgba(255, 255, 255, 0.05);
+  --background: #070b12;
+  --foreground: #eef1f5;
 
-  --font-inter: "Inter", sans-serif;
+  /* Accents (spec: private-bank dark editorial, cyan stays) */
+  --accent: #22d3ee;
+  --accent-dim: #0891a6;
+  --color-gold: #d4af37;
+  --color-cyan: #22d3ee;
+  --rose: #f5a7a7;
+  --mint: #34d399;
+  --magenta: #fb4d6d;
+
+  /* Surfaces */
+  --bg-base: #070b12;
+  --bg-elevated: #0d121a;
+  --bg-elevated-2: #141a24;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-emphasis: rgba(255, 255, 255, 0.16);
+
+  --panel-bg: rgba(10, 14, 22, 0.72);
+  --panel-border: rgba(255, 255, 255, 0.1);
+  --panel-glow: rgba(0, 0, 0, 0.5);
+
+  /* Chrome sizes (used by map overlays to avoid the nav/tab bar) */
+  --nav-h: 56px;
+  --tabbar-h: 0px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  --font-inter: "Inter Variable", "Inter", system-ui, sans-serif;
+  --font-fraunces: "Fraunces Variable", "Fraunces", Georgia, serif;
+  --font-jetbrains: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --tabbar-h: calc(58px + var(--safe-bottom));
+  }
 }
 
 @theme inline {
@@ -21,23 +46,117 @@
   --color-foreground: var(--foreground);
   --color-gold: var(--color-gold);
   --color-cyan: var(--color-cyan);
+  --color-accent: var(--accent);
   --color-panel: var(--panel-bg);
   --color-panel-border: var(--panel-border);
   --font-sans: var(--font-inter);
+  --font-serif: var(--font-fraunces);
+  --font-mono: var(--font-jetbrains);
+}
+
+html, body {
+  height: 100%;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  text-rendering: optimizeLegibility;
+}
+
+.font-serif {
+  font-family: var(--font-fraunces);
+  font-variation-settings: "opsz" 72, "SOFT" 30;
+  letter-spacing: -0.01em;
 }
 
 @layer utilities {
-  .glass-panel {
+  .glass-panel,
+  .glass {
     background: var(--panel-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
     border: 1px solid var(--panel-border);
-    box-shadow: 0 4px 30px var(--panel-glow);
+    box-shadow: 0 10px 40px var(--panel-glow);
   }
+  .eyebrow {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8b93a1;
+  }
+  .h-dvh { height: 100dvh; }
+  .pt-nav { padding-top: calc(var(--nav-h) + var(--safe-top)); }
+  .pb-tabs { padding-bottom: calc(var(--tabbar-h) + 16px); }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+  .text-balance { text-wrap: balance; }
+}
+
+/* ---------- Map chrome ---------- */
+.maplibregl-ctrl-bottom-left { bottom: calc(var(--tabbar-h) + 2px); }
+.js-flight .maplibregl-ctrl-bottom-left { bottom: auto; top: calc(var(--nav-h) + var(--safe-top) + 96px); }
+@media (min-width: 768px) { .js-flight .maplibregl-ctrl-bottom-left { top: auto; bottom: 2px; left: 480px; } }
+.maplibregl-ctrl-attrib { background: rgba(0,0,0,0.35) !important; color: #7d8590; font-size: 10px; }
+.maplibregl-ctrl-attrib a { color: #9aa3b0; }
+.maplibregl-ctrl-attrib.maplibregl-compact { background: rgba(0,0,0,0.35); }
+.maplibregl-ctrl-attrib-button { filter: invert(0.8); }
+.maplibregl-canvas { outline: none; }
+
+.js-friend-pin {
+  width: 24px; height: 24px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(245,167,167,0.9);
+  background: #0a0f18;
+  box-shadow: 0 0 0 3px rgba(245,167,167,0.14), 0 4px 14px rgba(0,0,0,0.6);
+  padding: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 150ms ease;
+}
+.js-friend-pin:hover { transform: scale(1.1); }
+.js-friend-avatar {
+  width: 18px; height: 18px; border-radius: 999px;
+  background-size: cover; background-position: center;
+  filter: grayscale(0.2);
+}
+.js-friend-mono {
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-jetbrains);
+  font-size: 8px; font-weight: 700; letter-spacing: -0.02em;
+  color: #0a0f18; background: var(--rose);
+}
+.js-route-label {
+  font-family: var(--font-jetbrains);
+  font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+  color: #fff;
+  background: rgba(7,11,18,0.78);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 999px;
+  padding: 4px 10px;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  transform: translateY(-18px);
+  pointer-events: none;
+}
+.js-route-label .city { color: #9aa3b0; font-weight: 500; margin-left: 6px; }
+.js-route-label.dest { border-color: rgba(34,211,238,0.5); color: var(--accent); }
+
+@keyframes js-pulse {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+@keyframes js-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.04) 100%);
+  background-size: 200% 100%;
+  animation: js-shimmer 2.4s linear infinite;
 }

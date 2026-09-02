@@ -2,7 +2,7 @@ import { BillionaireEvent } from '../../types';
 import { db } from '../../lib/db';
 import { calculateDistanceNM } from './math';
 import { useStore } from './store';
-import airportsData from '../../data/airports.json';
+import { getAirport } from '../../lib/flight/airports';
 
 /**
  * Returns the exact event object but with its start/end dates shifted to
@@ -52,13 +52,12 @@ export async function detectEventAttendance() {
 
     if (activeEvents.length === 0) return;
 
-    let airports = airportsData;
 
     for (const aircraft of parkedFleet) {
         if (!aircraft.currentLocation) continue;
         
         for (const event of activeEvents) {
-            const eventAirport = airports.find((a: any) => a.icao === event.locationICAO);
+            const eventAirport = getAirport(event.locationICAO);
             
             if (eventAirport) {
                 const dist = calculateDistanceNM(aircraft.currentLocation.lat, aircraft.currentLocation.lng, eventAirport.lat, eventAirport.lng);

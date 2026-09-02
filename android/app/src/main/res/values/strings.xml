@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JETSTREAM</string>
+    <string name="app_url">https://private-jet-sim.vercel.app/</string>
+    <string name="app_host">private-jet-sim.vercel.app</string>
+</resources>

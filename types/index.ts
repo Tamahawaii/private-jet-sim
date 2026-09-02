@@ -121,6 +121,27 @@ export type AircraftModule = {
   }>;
 };
 
+export type FlightPurpose = {
+  type: "event" | "resort" | "leisure" | "delivery";
+  targetId?: EventID | ResortID;
+  label?: string;
+};
+
+export interface FlightRecap {
+  prestigeGained: number;
+  breakdown: { label: string; points: number }[];
+  newCountry: boolean;
+  countryName: string;
+  firstVisit: boolean;
+  flightNumber: number;
+  companions: PersonaID[];
+  purposeLabel?: string;
+  purposeLink?: string;
+  arrivedLocalTime: string;
+  hoursAloft: number;
+  reactionPersonaId?: PersonaID;
+}
+
 export type Flight = {
   id: FlightID;
   tailNumber: TailNumber;
@@ -135,10 +156,11 @@ export type Flight = {
   costUSD: number;
   waypoints: Coordinates[];
   passengers: PersonaID[];
-  purpose: {
-    type: "event" | "resort" | "leisure" | "delivery";
-    targetId?: EventID | ResortID;
-  } | null;
+  purpose: FlightPurpose | null;
+  /** Ids of in-flight moments whose side effects already ran (idempotency). */
+  momentsFired?: string[];
+  /** Computed once on arrival. */
+  recap?: FlightRecap;
 };
 
 export type PersonaArchetype =

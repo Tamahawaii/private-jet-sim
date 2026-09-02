@@ -1,10 +1,13 @@
 'use client';
 
 import React from 'react';
-import { useStore } from '../lib/store';
-import { Globe, Plane, ShoppingCart, DollarSign, MessageCircle, User } from 'lucide-react';
+import { Globe, Plane, ShoppingCart, MessageCircle, User, Palmtree } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { playerRepo } from '../../lib/repositories/player';
+import { db } from '../../lib/db';
+import SimSpeedControl from './SimSpeedControl';
 
 function fmt(n: number) {
     if (n >= 1000000000) return '$' + (n / 1000000000).toFixed(1) + 'B';
@@ -12,72 +15,69 @@ function fmt(n: number) {
     return '$' + n.toLocaleString();
 }
 
-import { useLiveQuery } from 'dexie-react-hooks';
-import { playerRepo } from '../../lib/repositories/player';
-import { db } from '../../lib/db';
+export const NAV_ITEMS = [
+  { id: '/', match: (p: string) => p === '/' || p === '/world' || p.startsWith('/flight'), icon: Globe, label: 'World' },
+  { id: '/fleet', match: (p: string) => p.startsWith('/fleet'), icon: Plane, label: 'Fleet' },
+  { id: '/destinations', match: (p: string) => p.startsWith('/destinations') || p.startsWith('/resorts') || p.startsWith('/events'), icon: Palmtree, label: 'Travel' },
+  { id: '/social', match: (p: string) => p.startsWith('/social'), icon: MessageCircle, label: 'Social' },
+  { id: '/acquisitions', match: (p: string) => p.startsWith('/acquisitions'), icon: ShoppingCart, label: 'Acquire' },
+];
 
 export default function TopNav() {
-  const pathname = usePathname();
+  const pathname = usePathname() || '/';
   const player = useLiveQuery(() => playerRepo.get());
   const netWorth = player?.netWorth || 0;
-  
+
   const dmThreads = useLiveQuery(() => db.dmThreads.toArray());
   const unreadCount = dmThreads ? dmThreads.reduce((acc, t) => acc + (t.unreadCount || 0), 0) : 0;
 
   return (
-    <div className="absolute top-0 left-0 right-0 h-16 bg-black/60 backdrop-blur-xl border-b border-white/10 z-[100] flex items-center justify-between px-4 md:px-8 pointer-events-auto">
-      
-      <div className="flex items-center gap-2">
-         <span className="hidden md:flex w-8 h-8 rounded-full bg-[#00f0ff]/20 border border-[#00f0ff] items-center justify-center">
-            <Plane size={16} className="text-[#00f0ff] -rotate-45" />
+    <div
+      className="absolute top-0 left-0 right-0 z-[100] flex items-center justify-between px-3 md:px-6 pointer-events-auto bg-gradient-to-b from-[#070b12]/95 via-[#070b12]/70 to-transparent"
+      style={{ height: 'calc(var(--nav-h) + var(--safe-top))', paddingTop: 'var(--safe-top)' }}
+    >
+      <Link href="/" className="flex items-center gap-2 min-w-0">
+         <span className="w-7 h-7 rounded-full bg-[var(--accent)]/15 border border-[var(--accent)]/60 flex items-center justify-center shrink-0">
+            <Plane size={13} className="text-[var(--accent)] -rotate-45" />
          </span>
-         <h1 className="text-lg md:text-xl font-black text-white tracking-widest font-mono">JETSTREAM</h1>
-      </div>
+         <span className="hidden sm:block text-[15px] font-bold text-white tracking-[0.22em] font-mono">JETSTREAM</span>
+      </Link>
 
-      <div className="hidden md:flex gap-1 bg-black/40 p-1 rounded-lg border border-white/5">
-        {[
-          { id: '/', activeCheck: '/', icon: Globe, label: 'CMD CENTER' },
-          { id: '/fleet', activeCheck: '/fleet', icon: Plane, label: 'FLEET ROSTER' },
-          { id: '/acquisitions', activeCheck: '/acquisitions', icon: ShoppingCart, label: 'ACQUISITIONS' }
-        ].map(tab => {
-          const isActive = pathname === tab.activeCheck || pathname?.startsWith(tab.activeCheck + '/');
+      <div className="hidden md:flex gap-1 bg-black/40 p-1 rounded-full border border-white/8">
+        {NAV_ITEMS.map(tab => {
+          const isActive = tab.match(pathname);
           return (
             <Link
               key={tab.id}
               href={tab.id}
-              className={`flex items-center gap-2 px-5 py-2 text-xs font-bold uppercase tracking-widest rounded-md transition-all ${
-                isActive 
-                  ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)]' 
-                  : 'text-zinc-500 hover:text-white hover:bg-white/10'
+              className={`flex items-center gap-2 px-4 py-1.5 text-[12px] font-semibold tracking-wide rounded-full transition-all ${
+                isActive ? 'bg-white text-black' : 'text-zinc-400 hover:text-white hover:bg-white/10'
               }`}
             >
-              <tab.icon size={14} /> {tab.label}
+              <tab.icon size={13} /> {tab.label}
             </Link>
           );
         })}
       </div>
 
-      <div className="flex items-center gap-3 md:gap-4">
-         <div className="flex items-center gap-2">
-           <Link href="/social" className="relative p-2 bg-black/40 border border-white/10 hover:border-white/30 rounded-lg transition-colors flex items-center justify-center">
-               <MessageCircle size={18} className="text-zinc-300 hover:text-white transition-colors" />
-               {unreadCount > 0 && (
-                   <span className="absolute -top-1 -right-1 bg-red-600 border border-black text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center font-mono">
-                       {unreadCount > 9 ? '9+' : unreadCount}
-                   </span>
-               )}
-           </Link>
-           <Link href="/profile" className="p-2 bg-black/40 border border-white/10 hover:border-white/30 rounded-lg transition-colors flex items-center justify-center">
-               <User size={18} className="text-zinc-300 hover:text-white transition-colors" />
-           </Link>
-         </div>
-         
-         <div className="flex items-center gap-2 bg-emerald-950/40 border border-emerald-500/30 px-3 md:px-4 py-2 rounded-lg">
-            <DollarSign size={14} className="text-emerald-400" />
-            <span className="text-emerald-400 font-black font-mono tracking-widest text-sm">{fmt(netWorth)}</span>
+      <div className="flex items-center gap-2 md:gap-3">
+         <div className="md:hidden"><SimSpeedControl compact /></div>
+         <div className="hidden md:block"><SimSpeedControl /></div>
+         <Link href="/social/dms" className="relative hidden md:flex w-9 h-9 bg-black/40 border border-white/10 hover:border-white/30 rounded-full transition-colors items-center justify-center">
+             <MessageCircle size={16} className="text-zinc-300" />
+             {unreadCount > 0 && (
+                 <span className="absolute -top-1 -right-1 bg-[var(--magenta)] border border-black text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center font-mono">
+                     {unreadCount > 9 ? '9+' : unreadCount}
+                 </span>
+             )}
+         </Link>
+         <Link href="/profile" className="hidden md:flex w-9 h-9 bg-black/40 border border-white/10 hover:border-white/30 rounded-full transition-colors items-center justify-center">
+             <User size={16} className="text-zinc-300" />
+         </Link>
+         <div className="flex items-center gap-1.5 bg-emerald-950/50 border border-emerald-500/30 px-2.5 md:px-3 h-9 rounded-full">
+            <span className="text-emerald-300 font-bold font-mono tracking-wide text-[12.5px]">{fmt(netWorth)}</span>
          </div>
       </div>
-
     </div>
   );
 }

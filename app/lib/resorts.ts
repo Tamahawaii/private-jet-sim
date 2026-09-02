@@ -1,5 +1,6 @@
 import { db } from '../../lib/db';
 import { useStore } from './store';
+import { sendProactiveDM } from '../../lib/social/proactiveDm';
 
 export async function getCurrentResortBooking() {
     const nowMs = useStore.getState().getNow();
@@ -62,8 +63,9 @@ export async function bookResortAndFly(params: {
             burnGPH: aircraft.fuelBurnGPH,
             costUSD: params.flightCost,
             waypoints: params.waypoints,
-            passengers: [],
-            purpose: { type: 'resort', targetId: params.resortId }
+            passengers: ['player'],
+            purpose: { type: 'resort', targetId: params.resortId },
+            momentsFired: []
         });
 
         await db.aircraft.update(params.aircraftId, {
@@ -184,29 +186,13 @@ export async function purchaseExperience(resortId: string, bookingId: string, ex
         const eligiblePersonas = collocatedPersonas.filter(p => !p.lastDmSentAt || (now - new Date(p.lastDmSentAt).getTime() > 24 * 60 * 60 * 1000));
         
         if (eligiblePersonas.length > 0) {
-            // Select one random distinct eligible persona
+            // Select one random distinct eligible persona and have them text about it
             const target = eligiblePersonas[Math.floor(Math.random() * eligiblePersonas.length)];
-            
-            // Mark last DM
-            await db.personaState.update(target.personaId, {
-                lastDmSentAt: new Date(now).toISOString()
-            });
-
-            useStore.getState().addToast({
-                message: "A companion noticed your booking.",
-                link: `/social/${target.personaId}`
-            });
-            
-            // Haiku DM gen via fetch to our existing DM endpoint simulating the prompt
-            fetch('/api/ai/dm', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    personaId: target.personaId,
-                    trigger: "reaction",
-                    context: `They just saw the player purchase the ${experienceId} experience at ${resort?.name}. They should send ONE short text exactly expressing "Perfect day for the helicopter" or related sentiment seamlessly. Use claude-haiku-4-5-20251001.`
-                })
-            }).catch(console.error);
+            const experience = resort?.signatureExperiences?.find(x => x.id === experienceId);
+            sendProactiveDM(target.personaId,
+                `You're at ${resort?.name} too and just noticed the player booked the "${experience?.name || experienceId}" experience there. Send ONE short text inviting yourself along or teasing them about it.`,
+                { trigger: 'reaction', relatedId: resortId, fallback: `Saw you booked the ${experience?.name || 'experience'}. I'm coming. Don't argue.` }
+            ).catch(console.error);
         }
 
         return true;

@@ -132,3 +132,24 @@ export function calculateInitialBearing(
   const brng = Math.atan2(y, x);
   return (toDeg(brng) + 360) % 360;
 }
+
+/**
+ * Longitudes along a path, unwrapped so the sequence is continuous across the
+ * antimeridian (e.g. Honolulu → Tokyo becomes -158 … -220 instead of jumping to +140).
+ * MapLibre accepts out-of-range longitudes in bounds, so this frames routes correctly.
+ */
+export function unwrapPath(coords: [number, number][]): [number, number][] {
+  const out: [number, number][] = [];
+  let offset = 0;
+  let prev: number | null = null;
+  for (const [lng, lat] of coords) {
+    let l = lng + offset;
+    if (prev !== null) {
+      while (l - prev > 180) { offset -= 360; l -= 360; }
+      while (l - prev < -180) { offset += 360; l += 360; }
+    }
+    out.push([l, lat]);
+    prev = l;
+  }
+  return out;
+}

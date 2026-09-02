@@ -4,13 +4,30 @@ import { STARTER_FLEET } from '../app/lib/mockData';
 import { useStore } from '../app/lib/store';
 import eventsData from '../data/events.json';
 import personasData from '../data/personas.json';
-import airportsData from '../data/airports.json';
+import { getAirport } from './flight/airports';
 import resortsData from '../data/resorts.json';
 import playerData from '../data/player.json';
 import petsData from '../data/pets.json';
 import giftsData from '../data/gifts.json';
 import relationshipsData from '../data/persona-relationships.json';
 import { seedPlayerRelationship } from './relationships/helpers';
+
+const CITY_AIRPORTS: [RegExp, string][] = [
+  [/houston/i, 'KHOU'], [/aspen/i, 'KASE'], [/san francisco|bay area/i, 'KSFO'], [/kyoto|tokyo/i, 'RJTT'], [/milan/i, 'LIML'],
+  [/london/i, 'EGLL'], [/geneva/i, 'LSGG'], [/abu dhabi/i, 'OMAA'], [/dubai/i, 'OMDB'], [/cotswolds/i, 'EGBJ'], [/los angeles/i, 'KLAX'],
+  [/new york|nyc/i, 'KTEB'], [/tel aviv/i, 'LLBG'], [/paris/i, 'LFPB'], [/mumbai/i, 'VABB'], [/s[aã]o paulo/i, 'SBSP'], [/copenhagen/i, 'EKCH'],
+  [/lisbon/i, 'LPPT'], [/berlin/i, 'EDDB'], [/tangier/i, 'GMTT'], [/lagos/i, 'DNMM'], [/beirut/i, 'OLBA'], [/honolulu/i, 'PHNL'], [/miami/i, 'KOPF'],
+  [/monaco|nice|antibes/i, 'LFMN'], [/singapore/i, 'WSSS'], [/hong kong/i, 'VHHH'], [/sydney/i, 'YSSY'], [/zurich/i, 'LSZH'], [/madrid/i, 'LEMD'], [/rome/i, 'LIRA'],
+];
+
+/** Best-guess home airport from a persona's residences/region text. */
+function homeAirportFor(p: { residences?: string[]; region?: string; homeBaseICAO?: string }): string {
+  if (p.homeBaseICAO && getAirport(p.homeBaseICAO)) return p.homeBaseICAO;
+  const text = [(p.residences || [])[0] || '', p.region || ''].join(' ');
+  for (const [re, icao] of CITY_AIRPORTS) if (re.test(text) && getAirport(icao)) return icao;
+  const fallback = ['LFMN', 'EGLL', 'KTEB', 'LSGG', 'OMDB'];
+  return fallback[Math.floor(Math.random() * fallback.length)];
+}
 
 export async function bootstrapWorld() {
   // 1. Init Player if not exists or merge canonical updates
@@ -127,12 +144,11 @@ export async function bootstrapWorld() {
      const isBad = !coords || typeof coords.lat !== 'number' || typeof coords.lng !== 'number' || isNaN(coords.lat) || isNaN(coords.lng) || !isFinite(coords.lat) || !isFinite(coords.lng);
      
      if (isBad && ac.currentLocationICAO) {
-         const apt = airportsData.find((a: any) => a.icao === ac.currentLocationICAO);
-         if (apt && typeof apt.lat === 'number' && typeof apt.lng === 'number' && !isNaN(apt.lat) && !isNaN(apt.lng)) {
-             await db.aircraft.update(ac.id, { currentLocation: { lat: apt.lat, lng: apt.lng, name: apt.name }});
-         } else {
-             // Best effort default for PHNL
-             if (ac.currentLocationICAO === 'PHNL') await db.aircraft.update(ac.id, { currentLocation: { lat: 21.328, lng: -157.922, name: "PHNL - Honolulu" } });
+         const apt = getAirport(ac.currentLocationICAO);
+         if (apt) {
+             await db.aircraft.update(ac.tailNumber, { currentLocation: { lat: apt.lat, lng: apt.lng, name: `${apt.icao} - ${apt.name}` }});
+         } else if (ac.currentLocationICAO === 'PHNL') {
+             await db.aircraft.update(ac.tailNumber, { currentLocation: { lat: 21.318, lng: -157.926, name: "PHNL - Honolulu" } });
          }
      }
   }
@@ -151,24 +167,35 @@ export async function bootstrapWorld() {
        // Deeply replace canonical definitions unconditionally
        await db.personas.bulkPut(personasData as any);
        
+       // One-time migration: older worlds spawned every friend in Honolulu. Scatter them home.
+       const allStates = await db.personaState.toArray();
+       if (allStates.length > 5 && allStates.every(s => s.currentLocationICAO === 'PHNL' && !s.currentFlightState && !s.lastFlightWithPlayer)) {
+           for (const st of allStates) {
+               const p = (personasData as any[]).find(x => x.id === st.personaId);
+               if (!p) continue;
+               const icao = homeAirportFor(p);
+               const hq = getAirport(icao);
+               if (hq) await db.personaState.update(st.personaId, { currentLocationICAO: icao, currentCoords: { lat: hq.lat, lng: hq.lng, name: hq.name } });
+           }
+       }
+
        // Only build state containers for missing personas
        const existingStates = new Set((await db.personaState.toArray()).map(s => s.personaId));
        const missingPersonas = personasData.filter((p: any) => !existingStates.has(p.id));
 
        if (missingPersonas.length > 0) {
            const states = missingPersonas.map((p: any) => {
-               let spawnIcao = 'PHNL';
+               // Friends live across the globe: home city first, sometimes a favorite resort.
+               let spawnIcao = homeAirportFor(p);
                if (Math.random() < 0.3) {
                    const preferred = (resortsData as any[]).filter(r => r.preferredBy && r.preferredBy.includes(p.id));
                    if (preferred.length > 0) {
-                       spawnIcao = preferred[0].locationICAO;
+                       spawnIcao = preferred[Math.floor(Math.random() * preferred.length)].locationICAO;
                    }
                }
 
-               const hq = airportsData.find((a: any) => a.icao === spawnIcao) || airportsData.find((a: any) => a.icao === 'PHNL');
-               const coords = hq && typeof hq.lat === 'number' && !isNaN(hq.lat) && typeof hq.lng === 'number' && !isNaN(hq.lng) 
-                 ? { lat: hq.lat, lng: hq.lng, name: hq.name } 
-                 : undefined;
+               const hq = getAirport(spawnIcao) || getAirport('PHNL');
+               const coords = hq ? { lat: hq.lat, lng: hq.lng, name: hq.name } : undefined;
                  
                return {
                    personaId: p.id,

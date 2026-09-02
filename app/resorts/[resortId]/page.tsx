@@ -10,7 +10,7 @@ import { SignatureExperience, Persona, Aircraft } from '../../../types';
 import { useStore } from '../../lib/store';
 import { bookResortAndFly, extendStay, purchaseExperience } from '../../lib/resorts';
 import { calculateDistanceNM } from '../../lib/math';
-import airportsData from '../../../data/airports.json';
+import { getAirport } from '../../../lib/flight/airports';
 
 export default function ResortDetailPage() {
     const params = useParams();
@@ -69,8 +69,8 @@ export default function ResortDetailPage() {
     if (selectedAircraft && resort) {
         let oLat = 0, oLng = 0;
         originICAO = selectedAircraft.currentLocationICAO || player?.currentLocationICAO || 'PHNL';
-        const originAirport = airportsData.find((a: any) => a.icao === originICAO);
-        const destAirport = airportsData.find((a: any) => a.icao === resort.locationICAO);
+        const originAirport = getAirport(originICAO);
+        const destAirport = getAirport(resort.locationICAO);
         
         if (originAirport && destAirport) {
             oLat = originAirport.lat; oLng = originAirport.lng;

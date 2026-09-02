@@ -2,6 +2,8 @@ import { db } from './db';
 import { playerRepo } from './repositories/player';
 import { transactionRepo } from './repositories/transactions';
 import { Aircraft, Flight } from '../types';
+import { getAirport } from './flight/airports';
+import { calculateDistanceNM, computeGreatCirclePoints } from '../app/lib/math';
 
 export const Economy = {
   generateUniqueTailNumber: async (): Promise<string> => {
@@ -45,8 +47,14 @@ export const Economy = {
           description: `Purchased ${catalogItem.model} (incl. 1% closing costs)`
        });
 
-       // 3. Create Aircraft in "in_transit"
-       const deliveryMs = 7 * 24 * 60 * 60 * 1000; // 7 days delivery 
+       // 3. Create Aircraft in "in_transit" — ferried from the factory (Boeing Field) to the player's home base
+       const factory = { lat: 47.528, lng: -122.301 };
+       const homeAirport = getAirport(player.homeBaseICAO) || getAirport('PHNL');
+       const home = homeAirport ? { lat: homeAirport.lat, lng: homeAirport.lng } : { lat: 21.328, lng: -157.922 };
+       const ferryNM = calculateDistanceNM(factory.lat, factory.lng, home.lat, home.lng);
+       const ferryWaypoints = computeGreatCirclePoints(factory.lat, factory.lng, home.lat, home.lng, 64).map(p => ({ lng: p[0], lat: p[1] }));
+       // Ferry flight takes its real duration, plus 48h of factory prep — you can watch it come in on the map.
+       const deliveryMs = 48 * 60 * 60 * 1000 + (ferryNM / Math.max(150, catalogItem.speedKnots)) * 3600 * 1000;
        const arrivalMs = Date.now() + deliveryMs;
 
        const newCraft: Aircraft = {
@@ -70,8 +78,8 @@ export const Economy = {
           cabinConfig: Array(catalogItem.cabinSlots || 0).fill('Empty'),
           scheduledRoutes: [],
           // MapEngine compat traits
-          currentLocation: { lat: 47.528, lng: -122.301, name: 'BFI - Factory' }, // Boeing Field mapping
-          destination: { lat: 21.328, lng: -157.922, name: player.homeBaseICAO }, // Home Base 
+          currentLocation: { lat: factory.lat, lng: factory.lng, name: 'KBFI - Factory' }, // Boeing Field mapping
+          destination: { lat: home.lat, lng: home.lng, name: player.homeBaseICAO }, // Home Base 
           launchedAt: Date.now(),
           lockedUntil: arrivalMs,
           currentFlightID: crypto.randomUUID(),
@@ -84,18 +92,18 @@ export const Economy = {
        const deliveryFlight: Flight = {
           id: newCraft.currentFlightID!,
           tailNumber,
-          originICAO: 'FACTORY',
+          originICAO: 'KBFI',
           destinationICAO: player.homeBaseICAO,
           departedAt: Date.now(),
           estimatedArrivalAt: arrivalMs,
           arrivedAt: null,
-          distanceNM: 0,
+          distanceNM: ferryNM,
           cruiseSpeedKTS: newCraft.speedKnots,
           burnGPH: newCraft.fuelBurnGPH,
           costUSD: 0,
-          waypoints: [],
+          waypoints: ferryWaypoints,
           passengers: [],
-          purpose: { type: 'delivery' }
+          purpose: { type: 'delivery', label: 'Factory delivery' }
        };
 
        await db.flights.add(deliveryFlight);

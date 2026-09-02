@@ -32,10 +32,24 @@ export default function SettingsPage() {
                 return data;
             }
 
+            const fileName = `jetstream-save-${new Date().toISOString().split('T')[0]}.json`;
+            const native = (window as unknown as { JetstreamNative?: { saveFile?: (n: string, b64: string, mime: string) => void } }).JetstreamNative;
+            if (native?.saveFile) {
+                // Android shell: hand the file to the native share sheet (Drive, Files, email…)
+                const b64 = await new Promise<string>((resolve, reject) => {
+                    const r = new FileReader();
+                    r.onloadend = () => resolve(String(r.result).split(',')[1] || '');
+                    r.onerror = () => reject(r.error);
+                    r.readAsDataURL(blob);
+                });
+                native.saveFile(fileName, b64, 'application/json');
+                addToast({ message: "Choose where to keep your backup." });
+                return;
+            }
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `jetstream-save-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = fileName;
             a.click();
             URL.revokeObjectURL(url);
             addToast({ message: "Save data exported successfully. Keep it secure." });
