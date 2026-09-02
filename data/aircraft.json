@@ -13,7 +13,8 @@
     "passengerCapacity": 8,
     "description": "The bestselling light jet in the world. Exceptional for its class but modest by the standards of your circle.",
     "prestigeTier": 1,
-    "layoutImage": "/layouts/phenom_300.png"
+    "layoutImage": "/layouts/phenom_300.png",
+    "imageUrl": "/art/aircraft/embraer-phenom-300.svg"
   },
   {
     "id": "cessna-citation-longitude",
@@ -29,7 +30,8 @@
     "passengerCapacity": 12,
     "description": "Super-midsize with a flat floor, coast-to-coast range, and a cabin that doesn't announce itself.",
     "prestigeTier": 2,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/cessna-citation-longitude.svg"
   },
   {
     "id": "embraer-praetor-600",
@@ -45,7 +47,8 @@
     "passengerCapacity": 12,
     "description": "Punches above its weight. Transatlantic range in a super-midsize. A quiet favorite.",
     "prestigeTier": 2,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/embraer-praetor-600.svg"
   },
   {
     "id": "cessna-citation-x",
@@ -61,7 +64,8 @@
     "passengerCapacity": 8,
     "description": "One of the fastest civilian aircraft in service. You'll beat the weather and most headwinds.",
     "prestigeTier": 3,
-    "layoutImage": "/layouts/citation_x.png"
+    "layoutImage": "/layouts/citation_x.png",
+    "imageUrl": "/art/aircraft/cessna-citation-x.svg"
   },
   {
     "id": "dassault-falcon-900",
@@ -77,7 +81,8 @@
     "passengerCapacity": 14,
     "description": "Trijet reliability and a cabin built for the long haul. The connoisseur's choice.",
     "prestigeTier": 3,
-    "layoutImage": "/layouts/falcon_900.png"
+    "layoutImage": "/layouts/falcon_900.png",
+    "imageUrl": "/art/aircraft/dassault-falcon-900.svg"
   },
   {
     "id": "gulfstream-g650er",
@@ -93,7 +98,8 @@
     "passengerCapacity": 14,
     "description": "The private aviation benchmark. Intercontinental range, 7,500 nm with fuel to spare.",
     "prestigeTier": 4,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/gulfstream-g650er.svg"
   },
   {
     "id": "gulfstream-g700",
@@ -109,7 +115,8 @@
     "passengerCapacity": 19,
     "description": "Gulfstream's new flagship. The longest, widest cabin in its class. Circadian lighting and ultra-high cabin altitude. You arrive fresh.",
     "prestigeTier": 5,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/gulfstream-g700.svg"
   },
   {
     "id": "gulfstream-g800",
@@ -125,7 +132,8 @@
     "passengerCapacity": 19,
     "description": "Farther than the G700 but slightly smaller cabin. For owners who fly true ultra-long-haul routes.",
     "prestigeTier": 5,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/gulfstream-g800.svg"
   },
   {
     "id": "bombardier-global-7500",
@@ -141,7 +149,8 @@
     "passengerCapacity": 19,
     "description": "Four distinct living spaces. A proper bedroom with a real shower. The lifestyle brief answered.",
     "prestigeTier": 5,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/bombardier-global-7500.svg"
   },
   {
     "id": "bombardier-global-8000",
@@ -155,9 +164,10 @@
     "costPerNM": 17,
     "moduleSlots": 4,
     "passengerCapacity": 19,
-    "description": "Mach 0.94 in a dash \u2014 the fastest civilian aircraft of its era. For those who feel travel time as a personal affront.",
+    "description": "Mach 0.94 in a dash — the fastest civilian aircraft of its era. For those who feel travel time as a personal affront.",
     "prestigeTier": 5,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/bombardier-global-8000.svg"
   },
   {
     "id": "dassault-falcon-10x",
@@ -173,7 +183,8 @@
     "passengerCapacity": 19,
     "description": "Dassault's flagship. Best-in-class cabin width and windows. The pilot's aircraft for the billionaire's route.",
     "prestigeTier": 4,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/dassault-falcon-10x.svg"
   },
   {
     "id": "dassault-falcon-8x",
@@ -189,7 +200,8 @@
     "passengerCapacity": 16,
     "description": "Trijet confidence across oceans and mountains. The discerning European choice.",
     "prestigeTier": 4,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/dassault-falcon-8x.svg"
   },
   {
     "id": "dassault-falcon-7x",
@@ -205,7 +217,8 @@
     "passengerCapacity": 16,
     "description": "Excellence in trijet reliability at an aggressive price.",
     "prestigeTier": 3,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/dassault-falcon-7x.svg"
   },
   {
     "id": "boeing-bbj-737",
@@ -221,7 +234,8 @@
     "passengerCapacity": 48,
     "description": "A private airliner. You arrive with your guests, staff, and dogs. Full galley, stateroom, and two lounges.",
     "prestigeTier": 5,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/boeing-bbj-737.svg"
   },
   {
     "id": "boeing-bbj-787",
@@ -237,7 +251,8 @@
     "passengerCapacity": 40,
     "description": "The ultra-long-range flagship of the flagships. A flying residence. Only a few dozen exist.",
     "prestigeTier": 5,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/boeing-bbj-787.svg"
   },
   {
     "id": "airbus-acj319neo",
@@ -253,7 +268,8 @@
     "passengerCapacity": 40,
     "description": "Airbus's answer to the BBJ. Wider cabin, fly-by-wire, quieter ride.",
     "prestigeTier": 5,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/airbus-acj319neo.svg"
   },
   {
     "id": "airbus-acj220",
@@ -269,7 +285,8 @@
     "passengerCapacity": 18,
     "description": "Airliner-class cabin at business-jet operating cost. Six living zones standard.",
     "prestigeTier": 5,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/airbus-acj220.svg"
   },
   {
     "id": "astra-gulfstream-spx",
@@ -285,7 +302,8 @@
     "passengerCapacity": 8,
     "description": "The value pick. A dependable light midsize for short hops in the portfolio.",
     "prestigeTier": 1,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/astra-gulfstream-spx.svg"
   },
   {
     "id": "pilatus-pc-24",
@@ -301,7 +319,8 @@
     "passengerCapacity": 8,
     "description": "The only jet that lands on dirt, grass, and short strips. For the Singita-to-Amangiri routes.",
     "prestigeTier": 2,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/pilatus-pc-24.svg"
   },
   {
     "id": "sikorsky-s76d",
@@ -317,7 +336,8 @@
     "passengerCapacity": 8,
     "description": "Corporate helicopter for the last mile. Helipad at home. Helipad at the office. Helipad at the resort.",
     "prestigeTier": 3,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/sikorsky-s76d.svg"
   },
   {
     "id": "agustawestland-aw109",
@@ -333,6 +353,7 @@
     "passengerCapacity": 6,
     "description": "The CEO helicopter. Italian engineered. The Portofino arrival.",
     "prestigeTier": 3,
-    "layoutImage": null
+    "layoutImage": null,
+    "imageUrl": "/art/aircraft/agustawestland-aw109.svg"
   }
 ]

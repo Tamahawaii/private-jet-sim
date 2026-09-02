@@ -1,4 +1,5 @@
 'use client';
+import { routes } from '../../lib/routes';
 
 import { useEffect, useRef } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -9,10 +10,7 @@ import { getFlightMoments, getFlightSnapshot, FlightMoment } from '../../lib/fli
 import { getAirport, shortCity } from '../../lib/flight/airports';
 import { isPlayerAboard } from '../../lib/simulation';
 import { sendProactiveDM } from '../../lib/social/proactiveDm';
-
-declare global {
-  interface Window { JetstreamNative?: { vibrate?: (ms: number) => void; isNative?: () => boolean } }
-}
+import '../../lib/api';
 
 export function haptic(kind: 'light' | 'heavy') {
   const ms = kind === 'heavy' ? 60 : 18;
@@ -64,7 +62,7 @@ export default function FlightMomentsRunner() {
             if (m.kind === 'friend-text') {
               await fireFriendText(flight, snap.msRemaining, companions);
             } else if (m.kind !== 'pushback') {
-              useStore.getState().addToast({ message: `${m.title} — ${m.body}`, link: `/flight/${flight.id}` });
+              useStore.getState().addToast({ message: `${m.title} — ${m.body}`, link: routes.flight(flight.id) });
             }
           } catch (e) { console.warn('moment failed', m.id, e); }
         }

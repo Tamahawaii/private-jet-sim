@@ -1,3 +1,4 @@
+import { routes } from '../../../../lib/routes';
 import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Aircraft, FlightPurpose, Flight } from '../../../../types';
@@ -74,7 +75,7 @@ export default function Step4Review({ aircraft, destination, passengers, onBack 
                passengers,
                purpose,
            });
-           router.push(`/flight/${id}`);
+           router.push(routes.flight(id));
        } catch (error: any) {
            console.error("Launch Error:", error);
            alert(`Dispatch failed: ${error.message}`);

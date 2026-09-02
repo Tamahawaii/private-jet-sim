@@ -2,7 +2,7 @@ import Dexie, { Table } from 'dexie';
 import {
   Player, Aircraft, Flight, Persona, PersonaState, DMThread, GroupChat,
   BillionaireEvent, EventAttendance, Resort, ResortBooking, Transaction, Notification,
-  ApiUsageRecord, Pet
+  ApiUsageRecord, Pet, Yacht, Voyage, Marina, Residence, HostedGathering
 } from '../types';
 
 export class JetstreamDB extends Dexie {
@@ -22,10 +22,12 @@ export class JetstreamDB extends Dexie {
   apiUsage!: Table<ApiUsageRecord, string>;
   pets!: Table<Pet, string>;
 
-  // Stubbed (Phase 5.5, 7, etc.)
-  yachts!: Table<any, string>;
-  yachtVoyages!: Table<any, string>;
-  marinas!: Table<any, string>;
+  // Phase 11 (v2.1)
+  yachts!: Table<Yacht, string>;
+  yachtVoyages!: Table<Voyage, string>;
+  marinas!: Table<Marina, string>;
+  residences!: Table<Residence, string>;
+  gatherings!: Table<HostedGathering, string>;
   charterBookings!: Table<any, string>;
   neighborhoods!: Table<any, string>;
   properties!: Table<any, string>;
@@ -95,6 +97,14 @@ export class JetstreamDB extends Dexie {
       relationshipEvents: 'id, relationshipId, type, at',
       giftItems: 'id, category, basePrice',
       giftsSent: 'id, fromId, toId, sentAt'
+    });
+
+    this.version(9).stores({
+      yachts: 'id, status, owned, currentMarinaId',
+      yachtVoyages: 'id, yachtId, arrivedAt, departedAt',
+      marinas: 'id, basin, nearestAirportICAO',
+      residences: 'id, type, city, owned, isPrimary',
+      gatherings: 'id, residenceId, at'
     });
   }
 }

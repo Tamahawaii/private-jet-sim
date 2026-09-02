@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Layers, Globe2, Map as MapIcon, LocateFixed, CloudRain, Sun, Plane, Users, CalendarDays, Palmtree, TowerControl, Check } from 'lucide-react';
+import { Layers, Globe2, Map as MapIcon, LocateFixed, CloudRain, Sun, Plane, Users, CalendarDays, Palmtree, TowerControl, Check, Anchor, Home } from 'lucide-react';
 import { useStore, MapStyleId } from '../../lib/store';
 
 const STYLES: { id: MapStyleId; label: string; hint: string }[] = [
@@ -36,6 +36,8 @@ export default function MapControls({ onRecenter, showRecenter, topOffset = 0 }:
     { key: 'events', label: 'Events', icon: <CalendarDays size={14} />, tint: 'text-[#d4af37]' },
     { key: 'resorts', label: 'Resorts', icon: <Palmtree size={14} />, tint: 'text-[#f5a7a7]' },
     { key: 'airports', label: 'Airports', icon: <TowerControl size={14} />, tint: 'text-zinc-300' },
+    { key: 'marinas', label: 'Marinas & yachts', icon: <Anchor size={14} />, tint: 'text-sky-200' },
+    { key: 'homes', label: 'Your homes', icon: <Home size={14} />, tint: 'text-amber-300' },
     { key: 'daylight', label: 'Day / night', icon: <Sun size={14} />, tint: 'text-amber-200' },
     { key: 'weather', label: 'Live radar (US)', icon: <CloudRain size={14} />, tint: 'text-sky-300' },
   ];

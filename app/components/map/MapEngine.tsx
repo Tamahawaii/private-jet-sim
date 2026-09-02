@@ -7,10 +7,11 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../../lib/db';
 import { useStore } from '../../lib/store';
-import { Aircraft, Flight, BillionaireEvent, Resort, Persona, PersonaState } from '../../../types';
+import { Aircraft, Flight, BillionaireEvent, Resort, Persona, PersonaState, Yacht, Voyage, Marina, Residence } from '../../../types';
 import { buildStyle, SRC, LYR, CLICKABLE_LAYERS, RADAR_TILES } from './mapStyle';
 import { registerIcons } from './icons';
-import { getFlightSnapshot } from '../../../lib/flight/engine';
+import { getFlightSnapshot, getVoyageSnapshot } from '../../../lib/flight/engine';
+import { resolveVoyages } from '../../../lib/estate';
 import { nightPolygon } from '../../../lib/flight/sun';
 import { getAllAirports, getAirport, shortCity } from '../../../lib/flight/airports';
 import { calculateDistanceNM, computeGreatCirclePoints, computeRangeCirclePoints, unwrapPath } from '../../lib/math';
@@ -76,6 +77,12 @@ export default function MapEngine() {
   const resorts = (useLiveQuery(() => db.resorts.toArray()) || EMPTY) as Resort[];
   const personas = (useLiveQuery(() => db.personas.toArray()) || EMPTY) as Persona[];
   const personaStates = (useLiveQuery(() => db.personaState.toArray()) || EMPTY) as PersonaState[];
+  const yachts = (useLiveQuery(() => db.yachts.toArray()) || EMPTY) as Yacht[];
+  const voyages = (useLiveQuery(() => db.yachtVoyages.filter(v => v.arrivedAt === null).toArray()) || EMPTY) as Voyage[];
+  const marinas = (useLiveQuery(() => db.marinas.toArray()) || EMPTY) as Marina[];
+  const residences = (useLiveQuery(() => db.residences.filter(r => !!r.owned).toArray()) || EMPTY) as Residence[];
+  const yachtsRef = useRef(yachts); const voyagesRef = useRef(voyages);
+  useEffect(() => { yachtsRef.current = yachts; voyagesRef.current = voyages; }, [yachts, voyages]);
 
   const fleetRef = useRef(fleet);
   const flightsRef = useRef(activeFlights);
@@ -149,15 +156,18 @@ export default function MapEngine() {
       const st = useStore.getState();
       if (!hits.length) { st.setPeek(null); return; }
       // Priority: planes > events > resorts > airports
-      const order: string[] = [LYR.planesAir, LYR.planesParked, LYR.events, LYR.resorts, LYR.airports];
+      const order: string[] = [LYR.planesAir, LYR.planesParked, LYR.yachts, LYR.homes, LYR.events, LYR.resorts, LYR.marinas, LYR.airports];
       hits.sort((a, b) => order.indexOf(a.layer.id) - order.indexOf(b.layer.id));
       const f = hits[0];
       const p = f.properties || {};
       if (f.layer.id === LYR.planesAir || f.layer.id === LYR.planesParked) {
         st.setSelectedAircraftId(String(p.id));
         st.setPeek({ kind: 'aircraft', id: String(p.id) });
-      } else if (f.layer.id === LYR.events) st.setPeek({ kind: 'event', id: String(p.id) });
+      } else if (f.layer.id === LYR.yachts) { st.setSelectedAircraftId(String(p.id)); st.setPeek({ kind: 'yacht', id: String(p.id) }); }
+      else if (f.layer.id === LYR.homes) st.setPeek({ kind: 'residence', id: String(p.id) });
+      else if (f.layer.id === LYR.events) st.setPeek({ kind: 'event', id: String(p.id) });
       else if (f.layer.id === LYR.resorts) st.setPeek({ kind: 'resort', id: String(p.id) });
+      else if (f.layer.id === LYR.marinas) st.setPeek({ kind: 'marina', id: String(p.id) });
       else if (f.layer.id === LYR.airports) st.setPeek({ kind: 'airport', id: String(p.icao) });
     });
 
@@ -230,6 +240,10 @@ export default function MapEngine() {
     setData(map, SRC.resorts, layers.resorts ? fc(resorts.filter(r => isFinite(r.lat) && isFinite(r.lng)).map(r => ({
       type: 'Feature', geometry: { type: 'Point', coordinates: [r.lng, r.lat] }, properties: { id: r.id, inRange: inRange(r.lat, r.lng) },
     }))) : fc([]));
+
+    // Marinas + owned homes
+    setData(map, SRC.marinas, layers.marinas ? fc(marinas.map(m => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [m.lng, m.lat] }, properties: { id: m.id, inRange: inRange(m.lat, m.lng) } }))) : fc([]));
+    setData(map, SRC.homes, layers.homes ? fc(residences.map(r => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [r.coordinates.lng, r.coordinates.lat] }, properties: { id: r.id } }))) : fc([]));
 
     // Range ring for a selected parked jet
     if (rangeCenter && rangeCenter.currentLocation) {
@@ -305,6 +319,30 @@ export default function MapEngine() {
         if (showFleet) planeFeatures.push({ type: 'Feature', geometry: { type: 'Point', coordinates: coords }, properties: { id: jet.id, tail: jet.tailNumber, heading, inFlight, selected } });
         if (selected && inFlight) followTarget = coords;
       }
+      // Owned yachts: moored at a marina or under way along a voyage
+      const yachtFeatures: GeoJSON.Feature[] = [];
+      if (layersRef.current.marinas) {
+        for (const y of yachtsRef.current) {
+          if (!y.owned) continue;
+          const selected = y.id === selectedRef.current;
+          let coords: [number, number] = [y.currentLocationLng, y.currentLocationLat];
+          let heading = 0; let inFlight = false;
+          if (y.status === 'cruising' && y.currentVoyageId) {
+            const v = voyagesRef.current.find(x => x.id === y.currentVoyageId);
+            if (v && v.waypoints.length >= 2) {
+              const vs = getVoyageSnapshot(v, now);
+              coords = vs.position; heading = vs.heading; inFlight = !vs.isComplete;
+              if (vs.isComplete) anyComplete = true;
+              if (vs.flown.length >= 2) flownFeatures.push({ type: 'Feature', geometry: { type: 'LineString', coordinates: vs.flown }, properties: { id: y.id, selected } });
+              if (vs.ahead.length >= 2) aheadFeatures.push({ type: 'Feature', geometry: { type: 'LineString', coordinates: vs.ahead }, properties: { id: y.id, selected } });
+            }
+          }
+          if (!isFinite(coords[0]) || !isFinite(coords[1])) continue;
+          yachtFeatures.push({ type: 'Feature', geometry: { type: 'Point', coordinates: coords }, properties: { id: y.id, heading, inFlight, selected } });
+          if (selected && inFlight) followTarget = coords;
+        }
+      }
+      setData(map, SRC.yachts, fc(yachtFeatures));
       setData(map, SRC.planes, fc(planeFeatures));
       setData(map, SRC.routesFlown, fc(flownFeatures));
       setData(map, SRC.routesAhead, fc(aheadFeatures));
@@ -331,6 +369,7 @@ export default function MapEngine() {
       if (anyComplete && Date.now() - arrivalSweepRef.current > 2000) {
         arrivalSweepRef.current = Date.now();
         resolveArrivals().catch(console.error);
+        resolveVoyages().catch(console.error);
       }
     };
     const id = setInterval(tick, 100);

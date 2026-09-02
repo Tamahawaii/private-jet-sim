@@ -1,4 +1,5 @@
 'use client';
+import { routes } from '../../../lib/routes';
 
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -96,7 +97,7 @@ export default function Passport({ player }: { player: Player }) {
               const r = describeRoute(f);
               return (
                 <li key={f.id}>
-                  <Link href={`/flight/${f.id}`} className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.04]">
+                  <Link href={routes.flight(f.id)} className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.04]">
                     <div className="font-mono text-[12px] text-zinc-500 w-16 shrink-0">{new Date(f.arrivedAt || f.estimatedArrivalAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
                     <div className="flex-1 min-w-0">
                       <div className="text-[13.5px] text-white truncate">{r.originCity} <span className="text-[var(--accent)]">→</span> {r.destCity}</div>

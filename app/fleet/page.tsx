@@ -1,119 +1,116 @@
 'use client';
-
 import React, { useState } from 'react';
-import { useStore } from '../lib/store';
-import { Aircraft } from '../../types';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { aircraftRepo } from '../../lib/repositories/aircraft';
-import { Plane, Compass, Fuel, LayoutGrid, Route, MousePointerClick } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { Plane, Ship, Navigation2, Anchor, Wrench, BadgeDollarSign, Gauge, Route, Users } from 'lucide-react';
+import { db } from '../../lib/db';
+import { routes } from '../../lib/routes';
+import { Aircraft, Yacht } from '../../types';
+import { aircraftImage } from '../lib/mockData';
+import { getAirport, placeLine } from '../../lib/flight/airports';
+import { getMarina } from '../../lib/estate';
+import { useSimNow } from '../lib/useSimNow';
+import { getFlightSnapshot, getVoyageSnapshot, formatDurationMs } from '../../lib/flight/engine';
+import { maintenanceDue } from '../../lib/hangar';
+import { PageShell, PageHeader, Tabs, Button, Chip, Artwork, EmptyState, money } from '../components/ui';
 
-export default function FleetManager() {
-  const { setSelectedAircraftId } = useStore();
-  const fleet = useLiveQuery(() => aircraftRepo.getAll()) || [];
+function AircraftCard({ jet }: { jet: Aircraft }) {
   const router = useRouter();
-  const [tab, setTab] = useState<'AIRCRAFT' | 'YACHTS'>('AIRCRAFT');
-
+  const now = useSimNow(1000);
+  const flight = useLiveQuery(() => (jet.currentFlightID ? db.flights.get(jet.currentFlightID) : undefined), [jet.currentFlightID]);
+  const snap = flight && flight.arrivedAt === null ? getFlightSnapshot(flight, jet, now) : null;
+  const here = getAirport(jet.currentLocationICAO);
+  const due = maintenanceDue(jet);
+  const status = jet.status === 'in_transit' ? { chip: <Chip tone="accent">In flight</Chip> } : jet.status === 'maintenance' ? { chip: <Chip tone="amber"><Wrench size={10} /> In the shop</Chip> } : due ? { chip: <Chip tone="amber">Inspection due</Chip> } : { chip: <Chip>Parked</Chip> };
   return (
-    <div className="absolute inset-0 z-40 bg-[#0a0a0c] pt-24 px-10 pb-10 overflow-y-auto text-white">
-      <div className="max-w-7xl mx-auto flex flex-col gap-8">
-         
-         <div className="flex justify-between items-end border-b border-white/10 pb-4">
-            <div>
-               <h1 className="text-3xl font-black tracking-widest">FLEET ROSTER</h1>
-               <div className="flex gap-4 mt-3">
-                  <button onClick={() => setTab('AIRCRAFT')} className={`text-xs font-mono tracking-widest font-bold pb-2 border-b-2 ${tab === 'AIRCRAFT' ? 'text-[#00f0ff] border-[#00f0ff]' : 'text-zinc-600 border-transparent hover:text-white'}`}>AIRCRAFT</button>
-                  <button onClick={() => setTab('YACHTS')} className={`text-xs font-mono tracking-widest font-bold pb-2 border-b-2 ${tab === 'YACHTS' ? 'text-[#00f0ff] border-[#00f0ff]' : 'text-zinc-600 border-transparent hover:text-white'}`}>YACHTS</button>
-               </div>
+    <div className="group rounded-3xl overflow-hidden border border-white/8 bg-white/[0.03] hover:border-[var(--accent)]/40 transition-colors">
+      <button onClick={() => router.push(routes.aircraft(jet.tailNumber))} className="block w-full text-left">
+        <Artwork src={aircraftImage(jet)} alt={jet.model} className="aspect-[16/9]">
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#070b12] to-transparent" />
+          <div className="absolute top-3 left-3 flex gap-1.5">{status.chip}{jet.charter?.enabled && jet.status === 'parked' && <Chip tone="mint"><BadgeDollarSign size={10} /> Charter</Chip>}</div>
+          <div className="absolute left-4 right-4 bottom-3 flex items-end justify-between gap-3">
+            <div className="min-w-0">
+              <div className="font-mono text-[22px] font-bold tracking-wider text-white leading-none">{jet.tailNumber}{jet.nickname ? <span className="text-[13px] text-zinc-400 font-sans font-normal tracking-normal ml-2">“{jet.nickname}”</span> : null}</div>
+              <div className="text-[13px] text-zinc-300 mt-1 truncate">{jet.model}</div>
             </div>
-            <button 
-               onClick={() => router.push('/acquisitions')}
-               className="bg-white/5 hover:bg-white/10 border border-white/20 text-xs px-4 py-2 font-bold tracking-widest transition-colors rounded mb-2"
-            >
-               ACQUIRE NEW
-            </button>
-         </div>
-
-         {tab === 'YACHTS' && (
-            <div className="w-full py-32 flex flex-col items-center justify-center border border-white/5 border-dashed rounded-xl bg-[#141419]/50">
-               <h2 className="text-xl font-black tracking-widest text-zinc-500 mb-2">MARITIME BRANCH INACTIVE</h2>
-               <p className="text-sm font-mono text-zinc-600">Yacht acquisitions unlock in Phase 6.</p>
-            </div>
-         )}
-
-         {tab === 'AIRCRAFT' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-               {fleet.map((jet: Aircraft) => (
-                   <div key={jet.id} onClick={() => router.push(`/fleet/${jet.tailNumber}`)} className="group relative bg-[#141419] border border-white/10 rounded-xl overflow-hidden hover:border-[#00f0ff]/50 transition-all shadow-xl cursor-pointer">
-                      <div className="absolute top-4 right-4 z-10 flex gap-2">
-                          {jet.status === 'parked' ? (
-                             <span className="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-1 rounded font-mono font-bold">PARKED</span>
-                          ) : (
-                             <span className="text-[10px] bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/30 px-2 py-1 rounded font-mono font-bold animate-pulse">IN TRANSIT</span>
-                          )}
-                      </div>
-
-                      <div className="w-full h-48 bg-gradient-to-b from-white/5 to-transparent flex items-center justify-center p-6 relative">
-                          {jet.layoutImage ? (
-                             <img src={jet.layoutImage} alt={jet.model} onError={(e) => { e.currentTarget.style.display = 'none'; }} className="w-full h-full object-contain filter group-hover:brightness-125 transition-all opacity-80" />
-                          ) : (
-                             <div className="aspect-video w-full bg-white/5 border border-white/10 rounded flex items-center justify-center">
-                               <div className="text-center">
-                                 <Plane className="w-8 h-8 text-white/20 mx-auto mb-2" strokeWidth={1} />
-                                 <span className="text-[8px] font-mono uppercase tracking-widest text-white/30">
-                                   No blueprint available
-                                 </span>
-                               </div>
-                             </div>
-                          )}
-                      </div>
-
-                      <div className="p-6 flex flex-col gap-4">
-                         <div>
-                            <h2 className="text-2xl font-black font-mono tracking-widest text-[#00f0ff]">{jet.tailNumber}</h2>
-                            <h3 className="text-sm text-zinc-400 mt-1">{jet.model}</h3>
-                         </div>
-
-                         <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-                            <div className="bg-black/40 p-2 rounded border border-white/5">
-                               <span className="text-zinc-500 block mb-1">Max Speed</span>
-                               <span className="text-white flex items-center gap-2"><Compass size={12} className="text-amber-400"/> {jet.speedKnots} KT</span>
-                            </div>
-                            <div className="bg-black/40 p-2 rounded border border-white/5">
-                               <span className="text-zinc-500 block mb-1">Burn Rate</span>
-                               <span className="text-white flex items-center gap-2"><Fuel size={12} className="text-amber-400"/> {jet.fuelBurnGPH} GPH</span>
-                            </div>
-                            <div className="bg-black/40 p-2 rounded border border-white/5">
-                               <span className="text-zinc-500 block mb-1">Capacity</span>
-                               <span className="text-white flex items-center gap-2"><LayoutGrid size={12} className="text-amber-400"/> {jet.cabinConfig.length} SLOTS</span>
-                            </div>
-                            <div className="bg-black/40 p-2 rounded border border-white/5">
-                               <span className="text-zinc-500 block mb-1">Location</span>
-                               <span className="text-white flex items-center gap-2"><Route size={12} className="text-amber-400"/> {jet.status === 'parked' ? (jet.currentLocationICAO ?? 'Hangar') : 'In Transit'}</span>
-                            </div>
-                         </div>
-
-                         <div className="mt-2 flex gap-2 w-full">
-                            <button 
-                               onClick={(e) => { e.stopPropagation(); router.push(`/fleet/${jet.tailNumber}`); }}
-                               className="flex-1 bg-white/5 hover:bg-white/10 text-white border border-white/10 py-3 rounded font-bold tracking-widest text-[10px] transition-colors flex justify-center items-center gap-2"
-                            >
-                               VIEW CRAFT
-                            </button>
-                            <button 
-                               disabled={jet.status !== 'parked'}
-                               onClick={(e) => { e.stopPropagation(); router.push(`/flight/new?aircraft=${jet.tailNumber}`); }}
-                               className={`flex-1 ${jet.status === 'parked' ? 'bg-[#00f0ff]/10 hover:bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/30' : 'bg-white/5 text-zinc-500 border border-white/5 cursor-not-allowed opacity-50'} py-3 rounded font-bold tracking-widest text-[10px] transition-colors flex justify-center items-center gap-2`}
-                            >
-                               DISPATCH
-                            </button>
-                         </div>
-                      </div>
-                   </div>
-               ))}
-            </div>
-         )}
+          </div>
+        </Artwork>
+      </button>
+      <div className="px-4 pt-3 pb-4">
+        {snap && flight ? (
+          <div className="mb-3">
+            <div className="flex justify-between text-[12px]"><span className="text-white">{flight.originICAO} <span className="text-[var(--accent)]">→</span> {flight.destinationICAO}</span><span className="text-zinc-400 font-mono">{formatDurationMs(snap.msRemaining)} to go</span></div>
+            <div className="mt-1.5 h-1 rounded-full bg-white/10 overflow-hidden"><div className="h-full bg-[var(--accent)]" style={{ width: `${snap.distanceProgress * 100}%` }} /></div>
+          </div>
+        ) : (
+          <div className="text-[12.5px] text-zinc-400 mb-3 truncate">{jet.status === 'maintenance' ? `Back in ${formatDurationMs((jet.maintenanceUntil || now) - now)}` : `At ${placeLine(here, jet.currentLocationICAO)}`}</div>
+        )}
+        <div className="grid grid-cols-3 gap-2 text-[11px] font-mono text-zinc-400">
+          <div className="flex items-center gap-1"><Gauge size={11} /> {jet.speedKnots} kts</div>
+          <div className="flex items-center gap-1"><Route size={11} /> {jet.rangeNM.toLocaleString()} NM</div>
+          <div className="flex items-center gap-1"><Users size={11} /> {(jet.modules || []).length}/{(jet.cabinConfig || []).length} mods</div>
+        </div>
+        <div className="flex gap-2 mt-3">
+          <Button variant="secondary" size="sm" className="flex-1" onClick={() => router.push(routes.aircraft(jet.tailNumber))}>Hangar</Button>
+          <Button size="sm" className="flex-1" disabled={jet.status !== 'parked' || due} onClick={() => router.push(routes.planner({ aircraft: jet.tailNumber }))}><Navigation2 size={13} /> Dispatch</Button>
+        </div>
       </div>
     </div>
-  )
+  );
+}
+
+function YachtCard({ y }: { y: Yacht }) {
+  const router = useRouter();
+  const now = useSimNow(1000);
+  const voyage = useLiveQuery(() => (y.currentVoyageId ? db.yachtVoyages.get(y.currentVoyageId) : undefined), [y.currentVoyageId]);
+  const snap = voyage && voyage.arrivedAt === null ? getVoyageSnapshot(voyage, now) : null;
+  const marina = getMarina(y.currentMarinaId);
+  return (
+    <div className="rounded-3xl overflow-hidden border border-white/8 bg-white/[0.03] hover:border-[var(--accent)]/40 transition-colors">
+      <button onClick={() => router.push(routes.yacht(y.id))} className="block w-full text-left">
+        <Artwork src={y.imageUrl} alt={y.name} className="aspect-[16/9]">
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#070b12] to-transparent" />
+          <div className="absolute top-3 left-3 flex gap-1.5">{y.status === 'cruising' ? <Chip tone="accent">Under way</Chip> : <Chip><Anchor size={10} /> Moored</Chip>}{y.charterOut?.enabled && y.status === 'docked' && <Chip tone="mint"><BadgeDollarSign size={10} /> Charter</Chip>}</div>
+          <div className="absolute left-4 right-4 bottom-3">
+            <div className="font-serif text-[22px] text-white leading-none">{y.name}</div>
+            <div className="text-[12.5px] text-zinc-300 mt-1">{y.builder} · {y.lengthMeters} m · {y.guests} guests</div>
+          </div>
+        </Artwork>
+      </button>
+      <div className="px-4 pt-3 pb-4">
+        {snap && voyage ? (
+          <div className="mb-3">
+            <div className="flex justify-between text-[12px]"><span className="text-white">{getMarina(voyage.originMarinaId)?.city} <span className="text-[var(--accent)]">→</span> {getMarina(voyage.destinationMarinaId)?.city}</span><span className="text-zinc-400 font-mono">{formatDurationMs(snap.msRemaining)} to go</span></div>
+            <div className="mt-1.5 h-1 rounded-full bg-white/10 overflow-hidden"><div className="h-full bg-[var(--accent)]" style={{ width: `${snap.progress * 100}%` }} /></div>
+          </div>
+        ) : <div className="text-[12.5px] text-zinc-400 mb-3">Moored at {marina?.name || y.currentLocationName}, {marina?.city || ''}</div>}
+        <div className="flex gap-2">
+          <Button variant="secondary" size="sm" className="flex-1" onClick={() => router.push(routes.yacht(y.id))}>Details</Button>
+          <Button size="sm" className="flex-1" disabled={y.status !== 'docked'} onClick={() => router.push(routes.yacht(y.id) + '&plan=1')}><Ship size={13} /> Set sail</Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function FleetPage() {
+  const router = useRouter();
+  const [tab, setTab] = useState<'aircraft' | 'yachts'>('aircraft');
+  const fleet = (useLiveQuery(() => db.aircraft.toArray()) || []) as Aircraft[];
+  const yachts = (useLiveQuery(() => db.yachts.filter(y => !!y.owned).toArray()) || []) as Yacht[];
+
+  return (
+    <PageShell>
+      <PageHeader eyebrow="Fleet" title={tab === 'aircraft' ? 'Your hangar.' : 'Your marina.'} subtitle={tab === 'aircraft' ? `${fleet.length} aircraft · ${fleet.filter(j => j.status === 'in_transit').length} airborne` : `${yachts.length} yacht${yachts.length === 1 ? '' : 's'}`} actions={<Button variant="secondary" size="sm" onClick={() => router.push(tab === 'aircraft' ? '/acquisitions' : '/acquisitions?tab=yachts')}>Acquire</Button>} />
+      <Tabs tabs={[{ id: 'aircraft', label: 'Aircraft', count: fleet.length }, { id: 'yachts', label: 'Yachts', count: yachts.length }]} value={tab} onChange={setTab} />
+      {tab === 'aircraft' && (
+        fleet.length === 0 ? <EmptyState icon={<Plane size={18} />} title="No aircraft yet" body="The market has everything from a Phenom to a BBJ." action={<Button onClick={() => router.push('/acquisitions')}>Browse the market</Button>} /> :
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">{fleet.map(j => <AircraftCard key={j.tailNumber} jet={j} />)}</div>
+      )}
+      {tab === 'yachts' && (
+        yachts.length === 0 ? <EmptyState icon={<Ship size={18} />} title="No yacht in the fleet" body="Seven hulls are for sale, from a 24 m catamaran to a 142 m Lürssen. Every one comes with a crew and a berth in Monaco." action={<Button onClick={() => router.push('/acquisitions?tab=yachts')}>See the brokerage</Button>} /> :
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">{yachts.map(y => <YachtCard key={y.id} y={y} />)}</div>
+      )}
+    </PageShell>
+  );
 }

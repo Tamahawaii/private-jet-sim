@@ -106,6 +106,11 @@ export type Aircraft = {
   layoutImage: string | null;
   cabinConfig: any[];
   scheduledRoutes: any[];
+
+  // v2.1 hangar systems
+  charter?: CharterProgram;
+  maintenanceUntil?: number | null;
+  baseSpecs?: { speedKnots: number; rangeNM: number; fuelBurnGPH: number };
 };
 
 export type AircraftModule = {
@@ -315,7 +320,9 @@ export type TransactionType =
   | "resort_booking" | "resort_experience"
   | "event_ticket"
   | "charter_income" | "investment_yield" | "appearance_fee"
-  | "monthly_burn" | "gift";
+  | "monthly_burn" | "gift"
+  | "yacht_purchase" | "yacht_sale" | "voyage_cost" | "yacht_charter_income" | "yacht_upkeep"
+  | "residence_purchase" | "residence_sale" | "residence_upkeep" | "hosting";
 
 export type Transaction = {
   id: string;
@@ -572,4 +579,142 @@ export interface GiftSent {
   receivedAt: ISODateString | null;
   reactionDM?: string;
   metricsApplied: Partial<RelationshipMetrics>;
+}
+
+// -----------------------------------------------------------------------------
+// HANGAR — modules, charter program, maintenance (v2.1)
+// -----------------------------------------------------------------------------
+
+export interface ModuleCatalogItem {
+  id: string;
+  name: string;
+  category: 'performance' | 'cabin' | 'systems';
+  price: number;
+  monthlyCost: number;
+  description: string;
+  effect: AircraftModule['effect'];
+}
+
+export interface CharterProgram {
+  enabled: boolean;
+  ratePerHour: number;      // gross hourly rate while chartered
+  utilization: number;      // 0..1 share of parked time that gets booked
+  since: number;            // sim ms
+  lastPayoutAt: number;     // sim ms
+  lifetimeIncome: number;
+  lifetimeHours: number;
+}
+
+// -----------------------------------------------------------------------------
+// YACHTS & RESIDENCES (Phase 11, v2.1)
+// -----------------------------------------------------------------------------
+
+export type YachtClass = 'sailing' | 'motor' | 'mega' | 'explorer' | 'catamaran';
+
+export interface Yacht {
+  id: string;
+  name: string;
+  class: YachtClass;
+  builder: string;
+  yearBuilt: number;
+  lengthMeters: number;
+  guests: number;
+  crewSize: number;
+  cruisingSpeedKnots: number;
+  rangeNm: number;
+  flag: string;
+  hailingPort: string;
+  acquisitionPrice: number;
+  annualOperatingCost: number;
+  charterRatePerWeek: number;
+  fuelCostPerNm: number;
+  currentLocationLat: number;
+  currentLocationLng: number;
+  currentLocationName: string;
+  currentMarinaId?: string;
+  status: 'docked' | 'cruising' | 'in-charter' | 'in-maintenance' | 'in-transit';
+  interiorDesigner?: string;
+  signatureFeatures: string[];
+  preferredBy: string[];
+  imageUrl?: string | null;
+  owned?: boolean;
+  acquiredAt?: ISODateString;
+  currentVoyageId?: string | null;
+  charterOut?: { enabled: boolean; lastPayoutAt: number; lifetimeIncome: number };
+  lastCostsAppliedAt?: number;
+}
+
+export interface Marina {
+  id: string;
+  name: string;
+  city: string;
+  country: string;
+  basin: string;
+  lat: number;
+  lng: number;
+  nearestAirportICAO: string;
+  tier: 1 | 2 | 3 | 4 | 5;
+  vibe: string;
+}
+
+export interface Voyage {
+  id: string;
+  yachtId: string;
+  originMarinaId: string;
+  destinationMarinaId: string;
+  departedAt: number;
+  estimatedArrivalAt: number;
+  arrivedAt: number | null;
+  distanceNM: number;
+  costUSD: number;
+  waypoints: Coordinates[];
+  guests: PersonaID[];
+  momentsFired?: string[];
+  recap?: FlightRecap;
+}
+
+export type ResidenceType = 'penthouse' | 'townhouse' | 'estate' | 'villa' | 'chalet' | 'island' | 'pied-a-terre' | 'compound';
+
+export interface Residence {
+  id: string;
+  name: string;
+  type: ResidenceType;
+  city: string;
+  country: string;
+  neighborhood?: string;
+  coordinates: { lat: number; lng: number };
+  nearestAirportICAO: string;
+  acquisitionPrice: number;
+  currentValuation: number;
+  annualPropertyTax: number;
+  annualMaintenanceCost: number;
+  annualInsurance: number;
+  squareMeters: number;
+  bedrooms: number;
+  bathrooms: number;
+  features: string[];
+  hasFullTimeStaff: boolean;
+  staffSize: number;
+  caretakerName?: string;
+  isPrimary: boolean;
+  currentlyOccupied: boolean;
+  lastVisitedAt?: ISODateString;
+  interiorDesigner?: string;
+  canHostEvents: boolean;
+  maxEventGuests: number;
+  imageUrl?: string | null;
+  owned?: boolean;
+  acquiredAt?: ISODateString;
+  lastCostsAppliedAt?: number;
+  hostedCount?: number;
+}
+
+export interface HostedGathering {
+  id: string;
+  residenceId: string;
+  kind: 'dinner' | 'weekend' | 'party';
+  at: ISODateString;
+  guestIds: PersonaID[];
+  cost: number;
+  prestigeGained: number;
 }

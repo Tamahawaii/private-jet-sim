@@ -12,6 +12,10 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.30.1",
+    "@dicebear/adventurer": "^9.4.2",
+    "@dicebear/core": "^9.4.3",
+    "@dicebear/lorelei": "^9.4.2",
+    "@dicebear/notionists": "^9.4.2",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",

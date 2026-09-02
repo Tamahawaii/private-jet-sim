@@ -1,17 +1,19 @@
 'use client';
+import { routes } from '../../../lib/routes';
 
 import React, { useMemo } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { AnimatePresence, motion } from 'framer-motion';
-import { X, Navigation2, Plane, MessageCircle, FileText, MapPin, CalendarDays, Crosshair } from 'lucide-react';
+import { X, Navigation2, Plane, MessageCircle, FileText, MapPin, CalendarDays, Crosshair, Ship, Anchor, Home, Sparkles } from 'lucide-react';
 import { db } from '../../../lib/db';
 import { useStore } from '../../lib/store';
 import { Aircraft, Persona } from '../../../types';
 import { getAirport, placeLine, shortCity, countryName } from '../../../lib/flight/airports';
 import { calculateDistanceNM } from '../../lib/math';
 import { getEventNextOccurrence } from '../../lib/events';
-import { getFlightSnapshot, formatDurationMs } from '../../../lib/flight/engine';
-import { PersonaAvatar } from '../PersonaAvatar';
+import { getFlightSnapshot, getVoyageSnapshot, formatDurationMs } from '../../../lib/flight/engine';
+import { getMarina } from '../../../lib/estate';
+import { PersonaAvatar, personaRole } from '../PersonaAvatar';
 
 interface Props {
   fleet: Aircraft[];
@@ -50,6 +52,11 @@ export default function PeekCard({ fleet, onFlyTo, onOpen }: Props) {
   const personas = useLiveQuery(() => (peek?.kind === 'event' ? db.personas.toArray() : Promise.resolve([] as Persona[])), [peek?.kind]) || [];
   const aircraft = peek?.kind === 'aircraft' ? fleet.find(a => a.id === peek.id || a.tailNumber === peek.id) : undefined;
   const flight = useLiveQuery(() => (aircraft?.currentFlightID ? db.flights.get(aircraft.currentFlightID) : undefined), [aircraft?.currentFlightID]);
+  const yacht = useLiveQuery(() => (peek?.kind === 'yacht' ? db.yachts.get(peek.id) : undefined), [peek?.kind, peek?.id]);
+  const voyage = useLiveQuery(() => (yacht?.currentVoyageId ? db.yachtVoyages.get(yacht.currentVoyageId) : undefined), [yacht?.currentVoyageId]);
+  const marina = useLiveQuery(() => (peek?.kind === 'marina' ? db.marinas.get(peek.id) : undefined), [peek?.kind, peek?.id]);
+  const residence = useLiveQuery(() => (peek?.kind === 'residence' ? db.residences.get(peek.id) : undefined), [peek?.kind, peek?.id]);
+  const dockedHere = useLiveQuery(() => (peek?.kind === 'marina' ? db.yachts.filter(y => !!y.owned && y.currentMarinaId === peek.id && y.status === 'docked').toArray() : Promise.resolve([] as import('../../../types').Yacht[])), [peek?.kind, peek?.id]) || [];
   const simNow = useStore.getState().getNow();
 
   const body = useMemo(() => {
@@ -67,8 +74,8 @@ export default function PeekCard({ fleet, onFlyTo, onOpen }: Props) {
         line: inFlight && snap ? `${snap.phaseLabel} · ${shortCity(dest, flight!.destinationICAO)} in ${formatDurationMs(snap.msRemaining)}` : `At ${placeLine(here, aircraft.currentLocationICAO)}`,
         coords: inFlight && snap ? snap.position : (aircraft.currentLocation ? [aircraft.currentLocation.lng, aircraft.currentLocation.lat] as [number, number] : null),
         actions: inFlight
-          ? [{ label: 'Watch flight', href: `/flight/${aircraft.currentFlightID}`, primary: true, icon: <Plane size={14} /> }, { label: 'Craft', href: `/fleet/${aircraft.tailNumber}`, icon: <FileText size={14} /> }]
-          : [{ label: 'Dispatch', href: `/flight/new?aircraft=${aircraft.tailNumber}`, primary: true, icon: <Navigation2 size={14} /> }, { label: 'Craft', href: `/fleet/${aircraft.tailNumber}`, icon: <FileText size={14} /> }],
+          ? [{ label: 'Watch flight', href: routes.flight(aircraft.currentFlightID!), primary: true, icon: <Plane size={14} /> }, { label: 'Craft', href: routes.aircraft(aircraft.tailNumber), icon: <FileText size={14} /> }]
+          : [{ label: 'Dispatch', href: `/flight/new?aircraft=${aircraft.tailNumber}`, primary: true, icon: <Navigation2 size={14} /> }, { label: 'Craft', href: routes.aircraft(aircraft.tailNumber), icon: <FileText size={14} /> }],
         avatars: null,
       };
     }
@@ -87,7 +94,7 @@ export default function PeekCard({ fleet, onFlyTo, onOpen }: Props) {
         coords: a ? [a.lng, a.lat] as [number, number] : null,
         actions: [
           { label: 'Fly there', href: `/flight/new?${reach ? `aircraft=${reach.jet.tailNumber}&` : ''}destination=${evt.locationICAO}&purpose=event:${evt.id}`, primary: true, icon: <Navigation2 size={14} />, disabled: !!reach && !reach.inRange },
-          { label: 'Dossier', href: `/events/${evt.id}`, icon: <CalendarDays size={14} /> },
+          { label: 'Dossier', href: routes.event(evt.id), icon: <CalendarDays size={14} /> },
         ],
         avatars: attendees.slice(0, 4) as NonNullable<typeof attendees[number]>[],
       };
@@ -104,7 +111,7 @@ export default function PeekCard({ fleet, onFlyTo, onOpen }: Props) {
         coords: [resort.lng, resort.lat] as [number, number],
         actions: [
           { label: 'Fly there', href: `/flight/new?${reach ? `aircraft=${reach.jet.tailNumber}&` : ''}destination=${resort.locationICAO}&purpose=resort:${resort.id}`, primary: true, icon: <Navigation2 size={14} />, disabled: !!reach && !reach.inRange },
-          { label: 'Details', href: `/resorts/${resort.id}`, icon: <FileText size={14} /> },
+          { label: 'Details', href: routes.resort(resort.id), icon: <FileText size={14} /> },
         ],
         avatars: null,
       };
@@ -112,18 +119,68 @@ export default function PeekCard({ fleet, onFlyTo, onOpen }: Props) {
     if (peek.kind === 'persona' && persona) {
       const a = getAirport(personaState?.currentLocationICAO);
       return {
-        eyebrow: `FRIEND · ${persona.archetype.replace(/_/g, ' ')}`,
+        eyebrow: `FRIEND · ${personaRole(persona)}`,
         title: persona.displayName,
         titleMono: false,
         subtitle: a ? `In ${placeLine(a)}` : (personaState?.currentLocationICAO || 'Location unknown'),
         line: personaState?.mood ? `Mood: ${personaState.mood}` : '',
         coords: personaState?.currentCoords ? [personaState.currentCoords.lng, personaState.currentCoords.lat] as [number, number] : null,
         actions: [
-          { label: 'Message', href: `/social/dms/${persona.id}`, primary: true, icon: <MessageCircle size={14} /> },
-          { label: 'Dossier', href: `/social/${persona.id}`, icon: <FileText size={14} /> },
+          { label: 'Message', href: routes.dm(persona.id), primary: true, icon: <MessageCircle size={14} /> },
+          { label: 'Dossier', href: routes.persona(persona.id), icon: <FileText size={14} /> },
         ],
         avatars: null,
         personaAvatar: persona,
+      };
+    }
+    if (peek.kind === 'yacht' && yacht) {
+      const m = getMarina(yacht.currentMarinaId);
+      const vs = voyage && voyage.arrivedAt === null ? getVoyageSnapshot(voyage, simNow) : null;
+      return {
+        eyebrow: yacht.status === 'cruising' ? 'YOUR YACHT · UNDER WAY' : 'YOUR YACHT · MOORED',
+        title: yacht.name,
+        titleMono: false,
+        subtitle: `${yacht.builder} · ${yacht.lengthMeters} m · ${yacht.guests} guests`,
+        line: vs && voyage ? `${vs.phaseLabel} · ${getMarina(voyage.destinationMarinaId)?.city} in ${formatDurationMs(vs.msRemaining)}` : `At ${m?.name || yacht.currentLocationName}${m ? `, ${m.city}` : ''}`,
+        coords: vs ? vs.position : [yacht.currentLocationLng, yacht.currentLocationLat] as [number, number],
+        actions: yacht.status === 'docked'
+          ? [{ label: 'Set sail', href: routes.yacht(yacht.id) + '&plan=1', primary: true, icon: <Ship size={14} /> }, { label: 'Details', href: routes.yacht(yacht.id), icon: <FileText size={14} /> }]
+          : [{ label: 'Details', href: routes.yacht(yacht.id), primary: true, icon: <FileText size={14} /> }],
+        avatars: null,
+      };
+    }
+    if (peek.kind === 'marina' && marina) {
+      const reach = pickJet(fleet, selectedAircraftId, marina.lat, marina.lng);
+      return {
+        eyebrow: `MARINA · ${marina.basin.replace('-', ' ')} · TIER ${marina.tier}`,
+        title: marina.name,
+        titleMono: false,
+        subtitle: `${marina.city}, ${marina.country}${dockedHere.length ? ` · ${dockedHere.map(y => y.name).join(', ')} moored here` : ''}`,
+        line: reach ? `${Math.round(reach.distance).toLocaleString()} NM from ${reach.jet.tailNumber} · ${reach.inRange ? 'in range' : 'beyond range'}` : marina.vibe,
+        lineTone: reach ? (reach.inRange ? 'ok' : 'warn') : 'muted',
+        coords: [marina.lng, marina.lat] as [number, number],
+        actions: [
+          { label: 'Fly there', href: routes.planner({ aircraft: reach?.jet.tailNumber, destination: marina.nearestAirportICAO }), primary: true, icon: <Navigation2 size={14} />, disabled: !!reach && !reach.inRange },
+          ...(dockedHere.length ? [{ label: 'Set sail', href: routes.yacht(dockedHere[0].id) + '&plan=1', icon: <Anchor size={14} /> }] : []),
+        ],
+        avatars: null,
+      };
+    }
+    if (peek.kind === 'residence' && residence) {
+      const a = getAirport(residence.nearestAirportICAO);
+      const reach = a ? pickJet(fleet, selectedAircraftId, a.lat, a.lng) : null;
+      return {
+        eyebrow: `YOUR HOME · ${residence.type.replace('-', ' ')}${residence.isPrimary ? ' · HOME BASE' : ''}`,
+        title: residence.name,
+        titleMono: false,
+        subtitle: `${residence.city}, ${residence.country}`,
+        line: reach ? `${Math.round(reach.distance).toLocaleString()} NM from ${reach.jet.tailNumber}` : (residence.caretakerName ? `${residence.caretakerName} keeps the house` : ''),
+        coords: [residence.coordinates.lng, residence.coordinates.lat] as [number, number],
+        actions: [
+          { label: 'Fly home', href: routes.planner({ aircraft: reach?.jet.tailNumber, destination: residence.nearestAirportICAO }), primary: true, icon: <Home size={14} /> },
+          { label: 'Host', href: routes.residence(residence.id), icon: <Sparkles size={14} /> },
+        ],
+        avatars: null,
       };
     }
     if (peek.kind === 'airport') {
@@ -145,7 +202,7 @@ export default function PeekCard({ fleet, onFlyTo, onOpen }: Props) {
       };
     }
     return null;
-  }, [peek, aircraft, flight, event, resort, persona, personaState, personas, fleet, selectedAircraftId, simNow]);
+  }, [peek, aircraft, flight, event, resort, persona, personaState, personas, fleet, selectedAircraftId, simNow, yacht, voyage, marina, residence, dockedHere]);
 
   return (
     <AnimatePresence>

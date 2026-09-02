@@ -14,6 +14,9 @@ export const SRC = {
   events: 'js-events',
   resorts: 'js-resorts',
   planes: 'js-planes',
+  yachts: 'js-yachts',
+  marinas: 'js-marinas',
+  homes: 'js-homes',
   radar: 'js-radar',
   passport: 'js-passport',
 } as const;
@@ -25,11 +28,14 @@ export const LYR = {
   events: 'js-events',
   resorts: 'js-resorts',
   airports: 'js-airports',
+  yachts: 'js-yachts',
+  marinas: 'js-marinas',
+  homes: 'js-homes',
   radar: 'js-radar',
   labels: 'js-labels-tiles',
 } as const;
 
-export const CLICKABLE_LAYERS = [LYR.planesAir, LYR.planesParked, LYR.events, LYR.resorts, LYR.airports];
+export const CLICKABLE_LAYERS = [LYR.planesAir, LYR.planesParked, LYR.yachts, LYR.homes, LYR.events, LYR.resorts, LYR.marinas, LYR.airports];
 
 const EMPTY_FC = { type: 'FeatureCollection', features: [] } as const;
 
@@ -87,6 +93,9 @@ export function buildStyle(styleId: MapStyleId, projection: MapProjection): Styl
     [SRC.events]: { type: 'geojson', data: EMPTY_FC as never },
     [SRC.resorts]: { type: 'geojson', data: EMPTY_FC as never },
     [SRC.planes]: { type: 'geojson', data: EMPTY_FC as never },
+    [SRC.yachts]: { type: 'geojson', data: EMPTY_FC as never },
+    [SRC.marinas]: { type: 'geojson', data: EMPTY_FC as never },
+    [SRC.homes]: { type: 'geojson', data: EMPTY_FC as never },
     [SRC.passport]: { type: 'geojson', data: EMPTY_FC as never },
   };
 
@@ -144,6 +153,16 @@ export function buildStyle(styleId: MapStyleId, projection: MapProjection): Styl
     { id: LYR.resorts, type: 'circle', source: SRC.resorts, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 3.2, 6, 5.5], 'circle-color': '#f5a7a7', 'circle-opacity': ['case', ['boolean', ['get', 'inRange'], true], 0.95, 0.3], 'circle-stroke-color': '#0a0f18', 'circle-stroke-width': 1.2 } },
     { id: 'js-events-halo', type: 'circle', source: SRC.events, paint: { 'circle-radius': ['case', ['boolean', ['get', 'isProximate'], false], 16, 11], 'circle-color': '#d4af37', 'circle-opacity': ['case', ['boolean', ['get', 'inRange'], true], ['case', ['boolean', ['get', 'isProximate'], false], 0.3, 0.14], 0.04], 'circle-blur': 0.7 } },
     { id: LYR.events, type: 'circle', source: SRC.events, paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 3.6, 6, 6], 'circle-color': '#d4af37', 'circle-opacity': ['case', ['boolean', ['get', 'inRange'], true], 1, 0.3], 'circle-stroke-color': '#0a0f18', 'circle-stroke-width': 1.2 } },
+    { id: LYR.marinas, type: 'symbol', source: SRC.marinas, minzoom: 2.4,
+      layout: { 'icon-image': 'anchor', 'icon-size': ['interpolate', ['linear'], ['zoom'], 2.4, 0.22, 7, 0.4], 'icon-allow-overlap': true, 'icon-ignore-placement': true },
+      paint: { 'icon-opacity': ['case', ['boolean', ['get', 'inRange'], true], 0.85, 0.3] } },
+    { id: LYR.homes, type: 'symbol', source: SRC.homes,
+      layout: { 'icon-image': 'home', 'icon-size': ['interpolate', ['linear'], ['zoom'], 1, 0.34, 7, 0.55], 'icon-allow-overlap': true, 'icon-ignore-placement': true },
+      paint: { 'icon-opacity': 1 } },
+    { id: 'js-yachts-halo', type: 'circle', source: SRC.yachts, filter: ['==', ['get', 'selected'], true], paint: { 'circle-radius': 20, 'circle-color': '#22d3ee', 'circle-opacity': 0.22, 'circle-blur': 0.8 } },
+    { id: LYR.yachts, type: 'symbol', source: SRC.yachts,
+      layout: { 'icon-image': ['case', ['==', ['get', 'selected'], true], 'yacht-selected', ['==', ['get', 'inFlight'], true], 'yacht-air', 'yacht-parked'], 'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.42, 6, 0.7], 'icon-rotate': ['get', 'heading'], 'icon-rotation-alignment': 'map', 'icon-allow-overlap': true, 'icon-ignore-placement': true },
+      paint: { 'icon-opacity': 1 } },
     { id: LYR.planesHalo, type: 'circle', source: SRC.planes, filter: ['==', ['get', 'selected'], true], paint: { 'circle-radius': 22, 'circle-color': '#22d3ee', 'circle-opacity': 0.22, 'circle-blur': 0.8 } },
     { id: LYR.planesParked, type: 'symbol', source: SRC.planes, filter: ['==', ['get', 'inFlight'], false],
       layout: { 'icon-image': ['case', ['==', ['get', 'selected'], true], 'jet-selected', 'jet-parked'], 'icon-size': ['interpolate', ['linear'], ['zoom'], 0, 0.42, 6, 0.6], 'icon-rotate': -20, 'icon-rotation-alignment': 'map', 'icon-allow-overlap': true, 'icon-ignore-placement': true },

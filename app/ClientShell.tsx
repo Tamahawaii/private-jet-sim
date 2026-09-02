@@ -10,6 +10,7 @@ import { usePathname } from 'next/navigation';
 import { bootstrapWorld } from '../lib/bootstrap';
 import { persistClock } from './lib/store';
 import FlightMomentsRunner from './components/FlightMomentsRunner';
+import WorldRunner from './components/WorldRunner';
 import { useIsDesktop } from './lib/useIsDesktop';
 
 const MapEngine = dynamic(() => import('./components/map/MapEngine'), {
@@ -66,6 +67,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
         <TopNav />
         <ToastContainer />
         <FlightMomentsRunner />
+        <WorldRunner />
         {/* GLOBE LAYER (ALWAYS MOUNTED, hidden off-map to keep tiles warm) */}
         <div className={`absolute inset-0 transition-opacity duration-300 ${isMapActive ? 'opacity-100 z-0 pointer-events-auto' : 'opacity-0 -z-10 pointer-events-none'}`}>
           {mapMounted && (

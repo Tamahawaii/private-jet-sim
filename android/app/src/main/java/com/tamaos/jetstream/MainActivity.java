@@ -45,9 +45,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONObject;
 
 /**
  * JETSTREAM — native Android shell around the live web game.
@@ -60,7 +71,19 @@ import java.io.OutputStream;
 public class MainActivity extends Activity {
     private static final String TAG = "Jetstream";
     private static final int REQ_FILE_CHOOSER = 4101;
-    private static final String VERSION = "2.0.0";
+    private static final String VERSION = "2.2.0";
+    /** Virtual https origin the bundled game is served from (assets/www). */
+    private static final String APP_ORIGIN = "https://app.jetstream";
+    private static final String APP_HOST = "app.jetstream";
+    private static final Map<String, String> MIME = new HashMap<String, String>();
+    static {
+        MIME.put("html", "text/html"); MIME.put("js", "application/javascript"); MIME.put("mjs", "application/javascript");
+        MIME.put("css", "text/css"); MIME.put("json", "application/json"); MIME.put("txt", "text/plain");
+        MIME.put("svg", "image/svg+xml"); MIME.put("png", "image/png"); MIME.put("jpg", "image/jpeg"); MIME.put("jpeg", "image/jpeg");
+        MIME.put("webp", "image/webp"); MIME.put("gif", "image/gif"); MIME.put("ico", "image/x-icon");
+        MIME.put("woff2", "font/woff2"); MIME.put("woff", "font/woff"); MIME.put("ttf", "font/ttf");
+        MIME.put("webmanifest", "application/manifest+json"); MIME.put("wasm", "application/wasm"); MIME.put("map", "application/json");
+    }
 
     private WebView web;
     private FrameLayout root;
@@ -135,6 +158,13 @@ public class MainActivity extends Activity {
         CookieManager.getInstance().setAcceptThirdPartyCookies(web, false);
 
         web.setWebViewClient(new WebViewClient() {
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                Uri u = request.getUrl();
+                if (u != null && APP_HOST.equalsIgnoreCase(u.getHost())) return serveAsset(u.getPath());
+                return null;
+            }
+
             // API 24+ overload (compiled against API 23 stubs, so no @Override; dispatched by signature at runtime)
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 return handleUrl(request.getUrl());
@@ -198,12 +228,22 @@ public class MainActivity extends Activity {
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams params) {
                 if (pendingFileChooser != null) pendingFileChooser.onReceiveValue(null);
                 pendingFileChooser = filePathCallback;
+                // Honour the page's accept= filter: photos for the portrait picker, JSON for save imports.
+                boolean wantsImage = false;
+                String[] accept = params != null ? params.getAcceptTypes() : null;
+                if (accept != null) {
+                    for (String a : accept) { if (a != null && a.startsWith("image")) wantsImage = true; }
+                }
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"application/json", "text/plain", "application/octet-stream"});
+                if (wantsImage) {
+                    intent.setType("image/*");
+                } else {
+                    intent.setType("*/*");
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"application/json", "text/plain", "application/octet-stream"});
+                }
                 try {
-                    startActivityForResult(Intent.createChooser(intent, "Import save file"), REQ_FILE_CHOOSER);
+                    startActivityForResult(Intent.createChooser(intent, wantsImage ? "Choose a photo" : "Import save file"), REQ_FILE_CHOOSER);
                 } catch (ActivityNotFoundException e) {
                     pendingFileChooser = null;
                     Toast.makeText(MainActivity.this, "No file picker available", Toast.LENGTH_SHORT).show();
@@ -247,14 +287,104 @@ public class MainActivity extends Activity {
     private boolean isGameUrl(String url) {
         if (url == null) return false;
         Uri u = Uri.parse(url);
-        return u.getHost() != null && u.getHost().equalsIgnoreCase(appHost);
+        String h = u.getHost();
+        return h != null && (h.equalsIgnoreCase(appHost) || h.equalsIgnoreCase(APP_HOST));
+    }
+
+    /**
+     * Serves the bundled static export from assets/www for the virtual origin.
+     * Static-export paths: /fleet -> fleet.html, /fleet/detail?tail=X -> fleet/detail.html,
+     * RSC payloads -> *.txt (served as text/plain, which Next accepts in export mode).
+     */
+    private WebResourceResponse serveAsset(String path) {
+        if (path == null || path.isEmpty()) path = "/";
+        String p = path;
+        try { p = java.net.URLDecoder.decode(p, "UTF-8"); } catch (Exception ignored) { }
+        if (p.endsWith("/")) p = p + "index.html";
+        String[] candidates = new String[]{ p, p + ".html", p + "/index.html" };
+        for (String c : candidates) {
+            String assetPath = "www" + c;
+            try {
+                InputStream in = getAssets().open(assetPath);
+                return new WebResourceResponse(mimeFor(assetPath), "utf-8", 200, "OK", headers(), in);
+            } catch (IOException ignored) { }
+        }
+        // Unknown path (deep link into a screen we don't have): fall back to the shell
+        try {
+            return new WebResourceResponse("text/html", "utf-8", 200, "OK", headers(), getAssets().open("www/404.html"));
+        } catch (IOException e) {
+            return new WebResourceResponse("text/plain", "utf-8", 404, "Not Found", headers(), new ByteArrayInputStream("missing".getBytes(StandardCharsets.UTF_8)));
+        }
+    }
+
+    private Map<String, String> headers() {
+        Map<String, String> h = new HashMap<String, String>();
+        h.put("Access-Control-Allow-Origin", "*");
+        h.put("Cache-Control", "no-cache");
+        return h;
+    }
+
+    private String mimeFor(String path) {
+        int q = path.lastIndexOf('?'); if (q >= 0) path = path.substring(0, q);
+        int dot = path.lastIndexOf('.');
+        String ext = dot >= 0 ? path.substring(dot + 1).toLowerCase() : "";
+        String m = MIME.get(ext);
+        return m != null ? m : "application/octet-stream";
+    }
+
+    /** Runs an API call against the live deployment on behalf of the bundled page (no CORS involved). */
+    private void nativeRequest(final String id, final String method, final String path, final String body) {
+        new Thread(new Runnable() {
+            @Override public void run() {
+                int status = 0; String text = "";
+                try {
+                    URL url = new URL(appUrl.replaceAll("/+$", "") + (path.startsWith("/") ? path : "/" + path));
+                    HttpURLConnection c = (HttpURLConnection) url.openConnection();
+                    c.setRequestMethod(method == null ? "GET" : method.toUpperCase());
+                    c.setConnectTimeout(15000);
+                    c.setReadTimeout(60000);
+                    c.setRequestProperty("Accept", "application/json");
+                    c.setRequestProperty("User-Agent", "JetstreamApp/" + VERSION);
+                    if (body != null && !"GET".equalsIgnoreCase(method)) {
+                        c.setDoOutput(true);
+                        c.setRequestProperty("Content-Type", "application/json");
+                        OutputStream os = c.getOutputStream();
+                        os.write(body.getBytes(StandardCharsets.UTF_8));
+                        os.close();
+                    }
+                    status = c.getResponseCode();
+                    InputStream in = status >= 400 ? c.getErrorStream() : c.getInputStream();
+                    text = in == null ? "" : readAll(in);
+                    c.disconnect();
+                } catch (Exception e) {
+                    Log.w(TAG, "native request failed: " + e);
+                    status = 0;
+                    text = "{\"error\":" + JSONObject.quote(String.valueOf(e.getMessage())) + "}";
+                }
+                final int fStatus = status; final String fText = text;
+                ui.post(new Runnable() {
+                    @Override public void run() {
+                        if (web == null) return;
+                        web.evaluateJavascript("window.__jsNativeResolve && window.__jsNativeResolve(" + JSONObject.quote(id) + "," + fStatus + "," + JSONObject.quote(fText) + ");", null);
+                    }
+                });
+            }
+        }, "jetstream-api").start();
+    }
+
+    private static String readAll(InputStream in) throws IOException {
+        ByteArrayOutputStream bo = new ByteArrayOutputStream();
+        byte[] buf = new byte[8192]; int n;
+        while ((n = in.read(buf)) > 0) bo.write(buf, 0, n);
+        in.close();
+        return new String(bo.toByteArray(), StandardCharsets.UTF_8);
     }
 
     /** Keep the game in-app; hand everything else (mailto, external sites) to the system. */
     private boolean handleUrl(Uri uri) {
         if (uri == null) return false;
         String scheme = uri.getScheme();
-        if ("https".equals(scheme) && appHost.equalsIgnoreCase(uri.getHost())) return false;
+        if ("https".equals(scheme) && (APP_HOST.equalsIgnoreCase(uri.getHost()) || appHost.equalsIgnoreCase(uri.getHost()))) return false;
         if ("http".equals(scheme) && appHost.equalsIgnoreCase(uri.getHost())) {
             web.loadUrl(uri.buildUpon().scheme("https").build().toString());
             return true;
@@ -273,11 +403,8 @@ public class MainActivity extends Activity {
 
     private void loadGame() {
         showingOffline = false;
-        if (!isOnline()) {
-            showOffline("No connection");
-            return;
-        }
-        web.loadUrl(appUrl);
+        // The game ships inside the APK; only map tiles and the AI need a connection.
+        web.loadUrl(APP_ORIGIN + "/");
     }
 
     private boolean isOnline() {
@@ -481,6 +608,11 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void saveFile(final String name, final String base64, final String mime) {
             ui.post(new Runnable() { @Override public void run() { saveAndShare(name, base64, mime); } });
+        }
+
+        @JavascriptInterface
+        public void request(final String id, final String method, final String path, final String body) {
+            nativeRequest(id, method, path, body);
         }
 
         @JavascriptInterface

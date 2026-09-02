@@ -1,4 +1,6 @@
 'use client';
+import { apiFetch } from '../../../../lib/api';
+import { routes } from '../../../../lib/routes';
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -41,10 +43,7 @@ export default function CustomPersonaNew() {
       if (!seed.displayName || !seed.region || !seed.archetypeHint) return;
       setLoading(true);
       try {
-         const res = await fetch('/api/personas/custom', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(seed)
+         const res = await apiFetch('/api/personas/custom', { method: 'POST', body: JSON.stringify(seed)
          });
          const data = await res.json();
          if (data.error) throw new Error(data.error);
@@ -74,6 +73,11 @@ export default function CustomPersonaNew() {
    };
 
    const savePersona = async (personaObj: any) => {
+      // Illustrated portrait, generated on-device (deterministic from the persona id)
+      try {
+         const { portraitDataUri } = await import('../../../../lib/avatars/generate');
+         personaObj.imageUrl = portraitDataUri(personaObj.id, { gender: personaObj.gender, age: personaObj.age });
+      } catch (e) { console.warn('portrait generation failed', e); }
       await db.personas.put(personaObj);
       await db.personaState.put({
          personaId: personaObj.id,
@@ -87,7 +91,7 @@ export default function CustomPersonaNew() {
          rivalryTargets: []
       });
       await seedPlayerRelationship(personaObj.id);
-      router.push(`/social/${personaObj.id}`);
+      router.push(routes.persona(personaObj.id));
    };
 
    const handleSaveAdvanced = async () => {

@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '../../../lib/api';
 
 import React, { useState } from 'react';
 import { db } from '../../../lib/db';
@@ -101,10 +102,7 @@ export function GiftModal({ personaId, personaName, onClose, onGiftSent }: { per
               personalNote
            };
 
-           const res = await fetch('/api/ai/haiku', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
+           const res = await apiFetch('/api/ai/haiku', { method: 'POST', body: JSON.stringify({
                  personaId,
                  playerContext: { displayName: "Player", netWorth: pData?.netWorth },
                  personaState: state,

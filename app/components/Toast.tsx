@@ -5,6 +5,7 @@ import { useStore } from '../lib/store';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, MessageCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { resolveLegacyLink } from '../../lib/routes';
 
 export function ToastContainer() {
     const toasts = useStore(state => state.toasts);
@@ -24,7 +25,7 @@ export function ToastContainer() {
                         whileHover={{ scale: 1.02 }}
                         className="bg-[#1a1a24] border border-[#f5a7a7]/30 shadow-2xl rounded-xl p-4 w-full md:w-80 pointer-events-auto flex items-start gap-4 cursor-pointer"
                         onClick={() => {
-                            if (toast.link) router.push(toast.link);
+                            if (toast.link) router.push(resolveLegacyLink(toast.link));
                             removeToast(toast.id);
                         }}
                     >

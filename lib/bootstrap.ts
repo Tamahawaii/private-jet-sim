@@ -11,6 +11,8 @@ import petsData from '../data/pets.json';
 import giftsData from '../data/gifts.json';
 import relationshipsData from '../data/persona-relationships.json';
 import { seedPlayerRelationship } from './relationships/helpers';
+import { seedEstate, resolveVoyages, settleUpkeep, settleYachtCharter } from './estate';
+import { settleCharter, settleMaintenance, baseSpecsFor } from './hangar';
 
 const CITY_AIRPORTS: [RegExp, string][] = [
   [/houston/i, 'KHOU'], [/aspen/i, 'KASE'], [/san francisco|bay area/i, 'KSFO'], [/kyoto|tokyo/i, 'RJTT'], [/milan/i, 'LIML'],
@@ -153,6 +155,19 @@ export async function bootstrapWorld() {
      }
   }
 
+  // 3.5 Hangar systems: record base specs once, settle charter income + maintenance windows
+  for (const ac of existingFleet) {
+     if (!ac.baseSpecs) await db.aircraft.update(ac.tailNumber, { baseSpecs: baseSpecsFor(ac) });
+  }
+  await settleMaintenance().catch(console.warn);
+  await settleCharter().catch(console.warn);
+
+  // 3.6 Yachts, marinas, residences
+  await seedEstate().catch(console.warn);
+  await resolveVoyages().catch(console.warn);
+  await settleYachtCharter().catch(console.warn);
+  await settleUpkeep().catch(console.warn);
+
   // 4. Resolve any offline flight arrivals that occurred while the app was closed
   const { resolveArrivals } = require('./simulation');
   await resolveArrivals();
@@ -216,6 +231,20 @@ export async function bootstrapWorld() {
        console.error("Failed to seed personas:", e);
      }
   }
+
+  // 6.5 Refresh artwork on records that predate the visual pass (non-destructive)
+  try {
+     const canonicalEvents = new Map((eventsData as any[]).map(e => [e.id, e.imageUrl]));
+     for (const e of await db.events.toArray()) {
+        const img = canonicalEvents.get(e.id);
+        if (img && e.imageUrl !== img) await db.events.update(e.id, { imageUrl: img });
+     }
+     const canonicalResorts = new Map((resortsData as any[]).map(r => [r.id, r.imageUrl]));
+     for (const r of await db.resorts.toArray()) {
+        const img = canonicalResorts.get(r.id);
+        if (img && r.imageUrl !== img) await db.resorts.update(r.id, { imageUrl: img });
+     }
+  } catch (e) { console.warn('artwork refresh skipped', e); }
 
   // 7. Init Resorts (Phase 5)
   const resortCount = await db.resorts.count();

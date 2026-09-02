@@ -45,3 +45,9 @@ next-env.d.ts
 android/build/
 android/out/
 android/keystore/
+
+# android shell build outputs (regenerate with scripts/build-android-web.sh + android/build.sh)
+/.next-android/
+/android/app/src/main/assets/www/
+/android/build/
+/android/out/

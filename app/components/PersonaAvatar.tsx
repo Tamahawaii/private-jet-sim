@@ -2,34 +2,46 @@ import React from 'react';
 import { Persona } from '../../types';
 
 interface Props {
-    persona: Persona;
+    persona: Pick<Persona, 'id' | 'displayName' | 'imageUrl' | 'monogramColors'> & Partial<Persona>;
     size?: number;
     className?: string;
+    /** Rounded square instead of a circle (cards, headers). */
+    shape?: 'circle' | 'squircle';
 }
 
-export function PersonaAvatar({ persona, size = 64, className = '' }: Props) {
-    // Generate stable gradient based on persona id hash
+/** Gradient behind the portrait, derived from the persona's monogram colours (or a stable hash). */
+export function personaGradient(p: { id: string; monogramColors?: [string, string] }): string {
+    if (p.monogramColors?.length === 2) return `linear-gradient(135deg, ${p.monogramColors[0]} 0%, ${p.monogramColors[1]} 100%)`;
     let hash = 0;
-    for (let i = 0; i < persona.id.length; i++) {
-        hash = persona.id.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const c1 = `#${Math.abs(hash).toString(16).padEnd(6, '0').slice(0, 6)}`;
-    const c2 = `#${Math.abs(hash * 31).toString(16).padEnd(6, '0').slice(0, 6)}`;
-    
+    for (let i = 0; i < p.id.length; i++) hash = p.id.charCodeAt(i) + ((hash << 5) - hash);
+    const h1 = Math.abs(hash) % 360, h2 = (h1 + 40) % 360;
+    return `linear-gradient(135deg, hsl(${h1} 45% 38%) 0%, hsl(${h2} 50% 24%) 100%)`;
+}
+
+/** One-line role for a persona — archetype when the record has one, otherwise where they are from. */
+export function personaRole(p: { archetype?: string | null; region?: string; wealthTier?: number }): string {
+  if (p.archetype) return String(p.archetype).replace(/_/g, ' ');
+  if (p.region) return p.region;
+  return p.wealthTier ? `Tier ${p.wealthTier}` : '';
+}
+
+/** Relationship status label, safe for missing records. */
+export function statusLabel(status?: string | null): string {
+  return (status || 'strangers').replace(/-/g, ' ');
+}
+
+export function PersonaAvatar({ persona, size = 64, className = '', shape = 'circle' }: Props) {
+    const initials = persona.displayName.split(' ').map((n: string) => n[0]).join('').slice(0, 2);
+    const isPortrait = !!persona.imageUrl;
     return (
-        <div 
-           className={`rounded-full overflow-hidden relative shrink-0 flex items-center justify-center font-mono tracking-tighter uppercase font-bold text-white shadow-inner ${className}`}
-           style={{ 
-               width: size, 
-               height: size, 
-               fontSize: Math.max(10, size * 0.35),
-               background: persona.imageUrl ? 'bg-zinc-800' : `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`
-           }}
+        <div
+           className={`overflow-hidden relative shrink-0 flex items-center justify-center font-mono tracking-tight uppercase font-bold text-white ${shape === 'circle' ? 'rounded-full' : 'rounded-2xl'} ${className}`}
+           style={{ width: size, height: size, fontSize: Math.max(10, size * 0.34), background: personaGradient(persona) }}
         >
-           {persona.imageUrl ? (
-               <div className="absolute inset-0 bg-cover bg-center grayscale mix-blend-luminosity opacity-80 hover:opacity-100 hover:grayscale-0 transition-all" style={{ backgroundImage: `url(${persona.imageUrl})` }} />
+           {isPortrait ? (
+               <img src={persona.imageUrl as string} alt={persona.displayName} className="absolute inset-0 w-full h-full object-cover" style={{ transform: 'scale(1.06) translateY(3%)' }} draggable={false} />
            ) : (
-               <span className="opacity-90 mix-blend-overlay text-white">{persona.displayName.split(' ').map((n: string) => n[0]).join('')}</span>
+               <span className="opacity-95 drop-shadow">{initials}</span>
            )}
         </div>
     );

@@ -20,7 +20,10 @@ export type PeekTarget =
   | { kind: 'event'; id: string }
   | { kind: 'resort'; id: string }
   | { kind: 'persona'; id: string }
-  | { kind: 'airport'; id: string };
+  | { kind: 'airport'; id: string }
+  | { kind: 'yacht'; id: string }
+  | { kind: 'marina'; id: string }
+  | { kind: 'residence'; id: string };
 
 export interface MapLayerToggles {
   fleet: boolean;
@@ -30,6 +33,8 @@ export interface MapLayerToggles {
   airports: boolean;
   weather: boolean;
   daylight: boolean;
+  marinas: boolean;
+  homes: boolean;
 }
 
 interface AppState {
@@ -116,7 +121,7 @@ export const useStore = create<AppState>()(
       playerLevel: 1,
       mapStyle: 'Dark',
       mapProjection: 'globe',
-      mapLayers: { fleet: true, friends: true, events: true, resorts: true, airports: true, weather: false, daylight: true },
+      mapLayers: { fleet: true, friends: true, events: true, resorts: true, airports: true, weather: false, daylight: true, marinas: true, homes: true },
       followSelected: true,
       peek: null,
       zenMode: true,

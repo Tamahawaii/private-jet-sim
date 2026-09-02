@@ -3,6 +3,7 @@ import { playerRepo } from './repositories/player';
 import { transactionRepo } from './repositories/transactions';
 import { Aircraft, Flight } from '../types';
 import { getAirport } from './flight/airports';
+import { useStore } from '../app/lib/store';
 import { calculateDistanceNM, computeGreatCirclePoints } from '../app/lib/math';
 
 export const Economy = {
@@ -55,7 +56,8 @@ export const Economy = {
        const ferryWaypoints = computeGreatCirclePoints(factory.lat, factory.lng, home.lat, home.lng, 64).map(p => ({ lng: p[0], lat: p[1] }));
        // Ferry flight takes its real duration, plus 48h of factory prep — you can watch it come in on the map.
        const deliveryMs = 48 * 60 * 60 * 1000 + (ferryNM / Math.max(150, catalogItem.speedKnots)) * 3600 * 1000;
-       const arrivalMs = Date.now() + deliveryMs;
+       const simNow = useStore.getState().getNow();
+       const arrivalMs = simNow + deliveryMs;
 
        const newCraft: Aircraft = {
           id: crypto.randomUUID(),
@@ -80,7 +82,7 @@ export const Economy = {
           // MapEngine compat traits
           currentLocation: { lat: factory.lat, lng: factory.lng, name: 'KBFI - Factory' }, // Boeing Field mapping
           destination: { lat: home.lat, lng: home.lng, name: player.homeBaseICAO }, // Home Base 
-          launchedAt: Date.now(),
+          launchedAt: simNow,
           lockedUntil: arrivalMs,
           currentFlightID: crypto.randomUUID(),
           layoutImage: catalogItem.layoutImage || null
@@ -94,7 +96,7 @@ export const Economy = {
           tailNumber,
           originICAO: 'KBFI',
           destinationICAO: player.homeBaseICAO,
-          departedAt: Date.now(),
+          departedAt: simNow,
           estimatedArrivalAt: arrivalMs,
           arrivedAt: null,
           distanceNM: ferryNM,

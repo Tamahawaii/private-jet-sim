@@ -1,4 +1,5 @@
 'use client';
+import { routes } from '../lib/routes';
 import React, { useState } from 'react';
 import { useStore } from './lib/store';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -17,7 +18,7 @@ function ActiveFlightCard({ flight, aircraft, compact }: { flight: Flight; aircr
   const snap = getFlightSnapshot(flight, aircraft, now);
   const r = describeRoute(flight);
   return (
-    <Link href={`/flight/${flight.id}`} className={`block glass rounded-2xl p-4 ${compact ? 'w-[78vw] max-w-[340px] shrink-0' : ''} hover:border-[var(--accent)]/40 transition-colors`}>
+    <Link href={routes.flight(flight.id)} className={`block glass rounded-2xl p-4 ${compact ? 'w-[78vw] max-w-[340px] shrink-0' : ''} hover:border-[var(--accent)]/40 transition-colors`}>
       <div className="flex items-center justify-between">
         <div className="eyebrow flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" /> {flight.purpose?.type === 'delivery' ? 'Delivery inbound' : 'In flight'} · {snap.phaseLabel}</div>
         <span className="font-mono text-[11px] text-zinc-400">{flight.tailNumber}</span>
@@ -53,7 +54,7 @@ function EventCard({ evt, personas, compact }: { evt: BillionaireEvent; personas
         </div>
         {names.length > 0 && <div className="text-[11px] text-[var(--rose)] mt-1.5 truncate">{names.slice(0, 2).join(' & ')}{names.length > 2 ? ` +${names.length - 2}` : ''} attending</div>}
         <div className="flex gap-2 mt-2.5">
-          <Link href={`/events/${evt.id}`} className="flex-1 h-9 rounded-lg bg-white/6 border border-white/10 text-white text-[11.5px] font-semibold flex items-center justify-center">Dossier</Link>
+          <Link href={routes.event(evt.id)} className="flex-1 h-9 rounded-lg bg-white/6 border border-white/10 text-white text-[11.5px] font-semibold flex items-center justify-center">Dossier</Link>
           <Link href={`/flight/new?destination=${evt.locationICAO}&purpose=event:${evt.id}`} className="flex-1 h-9 rounded-lg bg-[var(--accent)] text-black text-[11.5px] font-semibold flex items-center justify-center gap-1"><Navigation2 size={12} /> Fly there</Link>
         </div>
       </div>

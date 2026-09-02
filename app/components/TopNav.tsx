@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Globe, Plane, ShoppingCart, MessageCircle, User, Palmtree } from 'lucide-react';
+import { Globe, Plane, ShoppingCart, MessageCircle, User, Palmtree, Bell } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -30,6 +30,7 @@ export default function TopNav() {
 
   const dmThreads = useLiveQuery(() => db.dmThreads.toArray());
   const unreadCount = dmThreads ? dmThreads.reduce((acc, t) => acc + (t.unreadCount || 0), 0) : 0;
+  const unreadInbox = useLiveQuery(() => db.notifications.filter(n => !n.readAt).count()) || 0;
 
   return (
     <div
@@ -63,13 +64,17 @@ export default function TopNav() {
       <div className="flex items-center gap-2 md:gap-3">
          <div className="md:hidden"><SimSpeedControl compact /></div>
          <div className="hidden md:block"><SimSpeedControl /></div>
-         <Link href="/social/dms" className="relative hidden md:flex w-9 h-9 bg-black/40 border border-white/10 hover:border-white/30 rounded-full transition-colors items-center justify-center">
+         <Link href="/social?tab=chats" className="relative hidden md:flex w-9 h-9 bg-black/40 border border-white/10 hover:border-white/30 rounded-full transition-colors items-center justify-center">
              <MessageCircle size={16} className="text-zinc-300" />
              {unreadCount > 0 && (
                  <span className="absolute -top-1 -right-1 bg-[var(--magenta)] border border-black text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center font-mono">
                      {unreadCount > 9 ? '9+' : unreadCount}
                  </span>
              )}
+         </Link>
+         <Link href="/inbox" className="relative hidden md:flex w-9 h-9 bg-black/40 border border-white/10 hover:border-white/30 rounded-full transition-colors items-center justify-center">
+             <Bell size={16} className="text-zinc-300" />
+             {unreadInbox > 0 && <span className="absolute -top-1 -right-1 bg-[var(--accent)] border border-black text-black text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center font-mono">{unreadInbox > 9 ? '9+' : unreadInbox}</span>}
          </Link>
          <Link href="/profile" className="hidden md:flex w-9 h-9 bg-black/40 border border-white/10 hover:border-white/30 rounded-full transition-colors items-center justify-center">
              <User size={16} className="text-zinc-300" />

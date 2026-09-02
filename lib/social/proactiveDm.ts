@@ -1,3 +1,5 @@
+import { apiFetch } from '../api';
+import { routes } from '../routes';
 import { db } from '../db';
 import { useStore } from '../../app/lib/store';
 import { DMMessage } from '../../types';
@@ -44,10 +46,7 @@ export async function sendProactiveDM(personaId: string, situation: string, opts
 
   let content = '';
   try {
-    const res = await fetch('/api/ai/haiku', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    const res = await apiFetch('/api/ai/haiku', { method: 'POST', body: JSON.stringify({
         personaId,
         playerContext: { displayName: player?.displayName || 'Player', netWorth: player?.netWorth || 0 },
         personaState: state,
@@ -95,13 +94,13 @@ export async function sendProactiveDM(personaId: string, situation: string, opts
     body: content.length > 120 ? content.slice(0, 117) + '…' : content,
     createdAt: new Date(simNow).toISOString(),
     readAt: null,
-    linkTo: `/social/dms/${personaId}`,
+    linkTo: routes.dm(personaId),
   });
 
   if (opts.toast !== null) {
     useStore.getState().addToast({
       message: opts.toast || `${persona.displayName.split(' ')[0]}: “${content.length > 90 ? content.slice(0, 87) + '…' : content}”`,
-      link: `/social/dms/${personaId}`,
+      link: routes.dm(personaId),
     });
   }
   return msg;

@@ -16,16 +16,48 @@
     "lng": -111.42,
     "description": "Carved into the desert plateau of southern Utah, Amangiri is architectural reverence in stone. Forty-five suites face the sandstone monoliths. Pools are cut from rock. Silence is the amenity. Guests come to disappear and reorient.",
     "shortDescription": "The desert as cathedral. Architectural minimalism meets monumental landscape.",
-    "amenities": ["spa", "private pools", "fitness", "yoga pavilion", "private dining", "library", "boutique"],
-    "dressCode": "Resort casual; thoughtfully chosen",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "monument-valley-helicopter", "name": "Helicopter to Monument Valley", "price": 15000, "description": "Private helicopter charter at golden hour. Land at restricted overlooks. Champagne service."},
-      {"id": "slot-canyon-private", "name": "Private Slot Canyon Excursion", "price": 8500, "description": "Antelope Canyon to yourselves before the public arrives. Photographer included."},
-      {"id": "navajo-storyteller-dinner", "name": "Navajo Storyteller Dinner", "price": 12000, "description": "Private fire dinner with a tribal elder. Stories under the desert sky."},
-      {"id": "stargazing-astronomer", "name": "Private Astronomer Stargazing", "price": 6500, "description": "Observatory-grade telescope with personal astronomer. Champagne and small plates."}
+    "amenities": [
+      "spa",
+      "private pools",
+      "fitness",
+      "yoga pavilion",
+      "private dining",
+      "library",
+      "boutique"
     ],
-    "preferredBy": ["naomi-tanaka", "sasha-volkov", "james-okonkwo-petersen"]
+    "dressCode": "Resort casual; thoughtfully chosen",
+    "imageUrl": "/art/resorts/amangiri.svg",
+    "signatureExperiences": [
+      {
+        "id": "monument-valley-helicopter",
+        "name": "Helicopter to Monument Valley",
+        "price": 15000,
+        "description": "Private helicopter charter at golden hour. Land at restricted overlooks. Champagne service."
+      },
+      {
+        "id": "slot-canyon-private",
+        "name": "Private Slot Canyon Excursion",
+        "price": 8500,
+        "description": "Antelope Canyon to yourselves before the public arrives. Photographer included."
+      },
+      {
+        "id": "navajo-storyteller-dinner",
+        "name": "Navajo Storyteller Dinner",
+        "price": 12000,
+        "description": "Private fire dinner with a tribal elder. Stories under the desert sky."
+      },
+      {
+        "id": "stargazing-astronomer",
+        "name": "Private Astronomer Stargazing",
+        "price": 6500,
+        "description": "Observatory-grade telescope with personal astronomer. Champagne and small plates."
+      }
+    ],
+    "preferredBy": [
+      "naomi-tanaka",
+      "sasha-volkov",
+      "james-okonkwo-petersen"
+    ]
   },
   {
     "id": "the-brando",
@@ -44,16 +76,48 @@
     "lng": -149.57,
     "description": "Marlon Brando's private atoll, now a 35-villa carbon-neutral resort. Each villa has its own beach access, private pool, and unobstructed lagoon views. Bring nothing. Want for nothing. Leave changed.",
     "shortDescription": "Marlon Brando's island. Carbon neutral. Lagoon-fronted villas.",
-    "amenities": ["spa", "private beach", "lagoon access", "diving", "fitness", "library", "marine biology center"],
-    "dressCode": "Barefoot luxury",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "lagoon-yacht-sunset", "name": "Lagoon Sunset Yacht Charter", "price": 25000, "description": "Private catamaran with chef. Sunset sail across the atoll. Anchored dinner."},
-      {"id": "moorea-helicopter", "name": "Helicopter to Moorea", "price": 12000, "description": "Day trip via private helicopter to Moorea. Lunch at Sofitel beach club."},
-      {"id": "private-motu", "name": "Private Motu Picnic", "price": 18000, "description": "Helicopter to your own private motu (small island) for the day. Personal staff."},
-      {"id": "marine-biologist-dive", "name": "Private Marine Biologist Dive", "price": 9500, "description": "Resident marine biologist guides you through the lagoon's coral nurseries."}
+    "amenities": [
+      "spa",
+      "private beach",
+      "lagoon access",
+      "diving",
+      "fitness",
+      "library",
+      "marine biology center"
     ],
-    "preferredBy": ["marcus-chen", "rio-almeida", "khalid-al-rashid"]
+    "dressCode": "Barefoot luxury",
+    "imageUrl": "/art/resorts/the-brando.svg",
+    "signatureExperiences": [
+      {
+        "id": "lagoon-yacht-sunset",
+        "name": "Lagoon Sunset Yacht Charter",
+        "price": 25000,
+        "description": "Private catamaran with chef. Sunset sail across the atoll. Anchored dinner."
+      },
+      {
+        "id": "moorea-helicopter",
+        "name": "Helicopter to Moorea",
+        "price": 12000,
+        "description": "Day trip via private helicopter to Moorea. Lunch at Sofitel beach club."
+      },
+      {
+        "id": "private-motu",
+        "name": "Private Motu Picnic",
+        "price": 18000,
+        "description": "Helicopter to your own private motu (small island) for the day. Personal staff."
+      },
+      {
+        "id": "marine-biologist-dive",
+        "name": "Private Marine Biologist Dive",
+        "price": 9500,
+        "description": "Resident marine biologist guides you through the lagoon's coral nurseries."
+      }
+    ],
+    "preferredBy": [
+      "marcus-chen",
+      "rio-almeida",
+      "khalid-al-rashid"
+    ]
   },
   {
     "id": "aman-venice",
@@ -72,16 +136,48 @@
     "lng": 12.337,
     "description": "Sixteenth-century palazzo on the Grand Canal. Tiepolo ceilings. Twenty-four suites. Rooftop garden over Venice. Where you stay when you want Venice to feel like it once did.",
     "shortDescription": "Tiepolo-ceilinged palazzo on the Grand Canal. Twenty-four suites only.",
-    "amenities": ["spa", "Grand Canal access", "private boats", "rooftop garden", "library", "private dining"],
-    "dressCode": "Continental elegance",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-palazzo-dinner", "name": "Private Palazzo Dinner", "price": 18000, "description": "Closed-museum dinner at Ca' Rezzonico. Quartet, candles, Venetian feast."},
-      {"id": "gondola-dawn-tour", "name": "Gondola Dawn Tour", "price": 8000, "description": "Private gondola through quiet morning canals. Cappuccino at a closed cafe opened just for you."},
-      {"id": "murano-glassmaker-private", "name": "Private Murano Glassmaker Session", "price": 12000, "description": "Private workshop with master glassmaker. Create a piece. Ship home."},
-      {"id": "aperitivo-on-water", "name": "Aperitivo on Private Yacht", "price": 9500, "description": "Sunset spritzes on private vintage motoscafo through the lagoon."}
+    "amenities": [
+      "spa",
+      "Grand Canal access",
+      "private boats",
+      "rooftop garden",
+      "library",
+      "private dining"
     ],
-    "preferredBy": ["theo-beaumont", "elena-marchetti", "rio-almeida", "damir-volkov-reyes"]
+    "dressCode": "Continental elegance",
+    "imageUrl": "/art/resorts/aman-venice.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-palazzo-dinner",
+        "name": "Private Palazzo Dinner",
+        "price": 18000,
+        "description": "Closed-museum dinner at Ca' Rezzonico. Quartet, candles, Venetian feast."
+      },
+      {
+        "id": "gondola-dawn-tour",
+        "name": "Gondola Dawn Tour",
+        "price": 8000,
+        "description": "Private gondola through quiet morning canals. Cappuccino at a closed cafe opened just for you."
+      },
+      {
+        "id": "murano-glassmaker-private",
+        "name": "Private Murano Glassmaker Session",
+        "price": 12000,
+        "description": "Private workshop with master glassmaker. Create a piece. Ship home."
+      },
+      {
+        "id": "aperitivo-on-water",
+        "name": "Aperitivo on Private Yacht",
+        "price": 9500,
+        "description": "Sunset spritzes on private vintage motoscafo through the lagoon."
+      }
+    ],
+    "preferredBy": [
+      "theo-beaumont",
+      "elena-marchetti",
+      "rio-almeida",
+      "damir-volkov-reyes"
+    ]
   },
   {
     "id": "aman-tokyo",
@@ -100,16 +196,47 @@
     "lng": 139.762,
     "description": "Top six floors of the Otemachi Tower. Views across to Mt. Fuji on clear days. Onsen-style spa. Tokyo distilled to its most refined essence.",
     "shortDescription": "Top of Otemachi Tower. Onsen spa. Tokyo at its quietest.",
-    "amenities": ["onsen spa", "fitness", "library", "tea ceremony room", "private dining", "Mt. Fuji views"],
-    "dressCode": "Considered minimalism",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-sushi-omakase", "name": "Private Sushi Omakase", "price": 15000, "description": "After-hours at three-Michelin sushi master's counter. Twenty courses. No phones."},
-      {"id": "imperial-palace-private", "name": "Imperial Palace Private Tour", "price": 10000, "description": "Restricted access tour of Imperial Palace gardens with palace historian."},
-      {"id": "ginza-bespoke-tailoring", "name": "Bespoke Tailoring Day", "price": 8500, "description": "Master tailor visits suite. Three garments commissioned, shipped home."},
-      {"id": "tea-master-ceremony", "name": "Private Tea Master Ceremony", "price": 5500, "description": "Centuries-old tea ceremony at private temple. Just you."}
+    "amenities": [
+      "onsen spa",
+      "fitness",
+      "library",
+      "tea ceremony room",
+      "private dining",
+      "Mt. Fuji views"
     ],
-    "preferredBy": ["naomi-tanaka", "marcus-chen", "james-okonkwo-petersen"]
+    "dressCode": "Considered minimalism",
+    "imageUrl": "/art/resorts/aman-tokyo.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-sushi-omakase",
+        "name": "Private Sushi Omakase",
+        "price": 15000,
+        "description": "After-hours at three-Michelin sushi master's counter. Twenty courses. No phones."
+      },
+      {
+        "id": "imperial-palace-private",
+        "name": "Imperial Palace Private Tour",
+        "price": 10000,
+        "description": "Restricted access tour of Imperial Palace gardens with palace historian."
+      },
+      {
+        "id": "ginza-bespoke-tailoring",
+        "name": "Bespoke Tailoring Day",
+        "price": 8500,
+        "description": "Master tailor visits suite. Three garments commissioned, shipped home."
+      },
+      {
+        "id": "tea-master-ceremony",
+        "name": "Private Tea Master Ceremony",
+        "price": 5500,
+        "description": "Centuries-old tea ceremony at private temple. Just you."
+      }
+    ],
+    "preferredBy": [
+      "naomi-tanaka",
+      "marcus-chen",
+      "james-okonkwo-petersen"
+    ]
   },
   {
     "id": "aman-kyoto",
@@ -128,15 +255,39 @@
     "lng": 135.732,
     "description": "Hidden in a forested garden at the foot of Mount Hidari Daimonji. Pavilions among ancient cedars. Eight-acre secret garden. The opposite of speed.",
     "shortDescription": "Hidden forest pavilions in a centuries-old Kyoto garden.",
-    "amenities": ["onsen", "private gardens", "tea house", "library", "kaiseki dining"],
-    "dressCode": "Considered minimalism",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "geisha-private-evening", "name": "Private Geisha Evening", "price": 22000, "description": "Closed teahouse in Gion. Maiko and geiko entertainment. Kaiseki dinner."},
-      {"id": "monastery-meditation", "name": "Private Monastery Meditation Retreat", "price": 6500, "description": "Day at active Zen monastery with abbot. Meditation, calligraphy, vegetarian lunch."},
-      {"id": "kintsugi-master", "name": "Kintsugi Master Workshop", "price": 8000, "description": "Master shows you the art of golden joinery. Repair a piece you bring or one provided."}
+    "amenities": [
+      "onsen",
+      "private gardens",
+      "tea house",
+      "library",
+      "kaiseki dining"
     ],
-    "preferredBy": ["naomi-tanaka", "elena-marchetti"]
+    "dressCode": "Considered minimalism",
+    "imageUrl": "/art/resorts/aman-kyoto.svg",
+    "signatureExperiences": [
+      {
+        "id": "geisha-private-evening",
+        "name": "Private Geisha Evening",
+        "price": 22000,
+        "description": "Closed teahouse in Gion. Maiko and geiko entertainment. Kaiseki dinner."
+      },
+      {
+        "id": "monastery-meditation",
+        "name": "Private Monastery Meditation Retreat",
+        "price": 6500,
+        "description": "Day at active Zen monastery with abbot. Meditation, calligraphy, vegetarian lunch."
+      },
+      {
+        "id": "kintsugi-master",
+        "name": "Kintsugi Master Workshop",
+        "price": 8000,
+        "description": "Master shows you the art of golden joinery. Repair a piece you bring or one provided."
+      }
+    ],
+    "preferredBy": [
+      "naomi-tanaka",
+      "elena-marchetti"
+    ]
   },
   {
     "id": "aman-tangier",
@@ -155,15 +306,40 @@
     "lng": -5.804,
     "description": "Hillside above the Strait of Gibraltar where Africa meets Europe by sight. Old World drama, North African material restraint, twentieth-century literary ghosts.",
     "shortDescription": "Hillside above the Strait. Where Bowles, Burroughs, and the Beats lived.",
-    "amenities": ["spa", "infinity pool", "fitness", "private beach access", "library", "rooftop terraces"],
-    "dressCode": "Casual sophistication, kaftans encouraged",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "medina-private-tour", "name": "Private Medina with Historian", "price": 4500, "description": "Closed-shop tour of Tangier medina with cultural historian. Mint tea in hidden riads."},
-      {"id": "chefchaouen-day", "name": "Helicopter to Chefchaouen", "price": 9500, "description": "Day trip to the blue city via helicopter. Lunch at private guesthouse."},
-      {"id": "private-yacht-strait", "name": "Strait of Gibraltar Yacht Day", "price": 14000, "description": "Private yacht to Spain and back. Lunch in Tarifa."}
+    "amenities": [
+      "spa",
+      "infinity pool",
+      "fitness",
+      "private beach access",
+      "library",
+      "rooftop terraces"
     ],
-    "preferredBy": ["theo-beaumont", "khalid-al-rashid"]
+    "dressCode": "Casual sophistication, kaftans encouraged",
+    "imageUrl": "/art/resorts/aman-tangier.svg",
+    "signatureExperiences": [
+      {
+        "id": "medina-private-tour",
+        "name": "Private Medina with Historian",
+        "price": 4500,
+        "description": "Closed-shop tour of Tangier medina with cultural historian. Mint tea in hidden riads."
+      },
+      {
+        "id": "chefchaouen-day",
+        "name": "Helicopter to Chefchaouen",
+        "price": 9500,
+        "description": "Day trip to the blue city via helicopter. Lunch at private guesthouse."
+      },
+      {
+        "id": "private-yacht-strait",
+        "name": "Strait of Gibraltar Yacht Day",
+        "price": 14000,
+        "description": "Private yacht to Spain and back. Lunch in Tarifa."
+      }
+    ],
+    "preferredBy": [
+      "theo-beaumont",
+      "khalid-al-rashid"
+    ]
   },
   {
     "id": "el-fenn",
@@ -182,15 +358,41 @@
     "lng": -7.987,
     "description": "Restored medina riad complex by Vanessa Branson. Twenty-eight unique suites across former merchant houses. Rooftop bar with Atlas Mountain views. Quietly the best in Marrakech.",
     "shortDescription": "Vanessa Branson's medina labyrinth. The cool one.",
-    "amenities": ["spa", "rooftop bar", "library", "art collection", "private dining", "swimming pool"],
-    "dressCode": "Bohemian elegance",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "atlas-mountains-day", "name": "Atlas Mountains Private Day", "price": 5500, "description": "4x4 to remote Berber village. Lunch with local family. Hammam back at riad."},
-      {"id": "souk-private-shopper", "name": "Private Shopper through the Souk", "price": 3500, "description": "Insider with relationships at every important vendor. Pieces shipped home."},
-      {"id": "yves-saint-laurent-museum", "name": "After-Hours YSL Museum", "price": 4000, "description": "Private after-hours visit with curator. Champagne in Majorelle Garden after."}
+    "amenities": [
+      "spa",
+      "rooftop bar",
+      "library",
+      "art collection",
+      "private dining",
+      "swimming pool"
     ],
-    "preferredBy": ["theo-beaumont", "rio-almeida", "damir-volkov-reyes"]
+    "dressCode": "Bohemian elegance",
+    "imageUrl": "/art/resorts/el-fenn.svg",
+    "signatureExperiences": [
+      {
+        "id": "atlas-mountains-day",
+        "name": "Atlas Mountains Private Day",
+        "price": 5500,
+        "description": "4x4 to remote Berber village. Lunch with local family. Hammam back at riad."
+      },
+      {
+        "id": "souk-private-shopper",
+        "name": "Private Shopper through the Souk",
+        "price": 3500,
+        "description": "Insider with relationships at every important vendor. Pieces shipped home."
+      },
+      {
+        "id": "yves-saint-laurent-museum",
+        "name": "After-Hours YSL Museum",
+        "price": 4000,
+        "description": "Private after-hours visit with curator. Champagne in Majorelle Garden after."
+      }
+    ],
+    "preferredBy": [
+      "theo-beaumont",
+      "rio-almeida",
+      "damir-volkov-reyes"
+    ]
   },
   {
     "id": "hotel-du-cap",
@@ -209,15 +411,42 @@
     "lng": 7.124,
     "description": "Cap d'Antibes since 1870. The cabanas, the saltwater pool carved into rock, the gardens, the legend. Where Cannes Film Festival actually happens, in private.",
     "shortDescription": "The Cap d'Antibes original. Where the legend lives.",
-    "amenities": ["spa", "saltwater pool", "private cabanas", "tennis", "fitness", "private beach", "boutique"],
-    "dressCode": "Riviera classic",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "yacht-day-corsica", "name": "Day Yacht to Corsica", "price": 35000, "description": "Private superyacht charter to Corsican coves. Crew, chef, swim platform."},
-      {"id": "monaco-helicopter-day", "name": "Helicopter to Monaco", "price": 12000, "description": "GP weekend or otherwise. Pit access arranged separately."},
-      {"id": "private-cabana-season", "name": "Private Cabana Reservation", "price": 8500, "description": "Same cabana every day of stay, butler-staffed. Lunch service in cabana."}
+    "amenities": [
+      "spa",
+      "saltwater pool",
+      "private cabanas",
+      "tennis",
+      "fitness",
+      "private beach",
+      "boutique"
     ],
-    "preferredBy": ["theo-beaumont", "khalid-al-rashid", "marcus-chen"]
+    "dressCode": "Riviera classic",
+    "imageUrl": "/art/resorts/hotel-du-cap.svg",
+    "signatureExperiences": [
+      {
+        "id": "yacht-day-corsica",
+        "name": "Day Yacht to Corsica",
+        "price": 35000,
+        "description": "Private superyacht charter to Corsican coves. Crew, chef, swim platform."
+      },
+      {
+        "id": "monaco-helicopter-day",
+        "name": "Helicopter to Monaco",
+        "price": 12000,
+        "description": "GP weekend or otherwise. Pit access arranged separately."
+      },
+      {
+        "id": "private-cabana-season",
+        "name": "Private Cabana Reservation",
+        "price": 8500,
+        "description": "Same cabana every day of stay, butler-staffed. Lunch service in cabana."
+      }
+    ],
+    "preferredBy": [
+      "theo-beaumont",
+      "khalid-al-rashid",
+      "marcus-chen"
+    ]
   },
   {
     "id": "il-pellicano",
@@ -236,14 +465,35 @@
     "lng": 11.205,
     "description": "Tuscan coast cliff-cling since 1965. Slim Aarons photographs were taken here. Still feels like that. The pool deck is the world.",
     "shortDescription": "Slim Aarons's Italy. Still exists. Still magic.",
-    "amenities": ["spa", "saltwater pool", "private rocks beach", "fitness", "tennis", "private dining"],
-    "dressCode": "Effortless Italian classic",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-boat-giglio", "name": "Private Boat to Giglio", "price": 12000, "description": "Vintage motoscafo to Giglio Island. Lunch on the boat."},
-      {"id": "tuscan-vineyard-private", "name": "Private Vineyard Day", "price": 6500, "description": "Helicopter to Brunello producer. Lunch and tasting at the family estate."}
+    "amenities": [
+      "spa",
+      "saltwater pool",
+      "private rocks beach",
+      "fitness",
+      "tennis",
+      "private dining"
     ],
-    "preferredBy": ["theo-beaumont", "elena-marchetti", "sasha-volkov"]
+    "dressCode": "Effortless Italian classic",
+    "imageUrl": "/art/resorts/il-pellicano.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-boat-giglio",
+        "name": "Private Boat to Giglio",
+        "price": 12000,
+        "description": "Vintage motoscafo to Giglio Island. Lunch on the boat."
+      },
+      {
+        "id": "tuscan-vineyard-private",
+        "name": "Private Vineyard Day",
+        "price": 6500,
+        "description": "Helicopter to Brunello producer. Lunch and tasting at the family estate."
+      }
+    ],
+    "preferredBy": [
+      "theo-beaumont",
+      "elena-marchetti",
+      "sasha-volkov"
+    ]
   },
   {
     "id": "il-san-pietro",
@@ -258,18 +508,39 @@
     "tier": 4,
     "nightlyRate": 2400,
     "currency": "USD",
-    "lat": 40.620,
+    "lat": 40.62,
     "lng": 14.491,
     "description": "Carved into the cliff outside Positano. Private beach via elevator through the rock. Lemon groves, candles, terraces. The Amalfi Coast at its most operatic.",
     "shortDescription": "Amalfi cliff palace with private beach via cliff elevator.",
-    "amenities": ["private beach", "elevator through cliff", "spa", "tennis", "private boats", "lemon grove"],
-    "dressCode": "Elegant resort",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "capri-private-day", "name": "Capri Day on Private Boat", "price": 11000, "description": "Vintage gozzo to Capri. Lunch at Da Paolino. Blue Grotto when the crowd thins."},
-      {"id": "private-cooking-class", "name": "Private Cooking Class with Nonna", "price": 4500, "description": "Local nonna teaches you Positanese classics in your suite kitchen."}
+    "amenities": [
+      "private beach",
+      "elevator through cliff",
+      "spa",
+      "tennis",
+      "private boats",
+      "lemon grove"
     ],
-    "preferredBy": ["elena-marchetti", "rio-almeida", "sasha-volkov"]
+    "dressCode": "Elegant resort",
+    "imageUrl": "/art/resorts/il-san-pietro.svg",
+    "signatureExperiences": [
+      {
+        "id": "capri-private-day",
+        "name": "Capri Day on Private Boat",
+        "price": 11000,
+        "description": "Vintage gozzo to Capri. Lunch at Da Paolino. Blue Grotto when the crowd thins."
+      },
+      {
+        "id": "private-cooking-class",
+        "name": "Private Cooking Class with Nonna",
+        "price": 4500,
+        "description": "Local nonna teaches you Positanese classics in your suite kitchen."
+      }
+    ],
+    "preferredBy": [
+      "elena-marchetti",
+      "rio-almeida",
+      "sasha-volkov"
+    ]
   },
   {
     "id": "claridges",
@@ -288,15 +559,41 @@
     "lng": -0.148,
     "description": "Mayfair's grande dame since 1856. Art Deco bones, modern grace. Where royalty stays. Where Beaton photographed. Where you stay when London demands its full ceremonial weight.",
     "shortDescription": "Mayfair grande dame. Royalty's hotel.",
-    "amenities": ["spa", "fitness", "afternoon tea", "fine dining", "private dining", "boutique"],
-    "dressCode": "Smart London — jacket required after 6pm",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-bond-street-shopper", "name": "Private Bond Street Shopper", "price": 5500, "description": "Personal shopper opens doors at major houses after-hours. No press, no crowds."},
-      {"id": "afternoon-tea-private", "name": "Private Foyer Afternoon Tea", "price": 3500, "description": "Closed Foyer. Pianist. Just your party. Champagne service."},
-      {"id": "white-glove-museum", "name": "Private V&A or British Museum Visit", "price": 7500, "description": "After-hours curator-led tour of restricted collections."}
+    "amenities": [
+      "spa",
+      "fitness",
+      "afternoon tea",
+      "fine dining",
+      "private dining",
+      "boutique"
     ],
-    "preferredBy": ["charles-pemberton", "james-okonkwo-petersen", "naomi-tanaka"]
+    "dressCode": "Smart London — jacket required after 6pm",
+    "imageUrl": "/art/resorts/claridges.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-bond-street-shopper",
+        "name": "Private Bond Street Shopper",
+        "price": 5500,
+        "description": "Personal shopper opens doors at major houses after-hours. No press, no crowds."
+      },
+      {
+        "id": "afternoon-tea-private",
+        "name": "Private Foyer Afternoon Tea",
+        "price": 3500,
+        "description": "Closed Foyer. Pianist. Just your party. Champagne service."
+      },
+      {
+        "id": "white-glove-museum",
+        "name": "Private V&A or British Museum Visit",
+        "price": 7500,
+        "description": "After-hours curator-led tour of restricted collections."
+      }
+    ],
+    "preferredBy": [
+      "charles-pemberton",
+      "james-okonkwo-petersen",
+      "naomi-tanaka"
+    ]
   },
   {
     "id": "the-newt",
@@ -312,17 +609,37 @@
     "nightlyRate": 1800,
     "currency": "USD",
     "lat": 51.107,
-    "lng": -2.440,
+    "lng": -2.44,
     "description": "Country estate hotel in Somerset. Heritage gardens, private cyder works, Roman villa onsite, deer park. England as it imagines itself.",
     "shortDescription": "Somerset estate. Cyder, deer park, restored gardens, Roman ruins.",
-    "amenities": ["spa", "gardens", "fitness", "fine dining", "estate walks", "cyder works"],
-    "dressCode": "English countryside",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-game-shoot", "name": "Private Pheasant Shoot", "price": 8500, "description": "Estate shoot with gamekeepers. Country lunch in shooting hut after."},
-      {"id": "garden-design-master", "name": "Private Garden Tour with Head Gardener", "price": 3500, "description": "Behind-the-scenes garden tour. Cuttings to take home."}
+    "amenities": [
+      "spa",
+      "gardens",
+      "fitness",
+      "fine dining",
+      "estate walks",
+      "cyder works"
     ],
-    "preferredBy": ["charles-pemberton", "james-okonkwo-petersen"]
+    "dressCode": "English countryside",
+    "imageUrl": "/art/resorts/the-newt.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-game-shoot",
+        "name": "Private Pheasant Shoot",
+        "price": 8500,
+        "description": "Estate shoot with gamekeepers. Country lunch in shooting hut after."
+      },
+      {
+        "id": "garden-design-master",
+        "name": "Private Garden Tour with Head Gardener",
+        "price": 3500,
+        "description": "Behind-the-scenes garden tour. Cuttings to take home."
+      }
+    ],
+    "preferredBy": [
+      "charles-pemberton",
+      "james-okonkwo-petersen"
+    ]
   },
   {
     "id": "cliveden-house",
@@ -337,18 +654,39 @@
     "tier": 4,
     "nightlyRate": 1500,
     "currency": "USD",
-    "lat": 51.560,
+    "lat": 51.56,
     "lng": -0.692,
     "description": "Astor family estate above the Thames. Three centuries of scandal, statesmanship, and immaculately maintained gardens. The Profumo affair started here. Now you stay here.",
     "shortDescription": "Astor estate above the Thames. Centuries of scandal preserved in amber.",
-    "amenities": ["spa", "tennis", "swimming pool", "private dining", "gardens", "fitness", "Thames boats"],
-    "dressCode": "English country smart",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "thames-boat-day", "name": "Private Thames Boat Day", "price": 5500, "description": "Vintage launch up the Thames. Picnic lunch on board."},
-      {"id": "library-private-dinner", "name": "Private Library Dinner", "price": 8500, "description": "Astor's library, candlelit. Multi-course tasting menu. Just your party."}
+    "amenities": [
+      "spa",
+      "tennis",
+      "swimming pool",
+      "private dining",
+      "gardens",
+      "fitness",
+      "Thames boats"
     ],
-    "preferredBy": ["charles-pemberton", "james-okonkwo-petersen"]
+    "dressCode": "English country smart",
+    "imageUrl": "/art/resorts/cliveden-house.svg",
+    "signatureExperiences": [
+      {
+        "id": "thames-boat-day",
+        "name": "Private Thames Boat Day",
+        "price": 5500,
+        "description": "Vintage launch up the Thames. Picnic lunch on board."
+      },
+      {
+        "id": "library-private-dinner",
+        "name": "Private Library Dinner",
+        "price": 8500,
+        "description": "Astor's library, candlelit. Multi-course tasting menu. Just your party."
+      }
+    ],
+    "preferredBy": [
+      "charles-pemberton",
+      "james-okonkwo-petersen"
+    ]
   },
   {
     "id": "six-senses-bhutan",
@@ -367,15 +705,39 @@
     "lng": 89.412,
     "description": "Five lodges across Bhutan's western valleys. Each a different elevation, climate, story. Move between them on a 7-14 day journey. Buddhist monks bless your arrival. The opposite of striving.",
     "shortDescription": "Five lodges across Bhutan. Move between them. Be transformed.",
-    "amenities": ["wellness center at each lodge", "meditation", "yoga", "private guides", "monastery visits"],
-    "dressCode": "Modest, layered, comfortable",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "tigers-nest-private", "name": "Private Tiger's Nest Pilgrimage", "price": 6500, "description": "Predawn ascent to Paro Taktsang. Monk blessing at the top."},
-      {"id": "bhutan-helicopter-tour", "name": "Private Helicopter Across Valleys", "price": 18000, "description": "See all five lodges from the air. Land at remote monastery for lunch."},
-      {"id": "buddhist-master-meditation", "name": "Multi-Day Meditation with Monk", "price": 8000, "description": "Personal meditation instruction with senior monk. Three days of guided practice."}
+    "amenities": [
+      "wellness center at each lodge",
+      "meditation",
+      "yoga",
+      "private guides",
+      "monastery visits"
     ],
-    "preferredBy": ["naomi-tanaka", "james-okonkwo-petersen"]
+    "dressCode": "Modest, layered, comfortable",
+    "imageUrl": "/art/resorts/six-senses-bhutan.svg",
+    "signatureExperiences": [
+      {
+        "id": "tigers-nest-private",
+        "name": "Private Tiger's Nest Pilgrimage",
+        "price": 6500,
+        "description": "Predawn ascent to Paro Taktsang. Monk blessing at the top."
+      },
+      {
+        "id": "bhutan-helicopter-tour",
+        "name": "Private Helicopter Across Valleys",
+        "price": 18000,
+        "description": "See all five lodges from the air. Land at remote monastery for lunch."
+      },
+      {
+        "id": "buddhist-master-meditation",
+        "name": "Multi-Day Meditation with Monk",
+        "price": 8000,
+        "description": "Personal meditation instruction with senior monk. Three days of guided practice."
+      }
+    ],
+    "preferredBy": [
+      "naomi-tanaka",
+      "james-okonkwo-petersen"
+    ]
   },
   {
     "id": "six-senses-zighy",
@@ -394,15 +756,40 @@
     "lng": 56.243,
     "description": "Hidden bay on Oman's Musandam Peninsula. Only accessible by 4x4, boat, or paragliding arrival. Stone villas with private pools facing the sea. Total disappearance.",
     "shortDescription": "Oman's hidden bay. Arrive by paraglider if you wish.",
-    "amenities": ["spa", "private beach", "diving center", "fitness", "private pools", "yoga"],
-    "dressCode": "Resort barefoot",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "paraglide-arrival", "name": "Paraglide Arrival", "price": 12000, "description": "Tandem paraglide from mountaintop into resort beach. The legendary entrance."},
-      {"id": "private-dhow-fjords", "name": "Private Dhow through Musandam Fjords", "price": 8500, "description": "Traditional dhow through the 'Norway of Arabia'. Snorkeling. Beach lunch."},
-      {"id": "desert-camp-overnight", "name": "Private Desert Camp", "price": 9500, "description": "Overnight in luxury desert camp. Falconer demonstration. Stars."}
+    "amenities": [
+      "spa",
+      "private beach",
+      "diving center",
+      "fitness",
+      "private pools",
+      "yoga"
     ],
-    "preferredBy": ["khalid-al-rashid", "james-okonkwo-petersen"]
+    "dressCode": "Resort barefoot",
+    "imageUrl": "/art/resorts/six-senses-zighy.svg",
+    "signatureExperiences": [
+      {
+        "id": "paraglide-arrival",
+        "name": "Paraglide Arrival",
+        "price": 12000,
+        "description": "Tandem paraglide from mountaintop into resort beach. The legendary entrance."
+      },
+      {
+        "id": "private-dhow-fjords",
+        "name": "Private Dhow through Musandam Fjords",
+        "price": 8500,
+        "description": "Traditional dhow through the 'Norway of Arabia'. Snorkeling. Beach lunch."
+      },
+      {
+        "id": "desert-camp-overnight",
+        "name": "Private Desert Camp",
+        "price": 9500,
+        "description": "Overnight in luxury desert camp. Falconer demonstration. Stars."
+      }
+    ],
+    "preferredBy": [
+      "khalid-al-rashid",
+      "james-okonkwo-petersen"
+    ]
   },
   {
     "id": "amanruya",
@@ -417,18 +804,39 @@
     "tier": 4,
     "nightlyRate": 3400,
     "currency": "USD",
-    "lat": 37.030,
+    "lat": 37.03,
     "lng": 27.398,
     "description": "Aegean cliff above a private cove. Stone cottages with private pools and sea views. Olive groves. The understated Aman approach to the Mediterranean.",
     "shortDescription": "Aegean cliff cottages. Private cove. Olive groves.",
-    "amenities": ["spa", "private cove", "fitness", "tennis", "private pools", "boats"],
-    "dressCode": "Coastal Mediterranean elegance",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-gulet-charter", "name": "Private Gulet Day Charter", "price": 18000, "description": "Traditional Turkish gulet for the day. Cove hopping, lunch on board."},
-      {"id": "ephesus-private-tour", "name": "Private Ephesus Excursion", "price": 8500, "description": "Helicopter to Ephesus. Closed-site archaeologist tour."}
+    "amenities": [
+      "spa",
+      "private cove",
+      "fitness",
+      "tennis",
+      "private pools",
+      "boats"
     ],
-    "preferredBy": ["khalid-al-rashid", "elena-marchetti", "sasha-volkov"]
+    "dressCode": "Coastal Mediterranean elegance",
+    "imageUrl": "/art/resorts/amanruya.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-gulet-charter",
+        "name": "Private Gulet Day Charter",
+        "price": 18000,
+        "description": "Traditional Turkish gulet for the day. Cove hopping, lunch on board."
+      },
+      {
+        "id": "ephesus-private-tour",
+        "name": "Private Ephesus Excursion",
+        "price": 8500,
+        "description": "Helicopter to Ephesus. Closed-site archaeologist tour."
+      }
+    ],
+    "preferredBy": [
+      "khalid-al-rashid",
+      "elena-marchetti",
+      "sasha-volkov"
+    ]
   },
   {
     "id": "burj-al-arab",
@@ -447,15 +855,40 @@
     "lng": 55.185,
     "description": "Sail-shaped icon. Suite-only. Helipad. Gold leaf. Excessive in every dimension and unapologetic about it. Where the Gulf flexes.",
     "shortDescription": "The sail. Gold-leafed suites. Helipad arrival.",
-    "amenities": ["spa", "helipad", "private beach access", "multiple pools", "fine dining", "boutique"],
-    "dressCode": "Statement luxury",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "helipad-arrival", "name": "Helicopter Arrival via Helipad", "price": 15000, "description": "Arrive on the iconic helipad. Tea on arrival."},
-      {"id": "private-yacht-palm", "name": "Private Yacht around Palm Jumeirah", "price": 22000, "description": "Sunset cruise around Palm Jumeirah. Champagne, canapes."},
-      {"id": "desert-falconry-private", "name": "Private Desert Falconry Camp", "price": 14000, "description": "4x4 deep into desert. Falconer, oud player, traditional feast."}
+    "amenities": [
+      "spa",
+      "helipad",
+      "private beach access",
+      "multiple pools",
+      "fine dining",
+      "boutique"
     ],
-    "preferredBy": ["khalid-al-rashid", "marcus-chen"]
+    "dressCode": "Statement luxury",
+    "imageUrl": "/art/resorts/burj-al-arab.svg",
+    "signatureExperiences": [
+      {
+        "id": "helipad-arrival",
+        "name": "Helicopter Arrival via Helipad",
+        "price": 15000,
+        "description": "Arrive on the iconic helipad. Tea on arrival."
+      },
+      {
+        "id": "private-yacht-palm",
+        "name": "Private Yacht around Palm Jumeirah",
+        "price": 22000,
+        "description": "Sunset cruise around Palm Jumeirah. Champagne, canapes."
+      },
+      {
+        "id": "desert-falconry-private",
+        "name": "Private Desert Falconry Camp",
+        "price": 14000,
+        "description": "4x4 deep into desert. Falconer, oud player, traditional feast."
+      }
+    ],
+    "preferredBy": [
+      "khalid-al-rashid",
+      "marcus-chen"
+    ]
   },
   {
     "id": "jumeirah-al-qasr",
@@ -474,14 +907,33 @@
     "lng": 55.183,
     "description": "Madinat Jumeirah complex's flagship. Arabian palace aesthetic. Private beach, abra waterways winding through the property, souk attached. The grown-up choice in Dubai.",
     "shortDescription": "Madinat Jumeirah flagship. Arabian palace. Abras and souks.",
-    "amenities": ["spa", "multiple pools", "private beach", "abra transport", "souk access", "kids club"],
-    "dressCode": "Resort elegant",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-souk-shopping", "name": "Private Souk Shopping Experience", "price": 4500, "description": "Insider shopper through Madinat souk after hours."},
-      {"id": "desert-glamping", "name": "Private Desert Glamping Night", "price": 12000, "description": "Overnight in private desert camp with full butler service."}
+    "amenities": [
+      "spa",
+      "multiple pools",
+      "private beach",
+      "abra transport",
+      "souk access",
+      "kids club"
     ],
-    "preferredBy": ["khalid-al-rashid"]
+    "dressCode": "Resort elegant",
+    "imageUrl": "/art/resorts/jumeirah-al-qasr.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-souk-shopping",
+        "name": "Private Souk Shopping Experience",
+        "price": 4500,
+        "description": "Insider shopper through Madinat souk after hours."
+      },
+      {
+        "id": "desert-glamping",
+        "name": "Private Desert Glamping Night",
+        "price": 12000,
+        "description": "Overnight in private desert camp with full butler service."
+      }
+    ],
+    "preferredBy": [
+      "khalid-al-rashid"
+    ]
   },
   {
     "id": "singita-sweni",
@@ -496,19 +948,44 @@
     "tier": 5,
     "nightlyRate": 4500,
     "currency": "USD",
-    "lat": -24.490,
+    "lat": -24.49,
     "lng": 31.778,
     "description": "Six-suite lodge on the Sweni River in Kruger. Glass walls onto the bushveld. Big Five at your doorstep. Conservation-driven luxury.",
     "shortDescription": "Six suites on the Sweni River. Big Five. Glass walls.",
-    "amenities": ["spa", "wildlife center", "fitness", "private dining", "wine cellar", "library"],
-    "dressCode": "Safari neutrals",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-safari-vehicle", "name": "Private Safari Vehicle for Stay", "price": 8500, "description": "Dedicated vehicle, ranger, tracker. Set your own schedule."},
-      {"id": "walking-safari-private", "name": "Private Walking Safari with Master Tracker", "price": 5500, "description": "On-foot bush experience with senior tracker. All five senses engaged."},
-      {"id": "helicopter-safari", "name": "Helicopter Safari Day", "price": 18000, "description": "Aerial game viewing. Land for bush brunch. Visit remote conservation sites."}
+    "amenities": [
+      "spa",
+      "wildlife center",
+      "fitness",
+      "private dining",
+      "wine cellar",
+      "library"
     ],
-    "preferredBy": ["james-okonkwo-petersen", "khalid-al-rashid"]
+    "dressCode": "Safari neutrals",
+    "imageUrl": "/art/resorts/singita-sweni.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-safari-vehicle",
+        "name": "Private Safari Vehicle for Stay",
+        "price": 8500,
+        "description": "Dedicated vehicle, ranger, tracker. Set your own schedule."
+      },
+      {
+        "id": "walking-safari-private",
+        "name": "Private Walking Safari with Master Tracker",
+        "price": 5500,
+        "description": "On-foot bush experience with senior tracker. All five senses engaged."
+      },
+      {
+        "id": "helicopter-safari",
+        "name": "Helicopter Safari Day",
+        "price": 18000,
+        "description": "Aerial game viewing. Land for bush brunch. Visit remote conservation sites."
+      }
+    ],
+    "preferredBy": [
+      "james-okonkwo-petersen",
+      "khalid-al-rashid"
+    ]
   },
   {
     "id": "ellerman-house",
@@ -523,18 +1000,38 @@
     "tier": 4,
     "nightlyRate": 2200,
     "currency": "USD",
-    "lat": -33.910,
+    "lat": -33.91,
     "lng": 18.385,
     "description": "Edwardian mansion above Bantry Bay. Private South African art collection (one of the country's finest). Wine cellar of national significance. Eleven suites only.",
     "shortDescription": "Above Bantry Bay. Museum-grade SA art. Eleven suites.",
-    "amenities": ["spa", "private art gallery", "wine cellar", "infinity pool", "fitness", "private dining"],
-    "dressCode": "Cape sophistication",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "wine-tour-helicopter", "name": "Helicopter Wine Tour Stellenbosch", "price": 9500, "description": "Heli to top three estates. Tastings and lunch at private cellars."},
-      {"id": "private-art-curator", "name": "Private Art Tour with Curator", "price": 3500, "description": "Owner's collection tour with house curator. Champagne service."}
+    "amenities": [
+      "spa",
+      "private art gallery",
+      "wine cellar",
+      "infinity pool",
+      "fitness",
+      "private dining"
     ],
-    "preferredBy": ["james-okonkwo-petersen", "naomi-tanaka"]
+    "dressCode": "Cape sophistication",
+    "imageUrl": "/art/resorts/ellerman-house.svg",
+    "signatureExperiences": [
+      {
+        "id": "wine-tour-helicopter",
+        "name": "Helicopter Wine Tour Stellenbosch",
+        "price": 9500,
+        "description": "Heli to top three estates. Tastings and lunch at private cellars."
+      },
+      {
+        "id": "private-art-curator",
+        "name": "Private Art Tour with Curator",
+        "price": 3500,
+        "description": "Owner's collection tour with house curator. Champagne service."
+      }
+    ],
+    "preferredBy": [
+      "james-okonkwo-petersen",
+      "naomi-tanaka"
+    ]
   },
   {
     "id": "fasano-trancoso",
@@ -553,14 +1050,33 @@
     "lng": -39.092,
     "description": "Trancoso's quasi-secret beach hideaway. Bungalows in the jungle, infinity pool over the Atlantic. Brazilian high society's worst-kept secret.",
     "shortDescription": "Trancoso's hidden Fasano. Brazilian aristocracy's secret.",
-    "amenities": ["spa", "infinity pool", "private beach", "fitness", "tropical dining"],
-    "dressCode": "Bahian beach chic",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-quadricycle-villages", "name": "Private Quadricycle Beach Villages Tour", "price": 3500, "description": "Beach villages day tour. Lunch at remote pousada."},
-      {"id": "private-schooner-coast", "name": "Private Schooner Coastal Day", "price": 6500, "description": "Sail to neighboring beach coves. Fresh seafood lunch on board."}
+    "amenities": [
+      "spa",
+      "infinity pool",
+      "private beach",
+      "fitness",
+      "tropical dining"
     ],
-    "preferredBy": ["rio-almeida", "damir-volkov-reyes"]
+    "dressCode": "Bahian beach chic",
+    "imageUrl": "/art/resorts/fasano-trancoso.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-quadricycle-villages",
+        "name": "Private Quadricycle Beach Villages Tour",
+        "price": 3500,
+        "description": "Beach villages day tour. Lunch at remote pousada."
+      },
+      {
+        "id": "private-schooner-coast",
+        "name": "Private Schooner Coastal Day",
+        "price": 6500,
+        "description": "Sail to neighboring beach coves. Fresh seafood lunch on board."
+      }
+    ],
+    "preferredBy": [
+      "rio-almeida",
+      "damir-volkov-reyes"
+    ]
   },
   {
     "id": "fasano-punta-del-este",
@@ -579,14 +1095,33 @@
     "lng": -55.073,
     "description": "Isay Weinfeld-designed bungalows in the dunes outside Punta. Brazilian South American sophistication. Where the Latin American art world summers.",
     "shortDescription": "Isay Weinfeld bungalows in Punta dunes. Latin elegance.",
-    "amenities": ["spa", "private beach", "fitness", "fine dining", "wine cellar"],
-    "dressCode": "Resort cool",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "polo-private-day", "name": "Private Polo Day at La Bagatelle", "price": 12000, "description": "Match arranged. Lunch at estancia. Optional ride."},
-      {"id": "carmelo-vineyards", "name": "Carmelo Wineries Day", "price": 6500, "description": "Helicopter to Garzón vineyards. Lunch with the winemaker."}
+    "amenities": [
+      "spa",
+      "private beach",
+      "fitness",
+      "fine dining",
+      "wine cellar"
     ],
-    "preferredBy": ["rio-almeida", "damir-volkov-reyes"]
+    "dressCode": "Resort cool",
+    "imageUrl": "/art/resorts/fasano-punta-del-este.svg",
+    "signatureExperiences": [
+      {
+        "id": "polo-private-day",
+        "name": "Private Polo Day at La Bagatelle",
+        "price": 12000,
+        "description": "Match arranged. Lunch at estancia. Optional ride."
+      },
+      {
+        "id": "carmelo-vineyards",
+        "name": "Carmelo Wineries Day",
+        "price": 6500,
+        "description": "Helicopter to Garzón vineyards. Lunch with the winemaker."
+      }
+    ],
+    "preferredBy": [
+      "rio-almeida",
+      "damir-volkov-reyes"
+    ]
   },
   {
     "id": "rosewood-sao-paulo",
@@ -605,14 +1140,34 @@
     "lng": -46.652,
     "description": "Jean Nouvel-designed tower in Bela Vista. 175 rooms, four restaurants, art collection of major Brazilian works. The new center of São Paulo society.",
     "shortDescription": "Jean Nouvel's tower. Brazilian art. New SP society HQ.",
-    "amenities": ["spa", "rooftop pool", "art collection", "multiple restaurants", "fitness", "library"],
-    "dressCode": "São Paulo urban polish",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-art-gallery-tour", "name": "Private SP Art Gallery Day", "price": 4500, "description": "Insider tour of top galleries (Mendes Wood, Fortes D'Aloia). Studio visits arranged."},
-      {"id": "samba-school-private", "name": "Private Samba School Visit", "price": 5500, "description": "Behind-the-scenes at top Carnaval samba school. Rehearsal access."}
+    "amenities": [
+      "spa",
+      "rooftop pool",
+      "art collection",
+      "multiple restaurants",
+      "fitness",
+      "library"
     ],
-    "preferredBy": ["rio-almeida", "damir-volkov-reyes"]
+    "dressCode": "São Paulo urban polish",
+    "imageUrl": "/art/resorts/rosewood-sao-paulo.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-art-gallery-tour",
+        "name": "Private SP Art Gallery Day",
+        "price": 4500,
+        "description": "Insider tour of top galleries (Mendes Wood, Fortes D'Aloia). Studio visits arranged."
+      },
+      {
+        "id": "samba-school-private",
+        "name": "Private Samba School Visit",
+        "price": 5500,
+        "description": "Behind-the-scenes at top Carnaval samba school. Rehearsal access."
+      }
+    ],
+    "preferredBy": [
+      "rio-almeida",
+      "damir-volkov-reyes"
+    ]
   },
   {
     "id": "halekulani",
@@ -631,15 +1186,44 @@
     "lng": -157.835,
     "description": "House Befitting Heaven. Waikiki since 1917. Refined Hawaiian luxury. Where Tama hosts. The home court advantage.",
     "shortDescription": "Tama's Honolulu home court. House Befitting Heaven.",
-    "amenities": ["spa", "Waikiki beach access", "infinity pool", "fitness", "fine dining", "House Without a Key (live music)"],
-    "dressCode": "Refined island",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-luau", "name": "Private Beachfront Luau", "price": 8500, "description": "Closed luau experience for your party. Hawaiian musicians and dancers."},
-      {"id": "north-shore-helicopter", "name": "North Shore Helicopter Day", "price": 9500, "description": "Helicopter to North Shore. Surf lesson with Olympic surfer arranged."},
-      {"id": "private-lanai-omakase", "name": "Private Lanai Omakase", "price": 6500, "description": "Top sushi master visits your suite. Twelve-course omakase on private lanai."}
+    "amenities": [
+      "spa",
+      "Waikiki beach access",
+      "infinity pool",
+      "fitness",
+      "fine dining",
+      "House Without a Key (live music)"
     ],
-    "preferredBy": ["marcus-chen", "naomi-tanaka", "theo-beaumont", "rio-almeida", "james-okonkwo-petersen", "damir-volkov-reyes"]
+    "dressCode": "Refined island",
+    "imageUrl": "/art/resorts/halekulani.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-luau",
+        "name": "Private Beachfront Luau",
+        "price": 8500,
+        "description": "Closed luau experience for your party. Hawaiian musicians and dancers."
+      },
+      {
+        "id": "north-shore-helicopter",
+        "name": "North Shore Helicopter Day",
+        "price": 9500,
+        "description": "Helicopter to North Shore. Surf lesson with Olympic surfer arranged."
+      },
+      {
+        "id": "private-lanai-omakase",
+        "name": "Private Lanai Omakase",
+        "price": 6500,
+        "description": "Top sushi master visits your suite. Twelve-course omakase on private lanai."
+      }
+    ],
+    "preferredBy": [
+      "marcus-chen",
+      "naomi-tanaka",
+      "theo-beaumont",
+      "rio-almeida",
+      "james-okonkwo-petersen",
+      "damir-volkov-reyes"
+    ]
   },
   {
     "id": "the-lodge-koele",
@@ -658,14 +1242,34 @@
     "lng": -156.918,
     "description": "Larry Ellison bought the island. Then turned this into a wellness sanctuary. Adults only, deeply private, individualized programs. The richest people you've never heard of are usually here.",
     "shortDescription": "Larry Ellison's island wellness sanctuary. Adults only.",
-    "amenities": ["spa", "personalized wellness", "fitness", "meditation", "private dining", "island activities"],
-    "dressCode": "Wellness comfortable",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "personalized-wellness-program", "name": "Personalized Wellness Sensei Program", "price": 12000, "description": "Bespoke physical, nutritional, mental program designed for you over your stay."},
-      {"id": "private-island-tour", "name": "Private Lanai Island Tour", "price": 5500, "description": "4x4 to remote beaches and Garden of the Gods. Private picnic at hidden cove."}
+    "amenities": [
+      "spa",
+      "personalized wellness",
+      "fitness",
+      "meditation",
+      "private dining",
+      "island activities"
     ],
-    "preferredBy": ["naomi-tanaka", "marcus-chen"]
+    "dressCode": "Wellness comfortable",
+    "imageUrl": "/art/resorts/the-lodge-koele.svg",
+    "signatureExperiences": [
+      {
+        "id": "personalized-wellness-program",
+        "name": "Personalized Wellness Sensei Program",
+        "price": 12000,
+        "description": "Bespoke physical, nutritional, mental program designed for you over your stay."
+      },
+      {
+        "id": "private-island-tour",
+        "name": "Private Lanai Island Tour",
+        "price": 5500,
+        "description": "4x4 to remote beaches and Garden of the Gods. Private picnic at hidden cove."
+      }
+    ],
+    "preferredBy": [
+      "naomi-tanaka",
+      "marcus-chen"
+    ]
   },
   {
     "id": "amanyara",
@@ -684,14 +1288,35 @@
     "lng": -72.288,
     "description": "Northwest tip of Providenciales, on a nature reserve. Pavilions in pine forest with reflecting pools. Private. Quiet. Aman discipline applied to Caribbean blue.",
     "shortDescription": "Aman in Turks and Caicos. Reflecting pools. Caribbean quiet.",
-    "amenities": ["spa", "private beach", "private pools", "fitness", "diving center", "library"],
-    "dressCode": "Resort barefoot",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-yacht-day", "name": "Private Yacht to Iguana Island", "price": 14000, "description": "Catamaran to nearby uninhabited island. Snorkel, lunch on board, swim with rock iguanas."},
-      {"id": "private-conch-experience", "name": "Local Conch Diving + Cooking", "price": 5500, "description": "Free dive for conch with local fisherman. Cook with chef on the beach after."}
+    "amenities": [
+      "spa",
+      "private beach",
+      "private pools",
+      "fitness",
+      "diving center",
+      "library"
     ],
-    "preferredBy": ["marcus-chen", "rio-almeida", "khalid-al-rashid"]
+    "dressCode": "Resort barefoot",
+    "imageUrl": "/art/resorts/amanyara.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-yacht-day",
+        "name": "Private Yacht to Iguana Island",
+        "price": 14000,
+        "description": "Catamaran to nearby uninhabited island. Snorkel, lunch on board, swim with rock iguanas."
+      },
+      {
+        "id": "private-conch-experience",
+        "name": "Local Conch Diving + Cooking",
+        "price": 5500,
+        "description": "Free dive for conch with local fisherman. Cook with chef on the beach after."
+      }
+    ],
+    "preferredBy": [
+      "marcus-chen",
+      "rio-almeida",
+      "khalid-al-rashid"
+    ]
   },
   {
     "id": "twin-farms",
@@ -710,14 +1335,35 @@
     "lng": -72.617,
     "description": "300-acre Vermont estate. Twenty cottages and lodges. All-inclusive. Whatever you want, whenever. The American answer to a country estate.",
     "shortDescription": "Vermont's secret. 300 acres. All-inclusive Americana.",
-    "amenities": ["spa", "fitness", "tennis", "fly fishing", "skiing in season", "library", "farm dinners"],
-    "dressCode": "Country house casual",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-fly-fishing", "name": "Private Fly Fishing Guide", "price": 3500, "description": "Master fly fisher. Vermont rivers. Picnic lunch streamside."},
-      {"id": "syrup-harvest", "name": "Maple Sugaring Private Experience", "price": 2500, "description": "Sugar shack to bottle. Take your own syrup home."}
+    "amenities": [
+      "spa",
+      "fitness",
+      "tennis",
+      "fly fishing",
+      "skiing in season",
+      "library",
+      "farm dinners"
     ],
-    "preferredBy": ["charles-pemberton", "marcus-chen"]
+    "dressCode": "Country house casual",
+    "imageUrl": "/art/resorts/twin-farms.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-fly-fishing",
+        "name": "Private Fly Fishing Guide",
+        "price": 3500,
+        "description": "Master fly fisher. Vermont rivers. Picnic lunch streamside."
+      },
+      {
+        "id": "syrup-harvest",
+        "name": "Maple Sugaring Private Experience",
+        "price": 2500,
+        "description": "Sugar shack to bottle. Take your own syrup home."
+      }
+    ],
+    "preferredBy": [
+      "charles-pemberton",
+      "marcus-chen"
+    ]
   },
   {
     "id": "soneva-fushi",
@@ -736,14 +1382,36 @@
     "lng": 73.078,
     "description": "Maldives original barefoot luxury island. Each villa with private pool, observatory access, slow design. Sustainability-focused. The blueprint everyone copies.",
     "shortDescription": "Maldives original. Barefoot. Observatory. Sustainable.",
-    "amenities": ["spa", "observatory", "private pools", "fitness", "diving center", "cinema in jungle", "ice cream room"],
-    "dressCode": "Barefoot",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-yacht-overnight", "name": "Private Yacht Overnight", "price": 22000, "description": "Sleep on private yacht in remote atoll. Crew, chef, deserted beaches."},
-      {"id": "manta-ray-private", "name": "Private Manta Ray Encounter", "price": 8500, "description": "Marine biologist guides snorkel with manta squadron in Hanifaru Bay (season)."}
+    "amenities": [
+      "spa",
+      "observatory",
+      "private pools",
+      "fitness",
+      "diving center",
+      "cinema in jungle",
+      "ice cream room"
     ],
-    "preferredBy": ["khalid-al-rashid", "naomi-tanaka", "marcus-chen"]
+    "dressCode": "Barefoot",
+    "imageUrl": "/art/resorts/soneva-fushi.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-yacht-overnight",
+        "name": "Private Yacht Overnight",
+        "price": 22000,
+        "description": "Sleep on private yacht in remote atoll. Crew, chef, deserted beaches."
+      },
+      {
+        "id": "manta-ray-private",
+        "name": "Private Manta Ray Encounter",
+        "price": 8500,
+        "description": "Marine biologist guides snorkel with manta squadron in Hanifaru Bay (season)."
+      }
+    ],
+    "preferredBy": [
+      "khalid-al-rashid",
+      "naomi-tanaka",
+      "marcus-chen"
+    ]
   },
   {
     "id": "the-upper-house",
@@ -762,14 +1430,34 @@
     "lng": 114.166,
     "description": "Andre Fu-designed, Pacific Place. 117 suites, no front desk, deeply considered. The grown-up's Hong Kong choice.",
     "shortDescription": "Andre Fu's Hong Kong. No front desk. Considered everything.",
-    "amenities": ["spa", "fitness", "fine dining", "private dining", "library lounge"],
-    "dressCode": "Hong Kong international",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "tailored-suit-private", "name": "Bespoke Tailoring Day", "price": 6500, "description": "Master tailor visits suite. Three garments, shipped home."},
-      {"id": "junk-boat-private", "name": "Private Junk Boat Day", "price": 8500, "description": "Restored junk through Hong Kong waters. Lunch on board. Beach stop."}
+    "amenities": [
+      "spa",
+      "fitness",
+      "fine dining",
+      "private dining",
+      "library lounge"
     ],
-    "preferredBy": ["james-okonkwo-petersen", "naomi-tanaka", "marcus-chen"]
+    "dressCode": "Hong Kong international",
+    "imageUrl": "/art/resorts/the-upper-house.svg",
+    "signatureExperiences": [
+      {
+        "id": "tailored-suit-private",
+        "name": "Bespoke Tailoring Day",
+        "price": 6500,
+        "description": "Master tailor visits suite. Three garments, shipped home."
+      },
+      {
+        "id": "junk-boat-private",
+        "name": "Private Junk Boat Day",
+        "price": 8500,
+        "description": "Restored junk through Hong Kong waters. Lunch on board. Beach stop."
+      }
+    ],
+    "preferredBy": [
+      "james-okonkwo-petersen",
+      "naomi-tanaka",
+      "marcus-chen"
+    ]
   },
   {
     "id": "passalacqua",
@@ -788,14 +1476,37 @@
     "lng": 9.106,
     "description": "Eighteenth-century villa on Lake Como, opened as hotel in 2022. Twenty-four suites. Voted world's best hotel within a year. Frescoes restored, gardens magic, the lake just there.",
     "shortDescription": "Lake Como's new icon. Eighteenth-century villa. Twenty-four suites.",
-    "amenities": ["spa", "infinity pool over lake", "private boats", "fitness", "tennis", "fine dining", "music room"],
-    "dressCode": "Lake elegance",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-vintage-riva", "name": "Private Vintage Riva Day", "price": 12000, "description": "Vintage Riva motorboat for the day. Captain. Lunch at Bellagio."},
-      {"id": "private-villa-tour", "name": "Closed-Villa Tour with Curator", "price": 5500, "description": "Behind-velvet-rope tour of frescoes and grounds. Aperitivo in private salon."}
+    "amenities": [
+      "spa",
+      "infinity pool over lake",
+      "private boats",
+      "fitness",
+      "tennis",
+      "fine dining",
+      "music room"
     ],
-    "preferredBy": ["elena-marchetti", "theo-beaumont", "sasha-volkov", "rio-almeida"]
+    "dressCode": "Lake elegance",
+    "imageUrl": "/art/resorts/passalacqua.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-vintage-riva",
+        "name": "Private Vintage Riva Day",
+        "price": 12000,
+        "description": "Vintage Riva motorboat for the day. Captain. Lunch at Bellagio."
+      },
+      {
+        "id": "private-villa-tour",
+        "name": "Closed-Villa Tour with Curator",
+        "price": 5500,
+        "description": "Behind-velvet-rope tour of frescoes and grounds. Aperitivo in private salon."
+      }
+    ],
+    "preferredBy": [
+      "elena-marchetti",
+      "theo-beaumont",
+      "sasha-volkov",
+      "rio-almeida"
+    ]
   },
   {
     "id": "borgo-egnazia",
@@ -810,18 +1521,38 @@
     "tier": 4,
     "nightlyRate": 1500,
     "currency": "USD",
-    "lat": 40.890,
+    "lat": 40.89,
     "lng": 17.385,
     "description": "Recreated Pugliese village on the Adriatic. Limestone, courtyards, olive trees. Madonna got married here. Now you stay here.",
     "shortDescription": "Built-from-scratch Pugliese village. Madonna's wedding venue.",
-    "amenities": ["spa", "private beach", "tennis", "fitness", "kids program", "olive oil cellar"],
-    "dressCode": "Italian summer",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "alberobello-trullo-day", "name": "Private Trullo Country Day", "price": 4500, "description": "Visit medieval trulli in Alberobello. Lunch at private masseria."},
-      {"id": "private-pasta-master", "name": "Private Pasta Master Class", "price": 2800, "description": "Nonna teaches you orecchiette and Pugliese sauces."}
+    "amenities": [
+      "spa",
+      "private beach",
+      "tennis",
+      "fitness",
+      "kids program",
+      "olive oil cellar"
     ],
-    "preferredBy": ["elena-marchetti", "rio-almeida"]
+    "dressCode": "Italian summer",
+    "imageUrl": "/art/resorts/borgo-egnazia.svg",
+    "signatureExperiences": [
+      {
+        "id": "alberobello-trullo-day",
+        "name": "Private Trullo Country Day",
+        "price": 4500,
+        "description": "Visit medieval trulli in Alberobello. Lunch at private masseria."
+      },
+      {
+        "id": "private-pasta-master",
+        "name": "Private Pasta Master Class",
+        "price": 2800,
+        "description": "Nonna teaches you orecchiette and Pugliese sauces."
+      }
+    ],
+    "preferredBy": [
+      "elena-marchetti",
+      "rio-almeida"
+    ]
   },
   {
     "id": "splendido-portofino",
@@ -840,14 +1571,35 @@
     "lng": 9.207,
     "description": "Above Portofino harbor, with the postcard view. Sixty-four rooms, gardens, infinity pool, helipad. Where the harbor regulars stay.",
     "shortDescription": "Above Portofino. The postcard view. Where the regulars stay.",
-    "amenities": ["spa", "infinity pool", "tennis", "fitness", "private beach access", "helipad"],
-    "dressCode": "Italian Riviera classic",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-gozzo-cinque-terre", "name": "Private Gozzo to Cinque Terre", "price": 8500, "description": "Wooden boat captain takes you down the coast. Lunch in Vernazza."},
-      {"id": "san-fruttuoso-private", "name": "Private San Fruttuoso Excursion", "price": 4500, "description": "Boat to abbey accessible only by sea. Private monastery tour."}
+    "amenities": [
+      "spa",
+      "infinity pool",
+      "tennis",
+      "fitness",
+      "private beach access",
+      "helipad"
     ],
-    "preferredBy": ["elena-marchetti", "sasha-volkov", "theo-beaumont"]
+    "dressCode": "Italian Riviera classic",
+    "imageUrl": "/art/resorts/splendido-portofino.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-gozzo-cinque-terre",
+        "name": "Private Gozzo to Cinque Terre",
+        "price": 8500,
+        "description": "Wooden boat captain takes you down the coast. Lunch in Vernazza."
+      },
+      {
+        "id": "san-fruttuoso-private",
+        "name": "Private San Fruttuoso Excursion",
+        "price": 4500,
+        "description": "Boat to abbey accessible only by sea. Private monastery tour."
+      }
+    ],
+    "preferredBy": [
+      "elena-marchetti",
+      "sasha-volkov",
+      "theo-beaumont"
+    ]
   },
   {
     "id": "explora-patagonia",
@@ -866,14 +1618,34 @@
     "lng": -73.025,
     "description": "Inside Torres del Paine National Park. Forty-nine rooms facing the towers. All-inclusive expeditions: trekking, riding, kayaking. Wilderness as the only program.",
     "shortDescription": "Torres del Paine. Forty-nine rooms. The towers as wallpaper.",
-    "amenities": ["spa", "all-inclusive guided expeditions", "fitness", "library", "outdoor hot tubs"],
-    "dressCode": "Patagonia technical",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-helicopter-glaciers", "name": "Private Helicopter Glaciers Day", "price": 18000, "description": "Land on glacier. Champagne on ice. Aerial tour of Southern Ice Field."},
-      {"id": "private-horseback-multiday", "name": "Multi-Day Private Horseback", "price": 8500, "description": "Two-day ride to remote estancia. Sleep under stars. Gauchos as guides."}
+    "amenities": [
+      "spa",
+      "all-inclusive guided expeditions",
+      "fitness",
+      "library",
+      "outdoor hot tubs"
     ],
-    "preferredBy": ["damir-volkov-reyes", "naomi-tanaka", "marcus-chen"]
+    "dressCode": "Patagonia technical",
+    "imageUrl": "/art/resorts/explora-patagonia.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-helicopter-glaciers",
+        "name": "Private Helicopter Glaciers Day",
+        "price": 18000,
+        "description": "Land on glacier. Champagne on ice. Aerial tour of Southern Ice Field."
+      },
+      {
+        "id": "private-horseback-multiday",
+        "name": "Multi-Day Private Horseback",
+        "price": 8500,
+        "description": "Two-day ride to remote estancia. Sleep under stars. Gauchos as guides."
+      }
+    ],
+    "preferredBy": [
+      "damir-volkov-reyes",
+      "naomi-tanaka",
+      "marcus-chen"
+    ]
   },
   {
     "id": "the-rosewood-london",
@@ -892,14 +1664,34 @@
     "lng": -0.118,
     "description": "Edwardian Belle Époque manor in Holborn. Marble grand staircase, courtyard, deeply considered service. The London hotel for people who don't want Mayfair.",
     "shortDescription": "Edwardian Holborn manor. The anti-Mayfair London choice.",
-    "amenities": ["spa", "fitness", "fine dining", "afternoon tea", "private dining", "library"],
-    "dressCode": "London elegant",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "private-savile-row", "name": "Private Savile Row Tailoring Tour", "price": 5500, "description": "Insider tour of three legendary tailors. Bespoke order at one of them."},
-      {"id": "private-tate-tour", "name": "Private After-Hours Tate Modern", "price": 8500, "description": "Closed museum tour with senior curator. Champagne in the Turbine Hall."}
+    "amenities": [
+      "spa",
+      "fitness",
+      "fine dining",
+      "afternoon tea",
+      "private dining",
+      "library"
     ],
-    "preferredBy": ["james-okonkwo-petersen", "charles-pemberton"]
+    "dressCode": "London elegant",
+    "imageUrl": "/art/resorts/the-rosewood-london.svg",
+    "signatureExperiences": [
+      {
+        "id": "private-savile-row",
+        "name": "Private Savile Row Tailoring Tour",
+        "price": 5500,
+        "description": "Insider tour of three legendary tailors. Bespoke order at one of them."
+      },
+      {
+        "id": "private-tate-tour",
+        "name": "Private After-Hours Tate Modern",
+        "price": 8500,
+        "description": "Closed museum tour with senior curator. Champagne in the Turbine Hall."
+      }
+    ],
+    "preferredBy": [
+      "james-okonkwo-petersen",
+      "charles-pemberton"
+    ]
   },
   {
     "id": "chateau-de-fonscolombe",
@@ -918,13 +1710,35 @@
     "lng": 5.473,
     "description": "Eighteenth-century château outside Aix-en-Provence. Vineyards, lavender, library. Forty rooms. The Provence of imagination, made real.",
     "shortDescription": "Eighteenth-century Provence château. Lavender, vines, library.",
-    "amenities": ["spa", "vineyards", "swimming pool", "tennis", "fine dining", "library", "horse riding"],
-    "dressCode": "Provençal casual",
-    "imageUrl": null,
-    "signatureExperiences": [
-      {"id": "lavender-harvest", "name": "Private Lavender Harvest Day", "price": 3500, "description": "Help with harvest. Distillery tour. Take home essential oil bottle."},
-      {"id": "cezanne-studio-private", "name": "Cézanne Studio Private Visit", "price": 2500, "description": "Closed visit to Cézanne's atelier in Aix. Curator-led."}
+    "amenities": [
+      "spa",
+      "vineyards",
+      "swimming pool",
+      "tennis",
+      "fine dining",
+      "library",
+      "horse riding"
     ],
-    "preferredBy": ["theo-beaumont", "elena-marchetti", "sasha-volkov"]
+    "dressCode": "Provençal casual",
+    "imageUrl": "/art/resorts/chateau-de-fonscolombe.svg",
+    "signatureExperiences": [
+      {
+        "id": "lavender-harvest",
+        "name": "Private Lavender Harvest Day",
+        "price": 3500,
+        "description": "Help with harvest. Distillery tour. Take home essential oil bottle."
+      },
+      {
+        "id": "cezanne-studio-private",
+        "name": "Cézanne Studio Private Visit",
+        "price": 2500,
+        "description": "Closed visit to Cézanne's atelier in Aix. Curator-led."
+      }
+    ],
+    "preferredBy": [
+      "theo-beaumont",
+      "elena-marchetti",
+      "sasha-volkov"
+    ]
   }
 ]

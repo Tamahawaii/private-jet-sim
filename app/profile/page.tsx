@@ -3,12 +3,13 @@ import React from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../lib/db';
 import Link from 'next/link';
-import { ArrowLeft, MapPin, Edit3, User, Shield, Briefcase, Heart, Utensils, Music, Glasses, Coffee, Car } from 'lucide-react';
+import { MapPin, Edit3, User, Briefcase, Heart, Music, Glasses, Coffee, Car, Bell, ShoppingCart } from 'lucide-react';
 import { Player, PartnerEntry } from '../../types';
 import Passport from './_components/Passport';
 
 export default function PlayerProfilePage() {
     const player = useLiveQuery(() => db.player.get('player')) as Player;
+    const unreadInbox = useLiveQuery(() => db.notifications.filter(n => !n.readAt).count()) || 0;
 
     if (player === undefined) return <div className="p-24 text-center font-mono text-white tracking-widest">LOADING DOSSIER...</div>;
     if (player === null) return <div className="p-24 text-center font-mono text-white text-red-500">CANONICAL RECORD ERROR</div>;
@@ -16,56 +17,29 @@ export default function PlayerProfilePage() {
     const initials = player.displayName.split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase();
 
     return (
-        <div className="w-full h-full overflow-y-auto bg-[#070b12] text-white pb-tabs" style={{ paddingTop: 'calc(var(--nav-h) + var(--safe-top))' }}>
-            {/* Top Navigation */}
-            <div className="sticky top-0 z-50 bg-[#070b12]/90 backdrop-blur-md border-b border-white/10 p-4 md:px-8 flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors font-mono tracking-widest text-xs uppercase">
-                    <ArrowLeft size={16} /> Dashboard
-                </Link>
-                <div className="flex items-center gap-3">
-                    <Link href="/settings" className="px-3 py-1.5 border border-white/10 rounded font-mono text-[10px] tracking-widest text-zinc-400 hover:text-white hover:border-white/30 bg-white/5 flex items-center gap-1.5 transition-colors">
-                        <Edit3 size={12}/> EDIT
-                    </Link>
-                </div>
+        <div className="w-full h-full overflow-y-auto no-scrollbar bg-[#070b12] text-white pb-tabs" style={{ paddingTop: 'calc(var(--nav-h) + var(--safe-top))' }}>
+            <div className="max-w-4xl mx-auto px-4 md:px-8 pt-4">
+               <div className="relative rounded-3xl overflow-hidden border border-white/8" style={{ background: `linear-gradient(135deg, ${player.monogramColors?.[0] || '#0b6e8c'}, ${player.monogramColors?.[1] || '#2ca5c4'})` }}>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#070b12] via-[#070b12]/40 to-transparent" />
+                  <div className="relative p-5 md:p-7 flex items-end gap-4">
+                     <div className="w-[104px] h-[104px] md:w-[124px] md:h-[124px] rounded-2xl overflow-hidden border-[3px] border-[#070b12] shadow-2xl bg-[#0b1220] shrink-0 relative">
+                        <img src={player.imageUrl || '/avatars/player.svg'} alt={player.displayName} className="absolute inset-0 w-full h-full object-cover" style={player.imageUrl ? {} : { transform: 'scale(1.06) translateY(3%)' }} />
+                     </div>
+                     <div className="min-w-0 flex-1">
+                        <div className="eyebrow">{player.alternateName ? `a.k.a. ${player.alternateName}` : 'Primary record'} · tier {player.wealthTier}</div>
+                        <h1 className="font-serif text-[34px] md:text-[44px] leading-[1.02] text-white mt-1">{player.displayName}</h1>
+                        <div className="text-[12.5px] text-zinc-300 mt-1 flex items-center gap-1.5"><MapPin size={12} /> {player.homeCity} · {player.occupation}</div>
+                     </div>
+                  </div>
+                  <div className="relative px-5 md:px-7 pb-5 flex flex-wrap gap-2">
+                     <Link href="/inbox" className="h-9 px-3.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-[12px] font-semibold flex items-center gap-1.5 relative"><Bell size={13} /> Inbox{unreadInbox > 0 && <span className="ml-1 bg-[var(--accent)] text-black text-[10px] font-mono font-bold px-1.5 rounded-md">{unreadInbox}</span>}</Link>
+                     <Link href="/acquisitions" className="h-9 px-3.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-[12px] font-semibold flex items-center gap-1.5"><ShoppingCart size={13} /> Acquire</Link>
+                     <Link href="/settings" className="h-9 px-3.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-[12px] font-semibold flex items-center gap-1.5"><Edit3 size={13} /> Settings</Link>
+                  </div>
+               </div>
             </div>
 
-            <div className="w-full h-[40vh] min-h-[300px] relative bg-zinc-900 border-b border-white/10">
-                 {player.imageUrl ? (
-                     <img 
-                         src={player.imageUrl} 
-                         alt={player.displayName} 
-                         className="w-full h-full object-cover opacity-80"
-                     />
-                 ) : (
-                     <div 
-                        className="w-full h-full flex items-center justify-center relative overflow-hidden" 
-                        style={{ background: `linear-gradient(135deg, ${player.monogramColors?.[0] || '#222'}, ${player.monogramColors?.[1] || '#111'})` }}
-                     >
-
-                         <span className="text-[120px] text-white/30 font-serif leading-none tracking-tighter mix-blend-overlay">{initials}</span>
-                     </div>
-                 )}
-                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#0a0a0c]/40 to-transparent pointer-events-none" />
-                 
-                 <div className="absolute bottom-0 left-0 w-full p-6 md:p-12">
-                     <div className="max-w-4xl mx-auto flex items-end justify-between">
-                         <div>
-                            <span className="text-zinc-400 tracking-widest uppercase font-mono text-xs block mb-2">
-                                {player.alternateName ? `A.K.A. ${player.alternateName}` : 'PRIMARY RECORD'}
-                            </span>
-                            <h1 className="text-4xl md:text-5xl lg:text-7xl font-sans font-black tracking-tight text-white mb-4 group">{player.displayName}</h1>
-                            <div className="flex flex-wrap items-center gap-4 text-xs font-mono tracking-widest uppercase mt-4">
-                               <div className="text-[#00f0ff] border border-[#00f0ff]/30 bg-[#00f0ff]/10 px-3 py-1 rounded-sm flex items-center gap-1.5">
-                                   <Shield size={12}/> TIER {player.wealthTier}
-                               </div>
-                               <div className="text-zinc-300 flex items-center gap-1.5"><MapPin size={14}/> {player.region}</div>
-                            </div>
-                         </div>
-                     </div>
-                 </div>
-            </div>
-
-            <div className="max-w-4xl mx-auto p-6 md:p-12 pb-32">
+            <div className="max-w-4xl mx-auto px-4 md:px-8 py-8 pb-24">
                 <div className="mb-14"><Passport player={player} /></div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                     

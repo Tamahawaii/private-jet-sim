@@ -1,24 +1,80 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { Download, Upload, AlertTriangle, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Download, Upload, AlertTriangle, ArrowRight, ShieldCheck, Camera, Sparkles, RotateCcw, X, Trash2 } from 'lucide-react';
 import { db } from '../../lib/db';
 import { useStore } from '../lib/store';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { PageShell, PageHeader, Button } from '../components/ui';
 
 const SCHEMA_VERSION = 1;
 
+/** Downscale an uploaded photo to a square portrait and return a compact JPEG data URL. */
+async function fileToPortrait(file: File, size = 512): Promise<string> {
+    const url = URL.createObjectURL(file);
+    try {
+        const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+            const i = new Image();
+            i.onload = () => resolve(i);
+            i.onerror = () => reject(new Error('Could not read that image'));
+            i.src = url;
+        });
+        const side = Math.min(img.naturalWidth, img.naturalHeight);
+        const sx = (img.naturalWidth - side) / 2;
+        const sy = (img.naturalHeight - side) / 2;
+        const canvas = document.createElement('canvas');
+        canvas.width = size; canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Canvas unavailable');
+        ctx.drawImage(img, sx, sy, side, side, 0, 0, size, size);
+        return canvas.toDataURL('image/jpeg', 0.86);
+    } finally {
+        URL.revokeObjectURL(url);
+    }
+}
+
 export default function SettingsPage() {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const photoInputRef = useRef<HTMLInputElement>(null);
     const [importModal, setImportModal] = useState<{ open: boolean, data: any | null, diff: any | null, error: string | null }>({ open: false, data: null, diff: null, error: null });
+    const [resetOpen, setResetOpen] = useState(false);
     const [confirmText, setConfirmText] = useState('');
+    const [busy, setBusy] = useState<string | null>(null);
     const addToast = useStore(state => state.addToast);
-    
+
     // Live counts for diff logic
     const playerQuery = useLiveQuery(() => db.player?.toArray()) || [];
     const player = playerQuery[0] || null;
     const flightsCount = useLiveQuery(() => db.flights?.count()) || 0;
-    
+    const isNative = typeof window !== 'undefined' && !!(window as unknown as { JetstreamNative?: unknown }).JetstreamNative;
+
+    const handlePhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        e.target.value = '';
+        if (!file) return;
+        setBusy('photo');
+        try {
+            const dataUrl = await fileToPortrait(file);
+            await db.player.update('player', { imageUrl: dataUrl });
+            addToast({ message: 'Portrait updated.' });
+        } catch (err) {
+            console.error(err);
+            addToast({ message: 'That photo could not be used.' });
+        } finally { setBusy(null); }
+    };
+
+    const generatePortrait = async () => {
+        setBusy('generate');
+        try {
+            const { portraitDataUri } = await import('../../lib/avatars/generate');
+            const seed = `${player?.displayName || 'player'}-${Math.random().toString(36).slice(2, 8)}`;
+            await db.player.update('player', { imageUrl: portraitDataUri(seed, {}) });
+        } catch (err) {
+            console.error(err);
+            addToast({ message: 'Portrait generation failed.' });
+        } finally { setBusy(null); }
+    };
+
     const handleExport = async (isBackup = false) => {
         try {
             const data: any = {};
@@ -26,7 +82,7 @@ export default function SettingsPage() {
                 data[table.name] = await table.toArray();
             }
             const blob = new Blob([JSON.stringify({ schemaVersion: SCHEMA_VERSION, exportedAt: new Date().toISOString(), data }, null, 2)], { type: 'application/json' });
-            
+
             if (isBackup) {
                 // Background backup, technically we just return the object or save it locally
                 return data;
@@ -52,7 +108,7 @@ export default function SettingsPage() {
             a.download = fileName;
             a.click();
             URL.revokeObjectURL(url);
-            addToast({ message: "Save data exported successfully. Keep it secure." });
+            addToast({ message: "Save exported. Keep it somewhere safe." });
         } catch (e) {
             console.error("Export failed", e);
             addToast({ message: "Export failed. See console." });
@@ -61,6 +117,7 @@ export default function SettingsPage() {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
+        e.target.value = '';
         if (!file) return;
 
         const reader = new FileReader();
@@ -68,9 +125,9 @@ export default function SettingsPage() {
             try {
                 const text = event.target?.result as string;
                 const parsed = JSON.parse(text);
-                
+
                 if (parsed.schemaVersion !== SCHEMA_VERSION) {
-                    setImportModal({ open: true, data: null, diff: null, error: `Schema Version Mismatch. Expected ${SCHEMA_VERSION}, got ${parsed.schemaVersion || 'Unknown'}. Import rejected to prevent data corruption.` });
+                    setImportModal({ open: true, data: null, diff: null, error: `This save was written by a different version (schema ${parsed.schemaVersion || 'unknown'}, expected ${SCHEMA_VERSION}). Import rejected to protect your current game.` });
                     return;
                 }
 
@@ -85,7 +142,7 @@ export default function SettingsPage() {
 
                 setImportModal({ open: true, data: parsed.data, diff: dt, error: null });
             } catch (e) {
-                setImportModal({ open: true, data: null, diff: null, error: "Failed to parse JSON save file. Corrupted formatting." });
+                setImportModal({ open: true, data: null, diff: null, error: "That file is not a readable Jetstream save." });
             }
         };
         reader.readAsText(file);
@@ -96,11 +153,10 @@ export default function SettingsPage() {
         if (confirmText !== 'IMPORT') return;
 
         try {
-            // Force stealth backup to localstorage before atomic overwrite
+            // Keep a last-resort backup in localStorage before the atomic overwrite
             const backupStr = JSON.stringify({ schemaVersion: SCHEMA_VERSION, timestamp: Date.now(), data: await handleExport(true) });
             try { localStorage.setItem('jetstream_stealth_backup', backupStr); } catch (e) {} // ignore quota errors
 
-            // Atomic Restitution
             await db.transaction('rw', db.tables, async () => {
                 for (const tableName of Object.keys(importModal.data)) {
                     const table = (db as any)[tableName];
@@ -113,148 +169,149 @@ export default function SettingsPage() {
                 }
             });
 
-            addToast({ message: "Save data imported! State completely overwritten. Hard refresh recommended." });
+            addToast({ message: "Save imported. Reloading…" });
             setImportModal({ open: false, data: null, diff: null, error: null });
             setConfirmText('');
-            // Optional: window.location.reload();
+            setTimeout(() => window.location.reload(), 600);
         } catch (e) {
              console.error("Import failed:", e);
-             addToast({ message: "Critical atomic failure during import." });
+             addToast({ message: "Import failed part-way. Your previous save is untouched." });
         }
     };
 
+    const resetWorld = async () => {
+        if (confirmText !== 'RESET') return;
+        setBusy('reset');
+        try {
+            try { localStorage.removeItem('jetstream-clock'); localStorage.removeItem('jetstream-ui'); } catch (e) {}
+            await db.delete();
+            window.location.href = '/';
+        } catch (e) {
+            console.error(e);
+            addToast({ message: 'Reset failed. Close the app fully and try again.' });
+            setBusy(null);
+        }
+    };
+
+    const closeImport = () => { setImportModal({ open: false, data: null, diff: null, error: null }); setConfirmText(''); };
+
     return (
-        <div className="w-full h-full p-8 pt-24 max-w-4xl mx-auto text-white overflow-y-auto">
-            <h1 className="text-3xl font-black uppercase font-mono tracking-widest text-white mb-2">System Settings</h1>
-            <p className="text-zinc-400 font-sans text-sm mb-12">Manage local session storage and telemetry preferences.</p>
+        <PageShell width="max-w-4xl">
+            <PageHeader eyebrow="Settings" title="You, and your save." subtitle="Everything lives on this device. Back it up before you switch phones." back="/profile" />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                {/* Profile Edit Card */}
-                <div className="bg-black/40 border border-white/10 rounded-xl p-6 md:col-span-2">
-                     <h2 className="font-bold text-lg mb-4 text-[#00f0ff] uppercase font-mono tracking-widest text-xs">Identity Core</h2>
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                         <div>
-                             <label className="text-[10px] uppercase font-mono tracking-widest text-zinc-500 mb-2 block">Display Name</label>
-                             <input 
-                                 type="text"
-                                 value={player?.displayName || ''}
-                                 onChange={(e) => db.player.update('player', { displayName: e.target.value })}
-                                 className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white font-sans text-sm focus:outline-none focus:border-[#00f0ff] transition-colors"
-                             />
-                         </div>
-                         <div>
-                             <label className="text-[10px] uppercase font-mono tracking-widest text-zinc-500 mb-2 block">Avatar URL</label>
-                             <input 
-                                 type="text"
-                                 placeholder="https://..."
-                                 value={player?.imageUrl || ''}
-                                 onChange={(e) => db.player.update('player', { imageUrl: e.target.value || null })}
-                                 className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white font-sans text-sm focus:outline-none focus:border-[#00f0ff] transition-colors"
-                             />
-                         </div>
-                     </div>
-                </div>
-                
-                {/* Export Card */}
-                <div className="bg-black/40 border border-white/10 rounded-xl p-6 group hover:border-[#00f0ff]/50 transition-colors">
-                    <div className="w-12 h-12 bg-[#00f0ff]/10 rounded-lg flex items-center justify-center text-[#00f0ff] mb-4 group-hover:bg-[#00f0ff]/20 transition-colors">
-                        <Download size={20} />
+            {/* Identity */}
+            <section className="rounded-3xl border border-white/8 bg-white/[0.03] p-5 md:p-6 mb-4">
+                <div className="eyebrow mb-4">Identity</div>
+                <div className="flex flex-col sm:flex-row gap-5">
+                    <div className="shrink-0 flex sm:flex-col items-center sm:items-start gap-3">
+                        <div className="w-28 h-28 rounded-2xl overflow-hidden border border-white/10 bg-[#0b1220] relative">
+                            <img src={player?.imageUrl || '/avatars/player.svg'} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                            {busy === 'photo' || busy === 'generate' ? <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-[11px] font-mono text-white">working…</div> : null}
+                        </div>
+                        <div className="flex sm:flex-row flex-col gap-2">
+                            <input type="file" ref={photoInputRef} className="hidden" accept="image/*" onChange={handlePhoto} />
+                            <Button size="sm" variant="secondary" onClick={() => photoInputRef.current?.click()} disabled={!!busy}><Camera size={13} /> Photo</Button>
+                            <Button size="sm" variant="ghost" onClick={generatePortrait} disabled={!!busy}><Sparkles size={13} /> Illustrate me</Button>
+                        </div>
                     </div>
-                    <h2 className="font-bold text-lg mb-2">Export Local Save</h2>
-                    <p className="text-zinc-400 text-sm mb-6">Serialize your entire IndexedDB instance (wallet, fleet, social interactions, events) into a secure JSON flatfile. Recommended before purging cache.</p>
-                    <button 
-                        onClick={() => handleExport(false)}
-                        className="bg-white text-black px-6 py-2 rounded font-bold uppercase font-mono text-xs tracking-widest hover:bg-zinc-200 transition-colors w-full"
-                    >
-                        Initiate Export
-                    </button>
+                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label className="block">
+                            <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5 block">Display name</span>
+                            <input type="text" value={player?.displayName || ''} onChange={(e) => db.player.update('player', { displayName: e.target.value })} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 h-11 text-white text-[14px] focus:outline-none focus:border-[var(--accent)] transition-colors" />
+                        </label>
+                        <label className="block">
+                            <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5 block">Known as</span>
+                            <input type="text" placeholder="Nickname the circle uses" value={player?.alternateName || ''} onChange={(e) => db.player.update('player', { alternateName: e.target.value || undefined })} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 h-11 text-white text-[14px] focus:outline-none focus:border-[var(--accent)] transition-colors" />
+                        </label>
+                        <label className="block md:col-span-2">
+                            <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-500 mb-1.5 block">Portrait link (optional)</span>
+                            <input type="text" placeholder="https://… — or use Photo above" value={player?.imageUrl?.startsWith('data:') ? '' : (player?.imageUrl || '')} onChange={(e) => db.player.update('player', { imageUrl: e.target.value || null })} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 h-11 text-white text-[14px] focus:outline-none focus:border-[var(--accent)] transition-colors" />
+                            {player?.imageUrl ? <button onClick={() => db.player.update('player', { imageUrl: null })} className="mt-2 text-[12px] text-zinc-500 hover:text-white flex items-center gap-1"><Trash2 size={12} /> Remove portrait</button> : null}
+                        </label>
+                    </div>
                 </div>
+            </section>
 
-                {/* Import Card */}
-                <div className="bg-black/40 border border-white/10 rounded-xl p-6 group hover:border-[#f5a7a7]/50 transition-colors">
-                    <div className="w-12 h-12 bg-[#f5a7a7]/10 rounded-lg flex items-center justify-center text-[#f5a7a7] mb-4 group-hover:bg-[#f5a7a7]/20 transition-colors">
-                        <Upload size={20} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <section className="rounded-3xl border border-white/8 bg-white/[0.03] p-5 md:p-6">
+                    <div className="w-11 h-11 rounded-xl bg-[var(--accent)]/12 text-[var(--accent)] flex items-center justify-center mb-4"><Download size={18} /></div>
+                    <h2 className="font-serif text-[22px] text-white mb-1.5">Back up this game</h2>
+                    <p className="text-[13px] text-zinc-400 mb-5">Your wallet, fleet, homes, yachts, circle and every flight — written to one file{isNative ? ' you can save to Drive, Files or email' : ''}.</p>
+                    <Button variant="secondary" className="w-full" onClick={() => handleExport(false)}>Export save</Button>
+                </section>
+
+                <section className="rounded-3xl border border-white/8 bg-white/[0.03] p-5 md:p-6">
+                    <div className="w-11 h-11 rounded-xl bg-[var(--rose)]/12 text-[var(--rose)] flex items-center justify-center mb-4"><Upload size={18} /></div>
+                    <h2 className="font-serif text-[22px] text-white mb-1.5">Restore a save</h2>
+                    <p className="text-[13px] text-zinc-400 mb-5">Replaces everything on this device with the file you pick. You'll see a comparison before anything changes.</p>
+                    <input type="file" ref={fileInputRef} className="hidden" accept=".json,application/json" onChange={handleFileChange} />
+                    <Button variant="secondary" className="w-full" onClick={() => fileInputRef.current?.click()}>Choose save file</Button>
+                </section>
+
+                <section className="rounded-3xl border border-white/8 bg-white/[0.03] p-5 md:p-6 md:col-span-2 flex flex-col sm:flex-row sm:items-center gap-4">
+                    <div className="w-11 h-11 rounded-xl bg-[var(--magenta)]/12 text-[var(--magenta)] flex items-center justify-center shrink-0"><RotateCcw size={18} /></div>
+                    <div className="flex-1">
+                        <h2 className="font-serif text-[22px] text-white mb-1">Start over</h2>
+                        <p className="text-[13px] text-zinc-400">Wipes this device's game and begins a fresh world at Honolulu. Export first if you might want it back.</p>
                     </div>
-                    <h2 className="font-bold text-lg mb-2">Import Timeline</h2>
-                    <p className="text-zinc-400 text-sm mb-6">Overwrite the local simulator state entirely. A stealth backup will be generated immediately before the irreversible atomic wipe triggers.</p>
-                    <input type="file" ref={fileInputRef} className="hidden" accept=".json" onChange={handleFileChange} />
-                    <button 
-                        onClick={() => fileInputRef.current?.click()}
-                        className="border border-[#f5a7a7]/50 text-[#f5a7a7] hover:bg-[#f5a7a7]/10 px-6 py-2 rounded font-bold uppercase font-mono text-xs tracking-widest transition-colors w-full"
-                    >
-                        Select Source File
-                    </button>
-                </div>
+                    <Button variant="danger" onClick={() => { setConfirmText(''); setResetOpen(true); }}>Reset world</Button>
+                </section>
             </div>
+
+            <p className="text-[11px] font-mono text-zinc-600 mt-6">Jetstream {isNative ? 'Android' : 'web'} · local-first · nothing leaves your device unless you export it.</p>
 
             {/* Import Validation Modal */}
             {importModal.open && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setImportModal({ open: false, data: null, diff: null, error: null })} />
-                    
-                    <div className="relative bg-[#0c0c0e] border border-white/10 p-8 pt-10 rounded-2xl w-full max-w-lg shadow-2xl animate-in fade-in zoom-in-95 duration-300">
-                        <button onClick={() => setImportModal({ open: false, data: null, diff: null, error: null })} className="absolute top-4 right-4 text-zinc-500 hover:text-white"><X size={20}/></button>
-                        
+                <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={closeImport} />
+                    <div className="relative bg-[#0b1220] border border-white/10 p-6 md:p-8 rounded-3xl w-full max-w-lg shadow-2xl">
+                        <button onClick={closeImport} className="absolute top-4 right-4 text-zinc-500 hover:text-white"><X size={20}/></button>
                         {importModal.error ? (
                             <div className="flex flex-col items-center text-center">
-                                <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mb-6">
-                                    <AlertTriangle size={32} />
-                                </div>
-                                <h3 className="text-xl font-bold font-mono uppercase tracking-widest text-red-500 mb-2">REJECTED</h3>
-                                <p className="text-zinc-300 text-sm bg-red-500/5 border border-red-500/20 p-4 rounded-lg w-full">{importModal.error}</p>
+                                <div className="w-14 h-14 bg-[var(--magenta)]/12 text-[var(--magenta)] rounded-full flex items-center justify-center mb-5"><AlertTriangle size={26} /></div>
+                                <h3 className="font-serif text-[24px] text-white mb-2">Can't use that file</h3>
+                                <p className="text-zinc-300 text-[13px] bg-white/[0.04] border border-white/8 p-4 rounded-xl w-full">{importModal.error}</p>
                             </div>
                         ) : (
                             <div className="flex flex-col">
-                                <div className="flex items-center gap-4 text-[#f5a7a7] mb-6 border-b border-white/5 pb-6">
-                                    <ShieldCheck size={28} />
-                                    <h3 className="text-xl font-bold font-mono tracking-widest uppercase m-0 leading-none">Atomic Rollback</h3>
+                                <div className="flex items-center gap-3 text-[var(--rose)] mb-5 border-b border-white/8 pb-5">
+                                    <ShieldCheck size={24} />
+                                    <h3 className="font-serif text-[24px] text-white m-0 leading-none">Replace this game?</h3>
                                 </div>
-                                
-                                <p className="text-zinc-300 text-sm mb-6">You are about to irreversibly overwrite this environment. A snapshot comparison is below:</p>
-
-                                <div className="grid grid-cols-3 gap-2 mb-8 bg-black/50 p-4 rounded-xl border border-white/5 text-sm font-mono items-center">
-                                    <div className="text-zinc-500 text-[10px] uppercase tracking-widest text-center">Current</div>
-                                    <div className="text-zinc-500 text-[10px] uppercase tracking-widest text-center"></div>
+                                <p className="text-zinc-300 text-[13px] mb-5">The current save is kept as a hidden backup, but the app will reload into the file you chose.</p>
+                                <div className="grid grid-cols-3 gap-2 mb-6 bg-black/40 p-4 rounded-2xl border border-white/8 text-[13px] font-mono items-center">
+                                    <div className="text-zinc-500 text-[10px] uppercase tracking-widest text-center">Now</div>
+                                    <div />
                                     <div className="text-zinc-500 text-[10px] uppercase tracking-widest text-center">Incoming</div>
-
                                     <div className="text-zinc-300 text-center">${(importModal.diff?.currentNetWorth || 0).toLocaleString()}</div>
                                     <div className="flex justify-center text-zinc-600"><ArrowRight size={14} /></div>
-                                    <div className="text-[#00f0ff] text-center font-bold">${(importModal.diff?.incNetWorth || 0).toLocaleString()}</div>
-
+                                    <div className="text-[var(--accent)] text-center font-bold">${(importModal.diff?.incNetWorth || 0).toLocaleString()}</div>
                                     <div className="text-zinc-300 text-center">{importModal.diff?.currentFlights} flights</div>
                                     <div className="flex justify-center text-zinc-600"><ArrowRight size={14} /></div>
-                                    <div className="text-[#00f0ff] text-center font-bold">{importModal.diff?.incFlights} flights</div>
+                                    <div className="text-[var(--accent)] text-center font-bold">{importModal.diff?.incFlights} flights</div>
                                 </div>
-
-                                <div className="mb-6">
-                                   <p className="text-xs text-red-400 font-mono tracking-widest uppercase mb-2">Type "IMPORT" to confirm</p>
-                                   <input 
-                                     type="text"
-                                     value={confirmText}
-                                     onChange={(e) => setConfirmText(e.target.value)}
-                                     placeholder="IMPORT"
-                                     className="w-full bg-black border border-white/20 rounded p-3 text-white font-mono uppercase focus:outline-none focus:border-red-500 transition-colors"
-                                   />
-                                </div>
-
-                                <button 
-                                    onClick={commitImport}
-                                    disabled={confirmText !== 'IMPORT'}
-                                    className={`w-full py-3 rounded font-bold font-mono tracking-widest uppercase transition-all ${confirmText === 'IMPORT' ? 'bg-red-600 hover:bg-red-500 text-white shadow-[0_0_20px_rgba(220,38,38,0.5)]' : 'bg-white/5 text-zinc-500 cursor-not-allowed'}`}
-                                >
-                                    Erase & Replace Cache
-                                </button>
+                                <p className="text-[11px] text-zinc-500 font-mono uppercase tracking-widest mb-2">Type IMPORT to confirm</p>
+                                <input type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value.toUpperCase())} placeholder="IMPORT" className="w-full bg-black/40 border border-white/10 rounded-xl px-4 h-11 text-white font-mono uppercase focus:outline-none focus:border-[var(--rose)] transition-colors mb-4" />
+                                <Button variant="danger" size="lg" className="w-full" disabled={confirmText !== 'IMPORT'} onClick={commitImport}>Replace and reload</Button>
                             </div>
                         )}
                     </div>
                 </div>
             )}
-        </div>
-    );
-}
 
-// Just wrapping X icon hack for JSX above
-function X(props: any) {
-    return <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>;
+            {resetOpen && (
+                <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setResetOpen(false)} />
+                    <div className="relative bg-[#0b1220] border border-white/10 p-6 md:p-8 rounded-3xl w-full max-w-md shadow-2xl">
+                        <button onClick={() => setResetOpen(false)} className="absolute top-4 right-4 text-zinc-500 hover:text-white"><X size={20}/></button>
+                        <h3 className="font-serif text-[24px] text-white mb-2">Start a new world?</h3>
+                        <p className="text-zinc-300 text-[13px] mb-5">Your fleet, homes, yachts, passport and every relationship on this device will be gone. This cannot be undone.</p>
+                        <p className="text-[11px] text-zinc-500 font-mono uppercase tracking-widest mb-2">Type RESET to confirm</p>
+                        <input type="text" value={confirmText} onChange={(e) => setConfirmText(e.target.value.toUpperCase())} placeholder="RESET" className="w-full bg-black/40 border border-white/10 rounded-xl px-4 h-11 text-white font-mono uppercase focus:outline-none focus:border-[var(--magenta)] transition-colors mb-4" />
+                        <Button variant="danger" size="lg" className="w-full" disabled={confirmText !== 'RESET' || busy === 'reset'} onClick={resetWorld}>{busy === 'reset' ? 'Wiping…' : 'Erase and start over'}</Button>
+                    </div>
+                </div>
+            )}
+        </PageShell>
+    );
 }

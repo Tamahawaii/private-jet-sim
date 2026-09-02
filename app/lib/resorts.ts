@@ -30,10 +30,12 @@ export async function bookResortAndFly(params: {
     flightCost: number;
     waypoints: { lat: number, lng: number }[];
 }) {
-    const now = params.checkInMs;
-    const checkOutMs = now + (params.nights * 24 * 60 * 60 * 1000);
+    const now = useStore.getState().getNow();
     const durationMs = params.durationHours * 60 * 60 * 1000;
     const estimatedArrivalAt = now + durationMs;
+    // The stay starts when the wheels touch down
+    const checkInMs = Math.max(params.checkInMs, estimatedArrivalAt);
+    const checkOutMs = checkInMs + (params.nights * 24 * 60 * 60 * 1000);
     
     const resortCost = params.nightlyRate * params.nights;
     const totalCost = params.flightCost + resortCost;
@@ -78,7 +80,7 @@ export async function bookResortAndFly(params: {
         await db.resortBookings.add({
             id: bookingId,
             resortId: params.resortId,
-            checkInAt: new Date(now).toISOString(),
+            checkInAt: new Date(checkInMs).toISOString(),
             checkOutAt: new Date(checkOutMs).toISOString(),
             defaultNights: params.nights,
             extendedNights: 0,

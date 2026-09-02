@@ -1,3 +1,4 @@
+import { routes } from './routes';
 import { db } from './db';
 import { useStore } from '../app/lib/store';
 import { calculateDistanceNM, computeGreatCirclePoints } from '../app/lib/math';
@@ -123,10 +124,10 @@ export async function buildArrivalRecap(f: Flight, player: Player | undefined, a
     let purposeLink: string | undefined;
     if (f.purpose?.type === 'event' && f.purpose.targetId) {
         const ev = await db.events.get(f.purpose.targetId);
-        if (ev) { purposeLabel = ev.name; purposeLink = `/events/${ev.id}`; breakdown.push({ label: `Arriving for ${ev.name}`, points: ev.prestigeTier * 12 }); }
+        if (ev) { purposeLabel = ev.name; purposeLink = routes.event(ev.id); breakdown.push({ label: `Arriving for ${ev.name}`, points: ev.prestigeTier * 12 }); }
     } else if (f.purpose?.type === 'resort' && f.purpose.targetId) {
         const r = await db.resorts.get(f.purpose.targetId);
-        if (r) { purposeLabel = r.name; purposeLink = `/resorts/${r.id}`; breakdown.push({ label: `Checking in at ${r.name}`, points: r.tier * 6 }); }
+        if (r) { purposeLabel = r.name; purposeLink = routes.resort(r.id); breakdown.push({ label: `Checking in at ${r.name}`, points: r.tier * 6 }); }
     }
 
     const companions = (f.passengers || []).filter(p => p !== 'player');
@@ -140,6 +141,8 @@ export async function buildArrivalRecap(f: Flight, player: Player | undefined, a
     const price = aircraft?.purchasePrice || 0;
     if (price >= 100_000_000) breakdown.push({ label: `Arriving in a ${aircraft?.model}`, points: 10 });
     else if (price >= 50_000_000) breakdown.push({ label: `Arriving in a ${aircraft?.model}`, points: 5 });
+    const cabin = (aircraft?.modules || []).reduce((s, m) => s + (m.effect?.prestigeBonus || 0), 0);
+    if (cabin > 0) breakdown.push({ label: 'Cabin appointments', points: cabin });
 
     const prestigeGained = breakdown.reduce((s, b) => s + b.points, 0);
     return {
@@ -201,7 +204,7 @@ export async function resolveArrivals() {
                  title: `Arrived in ${shortCity(destAirport, f.destinationICAO)}`,
                  body: `${f.tailNumber} is on the ground at ${f.destinationICAO}. +${recap.prestigeGained} prestige.`,
                  type: 'flight_arrival',
-                 linkTo: `/flight/${f.id}`
+                 linkTo: routes.flight(f.id)
              });
 
              // Player location + prestige (a flight with no manifest is treated as the player's own trip)

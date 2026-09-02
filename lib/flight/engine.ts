@@ -230,6 +230,39 @@ export function getFlightSnapshot(flight: Flight, aircraft: Aircraft | null | un
 }
 
 // ---------------------------------------------------------------------------
+// VOYAGES — the sea version (constant speed, no altitude)
+// ---------------------------------------------------------------------------
+
+export interface VoyageSnapshot {
+  progress: number;
+  position: [number, number];
+  heading: number;
+  phase: 'castoff' | 'cruise' | 'approach' | 'moored';
+  phaseLabel: string;
+  speedKts: number;
+  distanceCoveredNM: number;
+  distanceRemainingNM: number;
+  msRemaining: number;
+  flown: [number, number][];
+  ahead: [number, number][];
+  isComplete: boolean;
+}
+
+export function getVoyageSnapshot(v: { departedAt: number; estimatedArrivalAt: number; distanceNM: number; waypoints: { lat: number; lng: number }[] }, now: number): VoyageSnapshot {
+  const total = Math.max(1, v.estimatedArrivalAt - v.departedAt);
+  const progress = clamp01((now - v.departedAt) / total);
+  const wps = v.waypoints && v.waypoints.length >= 2 ? v.waypoints : [{ lat: 0, lng: 0 }, { lat: 0, lng: 0 }];
+  const { point, heading, index } = positionAlong(wps, progress);
+  const hours = total / 3600000;
+  const speedKts = progress >= 1 ? 0 : v.distanceNM / hours;
+  const phase = progress >= 1 ? 'moored' : progress < 0.03 ? 'castoff' : progress > 0.96 ? 'approach' : 'cruise';
+  const labels = { castoff: 'CASTING OFF', cruise: `UNDER WAY · ${Math.round(speedKts)} KTS`, approach: 'ENTERING HARBOUR', moored: 'MOORED' } as const;
+  const flown: [number, number][] = []; for (let i = 0; i <= index; i++) flown.push([wps[i].lng, wps[i].lat]); flown.push(point);
+  const ahead: [number, number][] = [point]; for (let i = index + 1; i < wps.length; i++) ahead.push([wps[i].lng, wps[i].lat]);
+  return { progress, position: point, heading, phase, phaseLabel: labels[phase], speedKts, distanceCoveredNM: v.distanceNM * progress, distanceRemainingNM: v.distanceNM * (1 - progress), msRemaining: Math.max(0, v.estimatedArrivalAt - now), flown, ahead, isComplete: progress >= 1 };
+}
+
+// ---------------------------------------------------------------------------
 // MOMENTS — deterministic in-flight beats seeded by the flight id
 // ---------------------------------------------------------------------------
 
